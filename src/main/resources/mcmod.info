@@ -1,0 +1,16 @@
+[
+{
+  "modid": "caterpillar",
+  "name": "Caterpillar",
+  "description": "Adds a caterpillar drill to Minecraft.",
+  "version": "Run Your Dreams",
+  "mcversion": "1.8",
+  "url": "http://goo.gl/ijcuxp",
+  "updateUrl": "",
+  "authorList": ["Daniel Appleby","The_Fireplace"],
+  "credits": "Thank you guys",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]

@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "facing=north": { "model": "caterpillar:railplacer" },
+        "facing=south": { "model": "caterpillar:railplacer", "y": 180 },
+        "facing=west":  { "model": "caterpillar:railplacer", "y": 270 },
+        "facing=east":  { "model": "caterpillar:railplacer", "y": 90 }
+    }
+}

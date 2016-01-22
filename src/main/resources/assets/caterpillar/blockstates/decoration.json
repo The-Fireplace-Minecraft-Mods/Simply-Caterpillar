@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "facing=north": { "model": "caterpillar:decoration" },
+        "facing=south": { "model": "caterpillar:decoration", "y": 180 },
+        "facing=west":  { "model": "caterpillar:decoration", "y": 270 },
+        "facing=east":  { "model": "caterpillar:decoration", "y": 90 }
+    }
+}
