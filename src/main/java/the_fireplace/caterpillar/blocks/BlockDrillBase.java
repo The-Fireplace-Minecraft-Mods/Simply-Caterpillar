@@ -103,7 +103,7 @@ public class BlockDrillBase extends BlockContainer {
 	public void movieMe(World worldIn, BlockPos pos, IBlockState state)
 	{
 		try {
-			if (Reference.Loaded && !worldIn.isRemote) // !worldIn.isRemote &&
+			if (Reference.Loaded && !worldIn.isRemote)
 			{
 				if (!(worldIn.getBlockState(pos).getBlock() instanceof BlockDrillBase))
 				{
@@ -149,7 +149,7 @@ public class BlockDrillBase extends BlockContainer {
 					String catID = Caterpillar.instance.getCaterpillarID(movingXZ, newPOS);
 					int Count = this.getCountIndex(movingXZ, newPOS);
 					ContainerCaterpillar thiscater = Caterpillar.instance.getContainerCaterpillar(catID);
-					this.Fired(worldIn, newPOS, state, catID, movingXZ, Count);
+					this.fired(worldIn, newPOS, state, catID, movingXZ, Count);
 					if (thiscater != null)
 					{
 						thiscater.headTick = 0;
@@ -168,7 +168,7 @@ public class BlockDrillBase extends BlockContainer {
 
 	}
 
-	protected void Fired(World worldIn, BlockPos pos, IBlockState state, String catID, int[] movingXZ, int Count) {}
+	protected void fired(World worldIn, BlockPos pos, IBlockState state, String catID, int[] movingXZ, int Count) {}
 
 	@Override
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack held, EnumFacing side, float hitX, float hitY, float hitZ)
@@ -220,7 +220,6 @@ public class BlockDrillBase extends BlockContainer {
 		super.onBlockAdded(worldIn, pos, state);
 		if (!worldIn.isRemote)
 		{
-			// Rotate block if the front side is blocked
 			IBlockState blockToNorth = worldIn.getBlockState(
 					pos.north());
 			IBlockState blockToSouth = worldIn.getBlockState(
@@ -262,12 +261,7 @@ public class BlockDrillBase extends BlockContainer {
 		}
 
 	}
-	/*@Override
-	@SideOnly(Side.CLIENT)
-	public IBlockState getStateForEntityRender(IBlockState state)
-	{
-		return this.getDefaultState().withProperty(FACING, EnumFacing.SOUTH);
-	}*/
+
 	@Override
 	public IBlockState getStateFromMeta(int meta)
 	{
@@ -290,48 +284,6 @@ public class BlockDrillBase extends BlockContainer {
 	{
 		return new BlockStateContainer(this, FACING);
 	}
-	@SideOnly(Side.CLIENT)
-	static final class SwitchEnumFacing
-	{
-		static final int[] enumFacingArray = new int[EnumFacing.values()
-		                                             .length];
-
-		static
-		{
-			try
-			{
-				enumFacingArray[EnumFacing.WEST.ordinal()] = 1;
-			}
-			catch (NoSuchFieldError var4)
-			{
-			}
-
-			try
-			{
-				enumFacingArray[EnumFacing.EAST.ordinal()] = 2;
-			}
-			catch (NoSuchFieldError var3)
-			{
-			}
-
-			try
-			{
-				enumFacingArray[EnumFacing.NORTH.ordinal()] = 3;
-			}
-			catch (NoSuchFieldError var2)
-			{
-			}
-
-			try
-			{
-				enumFacingArray[EnumFacing.SOUTH.ordinal()] = 4;
-			}
-			catch (NoSuchFieldError var1)
-			{
-				// You should improve the error handling here
-			}
-		}
-	}
 
 	//*******************************************for renders*******************************************
 	@Override
@@ -349,12 +301,7 @@ public class BlockDrillBase extends BlockContainer {
 	{
 		return false;
 	}
-	/*@Override
-	@SideOnly(Side.CLIENT)
-	public boolean shouldSideBeRendered(IBlockAccess worldIn, BlockPos pos, EnumFacing side)
-	{
-		return true;
-	}*/
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public BlockRenderLayer getBlockLayer()
@@ -377,9 +324,9 @@ public class BlockDrillBase extends BlockContainer {
 				worldIn.setBlockState(pos, state.withProperty(FACING, placer.getHorizontalFacing().getOpposite()), 2);
 				return;
 			}
-			if (worldIn.getBlockState(pos.add(0, 1,0)).equals(Blocks.AIR.getDefaultState()))
+			if (worldIn.getBlockState(pos.add(0,1,0)).equals(Blocks.AIR.getDefaultState()))
 			{
-				worldIn.setBlockState(pos.add(0, 1,0), state.withProperty(FACING, placer.getHorizontalFacing().getOpposite()), 2);
+				worldIn.setBlockState(pos.add(0,1,0), state.withProperty(FACING, placer.getHorizontalFacing().getOpposite()), 2);
 			}
 			else
 			{

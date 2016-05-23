@@ -281,7 +281,6 @@ public class Caterpillar
 						return worldServer;
 					}
 				}
-
 			}
 		}
 		return null;
@@ -314,7 +313,7 @@ public class Caterpillar
 			int size = tmpNBT.getInteger("count");
 			for(int i=0;i<size;i++)
 			{
-				ContainerCaterpillar conCata = ContainerCaterpillar.readCatapiller(tmpNBT.getCompoundTag("catapillar" + i));
+				ContainerCaterpillar conCata = ContainerCaterpillar.readCaterpiller(tmpNBT.getCompoundTag("caterpillar" + i));
 				conCata.tabs.selected = GuiTabs.MAIN;
 				World objWorld = this.getCaterpillarWorld(conCata.pos);
 				if (objWorld != null)

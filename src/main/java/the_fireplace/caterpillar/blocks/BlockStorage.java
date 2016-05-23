@@ -33,7 +33,7 @@ public class BlockStorage extends BlockDrillBase
 
 	}
 	@Override
-	protected void Fired(World worldIn, BlockPos pos, IBlockState state, String catID, int[] movingXZ, int Count)
+	protected void fired(World worldIn, BlockPos pos, IBlockState state, String catID, int[] movingXZ, int Count)
 	{
 		ContainerCaterpillar thisCat = Caterpillar.instance.getContainerCaterpillar(catID);
 		if (thisCat != null)

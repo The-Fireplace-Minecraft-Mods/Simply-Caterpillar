@@ -3,7 +3,6 @@ package the_fireplace.caterpillar.containers;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.ClickType;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
@@ -19,9 +18,6 @@ public class ContainerDrillHead extends Container
 	private IInventory tileEntityInventory;
 	public ContainerDrillHead(EntityPlayer player, IInventory tileEntityInventoryIn, ContainerCaterpillar inCaterpillar)
 	{
-		if (player instanceof EntityPlayerMP)
-		{
-		}
 		this.playerInventory = player.inventory;
 		this.myCaterpillar = inCaterpillar;
 		this.myCaterpillar.myDrillHead = this;
@@ -37,9 +33,6 @@ public class ContainerDrillHead extends Container
 		//Drillhead
 		this.addSlotToContainer(new Slot(tileEntityInventoryIn, ID, 8 + (4) * 18, 7));
 
-
-
-
 		//Left Side
 		int IDMiddle   = (ContainerCaterpillar.getMaxSize() + this.myCaterpillar.storage.added - 2 )/2;
 		ID++;
@@ -53,7 +46,6 @@ public class ContainerDrillHead extends Container
 		}
 
 		//Right Side
-
 		for (i = 0; i < (IDMiddle/3); ++i)
 		{
 			for (j = 0; j < 3; ++j)
@@ -63,9 +55,7 @@ public class ContainerDrillHead extends Container
 			}
 		}
 
-
 		this.myCaterpillar.updateScroll(this);
-
 
 		//Player Inventory
 		for (i = 0; i < 3; ++i)
@@ -86,24 +76,21 @@ public class ContainerDrillHead extends Container
 	{
 		return this.tileEntityInventory.isUseableByPlayer(playerIn);
 	}
+
 	@Override
-	public void detectAndSendChanges()
-	{
-		//this override is need to cancle the realone
-	}
+	public void detectAndSendChanges(){}
+
 	private boolean isWood(ItemStack itemstack1)
 	{
 		Block thisBlock = Block.getBlockFromItem(itemstack1.getItem());
 		if (thisBlock != null)
 		{
-			if (thisBlock.getMaterial(thisBlock.getDefaultState()).equals(Material.WOOD))
+			if (thisBlock.getDefaultState().getMaterial().equals(Material.WOOD))
 			{
 				return true;
 			}
 		}
 		return false;
-
-
 	}
 
 	@Override
@@ -117,22 +104,22 @@ public class ContainerDrillHead extends Container
 				{
 					if (slotId > -1)
 					{
-						ItemStack decorstion =  null;
+						ItemStack decoration =  null;
 
 						ItemStack whattoKeep = playerIn.inventory.getItemStack();
 						if (whattoKeep != null)
 						{
-							decorstion = new ItemStack(whattoKeep.getItem(), 1, whattoKeep.getItemDamage());
+							decoration = new ItemStack(whattoKeep.getItem(), 1, whattoKeep.getItemDamage());
 						}
 						Slot slot1 = this.getSlot(slotId);
-						slot1.putStack(decorstion);
+						slot1.putStack(decoration);
 						this.detectAndSendChanges();
 						return null;
 					}
 				}
 			}
 		}
-		/*if (mode == ClickType.QUICK_MOVE)//TODO Make sure this is the correct clicktype
+		/*if (mode == ClickType.QUICK_MOVE)
 		{
 			if (slotId == 0)
 			{

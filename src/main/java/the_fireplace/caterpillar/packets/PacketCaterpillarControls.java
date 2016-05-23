@@ -25,7 +25,7 @@ public class PacketCaterpillarControls implements IMessage{
 	@Override
 	public void fromBytes(ByteBuf buf) {
 
-		this.remoteCaterpillar = ContainerCaterpillar.readCatapiller(ByteBufUtils.readTag(buf));
+		this.remoteCaterpillar = ContainerCaterpillar.readCaterpiller(ByteBufUtils.readTag(buf));
 	}
 
 	@Override

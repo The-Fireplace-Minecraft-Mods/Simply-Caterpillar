@@ -267,7 +267,6 @@ public class ContainerCaterpillar implements Cloneable{
 		}
 
 		//Right Side
-
 		for (i = 0; i < (IDMiddle/3); ++i)
 		{
 			for (j = 0; j < 3; ++j)
@@ -393,7 +392,7 @@ public class ContainerCaterpillar implements Cloneable{
 		this.inventory = tmpIT.clone();
 		this.storage.added = this.storage.added + Change;
 	}
-	public static ContainerCaterpillar readCatapiller(NBTTagCompound NBTconCat)
+	public static ContainerCaterpillar readCaterpiller(NBTTagCompound NBTconCat)
 	{
 		String key = NBTconCat.getString("name");
 		BlockPos posP = new BlockPos(NBTconCat.getInteger("X"), NBTconCat.getInteger("Y"), NBTconCat.getInteger("Z"));

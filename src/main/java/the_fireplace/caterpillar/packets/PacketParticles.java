@@ -30,7 +30,7 @@ public class PacketParticles implements IMessage{
 	@Override
 	public void fromBytes(ByteBuf buf) {
 
-		//this.remoteCaterpillar = ContainerCaterpillar.readCatapiller(ByteBufUtils.readTag(buf));
+		//this.remoteCaterpillar = ContainerCaterpillar.readCaterpiller(ByteBufUtils.readTag(buf));
 		this.particletype = ByteBufUtils.readUTF8String(buf);
 		this.posX = ByteBufUtils.readVarInt(buf, 5);
 		this.posY = ByteBufUtils.readVarInt(buf, 5);
