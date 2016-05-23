@@ -42,7 +42,7 @@ public class Reference {
 	}
 	public static void printDebug(String what)
 	{
-		//if (Config.debugversion)//TODO: Check if in dev environment
+		if (Caterpillar.instance.dev)
 			FMLLog.log(Caterpillar.MODNAME + "/Debug", Level.INFO,  what);
 	}
 	public static boolean checkLoaded()

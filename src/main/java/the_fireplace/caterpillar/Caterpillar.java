@@ -57,6 +57,7 @@ public class Caterpillar
 	public static final CreativeTabs TabCaterpillar = new TabCaterpillar();
 	public int saveCount = 0;
 	public TimerMain ModTasks;
+	public boolean dev = false;
 
 	private HashMap<String, ContainerCaterpillar> mainContainers;
 	private ContainerCaterpillar selectedCaterpillar;
@@ -69,9 +70,10 @@ public class Caterpillar
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
 		String[] version = event.getModMetadata().version.split("\\.");
-		if(version[3].equals("BUILDNUMBER"))//Dev environment
+		if(version[3].equals("BUILDNUMBER")) {//Dev environment
 			VERSION = event.getModMetadata().version.replace("BUILDNUMBER", "9001");
-		else//Released build
+			dev = true;
+		}else//Released build
 			VERSION = event.getModMetadata().version;
 		Config.init(event.getSuggestedConfigurationFile());
 
