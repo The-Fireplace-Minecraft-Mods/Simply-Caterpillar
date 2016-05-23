@@ -2,6 +2,7 @@ package the_fireplace.caterpillar.proxy;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiMainMenu;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 import the_fireplace.caterpillar.inits.InitBlocks;
@@ -36,5 +37,9 @@ public class ProxyClient extends ProxyCommon{
 	public void registerRenders()
 	{
 		InitBlocks.registerRenders();
+	}
+	@Override
+	public String translateToLocal(String s){
+		return I18n.format(s);
 	}
 }

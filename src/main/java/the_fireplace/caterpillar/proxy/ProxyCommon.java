@@ -34,5 +34,7 @@ public class ProxyCommon {
 	}
 	public void registerRenders()
 	{}
-
+	public String translateToLocal(String s){
+		return s;
+	}
 }

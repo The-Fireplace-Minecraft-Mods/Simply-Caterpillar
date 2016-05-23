@@ -27,16 +27,17 @@ import java.util.Random;
 public class BlockDrillHeads extends BlockDrillBase
 {
 	public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
+
+	private int variable = 50;
+
 	@Override
 	public void onBlockDestroyedByPlayer(World worldIn, BlockPos pos, IBlockState state)
 	{
-		if (Reference.Loaded && !worldIn.isRemote) //!worldIn.isRemote &&
+		if (Reference.Loaded && !worldIn.isRemote)
 		{
-
 			int[] movingXZ = Caterpillar.instance.getWayMoving(state);
 			String catID = Caterpillar.instance.getCaterpillarID(movingXZ, pos);
 
-			// this destroys the drill_blades/barrier blocks, placed by the drill head
 			for (int i = -1; i < 2; i++) {
 				for (int j = -1; j < 2; j++) {
 					BlockPos Wherepos = pos.add(j*Math.abs(movingXZ[1]) + movingXZ[0], i, j*Math.abs(movingXZ[0])+  movingXZ[1]);
@@ -46,7 +47,6 @@ public class BlockDrillHeads extends BlockDrillBase
 					}
 				}
 			}
-			//
 
 			if (Caterpillar.instance.doesHaveCaterpillar(catID))
 			{
@@ -59,25 +59,15 @@ public class BlockDrillHeads extends BlockDrillBase
 					}
 				}
 
-				/*for (conCata.decoration.selected = 0; conCata.decoration.selected < 10; conCata.decoration.selected++) {
-					for (ItemStack element : conCata.decoration.getSelectedInventory()) {
-
-						if (element != null)
-						{
-							Reference.dropItem(worldIn, pos, element);
-						}
-					}
-				}
-				 */
 				Caterpillar.instance.removeCaterpillar(catID);
 			}
 		}
 	}
 
 	@Override
-	public void movieMe(World worldIn, BlockPos pos, IBlockState state)
+	public void calculateMovement(World worldIn, BlockPos pos, IBlockState state)
 	{
-		if (Reference.Loaded && !worldIn.isRemote)// !worldIn.isRemote &&
+		if (Reference.Loaded && !worldIn.isRemote)
 		{
 			int[] movingXZ = Caterpillar.instance.getWayMoving(state);
 			String catID = Caterpillar.instance.getCaterpillarID(movingXZ, pos);
@@ -98,7 +88,7 @@ public class BlockDrillHeads extends BlockDrillBase
 				}
 			}
 			thisCat.headTick++;
-			//if (thisCat.headTick > drillHeaddrag){
+			if (thisCat.headTick > variable){
 				this.addMoreFuel(catID, worldIn.isRemote);
 
 				if (thisCat.burntime < 1 || !thisCat.running)
@@ -122,7 +112,7 @@ public class BlockDrillHeads extends BlockDrillBase
 					thisCat.incinerator.howclose--;
 				}
 				thisCat.headTick = 0;
-				//thisCat.burntime = thisCat.burntime - thisCat.drag.total;
+				thisCat.burntime = thisCat.burntime - variable;
 
 				boolean ret=false;
 
@@ -193,7 +183,7 @@ public class BlockDrillHeads extends BlockDrillBase
 						}
 					}
 				}
-			//}
+			}
 		}
 	}
 

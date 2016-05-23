@@ -1,9 +1,10 @@
 tile.drillheads.name=Drill Heads
-tile.reinforcements.name=Reinforcements
+tile.reinforcements.name=Reinforcement Builder
 tile.decoration.name=Decoration Placer
 tile.collector.name=Item Collector
-tile.drillbase.name=Drill Base
+tile.drillbase.name=Basic Drill Segment
 tile.storage.name=Drill Storage
+tile.incinerator.name=Incinerator
 
 itemGroup.simplycaterpillar=Simply Caterpillar
 

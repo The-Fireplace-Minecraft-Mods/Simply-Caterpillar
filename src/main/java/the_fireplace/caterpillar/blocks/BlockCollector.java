@@ -31,8 +31,8 @@ public class BlockCollector extends BlockDrillBase
 
 		for (Entity ETObject : ETList) {
 			if (ETObject instanceof EntityItem) {
-				ContainerCaterpillar thisGuy = Caterpillar.instance.getContainerCaterpillar(pos, state);
-				if (thisGuy.addToOutInventory(((EntityItem) ETObject).getEntityItem())) {
+				ContainerCaterpillar myCat = Caterpillar.instance.getContainerCaterpillar(pos, state);
+				if (myCat.addToOutInventory(((EntityItem) ETObject).getEntityItem())) {
 					worldIn.removeEntity(ETObject);
 				}
 			}

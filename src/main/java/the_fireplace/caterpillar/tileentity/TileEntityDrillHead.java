@@ -230,7 +230,7 @@ public class TileEntityDrillHead extends TileEntityLockable implements ITickable
 
 		if (blockdriller.getBlock() instanceof BlockDrillBase || blockdriller.getBlock() instanceof BlockDrillHeads)
 		{
-			((BlockDrillBase)blockdriller.getBlock()).movieMe(this.worldObj, this.pos, this.worldObj.getBlockState(this.pos));
+			((BlockDrillBase)blockdriller.getBlock()).calculateMovement(this.worldObj, this.pos, this.worldObj.getBlockState(this.pos));
 		}
 	}
 }

@@ -4,12 +4,12 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.MinecraftForge;
@@ -42,13 +42,11 @@ import the_fireplace.caterpillar.timers.TimerMain;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
-import static net.minecraft.init.Items.LAVA_BUCKET;
-
-@Mod(name = Caterpillar.MODNAME, modid = Caterpillar.MODID, guiFactory=Reference.guiFactory)
+@Mod(name = Caterpillar.MODNAME, modid = Caterpillar.MODID, guiFactory=Reference.guiFactory, updateJSON = "http://caterpillar.bitnamiapp.com/jsons/simplycaterpillar.json")
 public class Caterpillar
 {
 	public static final String MODID = "simplycaterpillar";
-	public static String VERSION = "";
+	public static String VERSION;
 	public static final String MODNAME = "Simply Caterpillar";
 	public static final String curseCode = "";
 	@Instance(Caterpillar.MODID)
@@ -57,7 +55,7 @@ public class Caterpillar
 	public static final CreativeTabs TabCaterpillar = new TabCaterpillar();
 	public int saveCount = 0;
 	public TimerMain ModTasks;
-	public boolean dev = false;
+	boolean dev = false;
 
 	private HashMap<String, ContainerCaterpillar> mainContainers;
 	private ContainerCaterpillar selectedCaterpillar;
@@ -115,7 +113,7 @@ public class Caterpillar
 		this.addRecipe(InitBlocks.decoration, "PDP", 'D', InitBlocks.drillbase, 'P', Blocks.DISPENSER);
 		this.addRecipe(InitBlocks.collector, "D", "H", 'D', InitBlocks.drillbase, 'I', "ingotIron", 'H', Blocks.HOPPER);
 		this.addRecipe(InitBlocks.storage, "PDP", 'D', InitBlocks.drillbase, 'I', "ingotIron", 'P', Blocks.CHEST);
-		this.addRecipe(InitBlocks.incinerator, "F", "D", "P", 'D', InitBlocks.drillbase, 'F', Blocks.FURNACE, 'P', LAVA_BUCKET);
+		this.addRecipe(InitBlocks.incinerator, "F", "D", "P", 'D', InitBlocks.drillbase, 'F', Blocks.FURNACE, 'P', Items.LAVA_BUCKET);
 	}
 
 	private void addRecipe(Block block, Object... args){
@@ -135,7 +133,6 @@ public class Caterpillar
 		{
 			third = movingXZ[1] + 3;
 		}
-		//Reference.printDebug("Cat ID: " + firstID + "," + secondID + "," + third);
 		return firstID + "," + secondID + "," + third;
 	}
 
@@ -145,19 +142,19 @@ public class Caterpillar
 			int[] movingXZ = {0, 0};
 			if (state.getValue(BlockDrillHeads.FACING) == EnumFacing.EAST)
 			{
-				movingXZ[0] = -1;	//1
+				movingXZ[0] = -1;
 			}
 			if (state.getValue(BlockDrillHeads.FACING) == EnumFacing.WEST)
 			{
-				movingXZ[0] = 1;	//3
+				movingXZ[0] = 1;
 			}
 			if (state.getValue(BlockDrillHeads.FACING) == EnumFacing.NORTH)
 			{
-				movingXZ[1] = 1;	//4
+				movingXZ[1] = 1;
 			}
 			if (state.getValue(BlockDrillHeads.FACING) == EnumFacing.SOUTH)
 			{
-				movingXZ[1] = -1;	//2
+				movingXZ[1] = -1;
 			}
 
 			return movingXZ;
@@ -217,12 +214,7 @@ public class Caterpillar
 	}
 
 	public void putContainerCaterpillar(String CaterpillarID, ContainerCaterpillar conCat) {
-		/*if (this.mainContainers.containsKey(conCat))
-		{
-			this.mainContainers.remove(conCat);
-		}*/
 		this.mainContainers.put(CaterpillarID, conCat);
-		//this.mainContainersRemote.put(CaterpillarID, conCat.clone());
 	}
 
 	public ContainerCaterpillar getContainerCaterpillar(String caterpillarID) {
@@ -330,7 +322,7 @@ public class Caterpillar
 				}
 				else
 				{
-					Reference.printDebug("load error NBT Drills");
+					Reference.printDebug("Load error NBT Drills");
 				}
 			}
 		}
@@ -360,30 +352,30 @@ public class Caterpillar
 		{
 			switch (selected.value) {
 			case 0:
-				//Reference.printDebug("Getting: Main, 0");
+				Reference.printDebug("Getting: Main, 0");
 				return MyCaterpillar.inventory;
 			case 1:
-				//Reference.printDebug("Getting: Decoration, 1");
+				Reference.printDebug("Getting: Decoration, 1");
 				return MyCaterpillar.decoration.getSelectedInventory();
 			case 2:
-				//Reference.printDebug("Getting: Reinforcement, 2");
+				Reference.printDebug("Getting: Reinforcement, 2");
 				return MyCaterpillar.reinforcement.reinforcementMap;
 			case 3:
-				//Reference.printDebug("Getting: Reinforcement, 2");
+				Reference.printDebug("Getting: Incinerator, 3");
 				return MyCaterpillar.incinerator.placementMap;
 			default:
 				break;
 			}
 		}
 		return new ItemStack[256];
-
 	}
+
 	public enum Replacement {
-		AIR(0, I18n.translateToLocal("replacement1")),
-		WATER(1, I18n.translateToLocal("replacement2")),
-		LAVE(2, I18n.translateToLocal("replacement3")),
-		SANDGRAVEL(3, I18n.translateToLocal("replacement4")),
-		ALL(4, I18n.translateToLocal("replacement5"));
+		AIR(0, proxy.translateToLocal("replacement1")),
+		WATER(1, proxy.translateToLocal("replacement2")),
+		LAVA(2, proxy.translateToLocal("replacement3")),
+		FALLINGBLOCKS(3, proxy.translateToLocal("replacement4")),
+		ALL(4, proxy.translateToLocal("replacement5"));
 		public final int value;
 		public final String name;
 
@@ -393,10 +385,10 @@ public class Caterpillar
 		}
 	}
 	public enum GuiTabs {
-		MAIN(0, I18n.translateToLocal("tabs1"), false, new ResourceLocation(MODID  + ":textures/gui/guicatapiller.png")),
-		DECORATION(1, I18n.translateToLocal("tabs2"), true, new ResourceLocation(MODID  + ":textures/gui/guidecoration.png")),
-		REINFORCEMENT(2, I18n.translateToLocal("tabs3"), true, new ResourceLocation(MODID  + ":textures/gui/guireinfocement.png")),
-		INCINERATOR(3, I18n.translateToLocal("tabs4"), true, new ResourceLocation(MODID  + ":textures/gui/guiincinerator.png"));
+		MAIN(0, proxy.translateToLocal("tabs1"), false, new ResourceLocation(MODID  + ":textures/gui/guicatapiller.png")),
+		DECORATION(1, proxy.translateToLocal("tabs2"), true, new ResourceLocation(MODID  + ":textures/gui/guidecoration.png")),
+		REINFORCEMENT(2, proxy.translateToLocal("tabs3"), true, new ResourceLocation(MODID  + ":textures/gui/guireinfocement.png")),
+		INCINERATOR(3, proxy.translateToLocal("tabs4"), true, new ResourceLocation(MODID  + ":textures/gui/guiincinerator.png"));
 		public final int value;
 		public final String name;
 		public final boolean isCrafting;

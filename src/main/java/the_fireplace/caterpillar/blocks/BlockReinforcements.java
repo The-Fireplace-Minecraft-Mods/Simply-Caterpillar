@@ -55,7 +55,7 @@ public class BlockReinforcements extends BlockDrillBase
 	@Override
 	public void onBlockDestroyedByPlayer(World worldIn, BlockPos pos, IBlockState state)
 	{
-		if (Reference.Loaded && !worldIn.isRemote) //!worldIn.isRemote &&
+		if (Reference.Loaded && !worldIn.isRemote)
 		{
 			ContainerCaterpillar cater = Caterpillar.instance.getContainerCaterpillar(pos, state);
 			if (cater != null)
@@ -135,11 +135,11 @@ public class BlockReinforcements extends BlockDrillBase
 							int[] thisPart = mycaterpillar.reinforcement.replacers.get(3);
 							if (mycaterpillar.reinforcement.reinforcementMap[Side] != null)
 							{
-								Block BlocktoPlace = Block.getBlockFromItem(mycaterpillar.reinforcement.reinforcementMap[Side].getItem());
+								Block blockToPlace = Block.getBlockFromItem(mycaterpillar.reinforcement.reinforcementMap[Side].getItem());
 								int meta = mycaterpillar.reinforcement.reinforcementMap[Side].getItemDamage();
-								if (BlocktoPlace != null)
+								if (blockToPlace != null)
 								{
-									this.checkCustomizer(worldIn, catID, Wherepos, thisPart, thiState, BlocktoPlace, meta);
+									this.checkCustomizer(worldIn, catID, Wherepos, thisPart, thiState, blockToPlace, meta);
 								}
 							}
 						}
@@ -153,11 +153,11 @@ public class BlockReinforcements extends BlockDrillBase
 							int[] thisPart = mycaterpillar.reinforcement.replacers.get(1);
 							if (mycaterpillar.reinforcement.reinforcementMap[Side] != null)
 							{
-								Block BlocktoPlace = Block.getBlockFromItem(mycaterpillar.reinforcement.reinforcementMap[Side].getItem());
+								Block blockToPlace = Block.getBlockFromItem(mycaterpillar.reinforcement.reinforcementMap[Side].getItem());
 								int meta = mycaterpillar.reinforcement.reinforcementMap[Side].getItemDamage();
-								if (BlocktoPlace != null)
+								if (blockToPlace != null)
 								{
-									this.checkCustomizer(worldIn, catID, Wherepos, thisPart, thiState, BlocktoPlace, meta);
+									this.checkCustomizer(worldIn, catID, Wherepos, thisPart, thiState, blockToPlace, meta);
 								}
 							}
 						}
@@ -172,11 +172,11 @@ public class BlockReinforcements extends BlockDrillBase
 							int[] thisPart = mycaterpillar.reinforcement.replacers.get(2);
 							if (mycaterpillar.reinforcement.reinforcementMap[Side] != null)
 							{
-								Block BlocktoPlace = Block.getBlockFromItem(mycaterpillar.reinforcement.reinforcementMap[Side].getItem());
+								Block blockToPlace = Block.getBlockFromItem(mycaterpillar.reinforcement.reinforcementMap[Side].getItem());
 								int meta = mycaterpillar.reinforcement.reinforcementMap[Side].getItemDamage();
-								if (BlocktoPlace != null)
+								if (blockToPlace != null)
 								{
-									this.checkCustomizer(worldIn, catID, Wherepos, thisPart, thiState, BlocktoPlace, meta);
+									this.checkCustomizer(worldIn, catID, Wherepos, thisPart, thiState, blockToPlace, meta);
 								}
 							}
 						}

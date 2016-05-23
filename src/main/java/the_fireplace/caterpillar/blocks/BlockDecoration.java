@@ -16,7 +16,7 @@ public class BlockDecoration extends BlockDrillBase
 	@Override
 	public void onBlockDestroyedByPlayer(World worldIn, BlockPos pos, IBlockState state)
 	{
-		if (Reference.Loaded && !worldIn.isRemote) //!worldIn.isRemote &&
+		if (Reference.Loaded && !worldIn.isRemote)
 		{
 			ContainerCaterpillar cater = Caterpillar.instance.getContainerCaterpillar(pos, state);
 			if (cater != null)
@@ -47,12 +47,12 @@ public class BlockDecoration extends BlockDrillBase
 	@Override
 	protected void fired(World worldIn, BlockPos pos, IBlockState state, String catID, int[] movingXZ, int Count)
 	{
-		ContainerCaterpillar mycaterpillar = Caterpillar.instance.getContainerCaterpillar(catID);
-		if (mycaterpillar == null)
+		ContainerCaterpillar myCat = Caterpillar.instance.getContainerCaterpillar(catID);
+		if (myCat == null)
 		{
 			return;
 		}
-		PartsDecoration thisSection = mycaterpillar.decoration;
+		PartsDecoration thisSection = myCat.decoration;
 		thisSection.howclose = 2;
 		ItemStack[] whattoPlace = thisSection.placementMap.get(Count);
 		thisSection.countindex = Count;
@@ -71,7 +71,7 @@ public class BlockDecoration extends BlockDrillBase
 						toporB = -1 * i;
 					}
 					//north and
-					BlockPos Wherepos = pos.add(j*Math.abs(movingXZ[1]) + movingXZ[0], toporB, j*Math.abs(movingXZ[0]) +  movingXZ[1]);
+					BlockPos loc = pos.add(j*Math.abs(movingXZ[1]) + movingXZ[0], toporB, j*Math.abs(movingXZ[0]) +  movingXZ[1]);
 					ItemStack thisone = whattoPlace[slot];
 					if (movingXZ[1] == -1 || movingXZ[0] == 1)
 					{
@@ -89,7 +89,7 @@ public class BlockDecoration extends BlockDrillBase
 							if (toPlaceC.getDefaultState() != null)
 							{
 
-								this.takeOutMatsandPlace(worldIn, catID, Wherepos, toPlaceC.getStateFromMeta(thisone.getItemDamage()));
+								this.takeOutMatsandPlace(worldIn, catID, loc, toPlaceC.getStateFromMeta(thisone.getItemDamage()));
 							}
 						}
 					}

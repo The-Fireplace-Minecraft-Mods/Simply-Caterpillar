@@ -41,17 +41,16 @@ public class BlockDrillBase extends BlockContainer {
 
 		this.pushticks = new Hashtable<>();
 		//this.setBlockBounds(-1.0F, 0.0F, -1.0F, 2.0F, 3.0F, 2.0F);
-
 	}
 
 
-	protected void takeOutMatsandPlace(World worldIn, String MyId, BlockPos pos, IBlockState IBstate)
+	protected void takeOutMatsandPlace(World worldIn, String id, BlockPos pos, IBlockState state)
 	{
 
-		ContainerCaterpillar thisCat = Caterpillar.instance.getContainerCaterpillar(MyId);
+		ContainerCaterpillar thisCat = Caterpillar.instance.getContainerCaterpillar(id);
 		if (thisCat != null)
 		{
-			if (IBstate.getBlock().equals(Blocks.AIR))
+			if (state.getBlock().equals(Blocks.AIR))
 			{
 				worldIn.setBlockToAir(pos);
 				return;
@@ -67,7 +66,7 @@ public class BlockDrillBase extends BlockContainer {
 					if (inIvn != null)
 					{
 
-						if (inIvn.getStateFromMeta(thisGuyInv[i].getItemDamage()).equals(IBstate))
+						if (inIvn.getStateFromMeta(thisGuyInv[i].getItemDamage()).equals(state))
 						{
 							//ItemStack justOne = new ItemStack(thisGuyInv[i].getItem(), 1, thisGuyInv[i].getItemDamage());
 							ItemStack theRest = null;
@@ -76,7 +75,7 @@ public class BlockDrillBase extends BlockContainer {
 								theRest = new ItemStack(thisGuyInv[i].getItem(), thisGuyInv[i].stackSize - 1, thisGuyInv[i].getItemDamage());
 							}
 							thisGuyInv[i] = theRest;
-							worldIn.setBlockState(pos, IBstate);
+							worldIn.setBlockState(pos, state);
 							return;
 						}
 					}
@@ -98,9 +97,7 @@ public class BlockDrillBase extends BlockContainer {
 		return Count;
 	}
 
-
-
-	public void movieMe(World worldIn, BlockPos pos, IBlockState state)
+	public void calculateMovement(World worldIn, BlockPos pos, IBlockState state)
 	{
 		try {
 			if (Reference.Loaded && !worldIn.isRemote)
@@ -160,7 +157,6 @@ public class BlockDrillBase extends BlockContainer {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
 	}
 
 	@Override
@@ -186,7 +182,7 @@ public class BlockDrillBase extends BlockContainer {
 				if (tileentity instanceof TileEntityDrillHead)
 				{
 					Reference.printDebug("Gui Called: 4");
-					ContainerCaterpillar thisCat = Caterpillar.instance.getContainerCaterpillar(pos, state); // false
+					ContainerCaterpillar thisCat = Caterpillar.instance.getContainerCaterpillar(pos, state);
 					if (thisCat != null)
 					{
 						Reference.printDebug("Gui Called: 5");
@@ -210,10 +206,8 @@ public class BlockDrillBase extends BlockContainer {
 	}
 	@Override
 	public void onBlockExploded(World world, BlockPos pos, Explosion explosion)
-	{
-		//Can't be destroyed by the Explosion
-	}
-	//*******************************************for facing*******************************************
+	{}
+
 	@Override
 	public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state)
 	{
@@ -285,7 +279,6 @@ public class BlockDrillBase extends BlockContainer {
 		return new BlockStateContainer(this, FACING);
 	}
 
-	//*******************************************for renders*******************************************
 	@Override
 	public EnumBlockRenderType getRenderType(IBlockState state)
 	{

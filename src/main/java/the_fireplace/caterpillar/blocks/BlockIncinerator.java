@@ -15,7 +15,7 @@ public class BlockIncinerator extends BlockDrillBase
 	@Override
 	public void onBlockDestroyedByPlayer(World worldIn, BlockPos pos, IBlockState state)
 	{
-		if (Reference.Loaded && !worldIn.isRemote) //!worldIn.isRemote &&
+		if (Reference.Loaded && !worldIn.isRemote)
 		{
 			ContainerCaterpillar cater = Caterpillar.instance.getContainerCaterpillar(pos, state);
 			if (cater != null)
@@ -44,27 +44,27 @@ public class BlockIncinerator extends BlockDrillBase
 	@Override
 	protected void fired(World worldIn, BlockPos pos, IBlockState state, String catID, int[] movingXZ, int Count)
 	{
-		ContainerCaterpillar thisGuy =  Caterpillar.instance.getContainerCaterpillar(catID);
+		ContainerCaterpillar myCat =  Caterpillar.instance.getContainerCaterpillar(catID);
 
-		if (thisGuy != null)
+		if (myCat != null)
 		{
-			PartsIncinerator thisSection = thisGuy.incinerator;
+			PartsIncinerator thisSection = myCat.incinerator;
 			thisSection.howclose = 2;
 		}
 
-		int Middleindex = (thisGuy.inventory.length - 2) / 2;
-		Middleindex += 2;
-		ItemStack[] thisGuyInv = thisGuy.inventory;
+		int middleIndex = (myCat.inventory.length - 2) / 2;
+		middleIndex += 2;
+		ItemStack[] myCatInv = myCat.inventory;
 
-		for (int i = Middleindex; i < thisGuyInv.length; i++) {
-			for (ItemStack element : thisGuy.incinerator.placementMap) {
+		for (int i = middleIndex; i < myCatInv.length; i++) {
+			for (ItemStack element : myCat.incinerator.placementMap) {
 				if (element != null)
 				{
-					if (thisGuyInv[i] != null)
+					if (myCatInv[i] != null)
 					{
-						if (thisGuyInv[i].getItem().equals(element.getItem()) && thisGuyInv[i].getItemDamage() == element.getItemDamage())
+						if (myCatInv[i].getItem().equals(element.getItem()) && myCatInv[i].getItemDamage() == element.getItemDamage())
 						{
-							thisGuyInv[i] = null;
+							myCatInv[i] = null;
 							break;
 						}
 					}
