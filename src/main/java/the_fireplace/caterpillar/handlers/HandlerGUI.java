@@ -23,7 +23,6 @@ public class HandlerGUI implements IGuiHandler
 	@Override
 	public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z)
 	{
-
 		BlockPos thisPOS = new BlockPos(x, y, z);
 
 		IBlockState thisState =  world.getBlockState(thisPOS);
@@ -49,7 +48,7 @@ public class HandlerGUI implements IGuiHandler
 		TileEntity tileEntity = world.getTileEntity(new BlockPos(x, y, z));
 		if (tileEntity != null)
 		{
-			if (ID == 1)
+			if (ID == 0)
 			{
 				ContainerCaterpillar conCat = Caterpillar.instance.getContainerCaterpillar(tileEntity.getPos(), world);
 				if (conCat != null)

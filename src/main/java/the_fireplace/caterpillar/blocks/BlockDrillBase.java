@@ -173,7 +173,7 @@ public class BlockDrillBase extends BlockContainer {
 	@Override
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack held, EnumFacing side, float hitX, float hitY, float hitZ)
 	{
-		//Reference.printDebug("Gui Called: a little: " + Reference.Loaded);
+		Reference.printDebug("Loaded: " + Reference.Loaded);
 		Reference.printDebug("Gui Called: 1");
 		if (Reference.Loaded && !worldIn.isRemote)
 		{
