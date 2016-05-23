@@ -1,8 +1,0 @@
-{
-    "variants": {
-        "facing=north": { "model": "caterpillar:drillbase" },
-        "facing=south": { "model": "caterpillar:drillbase", "y": 180 },
-        "facing=west":  { "model": "caterpillar:drillbase", "y": 270 },
-        "facing=east":  { "model": "caterpillar:drillbase", "y": 90 }
-    }
-}

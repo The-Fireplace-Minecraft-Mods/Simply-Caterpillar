@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "facing=north": { "model": "simplycaterpillar:drillbase" },
+        "facing=south": { "model": "simplycaterpillar:drillbase", "y": 180 },
+        "facing=west":  { "model": "simplycaterpillar:drillbase", "y": 270 },
+        "facing=east":  { "model": "simplycaterpillar:drillbase", "y": 90 }
+    }
+}

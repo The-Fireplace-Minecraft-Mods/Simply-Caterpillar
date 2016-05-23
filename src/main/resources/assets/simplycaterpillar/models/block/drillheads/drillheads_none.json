@@ -1,0 +1,6 @@
+{
+    "parent": "simplycaterpillar:block/drillheads",
+    "textures": {
+        "chnage": "simplycaterpillar:block/blades/none_blades"
+    }
+}

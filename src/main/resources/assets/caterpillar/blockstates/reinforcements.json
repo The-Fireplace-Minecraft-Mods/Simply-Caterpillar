@@ -1,8 +1,0 @@
-{
-    "variants": {
-        "facing=north": { "model": "caterpillar:reinforcements" },
-        "facing=south": { "model": "caterpillar:reinforcements", "y": 180 },
-        "facing=west":  { "model": "caterpillar:reinforcements", "y": 270 },
-        "facing=east":  { "model": "caterpillar:reinforcements", "y": 90 }
-    }
-}

@@ -1,0 +1,44 @@
+﻿tile.drillheads.name=Razicí hlava
+tile.reinforcements.name= Vyzdívací sekce
+tile.decoration.name=Dekorační sekce
+tile.collector.name=Sběrač materiálu
+tile.drillbase.name=Základní jednotka
+tile.storage.name=Zásobník materiálu
+
+itemGroup.caterpillar=Caterpillar
+
+tutorial=        Návod k použití
+tutorial2=Zavřít
+options=Zde můžeš nastavit činnost vyzdívací sekce. Přejeď \nnad kteroukoliv pozicí myší a uvidíš podrobnosti\n  Klikni a přepni:\n  Červená = vypnuto\n  Zelená = zapnuto
+options2=Tady jsou pozice bloků, které mohou být při těžbě\nnahrazovány. Nevybereš-li žádné, původní zůstanou\nzachovány a nebudou nahrazeny. Potřebné bloky\nmusí být vloženy v inventáři zařízení, aby mohly\nbýt použity k náhradě původních.
+selection=Dekorační sekce umisťuje bloky podle\npředlohy, která se opakuje každých 10 bloků.\nKliknutím na 0-9 vyber příslušnou řadu.\nPrvní posuvník označuje místo, kde se nachází \nrazicí hlava. Druhý posuvník označuje \nvybranou řadu.
+selectionzero=klikni znova na záložku a\nvybereš řadu nula.
+selectionpatter=Toto je pohled do vlastní sekce.\nPotřebné bloky musí být vloženy\nv inventáři zařízení, aby mohly\nbýt dekorační sekcí umístěny.
+placeheads=Tady umísti razicí hlavu
+placefuel=Tady vlož uhlí/palivo
+poweron=Pro spuštění/vypnutí stroje klikni na Motor
+wheelstorage=Použij kolečko myši
+switchtozero=Klikni pro výběr: 0
+ceiling=Strop
+leftwall=Levá stěna
+rightwall=Pravá stěna
+floor=Podlaha
+wontreplace=Nenahrazovat 
+willreplace=Nahradit 
+selected=Vybráno: 
+clicktoselect=Klikni pro výběr: 
+consumption=Inventář zařízení
+gathered=Vytěženo
+furnace=Palivo:
+updatesaftermoving=Aktualizace po pohybu
+on=Zap.
+off=Vyp.
+power=Motor:
+replacement1=vzduch
+replacement2=vodu
+replacement3=lávu
+replacement4=písek a štěrk
+replacement5=všechno
+tabs1=Hlavní
+tabs2=Dekorace
+tabs3=Vyzdívání

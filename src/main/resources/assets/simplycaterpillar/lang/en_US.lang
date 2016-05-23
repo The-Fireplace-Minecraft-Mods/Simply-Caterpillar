@@ -1,0 +1,46 @@
+tile.drillheads.name=Drill Heads
+tile.reinforcements.name=Reinforcements
+tile.decoration.name=Decoration Placer
+tile.collector.name=Item Collector
+tile.drillbase.name=Drill Base
+tile.storage.name=Drill Storage
+
+itemGroup.simplycaterpillar=Simply Caterpillar
+
+tutorial=       Tutorial
+tutorial2=Dismiss
+options=These are the options for each side\nMouse over them to see what they are\nClick to toggle\nRed = off\nGreen = on
+options2=These are the blocks it will replace with\nNo block means it will leave it alone\nand not replace it. you\nmust have the blocks in\nthe inventory of the drill\nfor it to place them
+selection=The decoration places blocks in\na pattern that repeats every 10 blocks\n0-9. Use the mouse wheel to Select which\nsection. The First scrollbar is where the drill\nis at. The second scrollbar is which section\nyou have selected.
+selectionzero=click the tab again to select\nrow zero
+selectionpatter=this view is from the \nback of the drill. you\nmust have the blocks in\nthe inventory of the drill\nfor it to place them
+placeheads=Place Drill Heads Here
+placefuel=Place Coal/Fuel Here
+poweron=Click Power To Turn On/off
+wheelstorage=Use Mouse Wheel
+switchtozero=Click To Select: 0
+ceiling=Ceiling
+leftwall=Left Wall
+rightwall=Right Wall
+floor=Floor
+wontreplace=Will Not Replace 
+willreplace=Will Replace 
+selected=Selected: 
+where=Drill Is At: 
+clicktoselect=Click To Select: 
+consumption=Consumption
+gathered=Gathered
+furnace=Furnace:
+updatesaftermoving=Updates after moving
+on=On
+off=Off
+power=Power:
+replacement1=Air
+replacement2=Water
+replacement3=Lava
+replacement4=Sand and Gravel
+replacement5=All
+tabs1=Main
+tabs2=Decoration
+tabs3=Reinforcement
+tabs4=Incinerator
