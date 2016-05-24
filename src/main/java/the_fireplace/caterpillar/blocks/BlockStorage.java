@@ -30,8 +30,6 @@ public class BlockStorage extends BlockDrillBase
 
 		myCate.changeStorage(Amount, objworld);
 
-		//ContainerCaterpillar myCateRemote = myCate.clone();
-
 		Caterpillar.instance.putContainerCaterpillar(myCate, objworld);
 
 		Caterpillar.instance.saveNBTDrills();
@@ -45,14 +43,12 @@ public class BlockStorage extends BlockDrillBase
 		{
 			thisCat.storage.count += 24;
 		}
-
-
 	}
 
 	@Override
 	public void onBlockDestroyedByPlayer(World worldIn, BlockPos pos, IBlockState state)
 	{
-		if (!worldIn.isRemote && Reference.loaded) //!worldIn.isRemote &&
+		if (!worldIn.isRemote && Reference.loaded)
 		{
 			if (Caterpillar.instance.doesHaveCaterpillar(pos, state))
 			{
@@ -64,7 +60,7 @@ public class BlockStorage extends BlockDrillBase
 	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack)
 	{
 		super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
-		if (Reference.loaded && !worldIn.isRemote) //!worldIn.isRemote &&
+		if (Reference.loaded && !worldIn.isRemote)
 		{
 			BlockPos whereItAt = new BlockPos(pos.getX(), pos.getY(), pos.getZ());
 			if (!(worldIn.getBlockState(pos).getBlock() instanceof BlockDrillBase))

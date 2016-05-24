@@ -144,7 +144,7 @@ public class BlockDrillHeads extends BlockDrillBase
 						}
 						else
 						{
-							worldIn.destroyBlock(destroyPos, false);
+							worldIn.destroyBlock(destroyPos, true);
 						}
 					}
 				}

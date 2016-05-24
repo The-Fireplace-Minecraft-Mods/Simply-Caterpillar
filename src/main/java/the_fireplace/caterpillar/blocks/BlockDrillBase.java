@@ -261,7 +261,6 @@ public class BlockDrillBase extends BlockContainer {
 			worldIn.setBlockState(pos, state
 					.withProperty(FACING, enumfacing), 2);
 		}
-
 	}
 
 	@Override
