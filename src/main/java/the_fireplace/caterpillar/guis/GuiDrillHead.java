@@ -38,7 +38,6 @@ public class GuiDrillHead extends GuiContainer
 	private ContainerCaterpillar caterpillar;
 	private HashMap<GuiTabs, List<PartsGuiWidgets>> widgetsHolder;
 	private List<PartsGuiWidgets> selectedWidgets;
-	private boolean[] tutclone;
 	private PartsTutorial howTut;
 	public GuiDrillHead(EntityPlayer player, IInventory dispenserInv, ContainerCaterpillar DH)
 	{
@@ -48,7 +47,6 @@ public class GuiDrillHead extends GuiContainer
 		this.setupWidgets();
 		this.caterpillar = DH;
 		this.caterpillar.tabs.selected = GuiTabs.MAIN;
-		this.tutclone = Config.tutorial.clone();
 		this.sendUpdates();
 	}
 	public void setupWidgets()
@@ -59,8 +57,8 @@ public class GuiDrillHead extends GuiContainer
 
 		for (GuiTabs tab: GuiTabs.values()) {
 			List<PartsGuiWidgets> toAddWid = new ArrayList<>();
-			PartsGuiWidgets tmpAdding = null;
-			PartsTexture guiTextureA = null;
+			PartsGuiWidgets tmpAdding;
+			PartsTexture guiTextureA;
 			PartsTexture guiTextureB = null;
 			switch (tab) {
 			case MAIN://drill head
@@ -831,15 +829,15 @@ public class GuiDrillHead extends GuiContainer
 		{
 			if (Config.tutorial[4])
 			{
-				this.howTut = new PartsTutorial("selection", 5, this, -35, 15, true);
+				this.howTut = new PartsTutorial("selection", 4, this, -35, 15, true);
 			}
 			else if (Config.tutorial[5])
 			{
-				this.howTut = new PartsTutorial("selectionzero", 6, this, -175, -24, true);
+				this.howTut = new PartsTutorial("selectionzero", 5, this, -175, -24, true);
 			}
 			else if (Config.tutorial[6])
 			{
-				this.howTut = new PartsTutorial("selectionpatter", 7, this, -75, 14, true);
+				this.howTut = new PartsTutorial("selectionpatter", 6, this, -75, 14, true);
 			}
 			else
 			{
@@ -850,11 +848,11 @@ public class GuiDrillHead extends GuiContainer
 		{
 			if (Config.tutorial[7])
 			{
-				this.howTut = new PartsTutorial("options", 8, this, -95, -28, true);
+				this.howTut = new PartsTutorial("options", 7, this, -95, -28, true);
 			}
 			else if (Config.tutorial[8])
 			{
-				this.howTut = new PartsTutorial("options2", 9, this, -75, 5, true);
+				this.howTut = new PartsTutorial("options2", 8, this, -75, 5, true);
 			}
 			else
 			{
