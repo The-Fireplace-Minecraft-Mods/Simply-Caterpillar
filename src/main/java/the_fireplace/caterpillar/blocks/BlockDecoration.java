@@ -102,4 +102,9 @@ public class BlockDecoration extends BlockDrillBase
 			}
 		}
 	}
+
+	@Override
+	public void updateCat(ContainerCaterpillar cat){
+		cat.decoration.howclose = 2;
+	}
 }

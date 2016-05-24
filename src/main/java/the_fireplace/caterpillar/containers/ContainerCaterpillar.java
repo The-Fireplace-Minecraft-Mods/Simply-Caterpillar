@@ -456,5 +456,4 @@ public class ContainerCaterpillar implements Cloneable{
 		NBTconCat.setInteger("Z", this.pos.getZ());
 		return NBTconCat;
 	}
-
 }

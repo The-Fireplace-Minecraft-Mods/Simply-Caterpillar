@@ -312,11 +312,13 @@ public class BlockDrillBase extends BlockContainer {
 			if (worldIn.getBlockState(pos.add(placer.getHorizontalFacing().getFrontOffsetX(), placer.getHorizontalFacing().getFrontOffsetY(),placer.getHorizontalFacing().getFrontOffsetZ())).getBlock() instanceof BlockDrillBase)
 			{
 				worldIn.setBlockState(pos, state.withProperty(FACING, placer.getHorizontalFacing().getOpposite()), 2);
+				updateCatC(pos, worldIn);
 				return;
 			}
 			if (worldIn.getBlockState(pos.add(0,1,0)).equals(Blocks.AIR.getDefaultState()))
 			{
 				worldIn.setBlockState(pos.add(0,1,0), state.withProperty(FACING, placer.getHorizontalFacing().getOpposite()), 2);
+				updateCatC(pos, worldIn);
 			}
 			else
 			{
@@ -332,5 +334,30 @@ public class BlockDrillBase extends BlockContainer {
 	public TileEntity createNewTileEntity(World worldIn, int meta)
 	{
 		return new TileEntityDrillComponent();
+	}
+
+	private void updateCatC(BlockPos pos, World worldIn){
+		ContainerCaterpillar cat = Caterpillar.instance.getContainerCaterpillar(pos, worldIn);
+		boolean changeMade = false;
+		if (cat != null) {
+			Reference.printDebug("Caterpillar found on first attempt, updating");
+			updateCat(cat);
+			changeMade = true;
+		} else {
+			cat = Caterpillar.instance.getContainerCaterpillar(pos.add(0, 1, 0), worldIn);
+			if (cat != null) {
+				Reference.printDebug("Caterpillar found on second attempt, updating");
+				updateCat(cat);
+				changeMade = true;
+			}
+		}
+		if(changeMade)
+			Caterpillar.instance.saveNBTDrills();
+		else
+			Reference.printDebug("Caterpillar not found");
+	}
+
+	public void updateCat(ContainerCaterpillar cat){
+
 	}
 }

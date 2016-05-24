@@ -77,4 +77,9 @@ public class BlockIncinerator extends BlockDrillBase
 			}
 		}
 	}
+
+	@Override
+	public void updateCat(ContainerCaterpillar cat){
+		cat.incinerator.howclose = 2;
+	}
 }

@@ -204,4 +204,9 @@ public class BlockReinforcements extends BlockDrillBase
 			}
 		}
 	}
+
+	@Override
+	public void updateCat(ContainerCaterpillar cat){
+		cat.reinforcement.howclose = 2;
+	}
 }
