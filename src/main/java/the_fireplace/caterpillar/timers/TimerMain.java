@@ -23,13 +23,13 @@ public class TimerMain  extends TimerTask{
 			{
 				if (Caterpillar.proxy.getWorld().loadedEntityList.size() > 0)
 				{
-					if (!Reference.Loaded)
+					if (!Reference.loaded)
 					{
 						if (!this.inSetup)
 						{
 							this.inSetup = true;
 							this.worldLoadedfromMod();
-							Reference.Loaded = true;
+							Reference.loaded = true;
 							Reference.printDebug("Mod is running!");
 						}
 					}
@@ -52,7 +52,7 @@ public class TimerMain  extends TimerTask{
 		this.checkReady();
 
 
-		if (Reference.Loaded)
+		if (Reference.loaded)
 		{
 			if (Reference.checkLoaded())
 			{
@@ -67,7 +67,7 @@ public class TimerMain  extends TimerTask{
 
 	public void runningTickfromMod()
 	{
-		if (Reference.Loaded)
+		if (Reference.loaded)
 		{
 			if (!Caterpillar.proxy.isServer())
 			{
@@ -110,15 +110,13 @@ public class TimerMain  extends TimerTask{
 		this.starttime = System.currentTimeMillis();
 	}
 	public void worldLoadedfromMod() {
-		Reference.printDebug("World Loaded, starting mod!");
+		Reference.printDebug("World loaded, starting mod!");
 
 		Caterpillar.instance.readNBTDrills();
 
-		Caterpillar.instance.clearOldBarrierBlocks();
-
 		Caterpillar.instance.ModTasks.setTime();
 
-		Reference.printDebug("World Loaded, finished!");
+		Reference.printDebug("World loaded, finished!");
 	}
 
 }

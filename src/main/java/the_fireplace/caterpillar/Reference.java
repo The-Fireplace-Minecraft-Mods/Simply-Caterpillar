@@ -3,12 +3,9 @@ package the_fireplace.caterpillar;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLLog;
 import net.minecraftforge.fml.relauncher.Side;
@@ -31,8 +28,7 @@ public class Reference {
 	public static final String guiFactory = "the_fireplace.caterpillar.guis.GuiFactoryConfig";
 
 	public static Timer ModTick = new Timer();
-	public static boolean Loaded;
-	public static boolean newminecraft = false;
+	public static boolean loaded;
 
 	public static HandlerNBTTag MainNBT;
 
@@ -49,10 +45,6 @@ public class Reference {
 	{
 		return Caterpillar.proxy.checkLoaded();
 	}
-	public static EntityPlayer thePlayerClient()
-	{
-		return Caterpillar.proxy.getPlayer();
-	}
 
 	/**
 	 * Spawn this Block's drops into the World as EntityItems
@@ -62,10 +54,12 @@ public class Reference {
 	public static final  void dropBlockAsItem(World worldIn, BlockPos pos, BlockPos droppos, IBlockState state, int forture)
 	{
 		dropBlockAsItemWithChance(worldIn, pos, droppos, state, 1.0F, forture);
+		printDebug("Dropping " + state + " as items");
 	}
 	public static void dropItem(World worldIn, BlockPos pos, ItemStack item)
 	{
 		Block.spawnAsEntity(worldIn, pos, item);
+		printDebug("Dropping " + worldIn.getBlockState(pos));
 	}
 	/**
 	 * Spawns this Block's drops into the World as EntityItems.
@@ -85,17 +79,11 @@ public class Reference {
 			});
 		}
 	}
-	public static TextComponentTranslation format(TextFormatting color, String str, Object... args)
-	{
-		TextComponentTranslation ret = new TextComponentTranslation(str, args);
-		ret.getStyle().setColor(color);
-		return ret;
-	}
 
 	@SideOnly(Side.CLIENT)
 	public static void spawnParticles(BlockPos pos, EnumParticleTypes typeofdots)
 	{
-		if (Loaded && Config.useparticles)
+		if (loaded && Config.useparticles)
 		{
 			for (int o = 0; o < 1; ++o)
 			{
@@ -154,7 +142,6 @@ public class Reference {
 
 			for (final File fileEntry : folder.listFiles()) {
 				if (!fileEntry.isDirectory()) {
-
 					if (!fileEntry.toString().endsWith(".txt"))
 					{
 						fileEntry.delete();
@@ -162,9 +149,7 @@ public class Reference {
 				}
 			}
 		} catch (NullPointerException  e) {
-
 			Reference.printDebug(e.getMessage());
-
 		}
 
 	}

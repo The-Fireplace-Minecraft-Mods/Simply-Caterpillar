@@ -4,7 +4,6 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.text.TextFormatting;
@@ -34,8 +33,6 @@ import java.util.List;
 @SideOnly(Side.CLIENT)
 public class GuiDrillHead extends GuiContainer
 {
-	/** The player inventory bound to this GUI. */
-	private final InventoryPlayer playerInventory;
 	/** The inventory contained within the corresponding Dispenser. */
 	public IInventory dispenserInventory;
 	private ContainerCaterpillar caterpillar;
@@ -46,7 +43,6 @@ public class GuiDrillHead extends GuiContainer
 	public GuiDrillHead(EntityPlayer player, IInventory dispenserInv, ContainerCaterpillar DH)
 	{
 		super(new ContainerDrillHead(player, dispenserInv, DH));
-		this.playerInventory = player.inventory;
 		this.dispenserInventory = dispenserInv;
 		this.widgetsHolder = new HashMap<>();
 		this.setupWidgets();
@@ -561,7 +557,6 @@ public class GuiDrillHead extends GuiContainer
 			@Override
 			public void run(PartsGuiWidgets widget) {
 				GuiDrillHead.this.buttonpress(widget);
-
 			}
 		};
 		tmpAdding.hoovernotrun = new AbstractRunnerWidgets() {
@@ -617,24 +612,24 @@ public class GuiDrillHead extends GuiContainer
 				{
 					NBTTagCompound tmpNBT = new NBTTagCompound();
 					NBTTagCompound tmpNBTsub;
-					// button was clicked
+
 					switch (this.caterpillar.tabs.selected) {
 					case MAIN://drill head
 						break;
-					case DECORATION://decoration
+					case DECORATION:
 						tmpNBTsub = this.caterpillar.decoration.saveNBT();
 						tmpNBTsub.setInteger("howclose", 0);
 						tmpNBT.setTag("decoration", tmpNBTsub);
 						Reference.MainNBT.saveNBTSettings(tmpNBT, Reference.MainNBT.getFolderLocationWorld(), "DecorationDefault.dat");
 						break;
-					case REINFORCEMENT://REINFORCEMENT
+					case REINFORCEMENT:
 
 						tmpNBTsub = this.caterpillar.reinforcement.saveNBT();
 						tmpNBTsub.setInteger("howclose", 0);
 						tmpNBT.setTag("reinforcement", tmpNBTsub);
 						Reference.MainNBT.saveNBTSettings(tmpNBT, Reference.MainNBT.getFolderLocationWorld(), "ReinforcementDefault.dat");
 						break;
-					case INCINERATOR://INCINERATOR
+					case INCINERATOR:
 						tmpNBTsub = this.caterpillar.incinerator.saveNBT();
 						tmpNBTsub.setInteger("howclose", 0);
 						tmpNBT.setTag("incinerator", tmpNBTsub);
@@ -665,24 +660,24 @@ public class GuiDrillHead extends GuiContainer
 				{
 					NBTTagCompound tmpNBT = new NBTTagCompound();
 					NBTTagCompound tmpNBTsub;
-					// button was clicked
+
 					switch (this.caterpillar.tabs.selected) {
 					case MAIN://drill head
 						break;
-					case DECORATION://decoration
+					case DECORATION:
 						tmpNBTsub = this.caterpillar.decoration.saveNBT();
 						tmpNBTsub.setInteger("howclose", 0);
 						tmpNBT.setTag("decoration", tmpNBTsub);
 
 						Reference.MainNBT.saveNBTSettings(tmpNBT, Reference.MainNBT.getFolderLocationMod(), "DecorationDefault.txt");
 						break;
-					case REINFORCEMENT://REINFORCEMENT
+					case REINFORCEMENT:
 						tmpNBTsub = this.caterpillar.reinforcement.saveNBT();
 						tmpNBTsub.setInteger("howclose", 0);
 						tmpNBT.setTag("reinforcement", tmpNBTsub);
 						Reference.MainNBT.saveNBTSettings(tmpNBT, Reference.MainNBT.getFolderLocationMod(), "ReinforcementDefault.txt");
 						break;
-					case INCINERATOR://REINFORCEMENT
+					case INCINERATOR:
 						tmpNBTsub = this.caterpillar.incinerator.saveNBT();
 						tmpNBTsub.setInteger("howclose", 0);
 						tmpNBT.setTag("incinerator", tmpNBTsub);
@@ -709,13 +704,13 @@ public class GuiDrillHead extends GuiContainer
 		case MAIN://drill head
 			this.drawGuiDrillHeadBackgroundLayer();
 			break;
-		case DECORATION://decoration
+		case DECORATION:
 			this.drawGuiDecorationBackgroundLayer();
 			break;
-		case REINFORCEMENT://REINFORCEMENT
+		case REINFORCEMENT:
 			this.drawGuiReinforcementBackgroundLayer();
 			break;
-		case INCINERATOR://REINFORCEMENT
+		case INCINERATOR:
 			this.drawGuiIncineratorBackgroundLayer();
 			break;
 		default:
@@ -780,14 +775,14 @@ public class GuiDrillHead extends GuiContainer
 		case MAIN://drill head
 			this.drawGuiDrillHeadForegroundLayer();
 			break;
-		case DECORATION://decoration
+		case DECORATION:
 			this.drawGuiDecorationForegroundLayer();
 			break;
-		case REINFORCEMENT://reinforcement
+		case REINFORCEMENT:
 			this.drawGuiReinforcementForegroundLayer();
 			break;
-		case INCINERATOR://incinerator
-			//this.drawGuiReinforcementForegroundLayer();
+		case INCINERATOR:
+			//this.drawGuiIncineratorForegroundLayer();
 			break;
 		default:
 			this.drawGuiDrillHeadForegroundLayer();
@@ -932,18 +927,18 @@ public class GuiDrillHead extends GuiContainer
 					this.caterpillar.placeSlotsforMain(this.inventorySlots);
 					this.sendUpdates();
 					break;
-				case DECORATION://decoration
+				case DECORATION:
 					this.caterpillar.decoration.selected = 0;
 					this.caterpillar.placeSlotsforDecorations(this.inventorySlots);
 					this.sendUpdates();
 					this.dispenserInventory.markDirty();
 					break;
-				case REINFORCEMENT://decoration
+				case REINFORCEMENT:
 					this.caterpillar.placeSlotsforReinforcements(this.inventorySlots);
 					this.sendUpdates();
 					this.dispenserInventory.markDirty();
 					break;
-				case INCINERATOR://decoration
+				case INCINERATOR:
 					this.caterpillar.placeSlotsforIncinerator(this.inventorySlots);
 					this.sendUpdates();
 					this.dispenserInventory.markDirty();

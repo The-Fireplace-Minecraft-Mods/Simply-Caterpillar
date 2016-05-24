@@ -13,6 +13,11 @@ import java.util.List;
 
 public class BlockCollector extends BlockDrillBase
 {
+	public BlockCollector(){
+		super();
+		this.movementTicks = 50;
+	}
+
 	@Override
 	protected void fired(World worldIn, BlockPos pos, IBlockState state, String catID, int[] movingXZ, int Count)
 	{

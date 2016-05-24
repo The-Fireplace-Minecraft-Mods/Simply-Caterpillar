@@ -11,6 +11,11 @@ import the_fireplace.caterpillar.containers.ContainerCaterpillar;
 
 public class BlockStorage extends BlockDrillBase
 {
+	public BlockStorage(){
+		super();
+		this.movementTicks = 50;
+	}
+
 	public void changeStorage(BlockPos pos, IBlockState state, int Amount, World objworld) {
 		ContainerCaterpillar myCate = Caterpillar.instance.getContainerCaterpillar(pos, state);
 		this.changeStorage(myCate, Amount, objworld);
@@ -47,7 +52,7 @@ public class BlockStorage extends BlockDrillBase
 	@Override
 	public void onBlockDestroyedByPlayer(World worldIn, BlockPos pos, IBlockState state)
 	{
-		if (!worldIn.isRemote && Reference.Loaded) //!worldIn.isRemote &&
+		if (!worldIn.isRemote && Reference.loaded) //!worldIn.isRemote &&
 		{
 			if (Caterpillar.instance.doesHaveCaterpillar(pos, state))
 			{
@@ -59,7 +64,7 @@ public class BlockStorage extends BlockDrillBase
 	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack)
 	{
 		super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
-		if (Reference.Loaded && !worldIn.isRemote) //!worldIn.isRemote &&
+		if (Reference.loaded && !worldIn.isRemote) //!worldIn.isRemote &&
 		{
 			BlockPos whereItAt = new BlockPos(pos.getX(), pos.getY(), pos.getZ());
 			if (!(worldIn.getBlockState(pos).getBlock() instanceof BlockDrillBase))

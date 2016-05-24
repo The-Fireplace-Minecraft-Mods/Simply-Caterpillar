@@ -28,12 +28,15 @@ public class BlockDrillHeads extends BlockDrillBase
 {
 	public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
 
-	private int variable = 50;
+	public BlockDrillHeads(){
+		super();
+		this.movementTicks = 50;
+	}
 
 	@Override
 	public void onBlockDestroyedByPlayer(World worldIn, BlockPos pos, IBlockState state)
 	{
-		if (Reference.Loaded && !worldIn.isRemote)
+		if (Reference.loaded && !worldIn.isRemote)
 		{
 			int[] movingXZ = Caterpillar.instance.getWayMoving(state);
 			String catID = Caterpillar.instance.getCaterpillarID(movingXZ, pos);
@@ -67,7 +70,7 @@ public class BlockDrillHeads extends BlockDrillBase
 	@Override
 	public void calculateMovement(World worldIn, BlockPos pos, IBlockState state)
 	{
-		if (Reference.Loaded && !worldIn.isRemote)
+		if (Reference.loaded && !worldIn.isRemote)
 		{
 			int[] movingXZ = Caterpillar.instance.getWayMoving(state);
 			String catID = Caterpillar.instance.getCaterpillarID(movingXZ, pos);
@@ -88,14 +91,14 @@ public class BlockDrillHeads extends BlockDrillBase
 				}
 			}
 			thisCat.headTick++;
-			if (thisCat.headTick > variable){
+			thisCat.drag.total = this.movementTicks + thisCat.drag.value;
+			if (thisCat.headTick > movementTicks){
 				this.addMoreFuel(catID, worldIn.isRemote);
 
 				if (thisCat.burntime < 1 || !thisCat.running)
 				{
 					return;
 				}
-
 
 				this.fixStorage(pos, thisCat, worldIn.isRemote);
 
@@ -112,7 +115,8 @@ public class BlockDrillHeads extends BlockDrillBase
 					thisCat.incinerator.howclose--;
 				}
 				thisCat.headTick = 0;
-				thisCat.burntime = thisCat.burntime - variable;
+				thisCat.burntime = thisCat.burntime - thisCat.drag.total;
+				thisCat.drag.value = 0;
 
 				boolean ret=false;
 
@@ -133,13 +137,9 @@ public class BlockDrillHeads extends BlockDrillBase
 							}
 						}
 						else if(worldIn.getBlockState(destryPos).getBlock().equals(Blocks.BARRIER)){
-							if(Config.breakbarrier) {
-								worldIn.setBlockToAir(destryPos);
-							} else{
-								thisCat.running=false;
-								if(!ret) {
-									ret=true;
-								}
+							thisCat.running=false;
+							if(!ret) {
+								ret=true;
 							}
 						}
 						else
@@ -153,9 +153,8 @@ public class BlockDrillHeads extends BlockDrillBase
 				}
 
 				BlockPos newPlace = pos.add(movingXZ[0], 0, movingXZ[1]);
-				TargetPoint TPoint = new TargetPoint(worldIn.getWorldType().getWorldTypeID(), newPlace.getX(), newPlace.getY(), newPlace.getZ(), 5);
-				Caterpillar.network.sendToAllAround(new PacketParticles(EnumParticleTypes.FLAME.name(), newPlace.getX(), newPlace.getY(), newPlace.getZ()), TPoint);
-
+				TargetPoint targetPoint = new TargetPoint(worldIn.getWorldType().getWorldTypeID(), newPlace.getX(), newPlace.getY(), newPlace.getZ(), 5);
+				Caterpillar.network.sendToAllAround(new PacketParticles(EnumParticleTypes.FLAME.name(), newPlace.getX(), newPlace.getY(), newPlace.getZ()), targetPoint);
 
 				worldIn.setBlockState(newPlace, basedrillhead.getDefaultState().withProperty(FACING, state.getValue(FACING)));
 
@@ -168,18 +167,18 @@ public class BlockDrillHeads extends BlockDrillBase
 
 				for (int i = -1; i < 2; i++) {
 					for (int j = -1; j < 2; j++) {
-						BlockPos Wherepos = newPlace.add(j*Math.abs(movingXZ[1]) + movingXZ[0], i, j*Math.abs(movingXZ[0])+  movingXZ[1]);
+						BlockPos loc = newPlace.add(j*Math.abs(movingXZ[1]) + movingXZ[0], i, j*Math.abs(movingXZ[0])+  movingXZ[1]);
 
-						if (worldIn.getBlockState(Wherepos).getBlock().equals(Blocks.FLOWING_LAVA) ||
-								worldIn.getBlockState(Wherepos).getBlock().equals(Blocks.FLOWING_WATER) ||
-								worldIn.getBlockState(Wherepos).equals(Blocks.SAND.getDefaultState()) ||
-								worldIn.getBlockState(Wherepos).equals(Blocks.GRAVEL.getDefaultState()) ||
-								worldIn.getBlockState(Wherepos).equals(Blocks.LAVA.getDefaultState()) ||
-								worldIn.getBlockState(Wherepos).equals(Blocks.WATER.getDefaultState()) ||
-								worldIn.getBlockState(Wherepos).equals(Blocks.AIR.getDefaultState())
+						if (worldIn.getBlockState(loc).getBlock().equals(Blocks.FLOWING_LAVA) ||
+								worldIn.getBlockState(loc).getBlock().equals(Blocks.FLOWING_WATER) ||
+								worldIn.getBlockState(loc).equals(Blocks.SAND.getDefaultState()) ||
+								worldIn.getBlockState(loc).equals(Blocks.GRAVEL.getDefaultState()) ||
+								worldIn.getBlockState(loc).equals(Blocks.LAVA.getDefaultState()) ||
+								worldIn.getBlockState(loc).equals(Blocks.WATER.getDefaultState()) ||
+								worldIn.getBlockState(loc).equals(Blocks.AIR.getDefaultState())
 								)
 						{
-							worldIn.setBlockState(Wherepos, InitBlocks.drill_blades.getDefaultState());
+							worldIn.setBlockState(loc, InitBlocks.drill_blades.getDefaultState());
 						}
 					}
 				}

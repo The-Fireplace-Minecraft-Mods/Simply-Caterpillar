@@ -34,6 +34,8 @@ public class BlockDrillBase extends BlockContainer {
 
 	public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
 	public Hashtable<BlockPos, Integer> pushticks;
+	public int movementTicks;
+
 	public BlockDrillBase() {
 		super(Material.IRON);
 		this.setSoundType(SoundType.STONE);
@@ -41,12 +43,12 @@ public class BlockDrillBase extends BlockContainer {
 
 		this.pushticks = new Hashtable<>();
 		//this.setBlockBounds(-1.0F, 0.0F, -1.0F, 2.0F, 3.0F, 2.0F);
+		this.movementTicks = 25;
 	}
 
 
 	protected void takeOutMatsandPlace(World worldIn, String id, BlockPos pos, IBlockState state)
 	{
-
 		ContainerCaterpillar thisCat = Caterpillar.instance.getContainerCaterpillar(id);
 		if (thisCat != null)
 		{
@@ -100,7 +102,7 @@ public class BlockDrillBase extends BlockContainer {
 	public void calculateMovement(World worldIn, BlockPos pos, IBlockState state)
 	{
 		try {
-			if (Reference.Loaded && !worldIn.isRemote)
+			if (Reference.loaded && !worldIn.isRemote)
 			{
 				if (!(worldIn.getBlockState(pos).getBlock() instanceof BlockDrillBase))
 				{
@@ -122,6 +124,7 @@ public class BlockDrillBase extends BlockContainer {
 				}
 				if (okToMove && worldIn.getBlockState(pos.add(movingXZ[0]*2, 0, movingXZ[1]*2)).getBlock() instanceof BlockDrillBase)
 				{
+					Reference.printDebug("Component "+this.getClass()+" is ok to move.");
 					if (!this.pushticks.containsKey(pos))
 					{
 						this.pushticks.put(pos, 0);
@@ -132,23 +135,23 @@ public class BlockDrillBase extends BlockContainer {
 					this.pushticks.put(pos, counter);
 					this.pushticks.remove(pos);
 
-					BlockPos newPOS = pos.add(movingXZ[0], 0, movingXZ[1]);
 					BlockPos newPlace = pos.add(movingXZ[0], 0, movingXZ[1]);
-					TargetPoint TPoint = new TargetPoint(worldIn.getWorldType().getWorldTypeID(), newPlace.getX(), newPlace.getY(), newPlace.getZ(), 5);
-					Caterpillar.network.sendToAllAround(new PacketParticles(EnumParticleTypes.FIREWORKS_SPARK.name(), newPlace.getX(), newPlace.getY(), newPlace.getZ()), TPoint);
+					TargetPoint targetPoint = new TargetPoint(worldIn.getWorldType().getWorldTypeID(), newPlace.getX(), newPlace.getY(), newPlace.getZ(), 5);
+					Caterpillar.network.sendToAllAround(new PacketParticles(EnumParticleTypes.FIREWORKS_SPARK.name(), newPlace.getX(), newPlace.getY(), newPlace.getZ()), targetPoint);
 
-					worldIn.setBlockState(newPOS, state);
+					worldIn.setBlockState(newPlace, state);
 					worldIn.setBlockToAir(pos);
 					if(Config.enablesounds) {
 						worldIn.playSound(null, pos, SoundEvents.BLOCK_PISTON_EXTEND, SoundCategory.BLOCKS, 0.5F, worldIn.rand.nextFloat() * 0.25F + 0.6F);
 					}
 
-					String catID = Caterpillar.instance.getCaterpillarID(movingXZ, newPOS);
-					int Count = this.getCountIndex(movingXZ, newPOS);
+					String catID = Caterpillar.instance.getCaterpillarID(movingXZ, newPlace);
+					int count = this.getCountIndex(movingXZ, newPlace);
 					ContainerCaterpillar thiscater = Caterpillar.instance.getContainerCaterpillar(catID);
-					this.fired(worldIn, newPOS, state, catID, movingXZ, Count);
+					this.fired(worldIn, newPlace, state, catID, movingXZ, count);
 					if (thiscater != null)
 					{
+						this.setDrag(thiscater);
 						thiscater.headTick = 0;
 					}
 					Caterpillar.instance.saveNBTDrills();
@@ -160,8 +163,10 @@ public class BlockDrillBase extends BlockContainer {
 	}
 
 	@Override
-	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
+	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {}
 
+	protected void setDrag(ContainerCaterpillar cat){
+		cat.drag.value += this.movementTicks;
 	}
 
 	protected void fired(World worldIn, BlockPos pos, IBlockState state, String catID, int[] movingXZ, int Count) {}
@@ -169,9 +174,9 @@ public class BlockDrillBase extends BlockContainer {
 	@Override
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack held, EnumFacing side, float hitX, float hitY, float hitZ)
 	{
-		Reference.printDebug("Loaded: " + Reference.Loaded);
+		Reference.printDebug("loaded: " + Reference.loaded);
 		Reference.printDebug("Gui Called: 1");
-		if (Reference.Loaded && !worldIn.isRemote)
+		if (Reference.loaded && !worldIn.isRemote)
 		{
 			Reference.printDebug("Gui Called: 2");
 			//if ( && !worldIn.isRemote)

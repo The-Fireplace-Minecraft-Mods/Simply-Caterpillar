@@ -9,7 +9,6 @@ public class Config {
 
 	public static boolean firstuse;
 
-	public static boolean breakbarrier;
 	public static boolean breakbedrock;
 	public static Configuration configuration;
 	public static boolean enablesounds;
@@ -32,7 +31,6 @@ public class Config {
 		firstuse  = configuration.getBoolean("firstuse", "general", true, "Show First Time Use Message?");
 		useparticles = configuration.getBoolean("use particles", "general", true, "Use particles for effect");
 		breakbedrock = configuration.getBoolean("break bedrock", "general", false, "Can the drill break bedrock");
-		breakbarrier = configuration.getBoolean("break barrier", "general", false, "Can the drill break barrier blocks");
 		enablesounds = configuration.getBoolean("enable sounds", "general", true, "Does the drill make noise when it moves?");
 
 		tutorial[0] = configuration.getBoolean("show tutorial 1", "tutorial", true, "Does this show the drill head tutorial?");

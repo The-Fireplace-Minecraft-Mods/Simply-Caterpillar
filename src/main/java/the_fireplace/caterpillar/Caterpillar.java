@@ -248,7 +248,7 @@ public class Caterpillar
 
 	public void saveNBTDrills()
 	{
-		if (Reference.Loaded)
+		if (Reference.loaded)
 		{
 			NBTTagCompound tmpNBT = new NBTTagCompound();
 			int i = 0;
@@ -278,23 +278,6 @@ public class Caterpillar
 		return null;
 	}
 
-	public void clearOldBarrierBlocks()
-	{
-		for (Entry<String, ContainerCaterpillar> caterpillar : this.mainContainers.entrySet()) {
-			BlockPos headisat = caterpillar.getValue().pos;
-			World objWorld = this.getCaterpillarWorld(headisat);
-			for (int x = -1; x < 2; x++) {
-				for (int y = -1; y < 2; y++) {
-					for (int z = -1; z < 2; z++) {
-						if (objWorld.getBlockState(headisat.add(x, y, z)).getBlock().equals(Blocks.BARRIER))
-						{
-							objWorld.setBlockState(headisat.add(x, y, z), InitBlocks.drill_blades.getDefaultState());
-						}
-					}
-				}
-			}
-		}
-	}
 	public void readNBTDrills()
 	{
 		NBTTagCompound tmpNBT =  Reference.MainNBT.readNBTSettings(Reference.MainNBT.getFolderLocationWorld(), "DrillHeads.dat");
@@ -330,7 +313,7 @@ public class Caterpillar
 
 	public void reset() {
 		Reference.printDebug("Resetting....");
-		Reference.Loaded = false;
+		Reference.loaded = false;
 		this.ModTasks.inSetup = false;
 		this.mainContainers.clear();
 	}
@@ -352,16 +335,12 @@ public class Caterpillar
 		{
 			switch (selected.value) {
 			case 0:
-				Reference.printDebug("Getting: Main, 0");
 				return MyCaterpillar.inventory;
 			case 1:
-				Reference.printDebug("Getting: Decoration, 1");
 				return MyCaterpillar.decoration.getSelectedInventory();
 			case 2:
-				Reference.printDebug("Getting: Reinforcement, 2");
 				return MyCaterpillar.reinforcement.reinforcementMap;
 			case 3:
-				Reference.printDebug("Getting: Incinerator, 3");
 				return MyCaterpillar.incinerator.placementMap;
 			default:
 				break;

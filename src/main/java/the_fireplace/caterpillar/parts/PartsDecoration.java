@@ -73,18 +73,6 @@ public class PartsDecoration extends PartsTabbed implements Cloneable{
 	{
 		return this.placementMap.get(this.selected);
 	}
-	public boolean isInventoryEmpty(int index)
-	{
-		boolean isEmpty = true;
-		ItemStack[] thisStack = this.placementMap.get(index);
-		for (ItemStack element : thisStack) {
-			if (element!=null)
-			{
-				isEmpty = false;
-			}
-		}
-		return isEmpty;
-	}
 
 	@Override
 	public void readNBT(NBTTagCompound NBTconCat)
@@ -100,7 +88,6 @@ public class PartsDecoration extends PartsTabbed implements Cloneable{
 	@Override
 	public NBTTagCompound saveNBT()
 	{
-
 		NBTTagCompound NBTconCat = super.saveNBT();
 		for (int i = 0; i < this.maxSlots; i++) {
 			NBTconCat.setTag("decoration" + i, Reference.MainNBT.writeItemStacks(this.placementMap.get(i)));

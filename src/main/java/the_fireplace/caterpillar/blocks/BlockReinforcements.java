@@ -14,6 +14,11 @@ import the_fireplace.caterpillar.parts.PartsReinforcement;
 
 public class BlockReinforcements extends BlockDrillBase
 {
+	public BlockReinforcements(){
+		super();
+		this.movementTicks = 50;
+	}
+
 	private void checkCustomizer(World worldIn, String catID,
 								 BlockPos Wherepos, int[] thisPart, IBlockState thiState,
 								 Block BlocktoPlace, int meta) {
@@ -55,7 +60,7 @@ public class BlockReinforcements extends BlockDrillBase
 	@Override
 	public void onBlockDestroyedByPlayer(World worldIn, BlockPos pos, IBlockState state)
 	{
-		if (Reference.Loaded && !worldIn.isRemote)
+		if (Reference.loaded && !worldIn.isRemote)
 		{
 			ContainerCaterpillar cater = Caterpillar.instance.getContainerCaterpillar(pos, state);
 			if (cater != null)
@@ -70,7 +75,7 @@ public class BlockReinforcements extends BlockDrillBase
 	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack)
 	{
 		super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
-		if (Reference.Loaded && !worldIn.isRemote)
+		if (Reference.loaded && !worldIn.isRemote)
 		{
 			ContainerCaterpillar cater = Caterpillar.instance.getContainerCaterpillar(pos, worldIn);
 			if (cater != null)
