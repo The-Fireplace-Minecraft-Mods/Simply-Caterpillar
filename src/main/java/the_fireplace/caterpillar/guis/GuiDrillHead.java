@@ -926,7 +926,6 @@ public class GuiDrillHead extends GuiContainer
 					this.sendUpdates();
 					break;
 				case DECORATION:
-					this.caterpillar.decoration.selected = 0;
 					this.caterpillar.placeSlotsforDecorations(this.inventorySlots);
 					this.sendUpdates();
 					this.dispenserInventory.markDirty();
@@ -949,7 +948,7 @@ public class GuiDrillHead extends GuiContainer
 			}
 		}
 	}
-	private void drawTabsHover(GuiTabs p) {
+	private void drawTabsHover(GuiTabs tabHoveredOver) {
 		//(k + this.xSize, l + 3 + index*20, 176, 58, 31, 20);
 		int i = Mouse.getX() * this.width / this.mc.displayWidth;
 		int j = this.height - Mouse.getY() * this.height / this.mc.displayHeight - 1;
@@ -959,7 +958,7 @@ public class GuiDrillHead extends GuiContainer
 		int XSide = k - 31;
 		int XWidth = 31;
 
-		int YSide = l + 3 + p.value*20;
+		int YSide = l + 3 + tabHoveredOver.value*20;
 		int YHeight = 20;
 
 		if (i > XSide && i < XSide + XWidth)
@@ -967,11 +966,8 @@ public class GuiDrillHead extends GuiContainer
 			if (j > YSide && j < YSide + YHeight)
 			{
 				List tmoString = new ArrayList<String>();
-				tmoString.add(p.name);
-				if (p.equals(GuiTabs.DECORATION) && this.caterpillar.tabs.selected.equals(p))
-				{
-					tmoString.add(I18n.translateToLocal("switchtozero"));
-				}
+				tmoString.add(tabHoveredOver.name);
+				//If any tooltip is needed for a tab, add it to tmoString here.
 				this.drawHoveringText(tmoString, i - k, j - l);
 			}
 		}
@@ -980,29 +976,22 @@ public class GuiDrillHead extends GuiContainer
 	{
 		return this.fontRendererObj;
 	}
-	private void drawTabsForeground(GuiTabs p) {
+	private void drawTabsForeground(GuiTabs tabToDraw) {
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-		this.mc.getTextureManager().bindTexture(p.guiTextures);
-		String Caption = p.name;
+		this.mc.getTextureManager().bindTexture(tabToDraw.guiTextures);
+		String Caption = tabToDraw.name;
 		if (Caption.length() > 5)
 		{
 			Caption = Caption.substring(0, 3) + "...";
 		}
 
-		if (this.caterpillar.tabs.selected.equals(p))
+		if (this.caterpillar.tabs.selected.equals(tabToDraw))
 		{
-			if (p.equals(GuiTabs.DECORATION))
-			{
-				this.fontRendererObj.drawString("  0",-31 + 1,  3 + p.value*20 + 5, Color.BLACK.getRGB());
-			}
-			else
-			{
-				this.fontRendererObj.drawString(Caption,-31 + 5 ,  3 + p.value*20 + 5, Color.BLACK.getRGB());
-			}
+			this.fontRendererObj.drawString(Caption,-31 + 5 ,  3 + tabToDraw.value*20 + 5, Color.BLACK.getRGB());
 		}
 		else
 		{
-			this.fontRendererObj.drawString(Caption,-31 + 3,  3 + p.value*20 + 5, Color.GRAY.getRGB());
+			this.fontRendererObj.drawString(Caption,-31 + 3,  3 + tabToDraw.value*20 + 5, Color.GRAY.getRGB());
 		}
 	}
 
@@ -1142,11 +1131,9 @@ public class GuiDrillHead extends GuiContainer
 		Caterpillar.instance.saveNBTDrills();
 
 		Caterpillar.instance.removeSelectedCaterpillar();
-		/*Config.tutorial = this.tutclone.clone();
-		Config.forceSave();*/
 	}
 	private void sendUpdates() {
-		Reference.printDebug("GUI: Updateing Server, " + this.caterpillar.name);
+		Reference.printDebug("GUI: Updating Server, " + this.caterpillar.name);
 		boolean whatamI = this.caterpillar.running;
 		this.caterpillar.running = false;
 		Caterpillar.network.sendToServer(new PacketCaterpillarControls(this.caterpillar));
