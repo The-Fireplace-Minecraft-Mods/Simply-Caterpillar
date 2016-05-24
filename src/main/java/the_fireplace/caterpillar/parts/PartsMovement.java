@@ -6,7 +6,6 @@ public class PartsMovement {
 
     public int total = 0;
     public int value = 0;
-    
     public PartsMovement()
     {
 

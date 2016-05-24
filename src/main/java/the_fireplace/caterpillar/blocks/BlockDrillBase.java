@@ -131,6 +131,11 @@ public class BlockDrillBase extends BlockContainer {
 					int counter = this.pushticks.get(pos);
 					counter++;
 					this.pushticks.put(pos, counter);
+					Random rnd = new Random(System.currentTimeMillis());
+					if (counter < 10 + rnd.nextInt(10))
+					{
+						return;
+					}
 					this.pushticks.remove(pos);
 
 					BlockPos newPlace = pos.add(movingXZ[0], 0, movingXZ[1]);
