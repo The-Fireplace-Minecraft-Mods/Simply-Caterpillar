@@ -25,7 +25,7 @@ import the_fireplace.caterpillar.Config;
 import the_fireplace.caterpillar.Reference;
 import the_fireplace.caterpillar.containers.ContainerCaterpillar;
 import the_fireplace.caterpillar.packets.PacketParticles;
-import the_fireplace.caterpillar.tileentity.TileEntityDrillHead;
+import the_fireplace.caterpillar.tileentity.TileEntityDrillComponent;
 
 import java.util.Hashtable;
 import java.util.Random;
@@ -45,7 +45,6 @@ public class BlockDrillBase extends BlockContainer {
 		//this.setBlockBounds(-1.0F, 0.0F, -1.0F, 2.0F, 3.0F, 2.0F);
 		this.movementTicks = 25;
 	}
-
 
 	protected void takeOutMatsandPlace(World worldIn, String id, BlockPos pos, IBlockState state)
 	{
@@ -124,7 +123,6 @@ public class BlockDrillBase extends BlockContainer {
 				}
 				if (okToMove && worldIn.getBlockState(pos.add(movingXZ[0]*2, 0, movingXZ[1]*2)).getBlock() instanceof BlockDrillBase)
 				{
-					Reference.printDebug("Component "+this.getClass()+" is ok to move.");
 					if (!this.pushticks.containsKey(pos))
 					{
 						this.pushticks.put(pos, 0);
@@ -166,7 +164,7 @@ public class BlockDrillBase extends BlockContainer {
 	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {}
 
 	protected void setDrag(ContainerCaterpillar cat){
-		cat.drag.value += this.movementTicks;
+		cat.movement.value += this.movementTicks;
 	}
 
 	protected void fired(World worldIn, BlockPos pos, IBlockState state, String catID, int[] movingXZ, int Count) {}
@@ -184,7 +182,7 @@ public class BlockDrillBase extends BlockContainer {
 				TileEntity tileentity = worldIn.getTileEntity(pos);
 
 				Reference.printDebug("Gui Called: 3");
-				if (tileentity instanceof TileEntityDrillHead)
+				if (tileentity instanceof TileEntityDrillComponent)
 				{
 					Reference.printDebug("Gui Called: 4");
 					ContainerCaterpillar thisCat = Caterpillar.instance.getContainerCaterpillar(pos, state);
@@ -339,8 +337,6 @@ public class BlockDrillBase extends BlockContainer {
 	@Override
 	public TileEntity createNewTileEntity(World worldIn, int meta)
 	{
-		return new TileEntityDrillHead();
+		return new TileEntityDrillComponent();
 	}
-
-
 }

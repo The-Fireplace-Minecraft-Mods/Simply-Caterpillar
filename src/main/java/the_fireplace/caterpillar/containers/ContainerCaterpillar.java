@@ -18,7 +18,7 @@ public class ContainerCaterpillar implements Cloneable{
 	public int maxburntime;
 	public String name;
 	public int headTick;
-	public PartsDrag drag;
+	public PartsMovement movement;
 	public PartsStorage storage;
 	public PartsDecoration decoration;
 	public PartsReinforcement reinforcement;
@@ -32,7 +32,7 @@ public class ContainerCaterpillar implements Cloneable{
 		this.burntime = 0;
 		this.name = key;
 		this.headTick = 0;
-		this.drag = new PartsDrag();
+		this.movement = new PartsMovement();
 		this.storage = new PartsStorage();
 		this.decoration = new PartsDecoration();
 		this.reinforcement = new PartsReinforcement();
@@ -430,7 +430,7 @@ public class ContainerCaterpillar implements Cloneable{
 			newCatp.decoration.readNBT(NBTconCat.getCompoundTag("decoration"));
 		}
 		if (NBTconCat.hasKey("movementTicks")){
-			newCatp.drag.readNBT(NBTconCat.getCompoundTag("movementTicks"));
+			newCatp.movement.readNBT(NBTconCat.getCompoundTag("movementTicks"));
 		}
 		if (NBTconCat.hasKey("reinforcement"))
 		{
@@ -443,7 +443,7 @@ public class ContainerCaterpillar implements Cloneable{
 		NBTconCat.setTag("decoration", this.decoration.saveNBT());
 		NBTconCat.setTag("reinforcement", this.reinforcement.saveNBT());
 		NBTconCat.setTag("incinerator", this.incinerator.saveNBT());
-		NBTconCat.setTag("movementTicks", this.drag.saveNBT());
+		NBTconCat.setTag("movementTicks", this.movement.saveNBT());
 		NBTconCat.setString("name", this.name);
 		NBTconCat.setInteger("selectedtab", this.tabs.selected.value);
 		NBTconCat.setInteger("decorationsselected", this.decoration.selected);

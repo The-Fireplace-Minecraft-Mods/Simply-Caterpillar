@@ -2,11 +2,12 @@ package the_fireplace.caterpillar.parts;
 
 import net.minecraft.nbt.NBTTagCompound;
 
-public class PartsDrag {
+public class PartsMovement {
 
     public int total = 0;
     public int value = 0;
-    public PartsDrag()
+    
+    public PartsMovement()
     {
 
     }

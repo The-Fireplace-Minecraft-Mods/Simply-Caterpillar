@@ -1,10 +1,7 @@
 package the_fireplace.caterpillar.timers;
 
 import net.minecraft.client.Minecraft;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import the_fireplace.caterpillar.Caterpillar;
-import the_fireplace.caterpillar.Config;
 import the_fireplace.caterpillar.Reference;
 
 import java.util.TimerTask;
@@ -13,9 +10,7 @@ public class TimerMain  extends TimerTask{
 
 	public boolean inSetup = false;
 	private boolean onlyrunOnce = false;
-	private long runtime = 0;
 	private boolean savedyet = false;
-	private long starttime = 0;
 	private void checkReady() {
 		if (Caterpillar.proxy.getWorld() != null )
 		{
@@ -41,9 +36,6 @@ public class TimerMain  extends TimerTask{
 
 	@Override
 	public void run() {
-		long thissecond = System.currentTimeMillis();
-		this.runtime = thissecond;
-
 		if (!this.onlyrunOnce)
 		{
 			this.onlyrunOnce = true;
@@ -82,13 +74,6 @@ public class TimerMain  extends TimerTask{
 				}
 				else
 				{
-					if (!Caterpillar.proxy.isServer())
-					{
-						if (Config.firstuse)
-						{
-							this.callguiScreen();
-						}
-					}
 					this.savedyet = false;
 				}
 			}
@@ -100,21 +85,10 @@ public class TimerMain  extends TimerTask{
 			}
 		}
 	}
-	@SideOnly(Side.CLIENT)
-	private void callguiScreen() {
-		//Minecraft.getMinecraft().displayGuiScreen(new GuiMessage());
-	}
-	public void setTime()
-	{
-		this.runtime = System.currentTimeMillis();
-		this.starttime = System.currentTimeMillis();
-	}
 	public void worldLoadedfromMod() {
 		Reference.printDebug("World loaded, starting mod!");
 
 		Caterpillar.instance.readNBTDrills();
-
-		Caterpillar.instance.ModTasks.setTime();
 
 		Reference.printDebug("World loaded, finished!");
 	}

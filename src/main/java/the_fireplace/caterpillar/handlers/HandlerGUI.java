@@ -9,7 +9,7 @@ import the_fireplace.caterpillar.containers.ContainerCaterpillar;
 import the_fireplace.caterpillar.containers.ContainerDrillHead;
 import the_fireplace.caterpillar.guis.GuiDrillHead;
 import the_fireplace.caterpillar.packets.PacketCaterpillarControls;
-import the_fireplace.caterpillar.tileentity.TileEntityDrillHead;
+import the_fireplace.caterpillar.tileentity.TileEntityDrillComponent;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -31,7 +31,7 @@ public class HandlerGUI implements IGuiHandler
 		{
 			Caterpillar.instance.getWayMoving(thisState);
 
-			TileEntityDrillHead TEDrill = (TileEntityDrillHead) world.getTileEntity(new BlockPos(x, y, z));
+			TileEntityDrillComponent TEDrill = (TileEntityDrillComponent) world.getTileEntity(new BlockPos(x, y, z));
 			TEDrill.isSelected = true;
 			ContainerCaterpillar conCat =  Caterpillar.instance.getSelectedCaterpillar();
 			if (conCat != null)
@@ -54,7 +54,7 @@ public class HandlerGUI implements IGuiHandler
 				if (conCat != null)
 				{
 					conCat.tabs.selected = GuiTabs.MAIN;
-					TileEntityDrillHead tileEntityB = (TileEntityDrillHead) world.getTileEntity(conCat.pos);
+					TileEntityDrillComponent tileEntityB = (TileEntityDrillComponent) world.getTileEntity(conCat.pos);
 					tileEntityB.isSelected = false;
 					Caterpillar.network.sendTo(new PacketCaterpillarControls(conCat), (EntityPlayerMP) player);
 					Reference.printDebug("Server GUI: " + conCat.name);

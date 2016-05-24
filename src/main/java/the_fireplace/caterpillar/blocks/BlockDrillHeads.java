@@ -76,8 +76,8 @@ public class BlockDrillHeads extends BlockDrillBase
 			String catID = Caterpillar.instance.getCaterpillarID(movingXZ, pos);
 			if (!Caterpillar.instance.doesHaveCaterpillar(catID))
 			{
-				String catapillar = Caterpillar.instance.getCaterpillarID(movingXZ, pos);
-				Caterpillar.instance.putContainerCaterpillar(catapillar,  new ContainerCaterpillar(pos, catapillar));
+				String catId = Caterpillar.instance.getCaterpillarID(movingXZ, pos);
+				Caterpillar.instance.putContainerCaterpillar(catId,  new ContainerCaterpillar(pos, catId));
 			}
 			ContainerCaterpillar thisCat = Caterpillar.instance.getContainerCaterpillar(catID);
 
@@ -91,16 +91,16 @@ public class BlockDrillHeads extends BlockDrillBase
 				}
 			}
 			thisCat.headTick++;
-			thisCat.drag.total = this.movementTicks + thisCat.drag.value;
+			thisCat.movement.total = this.movementTicks + thisCat.movement.value;
 			if (thisCat.headTick > movementTicks){
-				this.addMoreFuel(catID, worldIn.isRemote);
+				this.addMoreFuel(catID);
 
 				if (thisCat.burntime < 1 || !thisCat.running)
 				{
 					return;
 				}
 
-				this.fixStorage(pos, thisCat, worldIn.isRemote);
+				this.fixStorage(pos, thisCat);
 
 				if (thisCat.decoration.howclose > 0)
 				{
@@ -115,20 +115,20 @@ public class BlockDrillHeads extends BlockDrillBase
 					thisCat.incinerator.howclose--;
 				}
 				thisCat.headTick = 0;
-				thisCat.burntime = thisCat.burntime - thisCat.drag.total;
-				thisCat.drag.value = 0;
+				thisCat.burntime = thisCat.burntime - thisCat.movement.total;
+				thisCat.movement.value = 0;
 
 				boolean ret=false;
 
 				for (int i = -1; i < 2; i++) {
 					for (int j = -1; j < 2; j++) {
-						BlockPos destryPos = pos.add(j*Math.abs(movingXZ[1]) + movingXZ[0], i, j*Math.abs(movingXZ[0])+  movingXZ[1]);
-						if (worldIn.getBlockState(destryPos).getBlock().equals(InitBlocks.drill_blades))
+						BlockPos destroyPos = pos.add(j*Math.abs(movingXZ[1]) + movingXZ[0], i, j*Math.abs(movingXZ[0])+  movingXZ[1]);
+						if (worldIn.getBlockState(destroyPos).getBlock().equals(InitBlocks.drill_blades))
 						{
-							worldIn.setBlockToAir(destryPos);
-						}else if(worldIn.getBlockState(destryPos).getBlock().equals(Blocks.BEDROCK)){
+							worldIn.setBlockToAir(destroyPos);
+						}else if(worldIn.getBlockState(destroyPos).getBlock().equals(Blocks.BEDROCK)){
 							if(Config.breakbedrock) {
-								worldIn.setBlockToAir(destryPos);
+								worldIn.setBlockToAir(destroyPos);
 							} else{
 								thisCat.running=false;
 								if(!ret) {
@@ -136,7 +136,7 @@ public class BlockDrillHeads extends BlockDrillBase
 								}
 							}
 						}
-						else if(worldIn.getBlockState(destryPos).getBlock().equals(Blocks.BARRIER)){
+						else if(worldIn.getBlockState(destroyPos).getBlock().equals(Blocks.BARRIER)){
 							thisCat.running=false;
 							if(!ret) {
 								ret=true;
@@ -144,7 +144,7 @@ public class BlockDrillHeads extends BlockDrillBase
 						}
 						else
 						{
-							worldIn.destroyBlock(destryPos, false);
+							worldIn.destroyBlock(destroyPos, false);
 						}
 					}
 				}
@@ -206,7 +206,7 @@ public class BlockDrillHeads extends BlockDrillBase
 		return 0;
 	}
 
-	private void fixStorage(BlockPos pos, ContainerCaterpillar thisCat, boolean isRemote) {
+	private void fixStorage(BlockPos pos, ContainerCaterpillar thisCat) {
 		thisCat.storage.count = 0;
 	}
 
@@ -216,7 +216,7 @@ public class BlockDrillHeads extends BlockDrillBase
 
 	}
 
-	private void addMoreFuel(String catID, boolean isRemote) {
+	private void addMoreFuel(String catID) {
 		ContainerCaterpillar thisCat = Caterpillar.instance.getContainerCaterpillar(catID);
 		if (thisCat != null)
 		{
@@ -237,7 +237,6 @@ public class BlockDrillHeads extends BlockDrillBase
 					thisGuyInv[i] = theRest;
 					thisCat.maxburntime = TileEntityFurnace.getItemBurnTime(justOne);
 					thisCat.burntime += thisCat.maxburntime;
-
 				}
 			}
 		}

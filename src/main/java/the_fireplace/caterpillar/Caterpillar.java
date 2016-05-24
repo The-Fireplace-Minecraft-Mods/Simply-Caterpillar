@@ -36,7 +36,7 @@ import the_fireplace.caterpillar.packets.PacketCaterpillarControls;
 import the_fireplace.caterpillar.packets.PacketParticles;
 import the_fireplace.caterpillar.proxy.ProxyCommon;
 import the_fireplace.caterpillar.tabs.TabCaterpillar;
-import the_fireplace.caterpillar.tileentity.TileEntityDrillHead;
+import the_fireplace.caterpillar.tileentity.TileEntityDrillComponent;
 import the_fireplace.caterpillar.timers.TimerMain;
 
 import java.util.HashMap;
@@ -138,7 +138,6 @@ public class Caterpillar
 
 	public int[] getWayMoving(IBlockState state) {
 		try {
-
 			int[] movingXZ = {0, 0};
 			if (state.getValue(BlockDrillHeads.FACING) == EnumFacing.EAST)
 			{
@@ -322,7 +321,7 @@ public class Caterpillar
 
 		InitBlocks.register();
 
-		GameRegistry.registerTileEntity(TileEntityDrillHead.class, "DrillHead");
+		GameRegistry.registerTileEntity(TileEntityDrillComponent.class, "DrillHead");
 
 		proxy.registerRenders();
 

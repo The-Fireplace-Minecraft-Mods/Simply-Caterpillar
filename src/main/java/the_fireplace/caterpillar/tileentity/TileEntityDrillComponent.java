@@ -14,11 +14,11 @@ import the_fireplace.caterpillar.blocks.BlockDrillHeads;
 import the_fireplace.caterpillar.containers.ContainerCaterpillar;
 import the_fireplace.caterpillar.containers.ContainerDrillHead;
 import the_fireplace.caterpillar.guis.GuiDrillHead;
-public class TileEntityDrillHead extends TileEntityLockable implements ITickable
+public class TileEntityDrillComponent extends TileEntityLockable implements ITickable
 {
 	protected String customName;
 	public boolean isSelected = false;
-	public TileEntityDrillHead()
+	public TileEntityDrillComponent()
 	{
 		//Reference.printDebug("No Remote World?");
 	}
