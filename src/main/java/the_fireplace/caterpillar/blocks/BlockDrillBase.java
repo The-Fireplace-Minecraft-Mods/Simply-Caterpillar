@@ -177,37 +177,27 @@ public class BlockDrillBase extends BlockContainer {
 	@Override
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack held, EnumFacing side, float hitX, float hitY, float hitZ)
 	{
-		Reference.printDebug("loaded: " + Reference.loaded);
-		Reference.printDebug("Gui Called: 1");
+		//Reference.printDebug("Gui Called; Stage 1");
 		if (Reference.loaded && !worldIn.isRemote)
 		{
-			Reference.printDebug("Gui Called: 2");
-			//if ( && !worldIn.isRemote)
-			{
-				TileEntity tileentity = worldIn.getTileEntity(pos);
+			TileEntity tileentity = worldIn.getTileEntity(pos);
 
-				Reference.printDebug("Gui Called: 3");
-				if (tileentity instanceof TileEntityDrillComponent)
+			//Reference.printDebug("Gui Called; Stage 2");
+			if (tileentity instanceof TileEntityDrillComponent)
+			{
+				//Reference.printDebug("Gui Called; Stage 3");
+				ContainerCaterpillar thisCat = Caterpillar.instance.getContainerCaterpillar(pos, state);
+				if (thisCat != null)
 				{
-					Reference.printDebug("Gui Called: 4");
-					ContainerCaterpillar thisCat = Caterpillar.instance.getContainerCaterpillar(pos, state);
-					if (thisCat != null)
-					{
-						Reference.printDebug("Gui Called: 5");
-						playerIn.openGui(Caterpillar.instance, 0, worldIn, thisCat.pos.getX(), thisCat.pos.getY(), thisCat.pos.getZ());
-						Reference.printDebug("Gui Called: " + worldIn.isRemote );
-						Reference.printDebug("Gui Called: " + Caterpillar.proxy.isServer());
-					}
-					else
-					{
-						Reference.printDebug("Cat Not Found" );
-					}
+					//Reference.printDebug("Gui Called; Stage 4");
+					playerIn.openGui(Caterpillar.instance, 0, worldIn, thisCat.pos.getX(), thisCat.pos.getY(), thisCat.pos.getZ());
 				}
 				else
 				{
-					Reference.printDebug("Tile Not Found" );
+					Reference.printDebug("Cat Not Found" );
 				}
-
+			}else{
+				Reference.printDebug("Tile Not Found" );
 			}
 		}
 		return true;
@@ -333,7 +323,7 @@ public class BlockDrillBase extends BlockContainer {
 				Reference.dropBlockAsItem(worldIn, pos, pos, state, 0);
 			}
 			worldIn.setBlockToAir(pos);
-			return ;
+			return;
 		}
 
 		worldIn.setBlockState(pos, state.withProperty(FACING, placer.getHorizontalFacing().getOpposite()), 2);
