@@ -197,9 +197,9 @@ public class GuiDrillHead extends GuiContainer
 								//Max -= 11;
 								//-18 - 36 == 54
 								widget.Y = (int)(-18 + 54 *((double)where/(double)Max));
-
 							}
 						}
+						widget.drawH = widget.drawA;
 					}
 				};
 
@@ -225,7 +225,6 @@ public class GuiDrillHead extends GuiContainer
 				tmpAdding.setTexture(guiTextureA, guiTextureB);
 				tmpAdding.beforeDraw = tmpRun;
 				toAddWid.add(tmpAdding);
-
 
 				break;
 			case DECORATION:
@@ -404,10 +403,8 @@ public class GuiDrillHead extends GuiContainer
 				 */
 				this.addDefaultButtons(toAddWid, 5, 5, 40, 5);
 
-
 				break;
 			case REINFORCEMENT://decoration
-
 				tmpAdding = new PartsGuiWidgets("background",this, 0, -23, 176, 29);
 				guiTextureA = new PartsTexture("background", GuiTabs.REINFORCEMENT.guiTextures, 0, 166 , 176, 29);
 				tmpAdding.setTexture(guiTextureA, null);
@@ -523,13 +520,10 @@ public class GuiDrillHead extends GuiContainer
 					tmpAdding.hooverrun = tmpHoover;
 					toAddWid.add(tmpAdding);
 				}
-
-
 				this.addDefaultButtons(toAddWid, 140, 0, 140, 22);
 
 				break;
 			case INCINERATOR:
-
 				this.addDefaultButtons(toAddWid, 5, 5, 5, 30);
 
 				break;
@@ -621,7 +615,6 @@ public class GuiDrillHead extends GuiContainer
 						Reference.MainNBT.saveNBTSettings(tmpNBT, Reference.MainNBT.getFolderLocationWorld(), "DecorationDefault.dat");
 						break;
 					case REINFORCEMENT:
-
 						tmpNBTsub = this.caterpillar.reinforcement.saveNBT();
 						tmpNBTsub.setInteger("howclose", 0);
 						tmpNBT.setTag("reinforcement", tmpNBTsub);

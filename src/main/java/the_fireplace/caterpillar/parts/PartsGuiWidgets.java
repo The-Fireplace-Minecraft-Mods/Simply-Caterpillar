@@ -1,20 +1,19 @@
 package the_fireplace.caterpillar.parts;
 
-import java.awt.Color;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
-
 import org.lwjgl.input.Mouse;
-
 import the_fireplace.caterpillar.abstracts.AbstractRunnerWidgets;
 import the_fireplace.caterpillar.guis.GuiDrillHead;
+
+import java.awt.*;
 
 
 public class PartsGuiWidgets{
 
 	public boolean drawA;
 	public boolean drawB;
+	public boolean drawH = true;
 	protected PartsTexture guiTextureA;
 	protected PartsTexture guiTextureB;
 	public int Height;
@@ -55,7 +54,6 @@ public class PartsGuiWidgets{
 		this.hoovernotrun = null;
 		this.clicked = null;
 		this.beforeDraw = null;
-
 	}
 
 	public void clickedGuiWidgets() {
@@ -91,8 +89,6 @@ public class PartsGuiWidgets{
 
 
 			GlStateManager.scale(1f/this.ScaleXA, 1f/this.ScaleYA, 1);
-
-
 		}
 		if (this.drawB)
 		{
@@ -148,7 +144,7 @@ public class PartsGuiWidgets{
 
 	}
 	public void hooverdGuiWidgets() {
-
+		if (this.drawH)
 		if (this.getMouseX() > this.getGuiX() +  this.X && this.getMouseX() <= this.getGuiX() + this.X + this.Width)
 		{
 			if (this.getMouseY() > this.getGuiY() + this.Y && this.getMouseY() <= this.getGuiY() + this.Y + this.Height)
