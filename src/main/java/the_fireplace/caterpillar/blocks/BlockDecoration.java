@@ -44,8 +44,7 @@ public class BlockDecoration extends BlockDrillBase
 				thisSection.howclose = 2;
 				int[] movingXZ = Caterpillar.instance.getWayMoving(state);
 
-				int Count = this.getCountIndex(movingXZ, pos);
-				thisSection.countindex = Count;
+				thisSection.countindex = this.getCountIndex(movingXZ, pos);
 			}
 		}
 	}

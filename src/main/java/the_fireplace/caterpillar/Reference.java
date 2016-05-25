@@ -70,9 +70,7 @@ public class Reference {
 			java.util.List<ItemStack> items = state.getBlock().getDrops(worldIn, pos, state, fortune);
 			//chance = net.minecraftforge.event.ForgeEventFactory.fireBlockHarvesting(items, worldIn, pos, state, fortune, chance, false, harvesters.get());
 
-			items.stream().filter(item -> worldIn.rand.nextFloat() <= chance).forEach(item -> {
-				state.getBlock().spawnAsEntity(worldIn, droppos, item);
-			});
+			items.stream().filter(item -> worldIn.rand.nextFloat() <= chance).forEach(item -> Block.spawnAsEntity(worldIn, droppos, item));
 		}
 	}
 

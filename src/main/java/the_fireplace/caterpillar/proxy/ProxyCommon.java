@@ -28,7 +28,7 @@ public class ProxyCommon {
 		}
 		return null;
 	}
-	public boolean isServer()
+	public boolean isServerSide()
 	{
 		return true;
 	}

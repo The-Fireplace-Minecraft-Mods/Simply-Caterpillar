@@ -49,10 +49,10 @@ public class TileEntityDrillComponent extends TileEntityLockable implements ITic
 		try {
 			return  this.FixZeroItem(Caterpillar.instance.getInventory(this.MyCaterpillar(), this.MyCaterpillar().tabs.selected));
 		} catch (Exception e) {
-			if (!Caterpillar.proxy.isServer()){
+			if (!Caterpillar.proxy.isServerSide()){
 				Minecraft.getMinecraft().currentScreen = null;
 			}
-			if (!Caterpillar.proxy.isServer())
+			if (!Caterpillar.proxy.isServerSide())
 			{
 				if (Minecraft.getMinecraft().currentScreen instanceof GuiDrillHead)
 				{

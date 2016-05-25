@@ -50,18 +50,12 @@ public class PacketParticles implements IMessage{
 
 		@Override
 		public IMessage onMessage(PacketParticles message, MessageContext ctx) {
-			if (message instanceof PacketParticles)
+			if (ctx.side.equals(Side.CLIENT))
 			{
-				if (ctx.side.equals(Side.CLIENT))
-				{
-					PacketParticles PPCmessage = message;
-					BlockPos tmpY = new BlockPos(PPCmessage.posX, PPCmessage.posY, PPCmessage.posZ);
-					Reference.spawnParticles(tmpY, EnumParticleTypes.valueOf(PPCmessage.particletype));
-				}
+				BlockPos tmpY = new BlockPos(message.posX, message.posY, message.posZ);
+				Reference.spawnParticles(tmpY, EnumParticleTypes.valueOf(message.particletype));
 			}
 			return null;
 		}
-
-
 	}
 }

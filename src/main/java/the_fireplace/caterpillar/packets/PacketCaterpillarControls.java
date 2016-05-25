@@ -40,10 +40,7 @@ public class PacketCaterpillarControls implements IMessage{
 
 		@Override
 		public IMessage onMessage(PacketCaterpillarControls message, MessageContext ctx) {
-			if (message instanceof PacketCaterpillarControls)
-			{
-				PacketCaterpillarControls PPCmessage = message;
-				ContainerCaterpillar cater =  PPCmessage.remoteCaterpillar;
+				ContainerCaterpillar cater =  message.remoteCaterpillar;
 				boolean foundcat  =Caterpillar.instance.doesHaveCaterpillar(cater.name);
 				Reference.printDebug("Packets(" + ctx.side.toString() +"): Received, " + cater.name + ", " + foundcat);
 				if (ctx.side.equals(Side.CLIENT))
@@ -68,16 +65,11 @@ public class PacketCaterpillarControls implements IMessage{
 						}
 					}
 
-
 					Caterpillar.instance.putContainerCaterpillar(cater.name, cater);
 					Caterpillar.instance.saveNBTDrills();
 					Reference.printDebug("Server: Saving...");
 				}
-
-			}
 			return null;
 		}
-
-
 	}
 }

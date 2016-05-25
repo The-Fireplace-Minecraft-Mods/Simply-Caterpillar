@@ -34,13 +34,11 @@ public class BlockCollector extends BlockDrillBase
 			}
 		}
 
-		for (Entity ETObject : ETList) {
-			if (ETObject instanceof EntityItem) {
-				ContainerCaterpillar myCat = Caterpillar.instance.getContainerCaterpillar(pos, state);
-				if (myCat.addToOutInventory(((EntityItem) ETObject).getEntityItem())) {
-					worldIn.removeEntity(ETObject);
-				}
+		ETList.stream().filter(ETObject -> ETObject instanceof EntityItem).forEach(ETObject -> {
+			ContainerCaterpillar myCat = Caterpillar.instance.getContainerCaterpillar(pos, state);
+			if (myCat.addToOutInventory(((EntityItem) ETObject).getEntityItem())) {
+				worldIn.removeEntity(ETObject);
 			}
-		}
+		});
 	}
 }

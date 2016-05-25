@@ -155,8 +155,7 @@ public class GuiDrillHead extends GuiContainer
 								widget.drawA = false;
 							}
 							int maxBurn = GuiDrillHead.this.caterpillar.maxburntime;
-							double total = (double)ct / (double)maxBurn;
-							widget.YPercentShownA = total;
+							widget.YPercentShownA = (double)ct / (double)maxBurn;
 						}
 					}
 				};
@@ -709,9 +708,7 @@ public class GuiDrillHead extends GuiContainer
 			break;
 		}
 
-		for (PartsGuiWidgets widget : this.selectedWidgets) {
-			widget.drawGuiWidgets();
-		}
+		this.selectedWidgets.forEach(PartsGuiWidgets::drawGuiWidgets);
 
 		for (GuiTabs p : GuiTabs.values())
 		{
@@ -883,9 +880,7 @@ public class GuiDrillHead extends GuiContainer
 		int k = (this.width - this.xSize) / 2;
 		int l = (this.height - this.ySize) / 2;
 
-		for (PartsGuiWidgets widget : this.selectedWidgets) {
-			widget.clickedGuiWidgets();
-		}
+		this.selectedWidgets.forEach(PartsGuiWidgets::clickedGuiWidgets);
 
 		for (GuiTabs p : GuiTabs.values())
 		{

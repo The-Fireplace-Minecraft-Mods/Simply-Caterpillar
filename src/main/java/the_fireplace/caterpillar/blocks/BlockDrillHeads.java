@@ -83,7 +83,7 @@ public class BlockDrillHeads extends BlockDrillBase
 
 			BlockDrillHeads basedrillhead = (BlockDrillHeads)InitBlocks.drillheads;
 
-			if (!Caterpillar.proxy.isServer())
+			if (!Caterpillar.proxy.isServerSide())
 			{
 				if (Minecraft.getMinecraft().currentScreen instanceof GuiDrillHead)
 				{

@@ -102,24 +102,20 @@ public class PartsGuiWidgets{
 	}
 	public int getGuiX()
 	{
-		int k = (this.myGui.width - this.xSize) / 2;
-		return k;
+		return (this.myGui.width - this.xSize) / 2;
 	}
 	public int getGuiY()
 	{
-		int l = (this.myGui.height - this.ySize) / 2;
-		return l;
+		return (this.myGui.height - this.ySize) / 2;
 	}
 	public int getMouseX()
 	{
-		int i = Mouse.getX() * this.myGui.width / Minecraft.getMinecraft().displayWidth;
-		return i;
+		return Mouse.getX() * this.myGui.width / Minecraft.getMinecraft().displayWidth;
 	}
 
 	public int getMouseY()
 	{
-		int j = this.myGui.height - Mouse.getY() * this.myGui.height / Minecraft.getMinecraft().displayHeight - 1;
-		return j;
+		return this.myGui.height - Mouse.getY() * this.myGui.height / Minecraft.getMinecraft().displayHeight - 1;
 	}
 	public void drawforgroundlayer()
 	{

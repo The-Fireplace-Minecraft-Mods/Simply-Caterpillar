@@ -29,7 +29,7 @@ public class ProxyClient extends ProxyCommon{
 		return Minecraft.getMinecraft().theWorld;
 	}
 	@Override
-	public boolean isServer()
+	public boolean isServerSide()
 	{
 		return false;
 	}

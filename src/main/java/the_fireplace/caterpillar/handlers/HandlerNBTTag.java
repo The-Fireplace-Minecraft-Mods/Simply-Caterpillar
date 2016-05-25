@@ -43,7 +43,7 @@ public class HandlerNBTTag {
 
 	private String checkPath(String Path)
 	{
-		String FileSeparator = Caterpillar.proxy.getDataDir().separator;
+		String FileSeparator = File.separator;
 		String ASP = Path;
 		if (ASP.endsWith("."))
 		{
@@ -131,7 +131,7 @@ public class HandlerNBTTag {
 	public String getFolderLocationWorld() {
 		//String FileSeparator = Caterpillar.proxy.getDataDir().separator;
 		String MainLocation = this.checkPath(Caterpillar.proxy.getDataDir().getAbsolutePath());
-		if (!Caterpillar.proxy.isServer())
+		if (!Caterpillar.proxy.isServerSide())
 		{
 			MainLocation = this.checkPath(MainLocation + "saves");
 		}

@@ -61,7 +61,7 @@ public class TimerMain  extends TimerTask{
 	{
 		if (Reference.loaded)
 		{
-			if (!Caterpillar.proxy.isServer())
+			if (!Caterpillar.proxy.isServerSide())
 			{
 				if (Minecraft.getMinecraft().currentScreen != null)
 				{
