@@ -12,9 +12,26 @@ buildscript {
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
 
-version = "1.0"
+allprojects {
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+}
+
+curseforge {
+  apiKey = project.curseForgeApiKey
+  project {
+    id = '245437'
+    changelog = file('changelog.txt')
+    releaseType = 'release'
+	addGameVersion '1.9.4'
+	addGameVersion 'Java 8'
+    mainArtifact jar
+  }
+}
+
+version = "!!VERSION!!"
 group= "the_fireplace.caterpillar"
-archivesBaseName = "CaterpillarClassic"
+archivesBaseName = "SimplyCaterpillar"
 
 minecraft {
     version = "1.9.4-12.17.0.1909-1.9.4"

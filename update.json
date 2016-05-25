@@ -1,0 +1,10 @@
+{
+	"homepage": "http://mods.curse.com/mc-mods/minecraft/245437-simply-caterpillar",
+	"promos": {
+		"1.9.4-latest": "!!VERSION!!",
+		"1.9.4-recommended": "!!VERSION!!"
+	},
+	"1.9.4": {
+		"!!VERSION!!": "Changelog at http://mods.curse.com/mc-mods/minecraft/245437-simply-caterpillar#t1:changes"
+	}
+}
