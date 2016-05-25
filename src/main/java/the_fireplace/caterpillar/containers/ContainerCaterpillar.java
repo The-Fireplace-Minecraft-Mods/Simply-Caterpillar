@@ -43,7 +43,7 @@ public class ContainerCaterpillar implements Cloneable{
 	}
 	public static int getMaxSize()
 	{
-		return 26;
+		return 25;
 	}
 	public void updateScroll(Container myDrillHeads ) {
 		int i;
@@ -51,7 +51,7 @@ public class ContainerCaterpillar implements Cloneable{
 		int k;
 		j = 0;
 		k = 0;
-		for (i = 2; i < getMaxSize() + this.storage.added; ++i)
+		for (i = this.storage.startingIndex; i < getMaxSize() + this.storage.added; ++i)
 		{
 			Slot AddingSlot = myDrillHeads.getSlot(i);
 			AddingSlot.yDisplayPosition = -1000;
@@ -70,7 +70,7 @@ public class ContainerCaterpillar implements Cloneable{
 		}
 		j = 0;
 		k = 0;
-		int Middle = (getMaxSize() + this.storage.added - 2) / 2;
+		int Middle = (getMaxSize() + this.storage.added - 1) / 2;
 		//Reference.printDebug( this.addedStorage + "," + Middle);
 		for (i = this.storage.startingIndex + Middle; i < this.storage.startingIndex + Middle + 12; ++i)
 		{

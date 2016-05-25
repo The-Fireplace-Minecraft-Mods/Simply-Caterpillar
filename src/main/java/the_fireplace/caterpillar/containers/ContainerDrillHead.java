@@ -27,21 +27,16 @@ public class ContainerDrillHead extends Container
 		int ID = 0;
 
 		//Burner
-		this.addSlotToContainer(new Slot(tileEntityInventoryIn, ID, 8 + (4) * 18, 7 + (3) * 18));
-		ID++;
-
-		//Drillhead
-		this.addSlotToContainer(new Slot(tileEntityInventoryIn, ID, 8 + (4) * 18, 7));
+		this.addSlotToContainer(new Slot(tileEntityInventoryIn, ID++, 8 + (4) * 18, 7 + (3) * 18));
 
 		//Left Side
-		int IDMiddle   = (ContainerCaterpillar.getMaxSize() + this.myCaterpillar.storage.added - 2 )/2;
-		ID++;
+		int IDMiddle   = (ContainerCaterpillar.getMaxSize() + this.myCaterpillar.storage.added - 1 )/2;
+		//ID++;
 		for (i = 0; i < (IDMiddle/3); ++i)
 		{
 			for (j = 0; j < 3; ++j)
 			{
-				this.addSlotToContainer(new Slot(tileEntityInventoryIn,ID, 8 + j * 18, -100));
-				ID++;
+				this.addSlotToContainer(new Slot(tileEntityInventoryIn, ID++, 8 + j * 18, -100));
 			}
 		}
 
@@ -50,8 +45,7 @@ public class ContainerDrillHead extends Container
 		{
 			for (j = 0; j < 3; ++j)
 			{
-				this.addSlotToContainer(new Slot(tileEntityInventoryIn, ID, 8 + (j + 6) * 18, -100));
-				ID++;
+				this.addSlotToContainer(new Slot(tileEntityInventoryIn, ID++, 8 + (j + 6) * 18, -100));
 			}
 		}
 
@@ -169,7 +163,7 @@ public class ContainerDrillHead extends Container
 				}
 				else
 				{
-					if (!this.mergeItemStack(itemstack1, 2, this.inventorySlots.size() - 36, false))
+					if (!this.mergeItemStack(itemstack1, 1, this.inventorySlots.size() - 36, false))
 					{
 						return null;
 					}
