@@ -48,7 +48,7 @@ public class Caterpillar
 	public static final String MODID = "simplycaterpillar";
 	public static String VERSION;
 	public static final String MODNAME = "Simply Caterpillar";
-	public static final String curseCode = "";
+	public static final String curseCode = "245437-simply-caterpillar";
 	@Instance(Caterpillar.MODID)
 	public static Caterpillar instance;
 

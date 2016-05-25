@@ -17,10 +17,6 @@ import java.io.File;
 import java.util.Random;
 import java.util.Timer;
 
-
-
-
-
 public class Reference {
 
 	public static final String CLIENT_PROXY_CLASS = "the_fireplace.caterpillar.proxy.ProxyClient";
