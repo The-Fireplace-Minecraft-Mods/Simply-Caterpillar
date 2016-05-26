@@ -42,7 +42,7 @@ curseforge {
 uploadToModsIO {
     apiKey = project.modsioApiKey
     artifact = jar.archivePath
-    modid = "1200"
+    modId = "1200"
     minecraft = "1.9.4"
     changelog = file('changelog.txt')
     tag = ""
