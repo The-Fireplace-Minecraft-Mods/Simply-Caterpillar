@@ -20,7 +20,7 @@ plugins {
     id "com.matthewprenger.cursegradle" version "1.0.4"
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
-apply plugin: 'net.cazzar.gradle.modsio'
+apply plugin: 'modsio'
 
 allprojects {
     sourceCompatibility = 1.8
