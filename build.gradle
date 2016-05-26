@@ -5,9 +5,14 @@ buildscript {
             name = "forge"
             url = "http://files.minecraftforge.net/maven"
         }
+        maven {
+            name = "Modmuss50"
+            url = "http://maven.modmuss50.me/"
+        }
     }
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
+        classpath 'ModsIOUpload:ModsIOUpload:+'
     }
 }
 
@@ -15,6 +20,7 @@ plugins {
     id "com.matthewprenger.cursegradle" version "1.0.4"
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
+apply plugin: 'net.cazzar.gradle.modsio'
 
 allprojects {
     sourceCompatibility = 1.8
@@ -26,11 +32,24 @@ curseforge {
   project {
     id = '245437'
     changelog = file('changelog.txt')
-    releaseType = 'release'
+    releaseType = 'alpha'
 	addGameVersion '1.9.4'
 	addGameVersion 'Java 8'
     mainArtifact jar
   }
+}
+
+modsIO {
+    key = project.modsioApiKey
+
+    project {
+        artifact = jar.archivePath
+        modid = "1200"
+        minecraft = "1.9.4"
+        changelog = file('changelog.txt')
+        tag = ""
+        current = true
+    }
 }
 
 version = "!!VERSION!!"
