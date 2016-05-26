@@ -40,7 +40,7 @@ curseforge {
 }
 
 uploadToModsIO {
-    key = project.modsioApiKey
+    apiKey = project.modsioApiKey
 
     project {
         artifact = jar.archivePath
