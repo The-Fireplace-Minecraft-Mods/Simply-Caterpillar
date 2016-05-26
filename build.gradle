@@ -32,26 +32,26 @@ curseforge {
   project {
     id = '245437'
     changelog = file('changelog.txt')
-    releaseType = 'alpha'
+    releaseType = 'release'
 	addGameVersion '1.9.4'
 	addGameVersion 'Java 8'
     mainArtifact jar
   }
 }
 
+version = "!!VERSION!!"
+group= "the_fireplace.caterpillar"
+archivesBaseName = "SimplyCaterpillar"
+
 uploadToModsIO {
     apiKey = project.modsioApiKey
-    artifact = new File(jar.archivePath.absolutePath, project.archivesBaseName+"-"+project.version+".jar")// project.archivesBaseName+"-"+project.version+".jar"
+    artifact = new File(jar.destinationDir, archivesBaseName+"-"+version+".jar")
     modId = "1200"
     minecraft = "1.9.4"
     changelog = file('changelog.txt')
     tag = ""
     current = true
 }
-
-version = "!!VERSION!!"
-group= "the_fireplace.caterpillar"
-archivesBaseName = "SimplyCaterpillar"
 
 minecraft {
     version = "1.9.4-12.17.0.1909-1.9.4"
