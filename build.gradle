@@ -39,7 +39,7 @@ curseforge {
   }
 }
 
-modsIO {
+uploadToModsIO {
     key = project.modsioApiKey
 
     project {
