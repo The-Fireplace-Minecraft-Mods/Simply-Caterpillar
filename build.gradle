@@ -41,7 +41,7 @@ curseforge {
 
 uploadToModsIO {
     apiKey = project.modsioApiKey
-    artifact = jar.archivePath.renameTo(project.archivesBaseName+"-"+project.version+".jar")
+    artifact = new File(jar.archivePath.absolutePath, project.archivesBaseName+"-"+project.version+".jar")// project.archivesBaseName+"-"+project.version+".jar"
     modId = "1200"
     minecraft = "1.9.4"
     changelog = file('changelog.txt')
