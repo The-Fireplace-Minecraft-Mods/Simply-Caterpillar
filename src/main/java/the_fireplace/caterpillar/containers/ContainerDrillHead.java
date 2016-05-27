@@ -112,16 +112,6 @@ public class ContainerDrillHead extends Container
 				}
 			}
 		}
-		/*if (mode == ClickType.QUICK_MOVE)
-		{
-			if (slotId == 0)
-			{
-				if (this.myCaterpillar.tabs.selected.equals(GuiTabs.MAIN))
-				{
-					//return null;
-				}
-			}
-		}*/
 		return super.slotClick(slotId, clickedButton, mode, playerIn);
 
 	}

@@ -71,7 +71,7 @@ public class ContainerCaterpillar implements Cloneable{
 		j = 0;
 		k = 0;
 		int Middle = (getMaxSize() + this.storage.added - this.storage.startingIndex) / 2;
-		//Reference.printDebug( this.addedStorage + "," + Middle);
+		Reference.printDebug( this.storage.added + "," + Middle);
 		for (i = this.storage.startingIndex + Middle; i < this.storage.startingIndex + Middle + 12; ++i)
 		{
 

@@ -7,7 +7,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.translation.I18n;
+import net.minecraft.client.resources.I18n;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.input.Mouse;
@@ -73,12 +73,12 @@ public class GuiDrillHead extends GuiContainer
 						List tmoString = new ArrayList<String>();
 						if (widget.Name.equals("power"))
 						{
-							String powertxt = TextFormatting.GREEN + I18n.translateToLocal("on");
+							String powertxt = TextFormatting.GREEN + I18n.format("on");
 							if (!GuiDrillHead.this.caterpillar.running)
 							{
-								powertxt = TextFormatting.RED + I18n.translateToLocal("off");
+								powertxt = TextFormatting.RED + I18n.format("off");
 							}
-							tmoString.add(I18n.translateToLocal("power") + powertxt);
+							tmoString.add(I18n.format("power") + powertxt);
 						}
 						GuiDrillHead.this.drawHoveringText(tmoString,widget.getMouseX() - widget.getGuiX(), widget.getMouseY() - widget.getGuiY());
 					}
@@ -136,7 +136,7 @@ public class GuiDrillHead extends GuiContainer
 							{
 								i1 = 100* (cbt1) / GuiDrillHead.this.caterpillar.maxburntime;
 							}
-							tmoString.add(I18n.translateToLocal("furnace") + i1 + "%");
+							tmoString.add(I18n.format("furnace") + i1 + "%");
 						}
 						GuiDrillHead.this.drawHoveringText(tmoString,widget.getMouseX() - widget.getGuiX(), widget.getMouseY() - widget.getGuiY());
 					}
@@ -169,7 +169,7 @@ public class GuiDrillHead extends GuiContainer
 						List tmoString = new ArrayList<String>();
 						if (widget.Name.equals("scrollbar"))
 						{
-							tmoString.add(TextFormatting.RED + I18n.translateToLocal("wheelstorage"));
+							tmoString.add(TextFormatting.RED + I18n.format("wheelstorage"));
 						}
 						GuiDrillHead.this.drawHoveringText(tmoString,widget.getMouseX() - widget.getGuiX(), widget.getMouseY() - widget.getGuiY());
 					}
@@ -236,7 +236,7 @@ public class GuiDrillHead extends GuiContainer
 						{
 							int where = GuiDrillHead.this.caterpillar.decoration.countindex;
 							//tmoString.add(StatCollector.translateToLocal("selected")  + (GuiDrillHead.this.caterpillar.decoration.selected));
-							tmoString.add(I18n.translateToLocal("where")  + (where));
+							tmoString.add(I18n.format("where")  + (where));
 
 						}
 						GuiDrillHead.this.drawHoveringText(tmoString,widget.getMouseX() - widget.getGuiX(), widget.getMouseY() - widget.getGuiY());
@@ -294,8 +294,8 @@ public class GuiDrillHead extends GuiContainer
 						List tmoString = new ArrayList<String>();
 						if (widget.Name.equals("scrollbar2") || widget.Name.equals("scrollbarmoving2"))
 						{
-							tmoString.add(I18n.translateToLocal("wheelstorage"));
-							tmoString.add(I18n.translateToLocal("selected")  + (GuiDrillHead.this.caterpillar.decoration.selected));
+							tmoString.add(I18n.format("wheelstorage"));
+							tmoString.add(I18n.format("selected")  + (GuiDrillHead.this.caterpillar.decoration.selected));
 							//tmoString.add(StatCollector.translateToLocal("selected")  + (GuiDrillHead.this.caterpillar.decoration.countindex));
 						}
 						GuiDrillHead.this.drawHoveringText(tmoString,widget.getMouseX() - widget.getGuiX(), widget.getMouseY() - widget.getGuiY());
@@ -372,7 +372,7 @@ public class GuiDrillHead extends GuiContainer
 						List tmoString = new ArrayList<String>();
 						if (widget.Name.equals("selected"))
 						{
-							tmoString.add(I18n.translateToLocal("selected")  + (GuiDrillHead.this.caterpillar.decoration.selected));
+							tmoString.add(I18n.format("selected")  + (GuiDrillHead.this.caterpillar.decoration.selected));
 						}
 						GuiDrillHead.this.drawHoveringText(tmoString,widget.getMouseX() - widget.getGuiX(), widget.getMouseY() - widget.getGuiY());
 					}
@@ -441,11 +441,11 @@ public class GuiDrillHead extends GuiContainer
 							int k = Integer.parseInt(getinfo[2]);
 							if (GuiDrillHead.this.caterpillar.reinforcement.replacers.get(j)[k] == 0)
 							{
-								tmoString.add(I18n.translateToLocal("wontreplace") + TextFormatting.RED + Replacement.values()[k].name);
+								tmoString.add(I18n.format("wontreplace") + TextFormatting.RED + Replacement.values()[k].name);
 							}
 							else
 							{
-								tmoString.add(I18n.translateToLocal("willreplace") + TextFormatting.GREEN  + Replacement.values()[k].name);
+								tmoString.add(I18n.format("willreplace") + TextFormatting.GREEN  + Replacement.values()[k].name);
 							}
 						}
 						GuiDrillHead.this.drawHoveringText(tmoString,widget.getMouseX() - widget.getGuiX(), widget.getMouseY() - widget.getGuiY());
@@ -1056,8 +1056,8 @@ public class GuiDrillHead extends GuiContainer
 	}
 
 	private void drawGuiDrillHeadForegroundLayer() {
-		this.fontRendererObj.drawString(I18n.translateToLocal("consumption"), 2, -8, Color.WHITE.getRGB());
-		this.fontRendererObj.drawString(I18n.translateToLocal("gathered"), 120, -8, Color.WHITE.getRGB());
+		this.fontRendererObj.drawString(I18n.format("consumption"), 2, -8, Color.WHITE.getRGB());
+		this.fontRendererObj.drawString(I18n.format("gathered"), 120, -8, Color.WHITE.getRGB());
 	}
 
 	private void drawGuiDrillHeadBackgroundLayer() {

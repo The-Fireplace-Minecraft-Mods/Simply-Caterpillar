@@ -12,7 +12,6 @@ public class PartsReinforcement extends PartsTabbed{
 	public ItemStack[] reinforcementMap = new ItemStack[16];
 	public List<int[]> replacers = new ArrayList();
 
-
 	public PartsReinforcement()
 	{
 		this.setMap();
