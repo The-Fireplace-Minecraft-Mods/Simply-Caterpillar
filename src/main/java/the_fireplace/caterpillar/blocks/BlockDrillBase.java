@@ -56,8 +56,8 @@ public class BlockDrillBase extends BlockContainer {
 				worldIn.setBlockToAir(pos);
 				return;
 			}
-			int Middleindex = (thisCat.inventory.length - 2) / 2;
-			Middleindex += 2;
+			int Middleindex = (thisCat.inventory.length - thisCat.storage.startingIndex) / 2;
+			//Middleindex += thisCat.storage.startingIndex;
 			ItemStack[] thisGuyInv = thisCat.inventory;
 
 			for (int i = 0; i < Middleindex; i++) {

@@ -30,8 +30,7 @@ public class ContainerDrillHead extends Container
 		this.addSlotToContainer(new Slot(tileEntityInventoryIn, ID++, 8 + (4) * 18, 7 + (3) * 18));
 
 		//Left Side
-		int IDMiddle   = (ContainerCaterpillar.getMaxSize() + this.myCaterpillar.storage.added - 1 )/2;
-		//ID++;
+		int IDMiddle   = (ContainerCaterpillar.getMaxSize() + this.myCaterpillar.storage.added - this.myCaterpillar.storage.startingIndex )/2;
 		for (i = 0; i < (IDMiddle/3); ++i)
 		{
 			for (j = 0; j < 3; ++j)

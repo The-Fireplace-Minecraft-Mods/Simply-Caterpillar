@@ -70,7 +70,7 @@ public class ContainerCaterpillar implements Cloneable{
 		}
 		j = 0;
 		k = 0;
-		int Middle = (getMaxSize() + this.storage.added - 1) / 2;
+		int Middle = (getMaxSize() + this.storage.added - this.storage.startingIndex) / 2;
 		//Reference.printDebug( this.addedStorage + "," + Middle);
 		for (i = this.storage.startingIndex + Middle; i < this.storage.startingIndex + Middle + 12; ++i)
 		{
@@ -249,14 +249,8 @@ public class ContainerCaterpillar implements Cloneable{
 		this.setSlotPos(myDrillHeads.getSlot(ID), 8 + (4) * 18, 7 + (3) * 18);
 		ID++;
 
-		//Drillhead
-		AddingSlot = myDrillHeads.getSlot(ID);
-		AddingSlot.putStack(this.inventory[ID]);
-		this.setSlotPos(myDrillHeads.getSlot(ID), 8 + (4) * 18, 7);
-
 		//Left Side
-		int IDMiddle   = (ContainerCaterpillar.getMaxSize() + this.storage.added - 2 )/2;
-		ID++;
+		int IDMiddle   = (ContainerCaterpillar.getMaxSize() + this.storage.added - this.storage.startingIndex )/2;
 		for (i = 0; i < (IDMiddle/3); ++i)
 		{
 			for (j = 0; j < 3; ++j)
@@ -288,9 +282,8 @@ public class ContainerCaterpillar implements Cloneable{
 	}
 	public boolean addToOutInventory(ItemStack toAdd)
 	{
-		int Middleindex = (this.inventory.length - 2) / 2;
-		Middleindex += 2;
-
+		int Middleindex = (this.inventory.length - this.storage.startingIndex) / 2;
+		Middleindex += this.storage.startingIndex;
 
 		for (int i = Middleindex; i < this.inventory.length; i++) {
 			ItemStack slot = this.inventory[i];
@@ -339,9 +332,9 @@ public class ContainerCaterpillar implements Cloneable{
 		}
 		ItemStack[] tmpIT = new ItemStack[ContainerCaterpillar.getMaxSize() + this.storage.added + Change];
 
-		int MiddleOldStorage = (this.inventory.length - 2) / 2;
-		int MiddleNewStorage = (tmpIT.length - 2) / 2;
-		int offset = 2;
+		int MiddleOldStorage = (this.inventory.length - this.storage.startingIndex) / 2;
+		int MiddleNewStorage = (tmpIT.length - this.storage.startingIndex) / 2;
+		int offset = this.storage.startingIndex;
 		if (MiddleNewStorage > MiddleOldStorage)// if new inv is bigger than the old one, short it
 		{
 			ItemStack[] tmpITRight = new ItemStack[MiddleNewStorage];
@@ -390,7 +383,7 @@ public class ContainerCaterpillar implements Cloneable{
 		{
 			tmpIT = this.inventory.clone();
 		}
-		this.storage.startingIndex = 2;
+		this.storage.startingIndex = 1;
 		this.inventory = tmpIT.clone();
 		this.storage.added = this.storage.added + Change;
 	}
