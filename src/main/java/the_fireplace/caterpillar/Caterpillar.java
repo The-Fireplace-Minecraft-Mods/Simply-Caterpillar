@@ -42,13 +42,11 @@ import the_fireplace.caterpillar.timers.TimerMain;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
-@Mod(name = Caterpillar.MODNAME, modid = Caterpillar.MODID, guiFactory=Reference.guiFactory, updateJSON = "http://caterpillar.bitnamiapp.com/jsons/simplycaterpillar.json")
+@Mod(name = Caterpillar.MODNAME, modid = Caterpillar.MODID, guiFactory=Reference.guiFactory, updateJSON = "http://caterpillar.bitnamiapp.com/jsons/simplycaterpillar.json", acceptedMinecraftVersions = "[1.9.4,1.10.2]")
 public class Caterpillar
 {
 	public static final String MODID = "simplycaterpillar";
-	public static String VERSION;
 	public static final String MODNAME = "Simply Caterpillar";
-	public static final String curseCode = "245437-simply-caterpillar";
 	@Instance(Caterpillar.MODID)
 	public static Caterpillar instance;
 
@@ -67,12 +65,6 @@ public class Caterpillar
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
-		String[] version = event.getModMetadata().version.split("\\.");
-		if(version[3].equals("BUILDNUMBER")) {//Dev environment
-			VERSION = event.getModMetadata().version.replace("BUILDNUMBER", "9001");
-			dev = true;
-		}else//Released build
-			VERSION = event.getModMetadata().version;
 		Config.init(event.getSuggestedConfigurationFile());
 
 		Reference.MainNBT = new HandlerNBTTag(MODID);

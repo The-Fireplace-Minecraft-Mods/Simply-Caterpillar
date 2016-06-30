@@ -346,24 +346,6 @@ public class GuiDrillHead extends GuiContainer
 				tmpAdding.beforeDraw = tmpRun;
 				toAddWid.add(tmpAdding);
 
-				/*
-
-				clickedtmp = new AbstractRunnerWidgets() {
-
-					@Override
-					public void run(PartsGuiWidgets widget) {
-						if (widget.Name.startsWith("selection"))
-						{
-							int index = Integer.parseInt(widget.Name.replace("selection", ""));
-							index += 1;
-							GuiDrillHead.this.caterpillar.decoration.selected = index;
-							GuiDrillHead.this.caterpillar.placeSlotsforDecorations(GuiDrillHead.this.inventorySlots);
-							GuiDrillHead.this.dispenserInventory.markDirty();
-							GuiDrillHead.this.sendUpdates();
-						}
-
-					}
-				};*/
 				tmpAdding = new PartsGuiWidgets("selected",this,13+12, 44, 18, 18);
 				tmpAdding.hooverrun = new AbstractRunnerWidgets() {
 
@@ -378,28 +360,7 @@ public class GuiDrillHead extends GuiContainer
 					}
 				};
 				toAddWid.add(tmpAdding);
-				/*
-				for (int i = 0; i < 9; i++) {
-					tmpAdding = new PartsGuiWidgets("selection" + i,this,6 +18*i, 6, 18, 18);
-					tmpAdding.clicked = clickedtmp;
-					tmpAdding.hooverrun = new AbstractRunnerWidgets() {
 
-						@Override
-						public void run(PartsGuiWidgets widget) {
-							List tmoString = new ArrayList<String>();
-							if (widget.Name.startsWith("selection"))
-							{
-								int index = Integer.parseInt(widget.Name.replace("selection", ""));
-								index += 1;
-								tmoString.add(StatCollector.translateToLocal("clicktoselect")  + (index));
-							}
-							GuiDrillHead.this.drawHoveringText(tmoString,widget.getMouseX() - widget.getGuiX(), widget.getMouseY() - widget.getGuiY());
-						}
-					};
-
-					toAddWid.add(tmpAdding);
-				}
-				 */
 				this.addDefaultButtons(toAddWid, 5, 5, 40, 5);
 
 				break;
@@ -471,9 +432,7 @@ public class GuiDrillHead extends GuiContainer
 								widget.drawA = false;
 								widget.drawB = true;
 							}
-
 						}
-
 					}
 				};
 				for (int i = 0; i < 5; i++) {//Left
@@ -544,14 +503,12 @@ public class GuiDrillHead extends GuiContainer
 		tmpAdding.setTexture(guiTextureA, guiTextureB);
 		tmpAdding.drawA = true;
 		tmpAdding.hooverrun = new AbstractRunnerWidgets() {
-
 			@Override
 			public void run(PartsGuiWidgets widget) {
 				GuiDrillHead.this.buttonpress(widget);
 			}
 		};
 		tmpAdding.hoovernotrun = new AbstractRunnerWidgets() {
-
 			@Override
 			public void run(PartsGuiWidgets widget) {
 				if (widget.Name.equals("default") || widget.Name.equals("defaultall"))
