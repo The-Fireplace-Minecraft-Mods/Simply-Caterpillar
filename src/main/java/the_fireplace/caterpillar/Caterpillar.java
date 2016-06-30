@@ -99,12 +99,12 @@ public class Caterpillar
 	}
 
 	private void recipes() {
-		this.addRecipe(InitBlocks.drillbase, "C C", "CRC", "CPC", 'C', "cobblestone", 'R', "dustRedstone", 'P', "plankWood");
+		this.addRecipe(InitBlocks.drillbase, "C C", "CRC", "CPC", 'C', "cobblestone", 'R', "dustRedstone", 'P', "ingotIron");
 		this.addRecipe(InitBlocks.drillheads, "PPP", " D ", " F ", 'D', InitBlocks.drillbase,  'P', "plankWood", 'F', Blocks.FURNACE);
-		this.addRecipe(InitBlocks.reinforcements, " P ", "PDP", " P ", 'D', InitBlocks.drillbase, 'I', "ingotIron", 'P', Blocks.PISTON);
+		this.addRecipe(InitBlocks.reinforcements, " P ", "PDP", " P ", 'D', InitBlocks.drillbase, 'P', Blocks.PISTON);
 		this.addRecipe(InitBlocks.decoration, "PDP", 'D', InitBlocks.drillbase, 'P', Blocks.DISPENSER);
-		this.addRecipe(InitBlocks.collector, "D", "H", 'D', InitBlocks.drillbase, 'I', "ingotIron", 'H', Blocks.HOPPER);
-		this.addRecipe(InitBlocks.storage, "PDP", 'D', InitBlocks.drillbase, 'I', "ingotIron", 'P', Blocks.CHEST);
+		this.addRecipe(InitBlocks.collector, "D", "H", 'D', InitBlocks.drillbase, 'H', Blocks.HOPPER);
+		this.addRecipe(InitBlocks.storage, "PDP", 'D', InitBlocks.drillbase, 'P', Blocks.CHEST);
 		this.addRecipe(InitBlocks.incinerator, "F", "D", "P", 'D', InitBlocks.drillbase, 'F', Blocks.FURNACE, 'P', Items.LAVA_BUCKET);
 	}
 
