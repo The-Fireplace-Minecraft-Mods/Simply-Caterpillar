@@ -32,7 +32,7 @@ curseforge {
   project {
     id = '245437'
     changelog = file('changelog.txt')
-    releaseType = 'release'
+    releaseType = 'beta'
     addGameVersion '1.10.2'
 	addGameVersion '1.10'
 	addGameVersion '1.9.4'
@@ -52,7 +52,7 @@ modsIO {
 		modid = "1200"
 		minecraft = "1.10.2"
 		try{changelog = file('changelog.txt').text}catch(Exception e){changelog=""}
-		tag = ""
+		tag = "beta"
 		current = true
     }
 }
