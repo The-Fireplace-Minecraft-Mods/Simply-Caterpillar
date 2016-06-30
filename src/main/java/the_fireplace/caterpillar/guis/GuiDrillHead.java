@@ -1089,22 +1089,18 @@ public class GuiDrillHead extends GuiContainer
 	{
 		if (Speed < 0)
 		{
-			this.caterpillar.storage.startingIndex++;
-			this.caterpillar.storage.startingIndex++;
-			this.caterpillar.storage.startingIndex++;
+			this.caterpillar.storage.startingIndex+=3;
 
-			int Resetindex = ((this.caterpillar.storage.added + ContainerCaterpillar.getMaxSize() - 2) / 2) - 10;
+			int resetindex = ((this.caterpillar.storage.added + ContainerCaterpillar.getMaxSize() - this.caterpillar.storage.startingIndex) / 2) - 10;
 
-			if (Integer.compare(this.caterpillar.storage.startingIndex, Resetindex)  >  0)
+			if (Integer.compare(this.caterpillar.storage.startingIndex, resetindex)  >  0)
 			{
-				this.caterpillar.storage.startingIndex = Resetindex;
+				this.caterpillar.storage.startingIndex = resetindex;
 			}
 		}
 		else
 		{
-			this.caterpillar.storage.startingIndex--;
-			this.caterpillar.storage.startingIndex--;
-			this.caterpillar.storage.startingIndex--;
+			this.caterpillar.storage.startingIndex-=3;
 
 			if (this.caterpillar.storage.startingIndex < 2)
 			{

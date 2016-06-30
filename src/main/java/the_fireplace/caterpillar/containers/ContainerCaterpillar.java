@@ -45,7 +45,7 @@ public class ContainerCaterpillar implements Cloneable{
 	{
 		return 25;
 	}
-	public void updateScroll(Container myDrillHeads ) {
+	public void updateScroll(Container myDrillHeads) {
 		int i;
 		int j;
 		int k;
