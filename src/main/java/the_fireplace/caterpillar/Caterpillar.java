@@ -83,7 +83,6 @@ public class Caterpillar
 		network.registerMessage(PacketParticles.Handler.class, PacketParticles.class, 1, Side.CLIENT);
 	}
 
-
 	@EventHandler
 	public void init(FMLInitializationEvent event)
 	{

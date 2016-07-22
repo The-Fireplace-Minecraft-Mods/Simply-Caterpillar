@@ -19,6 +19,7 @@ public class BlockDrillBlades extends Block
 		this.setResistance(0.1F);
 		this.disableStats();
 		this.translucent = true;
+		this.setHarvestLevel("pickaxe", 0);
 	}
 
 	@Override

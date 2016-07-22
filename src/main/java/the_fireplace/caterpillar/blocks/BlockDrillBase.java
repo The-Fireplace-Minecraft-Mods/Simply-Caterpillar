@@ -44,6 +44,7 @@ public class BlockDrillBase extends BlockContainer {
 		this.pushticks = new Hashtable<>();
 		//this.setBlockBounds(-1.0F, 0.0F, -1.0F, 2.0F, 3.0F, 2.0F);
 		this.movementTicks = 25;
+		this.setHarvestLevel("pickaxe", 0);
 	}
 
 	protected void takeOutMatsandPlace(World worldIn, String id, BlockPos pos, IBlockState state)
