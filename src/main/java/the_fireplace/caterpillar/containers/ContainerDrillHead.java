@@ -10,6 +10,7 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityFurnace;
 import the_fireplace.caterpillar.Caterpillar;
+import the_fireplace.caterpillar.Reference;
 
 public class ContainerDrillHead extends Container
 {
@@ -47,6 +48,8 @@ public class ContainerDrillHead extends Container
 				this.addSlotToContainer(new Slot(tileEntityInventoryIn, ID++, 8 + (j + 6) * 18, -100));
 			}
 		}
+
+		Reference.printDebug("Slot Count: "+ID);
 
 		this.myCaterpillar.updateScroll(this);
 
