@@ -1,13 +1,15 @@
 package the_fireplace.caterpillar.inits;
 
 import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import the_fireplace.caterpillar.Caterpillar;
+import the_fireplace.caterpillar.Reference;
 import the_fireplace.caterpillar.blocks.*;
 
 public class InitBlocks {
@@ -45,14 +47,18 @@ public class InitBlocks {
 		registerBlock(incinerator);
 	}
 	private static void registerBlock(Block block){
-		GameRegistry.registerBlock(block, block.getUnlocalizedName().substring(5));
+		GameRegistry.register(block.setRegistryName(block.getUnlocalizedName().substring(5)));
+		GameRegistry.register(new ItemBlock(block).setRegistryName(block.getUnlocalizedName().substring(5)));
 	}
 	@SideOnly(Side.CLIENT)
 	public static void registerRender(Block block)
 	{
 		Item item = Item.getItemFromBlock(block);
 
-		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, 0, new ModelResourceLocation(Caterpillar.MODID + ":" + item.getUnlocalizedName().substring(5), "inventory"));
+		if(item != null)
+			ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(Caterpillar.MODID + ":" + item.getUnlocalizedName().substring(5), "inventory"));
+		else
+			Reference.printDebug("Error: Null item for "+block);
 	}
 	@SideOnly(Side.CLIENT)
 	public static void registerRenders()

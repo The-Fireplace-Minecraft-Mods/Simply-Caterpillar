@@ -5,7 +5,7 @@ import the_fireplace.caterpillar.Caterpillar;
 import the_fireplace.caterpillar.Caterpillar.GuiTabs;
 import the_fireplace.caterpillar.Reference;
 import the_fireplace.caterpillar.blocks.BlockDrillBase;
-import the_fireplace.caterpillar.containers.ContainerCaterpillar;
+import the_fireplace.caterpillar.containers.CaterpillarData;
 import the_fireplace.caterpillar.containers.ContainerDrillHead;
 import the_fireplace.caterpillar.guis.GuiDrillHead;
 import the_fireplace.caterpillar.packets.PacketCaterpillarControls;
@@ -33,7 +33,7 @@ public class HandlerGUI implements IGuiHandler
 
 			TileEntityDrillComponent TEDrill = (TileEntityDrillComponent) world.getTileEntity(new BlockPos(x, y, z));
 			TEDrill.isSelected = true;
-			ContainerCaterpillar conCat =  Caterpillar.instance.getSelectedCaterpillar();
+			CaterpillarData conCat =  Caterpillar.instance.getSelectedCaterpillar();
 			if (conCat != null)
 			{
 				Reference.printDebug("Client GUI: " + conCat.name);
@@ -50,7 +50,7 @@ public class HandlerGUI implements IGuiHandler
 		{
 			if (ID == 0)
 			{
-				ContainerCaterpillar conCat = Caterpillar.instance.getContainerCaterpillar(tileEntity.getPos(), world);
+				CaterpillarData conCat = Caterpillar.instance.getContainerCaterpillar(tileEntity.getPos(), world);
 				if (conCat != null)
 				{
 					conCat.tabs.selected = GuiTabs.MAIN;

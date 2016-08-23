@@ -27,7 +27,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import the_fireplace.caterpillar.blocks.BlockDrillBase;
 import the_fireplace.caterpillar.blocks.BlockDrillHeads;
-import the_fireplace.caterpillar.containers.ContainerCaterpillar;
+import the_fireplace.caterpillar.containers.CaterpillarData;
 import the_fireplace.caterpillar.handlers.HandlerEvents;
 import the_fireplace.caterpillar.handlers.HandlerGUI;
 import the_fireplace.caterpillar.handlers.HandlerNBTTag;
@@ -53,10 +53,10 @@ public class Caterpillar
 	public static final CreativeTabs TabCaterpillar = new TabCaterpillar();
 	public int saveCount = 0;
 	public TimerMain ModTasks;
-	boolean dev = false;
+	boolean dev = true;
 
-	private HashMap<String, ContainerCaterpillar> mainContainers;
-	private ContainerCaterpillar selectedCaterpillar;
+	private HashMap<String, CaterpillarData> mainContainers;
+	private CaterpillarData selectedCaterpillar;
 
 	@SidedProxy(clientSide = Reference.CLIENT_PROXY_CLASS, serverSide = Reference.SERVER_PROXY_CLASS)
 	public static ProxyCommon proxy;
@@ -81,19 +81,20 @@ public class Caterpillar
 		network.registerMessage(PacketCaterpillarControls.Handler.class, PacketCaterpillarControls.class, 0, Side.CLIENT);
 
 		network.registerMessage(PacketParticles.Handler.class, PacketParticles.class, 1, Side.CLIENT);
+
+		InitBlocks.init();
+		InitBlocks.register();
+		proxy.registerRenders();
 	}
 
 	@EventHandler
 	public void init(FMLInitializationEvent event)
 	{
-		this.register();
-
+		GameRegistry.registerTileEntity(TileEntityDrillComponent.class, "DrillHead");
+		MinecraftForge.EVENT_BUS.register(new HandlerEvents());
 		this.recipes();
-
 		Reference.cleanModsFolder();
-
 		Config.load();
-
 		Reference.ModTick.scheduleAtFixedRate(this.ModTasks, 10, 10);
 	}
 
@@ -153,11 +154,11 @@ public class Caterpillar
 		}
 	}
 
-	public ContainerCaterpillar getSelectedCaterpillar()
+	public CaterpillarData getSelectedCaterpillar()
 	{
 		return this.selectedCaterpillar;
 	}
-	public void setSelectedCaterpillar(ContainerCaterpillar selectedcat)
+	public void setSelectedCaterpillar(CaterpillarData selectedcat)
 	{
 		this.selectedCaterpillar = selectedcat;
 	}
@@ -192,7 +193,7 @@ public class Caterpillar
 		return this.doesHaveCaterpillar(CatID);
 	}
 
-	public void putContainerCaterpillar(ContainerCaterpillar conCat, World objworld) {
+	public void putContainerCaterpillar(CaterpillarData conCat, World objworld) {
 		IBlockState thisState =  objworld.getBlockState(conCat.pos);
 		int[] movingXZ = this.getWayMoving(thisState);
 		if (movingXZ[0] == -2 || movingXZ[1] == -2)
@@ -203,15 +204,15 @@ public class Caterpillar
 		this.putContainerCaterpillar(CatID, conCat);
 	}
 
-	public void putContainerCaterpillar(String CaterpillarID, ContainerCaterpillar conCat) {
+	public void putContainerCaterpillar(String CaterpillarID, CaterpillarData conCat) {
 		this.mainContainers.put(CaterpillarID, conCat);
 	}
 
-	public ContainerCaterpillar getContainerCaterpillar(String caterpillarID) {
+	public CaterpillarData getContainerCaterpillar(String caterpillarID) {
 		return this.mainContainers.get(caterpillarID);
 	}
 
-	public ContainerCaterpillar getContainerCaterpillar(BlockPos pos, World objWorld)
+	public CaterpillarData getContainerCaterpillar(BlockPos pos, World objWorld)
 	{
 		IBlockState thisState =  objWorld.getBlockState(pos);
 		int[] movingXZ = this.getWayMoving(thisState);
@@ -224,7 +225,7 @@ public class Caterpillar
 		return this.getContainerCaterpillar(catID);
 	}
 
-	public ContainerCaterpillar getContainerCaterpillar(BlockPos pos, IBlockState thisState)
+	public CaterpillarData getContainerCaterpillar(BlockPos pos, IBlockState thisState)
 	{
 		int[] movingXZ = this.getWayMoving(thisState);
 		if (movingXZ[0] == -2 || movingXZ[1] == -2)
@@ -242,8 +243,8 @@ public class Caterpillar
 		{
 			NBTTagCompound tmpNBT = new NBTTagCompound();
 			int i = 0;
-			for (Entry<String, ContainerCaterpillar> key : this.mainContainers.entrySet()) {
-				ContainerCaterpillar conCat = key.getValue();
+			for (Entry<String, CaterpillarData> key : this.mainContainers.entrySet()) {
+				CaterpillarData conCat = key.getValue();
 				tmpNBT.setTag("caterpillar" + i, conCat.writeNBTCaterpillar());
 				i++;
 			}
@@ -278,7 +279,7 @@ public class Caterpillar
 			int size = tmpNBT.getInteger("count");
 			for(int i=0;i<size;i++)
 			{
-				ContainerCaterpillar conCata = ContainerCaterpillar.readCaterpiller(tmpNBT.getCompoundTag("caterpillar" + i));
+				CaterpillarData conCata = CaterpillarData.readCaterpiller(tmpNBT.getCompoundTag("caterpillar" + i));
 				conCata.tabs.selected = GuiTabs.MAIN;
 				World objWorld = this.getCaterpillarWorld(conCata.pos);
 				if (objWorld != null)
@@ -307,19 +308,7 @@ public class Caterpillar
 		this.ModTasks.inSetup = false;
 		this.mainContainers.clear();
 	}
-	private void register() {
-		InitBlocks.init();
-
-		InitBlocks.register();
-
-		GameRegistry.registerTileEntity(TileEntityDrillComponent.class, "DrillHead");
-
-		proxy.registerRenders();
-
-		MinecraftForge.EVENT_BUS.register(new HandlerEvents());
-	}
-
-	public ItemStack[] getInventory(ContainerCaterpillar MyCaterpillar, GuiTabs selected)
+	public ItemStack[] getInventory(CaterpillarData MyCaterpillar, GuiTabs selected)
 	{
 		if (MyCaterpillar != null)
 		{

@@ -17,7 +17,7 @@ import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import the_fireplace.caterpillar.Caterpillar;
 import the_fireplace.caterpillar.Config;
 import the_fireplace.caterpillar.Reference;
-import the_fireplace.caterpillar.containers.ContainerCaterpillar;
+import the_fireplace.caterpillar.containers.CaterpillarData;
 import the_fireplace.caterpillar.guis.GuiDrillHead;
 import the_fireplace.caterpillar.inits.InitBlocks;
 import the_fireplace.caterpillar.packets.PacketParticles;
@@ -53,7 +53,7 @@ public class BlockDrillHeads extends BlockDrillBase
 
 			if (Caterpillar.instance.doesHaveCaterpillar(catID))
 			{
-				ContainerCaterpillar conCata = Caterpillar.instance.getContainerCaterpillar(catID);
+				CaterpillarData conCata = Caterpillar.instance.getContainerCaterpillar(catID);
 				for (ItemStack element : conCata.inventory) {
 
 					if (element != null)
@@ -77,9 +77,9 @@ public class BlockDrillHeads extends BlockDrillBase
 			if (!Caterpillar.instance.doesHaveCaterpillar(catID))
 			{
 				String catId = Caterpillar.instance.getCaterpillarID(movingXZ, pos);
-				Caterpillar.instance.putContainerCaterpillar(catId,  new ContainerCaterpillar(pos, catId));
+				Caterpillar.instance.putContainerCaterpillar(catId,  new CaterpillarData(pos, catId));
 			}
-			ContainerCaterpillar thisCat = Caterpillar.instance.getContainerCaterpillar(catID);
+			CaterpillarData thisCat = Caterpillar.instance.getContainerCaterpillar(catID);
 
 			BlockDrillHeads basedrillhead = (BlockDrillHeads)InitBlocks.drillheads;
 
@@ -206,7 +206,7 @@ public class BlockDrillHeads extends BlockDrillBase
 		return 0;
 	}
 
-	private void fixStorage(BlockPos pos, ContainerCaterpillar thisCat) {
+	private void fixStorage(BlockPos pos, CaterpillarData thisCat) {
 		thisCat.storage.count = 0;
 	}
 
@@ -217,7 +217,7 @@ public class BlockDrillHeads extends BlockDrillBase
 	}
 
 	private void addMoreFuel(String catID) {
-		ContainerCaterpillar thisCat = Caterpillar.instance.getContainerCaterpillar(catID);
+		CaterpillarData thisCat = Caterpillar.instance.getContainerCaterpillar(catID);
 		if (thisCat != null)
 		{
 			if (thisCat.burntime < 1)

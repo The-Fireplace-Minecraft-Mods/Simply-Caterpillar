@@ -8,7 +8,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import the_fireplace.caterpillar.Caterpillar;
 import the_fireplace.caterpillar.Reference;
-import the_fireplace.caterpillar.containers.ContainerCaterpillar;
+import the_fireplace.caterpillar.containers.CaterpillarData;
 import the_fireplace.caterpillar.parts.PartsDecoration;
 
 public class BlockDecoration extends BlockDrillBase
@@ -23,7 +23,7 @@ public class BlockDecoration extends BlockDrillBase
 	{
 		if (Reference.loaded && !worldIn.isRemote)
 		{
-			ContainerCaterpillar cater = Caterpillar.instance.getContainerCaterpillar(pos, state);
+			CaterpillarData cater = Caterpillar.instance.getContainerCaterpillar(pos, state);
 			if (cater != null)
 			{
 				PartsDecoration thisSection = cater.decoration;
@@ -37,7 +37,7 @@ public class BlockDecoration extends BlockDrillBase
 		super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
 		if (Reference.loaded && !worldIn.isRemote)
 		{
-			ContainerCaterpillar cater = Caterpillar.instance.getContainerCaterpillar(pos, worldIn);
+			CaterpillarData cater = Caterpillar.instance.getContainerCaterpillar(pos, worldIn);
 			if (cater != null)
 			{
 				PartsDecoration thisSection = cater.decoration;
@@ -51,7 +51,7 @@ public class BlockDecoration extends BlockDrillBase
 	@Override
 	protected void fired(World worldIn, BlockPos pos, IBlockState state, String catID, int[] movingXZ, int Count)
 	{
-		ContainerCaterpillar myCat = Caterpillar.instance.getContainerCaterpillar(catID);
+		CaterpillarData myCat = Caterpillar.instance.getContainerCaterpillar(catID);
 		if (myCat == null)
 		{
 			return;
@@ -103,7 +103,7 @@ public class BlockDecoration extends BlockDrillBase
 	}
 
 	@Override
-	public void updateCat(ContainerCaterpillar cat){
+	public void updateCat(CaterpillarData cat){
 		cat.decoration.howclose = 2;
 	}
 }

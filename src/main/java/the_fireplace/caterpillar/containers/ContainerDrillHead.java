@@ -14,10 +14,10 @@ import the_fireplace.caterpillar.Reference;
 
 public class ContainerDrillHead extends Container
 {
-	private ContainerCaterpillar myCaterpillar;
+	private CaterpillarData myCaterpillar;
 	private IInventory playerInventory;
 	private IInventory tileEntityInventory;
-	public ContainerDrillHead(EntityPlayer player, IInventory tileEntityInventoryIn, ContainerCaterpillar inCaterpillar)
+	public ContainerDrillHead(EntityPlayer player, IInventory tileEntityInventoryIn, CaterpillarData inCaterpillar)
 	{
 		this.playerInventory = player.inventory;
 		this.myCaterpillar = inCaterpillar;
@@ -31,7 +31,7 @@ public class ContainerDrillHead extends Container
 		this.addSlotToContainer(new Slot(tileEntityInventoryIn, ID++, 8 + (4) * 18, 7 + (3) * 18));
 
 		//Left Side
-		int IDMiddle   = (ContainerCaterpillar.getMaxSize() + this.myCaterpillar.storage.added - this.myCaterpillar.storage.startingIndex )/2;
+		int IDMiddle   = (CaterpillarData.getMaxSize() + this.myCaterpillar.storage.added - this.myCaterpillar.storage.startingIndex )/2;
 		for (i = 0; i < (IDMiddle/3); ++i)
 		{
 			for (j = 0; j < 3; ++j)
@@ -185,7 +185,7 @@ public class ContainerDrillHead extends Container
 
 		return itemstack;
 	}
-	public void updateCaterpillar(ContainerCaterpillar caterpillar)
+	public void updateCaterpillar(CaterpillarData caterpillar)
 	{
 		this.myCaterpillar = caterpillar;
 		this.myCaterpillar.myDrillHead = this;

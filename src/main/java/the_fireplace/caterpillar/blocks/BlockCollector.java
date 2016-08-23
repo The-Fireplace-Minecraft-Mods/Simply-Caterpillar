@@ -6,7 +6,7 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import the_fireplace.caterpillar.Caterpillar;
-import the_fireplace.caterpillar.containers.ContainerCaterpillar;
+import the_fireplace.caterpillar.containers.CaterpillarData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +35,7 @@ public class BlockCollector extends BlockDrillBase
 		}
 
 		ETList.stream().filter(ETObject -> ETObject instanceof EntityItem).forEach(ETObject -> {
-			ContainerCaterpillar myCat = Caterpillar.instance.getContainerCaterpillar(pos, state);
+			CaterpillarData myCat = Caterpillar.instance.getContainerCaterpillar(pos, state);
 			if (myCat.addToOutInventory(((EntityItem) ETObject).getEntityItem())) {
 				worldIn.removeEntity(ETObject);
 			}

@@ -17,7 +17,7 @@ import the_fireplace.caterpillar.Caterpillar.Replacement;
 import the_fireplace.caterpillar.Config;
 import the_fireplace.caterpillar.Reference;
 import the_fireplace.caterpillar.abstracts.AbstractRunnerWidgets;
-import the_fireplace.caterpillar.containers.ContainerCaterpillar;
+import the_fireplace.caterpillar.containers.CaterpillarData;
 import the_fireplace.caterpillar.containers.ContainerDrillHead;
 import the_fireplace.caterpillar.packets.PacketCaterpillarControls;
 import the_fireplace.caterpillar.parts.PartsGuiWidgets;
@@ -35,11 +35,11 @@ public class GuiDrillHead extends GuiContainer
 {
 	/** The inventory contained within the corresponding Dispenser. */
 	public IInventory dispenserInventory;
-	private ContainerCaterpillar caterpillar;
+	private CaterpillarData caterpillar;
 	private HashMap<GuiTabs, List<PartsGuiWidgets>> widgetsHolder;
 	private List<PartsGuiWidgets> selectedWidgets;
 	private PartsTutorial howTut;
-	public GuiDrillHead(EntityPlayer player, IInventory dispenserInv, ContainerCaterpillar DH)
+	public GuiDrillHead(EntityPlayer player, IInventory dispenserInv, CaterpillarData DH)
 	{
 		super(new ContainerDrillHead(player, dispenserInv, DH));
 		this.dispenserInventory = dispenserInv;
@@ -1091,7 +1091,7 @@ public class GuiDrillHead extends GuiContainer
 		{
 			this.caterpillar.storage.startingIndex+=3;
 
-			int resetindex = ((this.caterpillar.storage.added + ContainerCaterpillar.getMaxSize() - this.caterpillar.storage.startingIndex) / 2) - 10;
+			int resetindex = ((this.caterpillar.storage.added + CaterpillarData.getMaxSize() - this.caterpillar.storage.startingIndex) / 2) - 10;
 
 			if (Integer.compare(this.caterpillar.storage.startingIndex, resetindex)  >  0)
 			{

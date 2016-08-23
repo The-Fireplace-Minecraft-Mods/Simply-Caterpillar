@@ -9,23 +9,23 @@ import net.minecraftforge.fml.relauncher.Side;
 
 import the_fireplace.caterpillar.Caterpillar;
 import the_fireplace.caterpillar.Reference;
-import the_fireplace.caterpillar.containers.ContainerCaterpillar;
+import the_fireplace.caterpillar.containers.CaterpillarData;
 
 public class PacketCaterpillarControls implements IMessage{
 
-	public ContainerCaterpillar remoteCaterpillar;
+	public CaterpillarData remoteCaterpillar;
 	public PacketCaterpillarControls()
 	{
 
 	}
-	public PacketCaterpillarControls(ContainerCaterpillar remoteCaterpillar)
+	public PacketCaterpillarControls(CaterpillarData remoteCaterpillar)
 	{
 		this.remoteCaterpillar = remoteCaterpillar;
 	}
 	@Override
 	public void fromBytes(ByteBuf buf) {
 
-		this.remoteCaterpillar = ContainerCaterpillar.readCaterpiller(ByteBufUtils.readTag(buf));
+		this.remoteCaterpillar = CaterpillarData.readCaterpiller(ByteBufUtils.readTag(buf));
 	}
 
 	@Override
@@ -40,7 +40,7 @@ public class PacketCaterpillarControls implements IMessage{
 
 		@Override
 		public IMessage onMessage(PacketCaterpillarControls message, MessageContext ctx) {
-				ContainerCaterpillar cater =  message.remoteCaterpillar;
+				CaterpillarData cater =  message.remoteCaterpillar;
 				boolean foundcat  =Caterpillar.instance.doesHaveCaterpillar(cater.name);
 				Reference.printDebug("Packets(" + ctx.side.toString() +"): Received, " + cater.name + ", " + foundcat);
 				if (ctx.side.equals(Side.CLIENT))

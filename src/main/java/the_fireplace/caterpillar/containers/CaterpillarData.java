@@ -10,7 +10,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import the_fireplace.caterpillar.parts.*;
 
-public class ContainerCaterpillar implements Cloneable{
+public class CaterpillarData implements Cloneable{
 
 	public ItemStack[] inventory;
 	public int burntime;
@@ -26,9 +26,9 @@ public class ContainerCaterpillar implements Cloneable{
 	public PartsTabs tabs;
 	public boolean running = true;
 	public ContainerDrillHead myDrillHead;
-	public ContainerCaterpillar(BlockPos drillhead, String key)
+	public CaterpillarData(BlockPos drillhead, String key)
 	{
-		this.inventory = new ItemStack[ContainerCaterpillar.getMaxSize()];
+		this.inventory = new ItemStack[CaterpillarData.getMaxSize()];
 		this.burntime = 0;
 		this.name = key;
 		this.headTick = 0;
@@ -93,7 +93,7 @@ public class ContainerCaterpillar implements Cloneable{
 	}
 	public void resetSlots(Container myDrillHeads, boolean changepos)
 	{
-		for (int i = 0; i < ContainerCaterpillar.getMaxSize() + this.storage.added; ++i)
+		for (int i = 0; i < CaterpillarData.getMaxSize() + this.storage.added; ++i)
 		{
 			Slot AddingSlot = myDrillHeads.getSlot(i);
 			//AddingSlot.putStack(null);
@@ -201,7 +201,7 @@ public class ContainerCaterpillar implements Cloneable{
 
 		}
 		//Everything else
-		for (int i = 8; i < ContainerCaterpillar.getMaxSize() + this.storage.added; ++i)
+		for (int i = 8; i < CaterpillarData.getMaxSize() + this.storage.added; ++i)
 		{
 			Slot AddingSlot = myDrillHeads.getSlot(i);
 			this.setSlotPos(AddingSlot, -100, -100);
@@ -225,7 +225,7 @@ public class ContainerCaterpillar implements Cloneable{
 		}
 
 		//Everything else
-		for (int i = 12; i < ContainerCaterpillar.getMaxSize() + this.storage.added; ++i)
+		for (int i = 12; i < CaterpillarData.getMaxSize() + this.storage.added; ++i)
 		{
 			Slot AddingSlot = myDrillHeads.getSlot(i);
 			this.setSlotPos(AddingSlot, -100, -100);
@@ -247,7 +247,7 @@ public class ContainerCaterpillar implements Cloneable{
 		ID++;
 
 		//Left Side
-		int IDMiddle   = (ContainerCaterpillar.getMaxSize() + this.storage.added - this.storage.startingIndex )/2;
+		int IDMiddle   = (CaterpillarData.getMaxSize() + this.storage.added - this.storage.startingIndex )/2;
 		for (i = 0; i < (IDMiddle/3); ++i)
 		{
 			for (j = 0; j < 3; ++j)
@@ -308,11 +308,11 @@ public class ContainerCaterpillar implements Cloneable{
 
 	}
 	@Override
-	public ContainerCaterpillar clone()
+	public CaterpillarData clone()
 	{
 		String key = this.name;
 		BlockPos posP = new BlockPos(this.pos.getX(), this.pos.getY(), this.pos.getZ());
-		ContainerCaterpillar newCatp = new ContainerCaterpillar(posP, key);
+		CaterpillarData newCatp = new CaterpillarData(posP, key);
 		newCatp.inventory = this.inventory.clone();
 		newCatp.maxburntime = this.maxburntime;
 		newCatp.storage.added = this.storage.added;
@@ -327,7 +327,7 @@ public class ContainerCaterpillar implements Cloneable{
 		{
 			return;
 		}
-		ItemStack[] tmpIT = new ItemStack[ContainerCaterpillar.getMaxSize() + this.storage.added + Change];
+		ItemStack[] tmpIT = new ItemStack[CaterpillarData.getMaxSize() + this.storage.added + Change];
 
 		int MiddleOldStorage = (this.inventory.length - this.storage.startingIndex) / 2;
 		int MiddleNewStorage = (tmpIT.length - this.storage.startingIndex) / 2;
@@ -384,11 +384,11 @@ public class ContainerCaterpillar implements Cloneable{
 		this.inventory = tmpIT.clone();
 		this.storage.added = this.storage.added + Change;
 	}
-	public static ContainerCaterpillar readCaterpiller(NBTTagCompound NBTconCat)
+	public static CaterpillarData readCaterpiller(NBTTagCompound NBTconCat)
 	{
 		String key = NBTconCat.getString("name");
 		BlockPos posP = new BlockPos(NBTconCat.getInteger("X"), NBTconCat.getInteger("Y"), NBTconCat.getInteger("Z"));
-		ContainerCaterpillar newCatp = new ContainerCaterpillar(posP, key);
+		CaterpillarData newCatp = new CaterpillarData(posP, key);
 		newCatp.tabs.selected = GuiTabs.values()[NBTconCat.getInteger("selectedtab")];
 		newCatp.decoration.selected = NBTconCat.getInteger("decorationsselected");
 		newCatp.maxburntime = NBTconCat.getInteger("burntimemax");

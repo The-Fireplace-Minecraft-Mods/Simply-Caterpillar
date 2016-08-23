@@ -23,7 +23,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import the_fireplace.caterpillar.Caterpillar;
 import the_fireplace.caterpillar.Config;
 import the_fireplace.caterpillar.Reference;
-import the_fireplace.caterpillar.containers.ContainerCaterpillar;
+import the_fireplace.caterpillar.containers.CaterpillarData;
 import the_fireplace.caterpillar.packets.PacketParticles;
 import the_fireplace.caterpillar.tileentity.TileEntityDrillComponent;
 
@@ -49,7 +49,7 @@ public class BlockDrillBase extends BlockContainer {
 
 	protected void takeOutMatsandPlace(World worldIn, String id, BlockPos pos, IBlockState state)
 	{
-		ContainerCaterpillar thisCat = Caterpillar.instance.getContainerCaterpillar(id);
+		CaterpillarData thisCat = Caterpillar.instance.getContainerCaterpillar(id);
 		if (thisCat != null)
 		{
 			if (state.getBlock().equals(Blocks.AIR))
@@ -151,7 +151,7 @@ public class BlockDrillBase extends BlockContainer {
 
 					String catID = Caterpillar.instance.getCaterpillarID(movingXZ, newPlace);
 					int count = this.getCountIndex(movingXZ, newPlace);
-					ContainerCaterpillar thiscater = Caterpillar.instance.getContainerCaterpillar(catID);
+					CaterpillarData thiscater = Caterpillar.instance.getContainerCaterpillar(catID);
 					this.fired(worldIn, newPlace, state, catID, movingXZ, count);
 					if (thiscater != null)
 					{
@@ -169,7 +169,7 @@ public class BlockDrillBase extends BlockContainer {
 	@Override
 	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {}
 
-	protected void setDrag(ContainerCaterpillar cat){
+	protected void setDrag(CaterpillarData cat){
 		cat.movement.value += this.movementTicks;
 	}
 
@@ -187,7 +187,7 @@ public class BlockDrillBase extends BlockContainer {
 			if (tileentity instanceof TileEntityDrillComponent)
 			{
 				//Reference.printDebug("Gui Called; Stage 3");
-				ContainerCaterpillar thisCat = Caterpillar.instance.getContainerCaterpillar(pos, state);
+				CaterpillarData thisCat = Caterpillar.instance.getContainerCaterpillar(pos, state);
 				if (thisCat != null)
 				{
 					//Reference.printDebug("Gui Called; Stage 4");
@@ -338,7 +338,7 @@ public class BlockDrillBase extends BlockContainer {
 	}
 
 	private void updateCatC(BlockPos pos, World worldIn){
-		ContainerCaterpillar cat = Caterpillar.instance.getContainerCaterpillar(pos, worldIn);
+		CaterpillarData cat = Caterpillar.instance.getContainerCaterpillar(pos, worldIn);
 		boolean changeMade = false;
 		if (cat != null) {
 			Reference.printDebug("Caterpillar found on first attempt, updating");
@@ -358,7 +358,7 @@ public class BlockDrillBase extends BlockContainer {
 			Reference.printDebug("Caterpillar not found");
 	}
 
-	public void updateCat(ContainerCaterpillar cat){
+	public void updateCat(CaterpillarData cat){
 
 	}
 }

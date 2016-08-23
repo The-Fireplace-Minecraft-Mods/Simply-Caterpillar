@@ -11,7 +11,7 @@ import net.minecraft.util.ITickable;
 import the_fireplace.caterpillar.Caterpillar;
 import the_fireplace.caterpillar.blocks.BlockDrillBase;
 import the_fireplace.caterpillar.blocks.BlockDrillHeads;
-import the_fireplace.caterpillar.containers.ContainerCaterpillar;
+import the_fireplace.caterpillar.containers.CaterpillarData;
 import the_fireplace.caterpillar.containers.ContainerDrillHead;
 import the_fireplace.caterpillar.guis.GuiDrillHead;
 public class TileEntityDrillComponent extends TileEntityLockable implements ITickable
@@ -22,7 +22,7 @@ public class TileEntityDrillComponent extends TileEntityLockable implements ITic
 	{
 		//Reference.printDebug("No Remote World?");
 	}
-	private ContainerCaterpillar MyCaterpillar()
+	private CaterpillarData MyCaterpillar()
 	{
 		if (this.isSelected)
 		{
@@ -30,7 +30,7 @@ public class TileEntityDrillComponent extends TileEntityLockable implements ITic
 		}
 		return Caterpillar.instance.getContainerCaterpillar(this.pos, this.worldObj);
 	}
-	private ItemStack[] FixZeroItem(ItemStack[] toFix)
+	private ItemStack[] ensureValidStacksizes(ItemStack[] toFix)
 	{
 		for (int i = 0; i < toFix.length; i++) {
 			ItemStack K = toFix[i];
@@ -47,7 +47,7 @@ public class TileEntityDrillComponent extends TileEntityLockable implements ITic
 	public ItemStack[] getItemStacks()
 	{
 		try {
-			return  this.FixZeroItem(Caterpillar.instance.getInventory(this.MyCaterpillar(), this.MyCaterpillar().tabs.selected));
+			return  this.ensureValidStacksizes(Caterpillar.instance.getInventory(this.MyCaterpillar(), this.MyCaterpillar().tabs.selected));
 		} catch (Exception e) {
 			if (!Caterpillar.proxy.isServerSide()){
 				Minecraft.getMinecraft().currentScreen = null;
@@ -143,18 +143,12 @@ public class TileEntityDrillComponent extends TileEntityLockable implements ITic
 		this.markDirty();
 	}
 
-	/**
-	 * Gets the name of this command sender (usually username, but possibly "Rcon")
-	 */
 	@Override
 	public String getName()
 	{
 		return this.hasCustomName() ? this.customName : "Caterpillar";
 	}
 
-	/**
-	 * Returns true if this thing is named
-	 */
 	@Override
 	public boolean hasCustomName()
 	{
@@ -166,7 +160,6 @@ public class TileEntityDrillComponent extends TileEntityLockable implements ITic
 	{
 		if (this.MyCaterpillar() != null)
 		{
-
 			if (this.MyCaterpillar().tabs.selected.equals(Caterpillar.GuiTabs.DECORATION) || this.MyCaterpillar().tabs.selected.equals(Caterpillar.GuiTabs.REINFORCEMENT))
 			{
 				return 1;

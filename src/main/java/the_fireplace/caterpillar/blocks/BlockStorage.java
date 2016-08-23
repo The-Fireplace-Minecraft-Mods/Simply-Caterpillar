@@ -7,7 +7,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import the_fireplace.caterpillar.Caterpillar;
 import the_fireplace.caterpillar.Reference;
-import the_fireplace.caterpillar.containers.ContainerCaterpillar;
+import the_fireplace.caterpillar.containers.CaterpillarData;
 
 public class BlockStorage extends BlockDrillBase
 {
@@ -17,16 +17,16 @@ public class BlockStorage extends BlockDrillBase
 	}
 
 	public void changeStorage(BlockPos pos, IBlockState state, int Amount, World objworld) {
-		ContainerCaterpillar myCate = Caterpillar.instance.getContainerCaterpillar(pos, state);
+		CaterpillarData myCate = Caterpillar.instance.getContainerCaterpillar(pos, state);
 		this.changeStorage(myCate, Amount, objworld);
 	}
 
 	public void changeStorage(BlockPos pos, int Amount, World objworld) {
-		ContainerCaterpillar myCate = Caterpillar.instance.getContainerCaterpillar(pos, objworld);
+		CaterpillarData myCate = Caterpillar.instance.getContainerCaterpillar(pos, objworld);
 		this.changeStorage(myCate, Amount, objworld);
 	}
 
-	public void changeStorage(ContainerCaterpillar myCate, int Amount, World objworld) {
+	public void changeStorage(CaterpillarData myCate, int Amount, World objworld) {
 
 		myCate.changeStorage(Amount, objworld);
 
@@ -38,7 +38,7 @@ public class BlockStorage extends BlockDrillBase
 	@Override
 	protected void fired(World worldIn, BlockPos pos, IBlockState state, String catID, int[] movingXZ, int Count)
 	{
-		ContainerCaterpillar thisCat = Caterpillar.instance.getContainerCaterpillar(catID);
+		CaterpillarData thisCat = Caterpillar.instance.getContainerCaterpillar(catID);
 		if (thisCat != null)
 		{
 			thisCat.storage.count += 24;
@@ -71,7 +71,7 @@ public class BlockStorage extends BlockDrillBase
 			state = state.withProperty(FACING, placer.getHorizontalFacing().getOpposite());
 			if (Caterpillar.instance.doesHaveCaterpillar(whereItAt, state))
 			{
-				ContainerCaterpillar myCate = Caterpillar.instance.getContainerCaterpillar(whereItAt, state);
+				CaterpillarData myCate = Caterpillar.instance.getContainerCaterpillar(whereItAt, state);
 				this.changeStorage(myCate,  24, worldIn);
 				return;
 			}
