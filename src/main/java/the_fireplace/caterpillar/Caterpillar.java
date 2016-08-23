@@ -111,10 +111,10 @@ public class Caterpillar
 		GameRegistry.addRecipe(new ShapedOreRecipe(block, args));
 	}
 
-	public String getCaterpillarID(int[] movingXZ, BlockPos Wherepos)
+	public String getCaterpillarID(int[] movingXZ, BlockPos pos)
 	{
-		int firstID = movingXZ[1] * Wherepos.getX() + movingXZ[0] * Wherepos.getZ();
-		int secondID = Wherepos.getY();
+		int firstID = movingXZ[1] * pos.getX() + movingXZ[0] * pos.getZ();
+		int secondID = pos.getY();
 		int third = 0;
 		if (movingXZ[0] != 0)
 		{
@@ -180,9 +180,9 @@ public class Caterpillar
 		}
 	}
 
-	public boolean doesHaveCaterpillar(BlockPos pos, IBlockState thisState)
+	public boolean doesHaveCaterpillar(BlockPos pos, IBlockState state)
 	{
-		int[] movingXZ = this.getWayMoving(thisState);
+		int[] movingXZ = this.getWayMoving(state);
 		if (movingXZ[0] == -2 || movingXZ[1] == -2)
 		{
 			Reference.printDebug("Null: facing");

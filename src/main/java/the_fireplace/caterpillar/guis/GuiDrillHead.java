@@ -1045,9 +1045,9 @@ public class GuiDrillHead extends GuiContainer
 		}
 
 	}
-	public void mouseWheelMovedDecoration(int Speed)
+	public void mouseWheelMovedDecoration(int speed)
 	{
-		if (Speed < 0)
+		if (speed < 0)
 		{
 			this.caterpillar.decoration.selected++;
 			if (this.caterpillar.decoration.selected > 9)
@@ -1085,9 +1085,9 @@ public class GuiDrillHead extends GuiContainer
 		this.caterpillar.running = whatamI;
 	}
 
-	public void mouseWheelMoved(int Speed)
+	public void mouseWheelMoved(int speed)
 	{
-		if (Speed < 0)
+		if (speed < 0)
 		{
 			this.caterpillar.storage.startingIndex+=3;
 
@@ -1102,9 +1102,9 @@ public class GuiDrillHead extends GuiContainer
 		{
 			this.caterpillar.storage.startingIndex-=3;
 
-			if (this.caterpillar.storage.startingIndex < 2)
+			if (this.caterpillar.storage.startingIndex < 1)
 			{
-				this.caterpillar.storage.startingIndex = 2;
+				this.caterpillar.storage.startingIndex = 1;
 			}
 		}
 
