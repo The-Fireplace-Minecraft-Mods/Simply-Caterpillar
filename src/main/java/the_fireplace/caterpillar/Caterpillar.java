@@ -26,14 +26,13 @@ import net.minecraftforge.oredict.ShapedOreRecipe;
 import the_fireplace.caterpillar.blocks.BlockDrillBase;
 import the_fireplace.caterpillar.blocks.BlockDrillHeads;
 import the_fireplace.caterpillar.containers.CaterpillarData;
-import the_fireplace.caterpillar.network.GUIHandler;
-import the_fireplace.caterpillar.tools.NBTTools;
 import the_fireplace.caterpillar.inits.InitBlocks;
+import the_fireplace.caterpillar.network.GUIHandler;
 import the_fireplace.caterpillar.network.PacketDispatcher;
 import the_fireplace.caterpillar.proxy.ProxyCommon;
 import the_fireplace.caterpillar.tabs.TabCaterpillar;
 import the_fireplace.caterpillar.tileentity.TileEntityDrillComponent;
-import the_fireplace.caterpillar.timers.TimerMain;
+import the_fireplace.caterpillar.tools.NBTTools;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
@@ -48,8 +47,7 @@ public class Caterpillar
 	public static Caterpillar instance;
 
 	public static final CreativeTabs tabCaterpillar = new TabCaterpillar();
-	public int saveCount = 0;
-	public TimerMain modTimer;
+	public boolean savedyet = false;
 	boolean dev = false;
 
 	private HashMap<String, CaterpillarData> mainContainers;
@@ -69,8 +67,6 @@ public class Caterpillar
 
 		NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GUIHandler());
 
-		this.modTimer = new TimerMain();
-
 		PacketDispatcher.registerPackets();
 
 		InitBlocks.init();
@@ -86,7 +82,6 @@ public class Caterpillar
 		this.recipes();
 		Reference.cleanModsFolder();
 		Config.load();
-		Reference.ModTick.scheduleAtFixedRate(this.modTimer, 10, 10);
 	}
 
 	private void recipes() {
@@ -297,7 +292,6 @@ public class Caterpillar
 	public void reset() {
 		Reference.printDebug("Resetting....");
 		Reference.loaded = false;
-		this.modTimer.inSetup = false;
 		this.mainContainers.clear();
 	}
 	public ItemStack[] getInventory(CaterpillarData caterpillarData, GuiTabs selected)
