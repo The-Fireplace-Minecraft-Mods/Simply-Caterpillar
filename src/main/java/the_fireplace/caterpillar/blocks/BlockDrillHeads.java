@@ -20,7 +20,8 @@ import the_fireplace.caterpillar.Reference;
 import the_fireplace.caterpillar.containers.CaterpillarData;
 import the_fireplace.caterpillar.guis.GuiDrillHead;
 import the_fireplace.caterpillar.inits.InitBlocks;
-import the_fireplace.caterpillar.packets.PacketParticles;
+import the_fireplace.caterpillar.network.PacketDispatcher;
+import the_fireplace.caterpillar.network.PacketParticles;
 
 import java.util.Random;
 
@@ -43,10 +44,10 @@ public class BlockDrillHeads extends BlockDrillBase
 
 			for (int i = -1; i < 2; i++) {
 				for (int j = -1; j < 2; j++) {
-					BlockPos Wherepos = pos.add(j*Math.abs(movingXZ[1]) + movingXZ[0], i, j*Math.abs(movingXZ[0])+  movingXZ[1]);
-					if (worldIn.getBlockState(Wherepos).getBlock().equals((InitBlocks.drill_blades)))
+					BlockPos loc = pos.add(j*Math.abs(movingXZ[1]) + movingXZ[0], i, j*Math.abs(movingXZ[0])+  movingXZ[1]);
+					if (worldIn.getBlockState(loc).getBlock().equals((InitBlocks.drill_blades)))
 					{
-						worldIn.setBlockToAir(Wherepos);
+						worldIn.setBlockToAir(loc);
 					}
 				}
 			}
@@ -154,7 +155,7 @@ public class BlockDrillHeads extends BlockDrillBase
 
 				BlockPos newPlace = pos.add(movingXZ[0], 0, movingXZ[1]);
 				TargetPoint targetPoint = new TargetPoint(worldIn.getWorldType().getWorldTypeID(), newPlace.getX(), newPlace.getY(), newPlace.getZ(), 5);
-				Caterpillar.network.sendToAllAround(new PacketParticles(EnumParticleTypes.FLAME.name(), newPlace.getX(), newPlace.getY(), newPlace.getZ()), targetPoint);
+				PacketDispatcher.sendToAllAround(new PacketParticles(EnumParticleTypes.FLAME.name(), newPlace.getX(), newPlace.getY(), newPlace.getZ()), targetPoint);
 
 				worldIn.setBlockState(newPlace, basedrillhead.getDefaultState().withProperty(FACING, state.getValue(FACING)));
 

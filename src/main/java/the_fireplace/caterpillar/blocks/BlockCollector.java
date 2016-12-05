@@ -21,20 +21,20 @@ public class BlockCollector extends BlockDrillBase
 	@Override
 	protected void fired(World worldIn, BlockPos pos, IBlockState state, String catID, int[] movingXZ, int Count)
 	{
-		List<Entity> ETList = new ArrayList<>();
+		List<Entity> entityList = new ArrayList<>();
 
 		for (int i = 0; i < worldIn.loadedEntityList.size(); i++) {
-			Entity ETObject = worldIn.loadedEntityList.get(i);
-			if (ETObject instanceof EntityItem)
+			Entity entity = worldIn.loadedEntityList.get(i);
+			if (entity instanceof EntityItem)
 			{
-				if (ETObject.getPosition().distanceSq(pos.getX(), pos.getY(), pos.getZ()) < 7*7)
+				if (entity.getPosition().distanceSq(pos.getX(), pos.getY(), pos.getZ()) < 7*7)
 				{
-					ETList.add(ETObject);
+					entityList.add(entity);
 				}
 			}
 		}
 
-		ETList.stream().filter(ETObject -> ETObject instanceof EntityItem).forEach(ETObject -> {
+		entityList.stream().filter(entity -> entity instanceof EntityItem).forEach(ETObject -> {
 			CaterpillarData myCat = Caterpillar.instance.getContainerCaterpillar(pos, state);
 			if (myCat.addToOutInventory(((EntityItem) ETObject).getEntityItem())) {
 				worldIn.removeEntity(ETObject);

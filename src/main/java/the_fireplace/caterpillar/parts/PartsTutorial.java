@@ -1,10 +1,10 @@
 package the_fireplace.caterpillar.parts;
 
+import the_fireplace.caterpillar.Caterpillar;
 import the_fireplace.caterpillar.Config;
 import the_fireplace.caterpillar.guis.GuiDrillHead;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.translation.I18n;
 import org.lwjgl.input.Mouse;
 
 import java.util.ArrayList;
@@ -12,7 +12,6 @@ import java.util.Collections;
 import java.util.List;
 
 public class PartsTutorial {
-
 
 	public int Height;
 	protected GuiDrillHead myGui;
@@ -129,8 +128,8 @@ public class PartsTutorial {
 			tmoString.add("");
 		}
 
-		tmoString.add(TextFormatting.RED +  "" + TextFormatting.BOLD +  I18n.translateToLocal("tutorial"));
-		String x = I18n.translateToLocal(this.Name);
+		tmoString.add(TextFormatting.RED +  "" + TextFormatting.BOLD +  Caterpillar.proxy.translateToLocal("tutorial"));
+		String x = Caterpillar.proxy.translateToLocal(this.Name);
 		String[] xs = x.split("\\\\n");
 		int yindex = 0;
 		Collections.addAll(tmoString, xs);
@@ -145,7 +144,7 @@ public class PartsTutorial {
 			this.myGui.drawHoveringText(tmoString, this.getGuiX() + this.x, this.getGuiY() + this.y);
 
 			tmoString = new ArrayList<String>();
-			tmoString.add(TextFormatting.GOLD +  "" + TextFormatting.BOLD +  I18n.translateToLocal("tutorial2"));
+			tmoString.add(TextFormatting.GOLD +  "" + TextFormatting.BOLD +  Caterpillar.proxy.translateToLocal("tutorial2"));
 			this.myGui.drawHoveringText(tmoString, this.getGuiX() + this.x, this.getGuiY() + this.y);
 
 		}

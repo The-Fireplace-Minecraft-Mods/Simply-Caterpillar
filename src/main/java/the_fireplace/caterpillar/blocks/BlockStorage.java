@@ -65,7 +65,7 @@ public class BlockStorage extends BlockDrillBase
 			BlockPos whereItAt = new BlockPos(pos.getX(), pos.getY(), pos.getZ());
 			if (!(worldIn.getBlockState(pos).getBlock() instanceof BlockDrillBase))
 			{
-				whereItAt = whereItAt.add(0, 1, 0);
+				whereItAt = whereItAt.up();
 			}
 
 			state = state.withProperty(FACING, placer.getHorizontalFacing().getOpposite());
@@ -81,9 +81,9 @@ public class BlockStorage extends BlockDrillBase
 				worldIn.setBlockToAir(pos);
 				Reference.dropBlockAsItem(worldIn, pos, pos, state, 0);
 			}
-			if (worldIn.getBlockState(pos.add(0, 1, 0)).getBlock() instanceof BlockStorage)
+			if (worldIn.getBlockState(pos.up()).getBlock() instanceof BlockStorage)
 			{
-				worldIn.setBlockToAir(pos.add(0, 1, 0));
+				worldIn.setBlockToAir(pos.up());
 				Reference.dropBlockAsItem(worldIn, pos, pos, state, 0);
 			}
 			//Reference.dropBlockAsItem(worldIn, pos, pos, state, 0);

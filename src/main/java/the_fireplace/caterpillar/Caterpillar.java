@@ -21,28 +21,26 @@ import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
-import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import the_fireplace.caterpillar.blocks.BlockDrillBase;
 import the_fireplace.caterpillar.blocks.BlockDrillHeads;
 import the_fireplace.caterpillar.containers.CaterpillarData;
 import the_fireplace.caterpillar.handlers.HandlerEvents;
-import the_fireplace.caterpillar.handlers.HandlerGUI;
+import the_fireplace.caterpillar.network.GUIHandler;
 import the_fireplace.caterpillar.handlers.HandlerNBTTag;
 import the_fireplace.caterpillar.inits.InitBlocks;
-import the_fireplace.caterpillar.packets.PacketCaterpillarControls;
-import the_fireplace.caterpillar.packets.PacketParticles;
+import the_fireplace.caterpillar.network.PacketDispatcher;
 import the_fireplace.caterpillar.proxy.ProxyCommon;
 import the_fireplace.caterpillar.tabs.TabCaterpillar;
 import the_fireplace.caterpillar.tileentity.TileEntityDrillComponent;
 import the_fireplace.caterpillar.timers.TimerMain;
 
+import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
-@Mod(name = Caterpillar.MODNAME, modid = Caterpillar.MODID, guiFactory=Reference.guiFactory, updateJSON = "http://caterpillar.bitnamiapp.com/jsons/simplycaterpillar.json", acceptedMinecraftVersions = "[1.9.4,1.10.2]")
+@Mod(name = Caterpillar.MODNAME, modid = Caterpillar.MODID, guiFactory=Reference.guiFactory, updateJSON = "http://thefireplace.bitnamiapp.com/jsons/simplycaterpillar.json", acceptedMinecraftVersions = "[1.9.4,1.10.2]")
 public class Caterpillar
 {
 	public static final String MODID = "simplycaterpillar";
@@ -50,10 +48,10 @@ public class Caterpillar
 	@Instance(Caterpillar.MODID)
 	public static Caterpillar instance;
 
-	public static final CreativeTabs TabCaterpillar = new TabCaterpillar();
+	public static final CreativeTabs tabCaterpillar = new TabCaterpillar();
 	public int saveCount = 0;
-	public TimerMain ModTasks;
-	boolean dev = true;
+	public TimerMain modTimer;
+	boolean dev = false;
 
 	private HashMap<String, CaterpillarData> mainContainers;
 	private CaterpillarData selectedCaterpillar;
@@ -61,26 +59,20 @@ public class Caterpillar
 	@SidedProxy(clientSide = Reference.CLIENT_PROXY_CLASS, serverSide = Reference.SERVER_PROXY_CLASS)
 	public static ProxyCommon proxy;
 
-	public static SimpleNetworkWrapper network;
-
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
+		dev = event.getModMetadata().version.equals("${version}");
 		Config.init(event.getSuggestedConfigurationFile());
 
 		Reference.MainNBT = new HandlerNBTTag(MODID);
 
 		this.mainContainers = new HashMap<>();
 
-		NetworkRegistry.INSTANCE.registerGuiHandler(instance, new HandlerGUI());
+		NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GUIHandler());
 
-		this.ModTasks = new TimerMain();
+		this.modTimer = new TimerMain();
 
-		network = NetworkRegistry.INSTANCE.newSimpleChannel(MODID);
-
-		network.registerMessage(PacketCaterpillarControls.Handler.class, PacketCaterpillarControls.class, 0, Side.SERVER);
-		network.registerMessage(PacketCaterpillarControls.Handler.class, PacketCaterpillarControls.class, 0, Side.CLIENT);
-
-		network.registerMessage(PacketParticles.Handler.class, PacketParticles.class, 1, Side.CLIENT);
+		PacketDispatcher.registerPackets();
 
 		InitBlocks.init();
 		InitBlocks.register();
@@ -95,7 +87,7 @@ public class Caterpillar
 		this.recipes();
 		Reference.cleanModsFolder();
 		Config.load();
-		Reference.ModTick.scheduleAtFixedRate(this.ModTasks, 10, 10);
+		Reference.ModTick.scheduleAtFixedRate(this.modTimer, 10, 10);
 	}
 
 	private void recipes() {
@@ -225,6 +217,7 @@ public class Caterpillar
 		return this.getContainerCaterpillar(catID);
 	}
 
+	@Nullable
 	public CaterpillarData getContainerCaterpillar(BlockPos pos, IBlockState thisState)
 	{
 		int[] movingXZ = this.getWayMoving(thisState);
@@ -245,19 +238,19 @@ public class Caterpillar
 			int i = 0;
 			for (Entry<String, CaterpillarData> key : this.mainContainers.entrySet()) {
 				CaterpillarData conCat = key.getValue();
-				tmpNBT.setTag("caterpillar" + i, conCat.writeNBTCaterpillar());
-				i++;
+				tmpNBT.setTag("caterpillar" + i++, conCat.writeNBTCaterpillar());
 			}
 			tmpNBT.setInteger("count", i);
 			Reference.MainNBT.saveNBTSettings(tmpNBT, Reference.MainNBT.getFolderLocationWorld(), "DrillHeads.dat");
 		}
 	}
+	@Nullable
 	private World getCaterpillarWorld(BlockPos pos){
-		if (FMLCommonHandler.instance().getMinecraftServerInstance().worldServers != null)
+		if (FMLCommonHandler.instance().getMinecraftServerInstance().worlds != null)
 		{
-			if (FMLCommonHandler.instance().getMinecraftServerInstance().worldServers.length >0)
+			if (FMLCommonHandler.instance().getMinecraftServerInstance().worlds.length >0)
 			{
-				for (WorldServer worldServer : FMLCommonHandler.instance().getMinecraftServerInstance().worldServers) {
+				for (WorldServer worldServer : FMLCommonHandler.instance().getMinecraftServerInstance().worlds) {
 					IBlockState state  = worldServer.getBlockState(pos);
 					if (state.getBlock() instanceof BlockDrillBase)
 					{
@@ -305,27 +298,27 @@ public class Caterpillar
 	public void reset() {
 		Reference.printDebug("Resetting....");
 		Reference.loaded = false;
-		this.ModTasks.inSetup = false;
+		this.modTimer.inSetup = false;
 		this.mainContainers.clear();
 	}
-	public ItemStack[] getInventory(CaterpillarData MyCaterpillar, GuiTabs selected)
+	public ItemStack[] getInventory(CaterpillarData caterpillarData, GuiTabs selected)
 	{
-		if (MyCaterpillar != null)
+		if (caterpillarData != null)
 		{
 			switch (selected.value) {
 			case 0:
-				return MyCaterpillar.inventory;
+				return caterpillarData.inventory;
 			case 1:
-				return MyCaterpillar.decoration.getSelectedInventory();
+				return caterpillarData.decoration.getSelectedInventory();
 			case 2:
-				return MyCaterpillar.reinforcement.reinforcementMap;
+				return caterpillarData.reinforcement.reinforcementMap;
 			case 3:
-				return MyCaterpillar.incinerator.placementMap;
+				return caterpillarData.incinerator.placementMap;
 			default:
 				break;
 			}
 		}
-		return new ItemStack[256];
+		return null;
 	}
 
 	public enum Replacement {

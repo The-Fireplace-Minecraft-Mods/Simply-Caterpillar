@@ -24,7 +24,8 @@ import the_fireplace.caterpillar.Caterpillar;
 import the_fireplace.caterpillar.Config;
 import the_fireplace.caterpillar.Reference;
 import the_fireplace.caterpillar.containers.CaterpillarData;
-import the_fireplace.caterpillar.packets.PacketParticles;
+import the_fireplace.caterpillar.network.PacketDispatcher;
+import the_fireplace.caterpillar.network.PacketParticles;
 import the_fireplace.caterpillar.tileentity.TileEntityDrillComponent;
 
 import java.util.Hashtable;
@@ -141,7 +142,7 @@ public class BlockDrillBase extends BlockContainer {
 
 					BlockPos newPlace = pos.add(movingXZ[0], 0, movingXZ[1]);
 					TargetPoint targetPoint = new TargetPoint(worldIn.getWorldType().getWorldTypeID(), newPlace.getX(), newPlace.getY(), newPlace.getZ(), 5);
-					Caterpillar.network.sendToAllAround(new PacketParticles(EnumParticleTypes.FIREWORKS_SPARK.name(), newPlace.getX(), newPlace.getY(), newPlace.getZ()), targetPoint);
+					PacketDispatcher.sendToAllAround(new PacketParticles(EnumParticleTypes.FIREWORKS_SPARK.name(), newPlace.getX(), newPlace.getY(), newPlace.getZ()), targetPoint);
 
 					worldIn.setBlockState(newPlace, state);
 					worldIn.setBlockToAir(pos);
@@ -178,19 +179,19 @@ public class BlockDrillBase extends BlockContainer {
 	@Override
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack held, EnumFacing side, float hitX, float hitY, float hitZ)
 	{
-		//Reference.printDebug("Gui Called; Stage 1");
+		Reference.printDebug("Gui Called; Stage 1");
 		if (Reference.loaded && !worldIn.isRemote)
 		{
 			TileEntity tileentity = worldIn.getTileEntity(pos);
 
-			//Reference.printDebug("Gui Called; Stage 2");
+			Reference.printDebug("Gui Called; Stage 2");
 			if (tileentity instanceof TileEntityDrillComponent)
 			{
-				//Reference.printDebug("Gui Called; Stage 3");
+				Reference.printDebug("Gui Called; Stage 3");
 				CaterpillarData thisCat = Caterpillar.instance.getContainerCaterpillar(pos, state);
 				if (thisCat != null)
 				{
-					//Reference.printDebug("Gui Called; Stage 4");
+					Reference.printDebug("Gui Called; Stage 4");
 					playerIn.openGui(Caterpillar.instance, 0, worldIn, thisCat.pos.getX(), thisCat.pos.getY(), thisCat.pos.getZ());
 				}
 				else

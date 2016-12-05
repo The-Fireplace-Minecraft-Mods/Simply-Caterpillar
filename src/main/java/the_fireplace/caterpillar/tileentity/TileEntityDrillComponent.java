@@ -14,6 +14,9 @@ import the_fireplace.caterpillar.blocks.BlockDrillHeads;
 import the_fireplace.caterpillar.containers.CaterpillarData;
 import the_fireplace.caterpillar.containers.ContainerDrillHead;
 import the_fireplace.caterpillar.guis.GuiDrillHead;
+
+import javax.annotation.Nonnull;
+
 public class TileEntityDrillComponent extends TileEntityLockable implements ITickable
 {
 	protected String customName;
@@ -22,13 +25,13 @@ public class TileEntityDrillComponent extends TileEntityLockable implements ITic
 	{
 		//Reference.printDebug("No Remote World?");
 	}
-	private CaterpillarData MyCaterpillar()
+	private CaterpillarData getCaterpillarData()
 	{
 		if (this.isSelected)
 		{
 			return Caterpillar.instance.getSelectedCaterpillar();
 		}
-		return Caterpillar.instance.getContainerCaterpillar(this.pos, this.worldObj);
+		return Caterpillar.instance.getContainerCaterpillar(this.pos, this.world);
 	}
 	private ItemStack[] ensureValidStacksizes(ItemStack[] toFix)
 	{
@@ -47,11 +50,8 @@ public class TileEntityDrillComponent extends TileEntityLockable implements ITic
 	public ItemStack[] getItemStacks()
 	{
 		try {
-			return  this.ensureValidStacksizes(Caterpillar.instance.getInventory(this.MyCaterpillar(), this.MyCaterpillar().tabs.selected));
+			return  this.ensureValidStacksizes(Caterpillar.instance.getInventory(this.getCaterpillarData(), this.getCaterpillarData().tabs.selected));
 		} catch (Exception e) {
-			if (!Caterpillar.proxy.isServerSide()){
-				Minecraft.getMinecraft().currentScreen = null;
-			}
 			if (!Caterpillar.proxy.isServerSide())
 			{
 				if (Minecraft.getMinecraft().currentScreen instanceof GuiDrillHead)
@@ -59,9 +59,8 @@ public class TileEntityDrillComponent extends TileEntityLockable implements ITic
 					Minecraft.getMinecraft().currentScreen = null;
 				}
 			}
-			return new ItemStack[256];
+			return null;
 		}
-
 	}
 
 	@Override
@@ -144,6 +143,7 @@ public class TileEntityDrillComponent extends TileEntityLockable implements ITic
 	}
 
 	@Override
+	@Nonnull
 	public String getName()
 	{
 		return this.hasCustomName() ? this.customName : "Caterpillar";
@@ -158,9 +158,9 @@ public class TileEntityDrillComponent extends TileEntityLockable implements ITic
 	@Override
 	public int getInventoryStackLimit()
 	{
-		if (this.MyCaterpillar() != null)
+		if (this.getCaterpillarData() != null)
 		{
-			if (this.MyCaterpillar().tabs.selected.equals(Caterpillar.GuiTabs.DECORATION) || this.MyCaterpillar().tabs.selected.equals(Caterpillar.GuiTabs.REINFORCEMENT))
+			if (this.getCaterpillarData().tabs.selected.equals(Caterpillar.GuiTabs.DECORATION) || this.getCaterpillarData().tabs.selected.equals(Caterpillar.GuiTabs.REINFORCEMENT))
 			{
 				return 1;
 			}
@@ -169,33 +169,35 @@ public class TileEntityDrillComponent extends TileEntityLockable implements ITic
 	}
 
 	@Override
-	public boolean isUseableByPlayer(EntityPlayer player)
+	public boolean isUsableByPlayer(@Nonnull EntityPlayer player)
 	{
-		return this.worldObj.getTileEntity(this.pos) == this && player.getDistanceSq(this.pos.getX() + 0.5D, this.pos.getY() + 0.5D, this.pos.getZ() + 0.5D) <= 64.0D;
+		return this.world.getTileEntity(this.pos) == this && player.getDistanceSq(this.pos.getX() + 0.5D, this.pos.getY() + 0.5D, this.pos.getZ() + 0.5D) <= 64.0D;
 	}
 
 	@Override
-	public void openInventory(EntityPlayer player) {}
+	public void openInventory(@Nonnull EntityPlayer player) {}
 
 	@Override
-	public void closeInventory(EntityPlayer player) {}
+	public void closeInventory(@Nonnull EntityPlayer player) {}
 
 	@Override
-	public boolean isItemValidForSlot(int index, ItemStack stack)
+	public boolean isItemValidForSlot(int index, @Nonnull ItemStack stack)
 	{
 		return true;
 	}
 
 	@Override
+	@Nonnull
 	public String getGuiID()
 	{
 		return Caterpillar.MODID  + ":" + this.blockType.getUnlocalizedName().substring(5);
 	}
 
 	@Override
-	public Container createContainer(InventoryPlayer playerInventory, EntityPlayer playerIn)
+	@Nonnull
+	public Container createContainer(@Nonnull InventoryPlayer playerInventory, @Nonnull EntityPlayer playerIn)
 	{
-		return new ContainerDrillHead(playerIn, this, this.MyCaterpillar());
+		return new ContainerDrillHead(playerIn, this, this.getCaterpillarData());
 	}
 
 	@Override
@@ -219,11 +221,11 @@ public class TileEntityDrillComponent extends TileEntityLockable implements ITic
 	}
 	@Override
 	public void update() {
-		IBlockState blockdriller =  this.worldObj.getBlockState(this.pos);
+		IBlockState blockdriller =  this.world.getBlockState(this.pos);
 
 		if (blockdriller.getBlock() instanceof BlockDrillBase || blockdriller.getBlock() instanceof BlockDrillHeads)
 		{
-			((BlockDrillBase)blockdriller.getBlock()).calculateMovement(this.worldObj, this.pos, this.worldObj.getBlockState(this.pos));
+			((BlockDrillBase)blockdriller.getBlock()).calculateMovement(this.world, this.pos, this.world.getBlockState(this.pos));
 		}
 	}
 }

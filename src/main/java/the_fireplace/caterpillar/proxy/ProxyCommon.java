@@ -3,6 +3,7 @@ package the_fireplace.caterpillar.proxy;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 import java.io.File;
 
@@ -19,9 +20,9 @@ public class ProxyCommon {
 		return null;
 	}
 	public World getWorld(){
-		if (FMLCommonHandler.instance().getMinecraftServerInstance().worldServers != null)
+		if (FMLCommonHandler.instance().getMinecraftServerInstance().worlds != null)
 		{
-			if (FMLCommonHandler.instance().getMinecraftServerInstance().worldServers.length >0)
+			if (FMLCommonHandler.instance().getMinecraftServerInstance().worlds.length >0)
 			{
 				return FMLCommonHandler.instance().getMinecraftServerInstance().getEntityWorld();
 			}
@@ -34,7 +35,11 @@ public class ProxyCommon {
 	}
 	public void registerRenders()
 	{}
-	public String translateToLocal(String s){
+	public String translateToLocal(String s, Object... args){
 		return s;
+	}
+
+	public EntityPlayer getPlayerEntity(MessageContext ctx) {
+		return ctx.getServerHandler().playerEntity;
 	}
 }

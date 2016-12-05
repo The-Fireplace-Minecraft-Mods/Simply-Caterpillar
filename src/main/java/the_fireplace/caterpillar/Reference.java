@@ -81,7 +81,7 @@ public class Reference {
 		{
 			for (int o = 0; o < 1; ++o)
 			{
-				World worldIn = Minecraft.getMinecraft().theWorld;
+				World worldIn = Minecraft.getMinecraft().world;
 				Random random = worldIn.rand;
 				double d0 = 0.0625D;
 

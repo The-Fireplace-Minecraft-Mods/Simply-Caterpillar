@@ -70,7 +70,7 @@ public class ContainerDrillHead extends Container
 	@Override
 	public boolean canInteractWith(EntityPlayer playerIn)
 	{
-		return this.tileEntityInventory.isUseableByPlayer(playerIn);
+		return this.tileEntityInventory.isUsableByPlayer(playerIn);
 	}
 
 	@Override
@@ -116,7 +116,6 @@ public class ContainerDrillHead extends Container
 			}
 		}
 		return super.slotClick(slotId, clickedButton, mode, playerIn);
-
 	}
 
 	/**

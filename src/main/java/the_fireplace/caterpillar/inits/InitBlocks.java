@@ -27,13 +27,13 @@ public class InitBlocks {
 	{
 		drill_blades = new BlockDrillBlades().setUnlocalizedName("drillblades");
 
-		drillheads = new BlockDrillHeads().setUnlocalizedName("drillheads").setCreativeTab(Caterpillar.TabCaterpillar);
-		reinforcements = new BlockReinforcements().setUnlocalizedName("reinforcements").setCreativeTab(Caterpillar.TabCaterpillar);
-		decoration = new BlockDecoration().setUnlocalizedName("decoration").setCreativeTab(Caterpillar.TabCaterpillar);
-		collector = new BlockCollector().setUnlocalizedName("collector").setCreativeTab(Caterpillar.TabCaterpillar);
-		drillbase = new BlockDrillBase().setUnlocalizedName("drillbase").setCreativeTab(Caterpillar.TabCaterpillar);
-		storage = new BlockStorage().setUnlocalizedName("storage").setCreativeTab(Caterpillar.TabCaterpillar);
-		incinerator = new BlockIncinerator().setUnlocalizedName("incinerator").setCreativeTab(Caterpillar.TabCaterpillar);
+		drillheads = new BlockDrillHeads().setUnlocalizedName("drillheads").setCreativeTab(Caterpillar.tabCaterpillar);
+		reinforcements = new BlockReinforcements().setUnlocalizedName("reinforcements").setCreativeTab(Caterpillar.tabCaterpillar);
+		decoration = new BlockDecoration().setUnlocalizedName("decoration").setCreativeTab(Caterpillar.tabCaterpillar);
+		collector = new BlockCollector().setUnlocalizedName("collector").setCreativeTab(Caterpillar.tabCaterpillar);
+		drillbase = new BlockDrillBase().setUnlocalizedName("drillbase").setCreativeTab(Caterpillar.tabCaterpillar);
+		storage = new BlockStorage().setUnlocalizedName("storage").setCreativeTab(Caterpillar.tabCaterpillar);
+		incinerator = new BlockIncinerator().setUnlocalizedName("incinerator").setCreativeTab(Caterpillar.tabCaterpillar);
 	}
 
 	public static void register() {

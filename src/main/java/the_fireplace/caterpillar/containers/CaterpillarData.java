@@ -51,13 +51,13 @@ public class CaterpillarData implements Cloneable{
 		int row = 0;
 		for (i = this.storage.startingIndex; i < getMaxSize() + this.storage.added; ++i)
 		{
-			Slot AddingSlot = myDrillHeads.getSlot(i);
-			AddingSlot.yDisplayPosition = -1000;
+			Slot addingSlot = myDrillHeads.getSlot(i);
+			addingSlot.yPos = -1000;
 		}
 		for (i = this.storage.startingIndex; i < this.storage.startingIndex + 12; ++i)
 		{
 			Slot AddingSlot = myDrillHeads.getSlot(i);
-			AddingSlot.yDisplayPosition = 7 + row * 18;
+			AddingSlot.yPos = 7 + row * 18;
 			column++;
 			if (column > 2)
 			{
@@ -67,13 +67,13 @@ public class CaterpillarData implements Cloneable{
 		}
 		column = 0;
 		row = 0;
-		int Middle = (getMaxSize() + this.storage.added - this.storage.startingIndex) / 2;
-		Reference.printDebug( this.storage.added + "," + Middle);
-		for (i = this.storage.startingIndex + Middle; i < this.storage.startingIndex + Middle + 12; ++i)
+		int middle = (getMaxSize() + this.storage.added - this.storage.startingIndex) / 2;
+		Reference.printDebug( this.storage.added + "," + middle);
+		for (i = this.storage.startingIndex + middle; i < this.storage.startingIndex + middle + 12; ++i)
 		{
 
-			Slot AddingSlot = myDrillHeads.getSlot(i);
-			AddingSlot.yDisplayPosition = 7 + row * 18;
+			Slot addingSlot = myDrillHeads.getSlot(i);
+			addingSlot.yPos = 7 + row * 18;
 			column++;
 			if (column > 2)
 			{
@@ -84,8 +84,8 @@ public class CaterpillarData implements Cloneable{
 	}
 	public void setSlotPos(Slot thisSlot, int xpos, int ypos)
 	{
-		thisSlot.xDisplayPosition =  xpos;
-		thisSlot.yDisplayPosition =  ypos;
+		thisSlot.xPos =  xpos;
+		thisSlot.yPos =  ypos;
 	}
 	public void resetSlots(Container myDrillHeads)
 	{
@@ -95,11 +95,11 @@ public class CaterpillarData implements Cloneable{
 	{
 		for (int i = 0; i < CaterpillarData.getMaxSize() + this.storage.added; ++i)
 		{
-			Slot AddingSlot = myDrillHeads.getSlot(i);
-			//AddingSlot.putStack(null);
+			Slot addingSlot = myDrillHeads.getSlot(i);
+			//addingSlot.putStack(null);
 			if (changepos)
 			{
-				this.setSlotPos(AddingSlot, 12, -1000);
+				this.setSlotPos(addingSlot, 12, -1000);
 			}
 		}
 	}
@@ -241,31 +241,31 @@ public class CaterpillarData implements Cloneable{
 		int ID = 0;
 
 		//Burner
-		Slot AddingSlot = myDrillHeads.getSlot(ID);
-		AddingSlot.putStack(this.inventory[ID]);
+		Slot addingSlot = myDrillHeads.getSlot(ID);
+		addingSlot.putStack(this.inventory[ID]);
 		this.setSlotPos(myDrillHeads.getSlot(ID), 8 + (4) * 18, 7 + (3) * 18);
 		ID++;
 
 		//Left Side
-		int IDMiddle   = (CaterpillarData.getMaxSize() + this.storage.added - this.storage.startingIndex )/2;
-		for (i = 0; i < (IDMiddle/3); ++i)
+		int idMiddle = (CaterpillarData.getMaxSize() + this.storage.added - this.storage.startingIndex )/2;
+		for (i = 0; i < (idMiddle/3); ++i)
 		{
 			for (j = 0; j < 3; ++j)
 			{
-				AddingSlot = myDrillHeads.getSlot(ID);
-				AddingSlot.putStack(this.inventory[ID]);
+				addingSlot = myDrillHeads.getSlot(ID);
+				addingSlot.putStack(this.inventory[ID]);
 				this.setSlotPos(myDrillHeads.getSlot(ID), 8 + j * 18, -100);
 				ID++;
 			}
 		}
 
 		//Right Side
-		for (i = 0; i < (IDMiddle/3); ++i)
+		for (i = 0; i < (idMiddle/3); ++i)
 		{
 			for (j = 0; j < 3; ++j)
 			{
-				AddingSlot = myDrillHeads.getSlot(ID);
-				AddingSlot.putStack(this.inventory[ID]);
+				addingSlot = myDrillHeads.getSlot(ID);
+				addingSlot.putStack(this.inventory[ID]);
 				this.setSlotPos(myDrillHeads.getSlot(ID), 8 + (j + 6) * 18, -100);
 				ID++;
 			}

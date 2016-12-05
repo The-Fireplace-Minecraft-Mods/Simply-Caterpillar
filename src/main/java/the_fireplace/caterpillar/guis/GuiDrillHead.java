@@ -19,7 +19,8 @@ import the_fireplace.caterpillar.Reference;
 import the_fireplace.caterpillar.abstracts.AbstractRunnerWidgets;
 import the_fireplace.caterpillar.containers.CaterpillarData;
 import the_fireplace.caterpillar.containers.ContainerDrillHead;
-import the_fireplace.caterpillar.packets.PacketCaterpillarControls;
+import the_fireplace.caterpillar.network.PacketDispatcher;
+import the_fireplace.caterpillar.network.PacketSendCatData;
 import the_fireplace.caterpillar.parts.PartsGuiWidgets;
 import the_fireplace.caterpillar.parts.PartsTexture;
 import the_fireplace.caterpillar.parts.PartsTutorial;
@@ -51,6 +52,7 @@ public class GuiDrillHead extends GuiContainer
 	}
 	public void setupWidgets()
 	{
+		Reference.printDebug("Setting up widgets...");
 		AbstractRunnerWidgets tmpHoover;
 		AbstractRunnerWidgets tmpRun;
 		AbstractRunnerWidgets tmpCheck;
@@ -865,6 +867,7 @@ public class GuiDrillHead extends GuiContainer
 				this.caterpillar.tabs.selected = GuiTabs.values()[index];
 				this.selectedWidgets = this.widgetsHolder.get(this.caterpillar.tabs.selected);
 
+				Reference.printDebug("Placing slots for tab "+this.caterpillar.tabs.selected);
 				switch (this.caterpillar.tabs.selected) {
 				case MAIN://drill head
 					this.caterpillar.placeSlotsforMain(this.inventorySlots);
@@ -890,6 +893,7 @@ public class GuiDrillHead extends GuiContainer
 					this.sendUpdates();
 					break;
 				}
+				Reference.printDebug("Placement complete!");
 			}
 		}
 	}
@@ -1070,7 +1074,7 @@ public class GuiDrillHead extends GuiContainer
 	{
 		Reference.printDebug("GUI: Closing, " + this.caterpillar.name);
 		this.caterpillar.tabs.selected = GuiTabs.MAIN;
-		Caterpillar.network.sendToServer(new PacketCaterpillarControls(this.caterpillar));
+		PacketDispatcher.sendToServer(new PacketSendCatData(this.caterpillar));
 
 		Reference.printDebug("Closing: Saving...");
 		Caterpillar.instance.saveNBTDrills();
@@ -1081,7 +1085,7 @@ public class GuiDrillHead extends GuiContainer
 		Reference.printDebug("GUI: Updating Server, " + this.caterpillar.name);
 		boolean whatamI = this.caterpillar.running;
 		this.caterpillar.running = false;
-		Caterpillar.network.sendToServer(new PacketCaterpillarControls(this.caterpillar));
+		PacketDispatcher.sendToServer(new PacketSendCatData(this.caterpillar));
 		this.caterpillar.running = whatamI;
 	}
 

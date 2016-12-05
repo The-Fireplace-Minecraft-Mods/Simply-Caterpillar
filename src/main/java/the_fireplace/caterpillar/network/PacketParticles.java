@@ -1,14 +1,13 @@
-package the_fireplace.caterpillar.packets;
+package the_fireplace.caterpillar.network;
 
-import the_fireplace.caterpillar.Reference;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import net.minecraftforge.fml.relauncher.Side;
+import the_fireplace.caterpillar.Reference;
 
 public class PacketParticles implements IMessage{
 
@@ -46,15 +45,12 @@ public class PacketParticles implements IMessage{
 		ByteBufUtils.writeVarInt(buf, this.posZ, 5);
 
 	}
-	public static class Handler implements IMessageHandler<PacketParticles, IMessage>{
+	public static class Handler extends AbstractClientMessageHandler<PacketParticles>{
 
 		@Override
-		public IMessage onMessage(PacketParticles message, MessageContext ctx) {
-			if (ctx.side.equals(Side.CLIENT))
-			{
-				BlockPos tmpY = new BlockPos(message.posX, message.posY, message.posZ);
-				Reference.spawnParticles(tmpY, EnumParticleTypes.valueOf(message.particletype));
-			}
+		public IMessage handleClientMessage(EntityPlayer player, PacketParticles message, MessageContext ctx) {
+			BlockPos tmpY = new BlockPos(message.posX, message.posY, message.posZ);
+			Reference.spawnParticles(tmpY, EnumParticleTypes.valueOf(message.particletype));
 			return null;
 		}
 	}

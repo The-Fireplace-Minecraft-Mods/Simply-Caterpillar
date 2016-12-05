@@ -6,7 +6,7 @@ import the_fireplace.caterpillar.Reference;
 
 import java.util.TimerTask;
 
-public class TimerMain  extends TimerTask{
+public class TimerMain extends TimerTask{
 
 	public boolean inSetup = false;
 	private boolean onlyrunOnce = false;
