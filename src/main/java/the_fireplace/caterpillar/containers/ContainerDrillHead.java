@@ -12,6 +12,8 @@ import net.minecraft.tileentity.TileEntityFurnace;
 import the_fireplace.caterpillar.Caterpillar;
 import the_fireplace.caterpillar.Reference;
 
+import javax.annotation.Nonnull;
+
 public class ContainerDrillHead extends Container
 {
 	private CaterpillarData myCaterpillar;
@@ -68,7 +70,7 @@ public class ContainerDrillHead extends Container
 		}
 	}
 	@Override
-	public boolean canInteractWith(EntityPlayer playerIn)
+	public boolean canInteractWith(@Nonnull EntityPlayer playerIn)
 	{
 		return this.tileEntityInventory.isUsableByPlayer(playerIn);
 	}

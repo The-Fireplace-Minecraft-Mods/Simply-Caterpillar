@@ -25,6 +25,7 @@ import the_fireplace.caterpillar.parts.PartsGuiWidgets;
 import the_fireplace.caterpillar.parts.PartsTexture;
 import the_fireplace.caterpillar.parts.PartsTutorial;
 
+import javax.annotation.Nonnull;
 import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -817,7 +818,7 @@ public class GuiDrillHead extends GuiContainer
 
 	}
 	@Override
-	public void drawHoveringText(List textLines, int x, int y)
+	public void drawHoveringText(@Nonnull List textLines, int x, int y)
 	{
 		super.drawHoveringText(textLines, x, y);
 	}

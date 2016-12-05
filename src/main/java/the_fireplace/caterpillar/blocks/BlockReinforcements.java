@@ -116,11 +116,11 @@ public class BlockReinforcements extends BlockDrillBase
 							if (mycaterpillar.reinforcement.reinforcementMap[Side] != null)
 							{
 								Reference.printDebug("Not Null" + "");
-								Block BlocktoPlace = Block.getBlockFromItem(mycaterpillar.reinforcement.reinforcementMap[Side].getItem());
+								Block placementBlock = Block.getBlockFromItem(mycaterpillar.reinforcement.reinforcementMap[Side].getItem());
 								int meta = mycaterpillar.reinforcement.reinforcementMap[Side].getItemDamage();
-								if (BlocktoPlace != null)
+								if (placementBlock != null)
 								{
-									this.checkCustomizer(worldIn, catID, Wherepos, thisPart, thiState, BlocktoPlace, meta);
+									this.checkCustomizer(worldIn, catID, Wherepos, thisPart, thiState, placementBlock, meta);
 								}
 							}
 						}

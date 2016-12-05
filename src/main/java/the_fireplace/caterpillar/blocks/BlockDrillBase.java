@@ -28,6 +28,7 @@ import the_fireplace.caterpillar.network.PacketDispatcher;
 import the_fireplace.caterpillar.network.PacketParticles;
 import the_fireplace.caterpillar.tileentity.TileEntityDrillComponent;
 
+import javax.annotation.Nonnull;
 import java.util.Hashtable;
 import java.util.Random;
 
@@ -205,7 +206,7 @@ public class BlockDrillBase extends BlockContainer {
 		return true;
 	}
 	@Override
-	public void onBlockExploded(World world, BlockPos pos, Explosion explosion)
+	public void onBlockExploded(World world, @Nonnull BlockPos pos, @Nonnull Explosion explosion)
 	{}
 
 	@Override
@@ -256,6 +257,7 @@ public class BlockDrillBase extends BlockContainer {
 	}
 
 	@Override
+	@Nonnull
 	public IBlockState getStateFromMeta(int meta)
 	{
 		EnumFacing enumfacing = EnumFacing.getFront(meta);
@@ -273,12 +275,14 @@ public class BlockDrillBase extends BlockContainer {
 		return state.getValue(FACING).getIndex();
 	}
 	@Override
+	@Nonnull
 	protected BlockStateContainer createBlockState()
 	{
 		return new BlockStateContainer(this, FACING);
 	}
 
 	@Override
+	@Nonnull
 	public EnumBlockRenderType getRenderType(IBlockState state)
 	{
 		return EnumBlockRenderType.MODEL;
@@ -296,12 +300,13 @@ public class BlockDrillBase extends BlockContainer {
 
 	@Override
 	@SideOnly(Side.CLIENT)
+	@Nonnull
 	public BlockRenderLayer getBlockLayer()
 	{
 		return BlockRenderLayer.CUTOUT_MIPPED;
 	}
 	@Override
-	public boolean canSilkHarvest(World world, BlockPos pos, IBlockState state, EntityPlayer player)
+	public boolean canSilkHarvest(World world, BlockPos pos, @Nonnull IBlockState state, EntityPlayer player)
 	{
 		return false;
 	}
@@ -333,7 +338,8 @@ public class BlockDrillBase extends BlockContainer {
 		worldIn.setBlockState(pos, state.withProperty(FACING, placer.getHorizontalFacing().getOpposite()), 2);
 	}
 	@Override
-	public TileEntity createNewTileEntity(World worldIn, int meta)
+	@Nonnull
+	public TileEntity createNewTileEntity(@Nonnull World worldIn, int meta)
 	{
 		return new TileEntityDrillComponent();
 	}

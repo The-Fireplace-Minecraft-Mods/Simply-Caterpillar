@@ -179,7 +179,7 @@ public class CaterpillarData implements Cloneable{
 		AddingSlot = myDrillHeads.getSlot(ID);
 		AddingSlot.putStack(this.reinforcement.reinforcementMap[ID]);
 		this.setSlotPos(AddingSlot, 8 + (3 + 3) * 18, -1 + (1 + 2) * 18);
-		ID++;
+		//ID++;
 	}
 	public void placeSlotsforDecorations(Container myDrillHeads)
 	{

@@ -9,15 +9,8 @@ import java.io.File;
 
 public class ProxyCommon {
 
-	public boolean checkLoaded()
-	{
-		return this.getWorld() == null;
-	}
 	public File getDataDir(){
 		return FMLCommonHandler.instance().getMinecraftServerInstance().getDataDirectory();
-	}
-	public EntityPlayer getPlayer(){
-		return null;
 	}
 	public World getWorld(){
 		if (FMLCommonHandler.instance().getMinecraftServerInstance().worlds != null)
@@ -29,6 +22,7 @@ public class ProxyCommon {
 		}
 		return null;
 	}
+	@Deprecated
 	public boolean isServerSide()
 	{
 		return true;

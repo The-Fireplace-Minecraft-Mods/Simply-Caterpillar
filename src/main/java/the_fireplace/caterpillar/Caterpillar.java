@@ -186,8 +186,8 @@ public class Caterpillar
 		{
 			Reference.printDebug("Null: facing");
 		}
-		String CatID = this.getCaterpillarID(movingXZ, conCat.pos);
-		this.putContainerCaterpillar(CatID, conCat);
+		String catId = this.getCaterpillarID(movingXZ, conCat.pos);
+		this.putContainerCaterpillar(catId, conCat);
 	}
 
 	public void putContainerCaterpillar(String CaterpillarID, CaterpillarData conCat) {
@@ -242,7 +242,7 @@ public class Caterpillar
 	private World getCaterpillarWorld(BlockPos pos){
 		if (FMLCommonHandler.instance().getMinecraftServerInstance().worlds != null)
 		{
-			if (FMLCommonHandler.instance().getMinecraftServerInstance().worlds.length >0)
+			if (FMLCommonHandler.instance().getMinecraftServerInstance().worlds.length > 0)
 			{
 				for (WorldServer worldServer : FMLCommonHandler.instance().getMinecraftServerInstance().worlds) {
 					IBlockState state  = worldServer.getBlockState(pos);

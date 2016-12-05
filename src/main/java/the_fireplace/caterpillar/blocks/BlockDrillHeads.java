@@ -2,7 +2,6 @@ package the_fireplace.caterpillar.blocks;
 
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
@@ -18,7 +17,6 @@ import the_fireplace.caterpillar.Caterpillar;
 import the_fireplace.caterpillar.Config;
 import the_fireplace.caterpillar.Reference;
 import the_fireplace.caterpillar.containers.CaterpillarData;
-import the_fireplace.caterpillar.guis.GuiDrillHead;
 import the_fireplace.caterpillar.inits.InitBlocks;
 import the_fireplace.caterpillar.network.PacketDispatcher;
 import the_fireplace.caterpillar.network.PacketParticles;
@@ -84,13 +82,6 @@ public class BlockDrillHeads extends BlockDrillBase
 
 			BlockDrillHeads basedrillhead = (BlockDrillHeads)InitBlocks.drillheads;
 
-			if (!Caterpillar.proxy.isServerSide())
-			{
-				if (Minecraft.getMinecraft().currentScreen instanceof GuiDrillHead)
-				{
-					return;
-				}
-			}
 			thisCat.headTick++;
 			thisCat.movement.total = this.movementTicks + thisCat.movement.value;
 			if (thisCat.headTick > movementTicks){

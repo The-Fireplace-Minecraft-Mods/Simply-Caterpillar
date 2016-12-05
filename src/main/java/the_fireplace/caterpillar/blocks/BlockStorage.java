@@ -21,11 +21,6 @@ public class BlockStorage extends BlockDrillBase
 		this.changeStorage(myCate, Amount, objworld);
 	}
 
-	public void changeStorage(BlockPos pos, int Amount, World objworld) {
-		CaterpillarData myCate = Caterpillar.instance.getContainerCaterpillar(pos, objworld);
-		this.changeStorage(myCate, Amount, objworld);
-	}
-
 	public void changeStorage(CaterpillarData myCate, int Amount, World objworld) {
 
 		myCate.changeStorage(Amount, objworld);

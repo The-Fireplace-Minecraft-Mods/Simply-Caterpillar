@@ -10,6 +10,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nonnull;
+
 public class BlockDrillBlades extends Block
 {
 	public BlockDrillBlades()
@@ -33,6 +35,7 @@ public class BlockDrillBlades extends Block
 	 * The type of render function that is called for this block
 	 */
 	@Override
+	@Nonnull
 	public EnumBlockRenderType getRenderType(IBlockState state)
 	{
 		return EnumBlockRenderType.INVISIBLE;
@@ -62,5 +65,5 @@ public class BlockDrillBlades extends Block
 	 * @param fortune The player's fortune level
 	 */
 	@Override
-	public void dropBlockAsItemWithChance(World worldIn, BlockPos pos, IBlockState state, float chance, int fortune) {}
+	public void dropBlockAsItemWithChance(World worldIn, @Nonnull BlockPos pos, @Nonnull IBlockState state, float chance, int fortune) {}
 }

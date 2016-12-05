@@ -15,7 +15,6 @@ import the_fireplace.caterpillar.tools.NBTTools;
 
 import java.io.File;
 import java.util.Random;
-import java.util.Timer;
 
 public class Reference {
 
@@ -23,23 +22,14 @@ public class Reference {
 	public static final String SERVER_PROXY_CLASS = "the_fireplace.caterpillar.proxy.ProxyCommon";
 	public static final String guiFactory = "the_fireplace.caterpillar.guis.GuiFactoryConfig";
 
-	public static Timer ModTick = new Timer();
 	public static boolean loaded;
 
 	public static NBTTools MainNBT;
 
-	public static void printInfo(String what)
-	{
-		FMLLog.log(Caterpillar.MODNAME, Level.INFO, what);
-	}
 	public static void printDebug(String what)
 	{
 		if (Caterpillar.instance.dev)
 			FMLLog.log(Caterpillar.MODNAME + "/Debug", Level.INFO,  what);
-	}
-	public static boolean isWorldNotLoaded()
-	{
-		return Caterpillar.proxy.checkLoaded();
 	}
 
 	/**
