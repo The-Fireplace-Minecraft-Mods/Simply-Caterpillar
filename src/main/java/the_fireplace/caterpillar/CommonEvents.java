@@ -1,11 +1,9 @@
-package the_fireplace.caterpillar.handlers;
+package the_fireplace.caterpillar;
 
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import the_fireplace.caterpillar.Caterpillar;
-import the_fireplace.caterpillar.Config;
 
-public class HandlerEvents {
+public class CommonEvents {
 
 	/*@SubscribeEvent//There is no need to register it if the contents are noted out.
 	public void onWorldSave(WorldEvent.Save event)
@@ -22,6 +20,5 @@ public class HandlerEvents {
 			Config.save();
 			Config.load();
 		}
-		//ConfigurationBackpack.loadConfiguration();
 	}
 }

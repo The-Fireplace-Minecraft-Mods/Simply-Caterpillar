@@ -1,4 +1,4 @@
-package the_fireplace.caterpillar.handlers;
+package the_fireplace.caterpillar.tools;
 
 import the_fireplace.caterpillar.Caterpillar;
 import the_fireplace.caterpillar.Reference;
@@ -16,11 +16,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.zip.ZipException;
 
-public class HandlerNBTTag {
+public class NBTTools {
 
 	public String modID;
 
-	public HandlerNBTTag(String ModID) {
+	public NBTTools(String ModID) {
 		this.modID = ModID;
 	}
 	private World theWorldServer()

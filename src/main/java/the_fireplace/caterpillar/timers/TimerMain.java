@@ -11,7 +11,7 @@ public class TimerMain extends TimerTask{
 	public boolean inSetup = false;
 	private boolean onlyrunOnce = false;
 	private boolean savedyet = false;
-	private void checkReady() {
+	private void tryBeginSetup() {
 		if (Caterpillar.proxy.getWorld() != null )
 		{
 			if (Caterpillar.proxy.getWorld().loadedEntityList != null)
@@ -41,16 +41,15 @@ public class TimerMain extends TimerTask{
 			this.onlyrunOnce = true;
 		}
 
-		this.checkReady();
+		this.tryBeginSetup();
 
 
 		if (Reference.loaded)
 		{
-			if (Reference.checkLoaded())
+			if (Reference.isWorldNotLoaded())
 			{
 				Caterpillar.instance.reset();
 				return;
-
 			}
 			this.runningTickfromMod();
 		}

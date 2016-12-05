@@ -11,7 +11,7 @@ import net.minecraftforge.fml.common.FMLLog;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.logging.log4j.Level;
-import the_fireplace.caterpillar.handlers.HandlerNBTTag;
+import the_fireplace.caterpillar.tools.NBTTools;
 
 import java.io.File;
 import java.util.Random;
@@ -26,7 +26,7 @@ public class Reference {
 	public static Timer ModTick = new Timer();
 	public static boolean loaded;
 
-	public static HandlerNBTTag MainNBT;
+	public static NBTTools MainNBT;
 
 	public static void printInfo(String what)
 	{
@@ -37,7 +37,7 @@ public class Reference {
 		if (Caterpillar.instance.dev)
 			FMLLog.log(Caterpillar.MODNAME + "/Debug", Level.INFO,  what);
 	}
-	public static boolean checkLoaded()
+	public static boolean isWorldNotLoaded()
 	{
 		return Caterpillar.proxy.checkLoaded();
 	}

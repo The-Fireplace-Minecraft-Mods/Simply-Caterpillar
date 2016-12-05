@@ -26,9 +26,8 @@ import net.minecraftforge.oredict.ShapedOreRecipe;
 import the_fireplace.caterpillar.blocks.BlockDrillBase;
 import the_fireplace.caterpillar.blocks.BlockDrillHeads;
 import the_fireplace.caterpillar.containers.CaterpillarData;
-import the_fireplace.caterpillar.handlers.HandlerEvents;
 import the_fireplace.caterpillar.network.GUIHandler;
-import the_fireplace.caterpillar.handlers.HandlerNBTTag;
+import the_fireplace.caterpillar.tools.NBTTools;
 import the_fireplace.caterpillar.inits.InitBlocks;
 import the_fireplace.caterpillar.network.PacketDispatcher;
 import the_fireplace.caterpillar.proxy.ProxyCommon;
@@ -64,7 +63,7 @@ public class Caterpillar
 		dev = event.getModMetadata().version.equals("${version}");
 		Config.init(event.getSuggestedConfigurationFile());
 
-		Reference.MainNBT = new HandlerNBTTag(MODID);
+		Reference.MainNBT = new NBTTools(MODID);
 
 		this.mainContainers = new HashMap<>();
 
@@ -83,7 +82,7 @@ public class Caterpillar
 	public void init(FMLInitializationEvent event)
 	{
 		GameRegistry.registerTileEntity(TileEntityDrillComponent.class, "DrillHead");
-		MinecraftForge.EVENT_BUS.register(new HandlerEvents());
+		MinecraftForge.EVENT_BUS.register(new CommonEvents());
 		this.recipes();
 		Reference.cleanModsFolder();
 		Config.load();
