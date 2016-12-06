@@ -41,19 +41,19 @@ public class NBTTools {
 		return "";
 	}
 
-	private String checkPath(String Path)
+	public static String checkPath(String path)
 	{
-		String FileSeparator = File.separator;
-		String ASP = Path;
-		if (ASP.endsWith("."))
+		String fileSeparator = File.separator;
+		String asp = path;
+		if (asp.endsWith("."))
 		{
-			ASP = ASP.substring(0, ASP.length() - 1);
+			asp = asp.substring(0, asp.length() - 1);
 		}
-		if (!ASP.endsWith(FileSeparator))
+		if (!asp.endsWith(fileSeparator))
 		{
-			ASP = ASP + FileSeparator;
+			asp = asp + fileSeparator;
 		}
-		return ASP;
+		return asp;
 	}
 
 	public NBTTagCompound readNBTSettings(String folderLocation, String FileName)
@@ -102,19 +102,6 @@ public class NBTTools {
 		}
 	}
 
-	public String getFolderLocationModDirectory() {
-		//String FileSeparator = Caterpillar.proxy.getDataDir().separator;
-		String MainLocation = this.checkPath(Caterpillar.proxy.getDataDir().getAbsolutePath());
-
-		File versionsDir = new File(MainLocation, "mods");
-		if (!versionsDir.exists())
-		{
-			versionsDir.mkdir();
-		}
-		MainLocation = this.checkPath(versionsDir.getAbsolutePath());
-		return MainLocation;
-	}
-
 	public String getFolderLocationMod() {
 		//String FileSeparator = Caterpillar.proxy.getDataDir().separator;
 		String MainLocation = this.checkPath(Caterpillar.proxy.getDataDir().getAbsolutePath());
@@ -130,21 +117,18 @@ public class NBTTools {
 
 	public String getFolderLocationWorld() {
 		//String FileSeparator = Caterpillar.proxy.getDataDir().separator;
-		String MainLocation = this.checkPath(Caterpillar.proxy.getDataDir().getAbsolutePath());
-		if (!Caterpillar.proxy.isServerSide())
-		{
-			MainLocation = this.checkPath(MainLocation + "saves");
-		}
-		MainLocation = this.checkPath(MainLocation + this.SavedWorldFolder());
-		MainLocation = this.checkPath(MainLocation + Caterpillar.MODID);
+		String primaryFilePath = this.checkPath(Caterpillar.proxy.getDataDir().getAbsolutePath());
+		primaryFilePath = Caterpillar.proxy.getModifiedPath(primaryFilePath);
+		primaryFilePath = this.checkPath(primaryFilePath + this.SavedWorldFolder());
+		primaryFilePath = this.checkPath(primaryFilePath + Caterpillar.MODID);
 
-		File versionsDir = new File(MainLocation);
+		File versionsDir = new File(primaryFilePath);
 		if (!versionsDir.exists())
 		{
 			versionsDir.mkdir();
 		}
-		MainLocation = this.checkPath(versionsDir.getAbsolutePath());
-		return MainLocation;
+		primaryFilePath = this.checkPath(versionsDir.getAbsolutePath());
+		return primaryFilePath;
 	}
 
 	public ItemStack readItemStack(NBTTagCompound tmpNBT)

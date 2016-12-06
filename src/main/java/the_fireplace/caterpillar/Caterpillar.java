@@ -152,16 +152,16 @@ public class Caterpillar
 	{
 		this.selectedCaterpillar = null;
 	}
-	public void removeCaterpillar(String CaterpillarID)
+	public void removeCaterpillar(String catId)
 	{
-		Caterpillar.instance.mainContainers.remove(CaterpillarID);
+		Caterpillar.instance.mainContainers.remove(catId);
 		this.removeSelectedCaterpillar();
 	}
 
-	public boolean doesHaveCaterpillar(String CaterpillarID)
+	public boolean doesHaveCaterpillar(String catId)
 	{
 		try {
-			return this.mainContainers.containsKey(CaterpillarID);
+			return this.mainContainers.containsKey(catId);
 		} catch (Exception e) {
 			return false;
 		}

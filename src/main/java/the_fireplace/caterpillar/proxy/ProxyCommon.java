@@ -22,11 +22,6 @@ public class ProxyCommon {
 		}
 		return null;
 	}
-	@Deprecated
-	public boolean isServerSide()
-	{
-		return true;
-	}
 	public void registerRenders()
 	{}
 	public String translateToLocal(String s, Object... args){
@@ -35,5 +30,11 @@ public class ProxyCommon {
 
 	public EntityPlayer getPlayerEntity(MessageContext ctx) {
 		return ctx.getServerHandler().playerEntity;
+	}
+
+	public void closeDrillGui(){}
+
+	public String getModifiedPath(String s){
+		return s;
 	}
 }

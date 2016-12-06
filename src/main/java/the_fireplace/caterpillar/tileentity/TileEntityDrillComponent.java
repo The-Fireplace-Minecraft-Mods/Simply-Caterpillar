@@ -1,7 +1,6 @@
 package the_fireplace.caterpillar.tileentity;
 
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -13,7 +12,6 @@ import the_fireplace.caterpillar.blocks.BlockDrillBase;
 import the_fireplace.caterpillar.blocks.BlockDrillHeads;
 import the_fireplace.caterpillar.containers.CaterpillarData;
 import the_fireplace.caterpillar.containers.ContainerDrillHead;
-import the_fireplace.caterpillar.guis.GuiDrillHead;
 
 import javax.annotation.Nonnull;
 
@@ -50,15 +48,9 @@ public class TileEntityDrillComponent extends TileEntityLockable implements ITic
 	public ItemStack[] getItemStacks()
 	{
 		try {
-			return  this.ensureValidStacksizes(Caterpillar.instance.getInventory(this.getCaterpillarData(), this.getCaterpillarData().tabs.selected));
+			return this.ensureValidStacksizes(Caterpillar.instance.getInventory(this.getCaterpillarData(), this.getCaterpillarData().tabs.selected));
 		} catch (Exception e) {
-			if (!Caterpillar.proxy.isServerSide())
-			{
-				if (Minecraft.getMinecraft().currentScreen instanceof GuiDrillHead)
-				{
-					Minecraft.getMinecraft().currentScreen = null;
-				}
-			}
+			Caterpillar.proxy.closeDrillGui();
 			return null;
 		}
 	}
