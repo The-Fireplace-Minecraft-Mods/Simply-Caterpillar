@@ -1,18 +1,24 @@
 package the_fireplace.caterpillar.containers;
 
-import the_fireplace.caterpillar.Caterpillar.GuiTabs;
-import the_fireplace.caterpillar.Reference;
+import com.google.common.collect.Lists;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import org.apache.commons.lang3.ArrayUtils;
+import the_fireplace.caterpillar.Caterpillar.GuiTabs;
+import the_fireplace.caterpillar.Reference;
 import the_fireplace.caterpillar.parts.*;
+
+import java.util.LinkedList;
 
 public class CaterpillarData implements Cloneable{
 
-	public ItemStack[] inventory;
+	public LinkedList<ItemStack[]> inventoryPages;
+	public ItemStack fuelSlotStack;
+	public int pageIndex;
 	public int burntime;
 	public BlockPos pos;
 	public int maxburntime;
@@ -28,7 +34,9 @@ public class CaterpillarData implements Cloneable{
 	public ContainerDrillHead myDrillHead;
 	public CaterpillarData(BlockPos drillhead, String key)
 	{
-		this.inventory = new ItemStack[CaterpillarData.getMaxSize()];
+		this.inventoryPages = Lists.newLinkedList();
+		this.inventoryPages.add(new ItemStack[CaterpillarData.getInventoryPageSize()]);
+		pageIndex=0;
 		this.burntime = 0;
 		this.name = key;
 		this.headTick = 0;
@@ -41,66 +49,43 @@ public class CaterpillarData implements Cloneable{
 
 		this.updatePos(drillhead);
 	}
-	public static int getMaxSize()
-	{
-		return 25;
-	}
-	public void updateScroll(Container myDrillHeads) {
-		int i;
-		int column = 0;
-		int row = 0;
-		for (i = this.storage.startingIndex; i < getMaxSize() + this.storage.added; ++i)
-		{
-			Slot addingSlot = myDrillHeads.getSlot(i);
-			addingSlot.yPos = -1000;
-		}
-		for (i = this.storage.startingIndex; i < this.storage.startingIndex + 12; ++i)
-		{
-			Slot AddingSlot = myDrillHeads.getSlot(i);
-			AddingSlot.yPos = 7 + row * 18;
-			column++;
-			if (column > 2)
-			{
-				row++;
-				column = 0;
-			}
-		}
-		column = 0;
-		row = 0;
-		int middle = (getMaxSize() + this.storage.added - this.storage.startingIndex) / 2;
-		Reference.printDebug( this.storage.added + "," + middle);
-		for (i = this.storage.startingIndex + middle; i < this.storage.startingIndex + middle + 12; ++i)
-		{
 
-			Slot addingSlot = myDrillHeads.getSlot(i);
-			addingSlot.yPos = 7 + row * 18;
-			column++;
-			if (column > 2)
-			{
-				row++;
-				column = 0;
-			}
-		}
+	/**
+	 * Get the inventory that is currently loaded
+	 * @return
+	 * 	The current inventory
+	 */
+	public ItemStack[] getCurrentInventory(){
+		return inventoryPages.get(pageIndex);
+	}
+
+	/**
+	 * Gets the size of 1 inventory page
+	 * @return
+	 * 	The size of a page
+	 */
+	public static int getInventoryPageSize()
+	{
+		return 24;
 	}
 	public void setSlotPos(Slot thisSlot, int xpos, int ypos)
 	{
 		thisSlot.xPos =  xpos;
 		thisSlot.yPos =  ypos;
 	}
+
+	/**
+	 * Resets slot location
+	 * @param myDrillHeads
+	 * 	The container to reset the slots of
+	 */
 	public void resetSlots(Container myDrillHeads)
 	{
-		this.resetSlots(myDrillHeads, true);
-	}
-	public void resetSlots(Container myDrillHeads, boolean changepos)
-	{
-		for (int i = 0; i < CaterpillarData.getMaxSize() + this.storage.added; ++i)
+		for (int i = 0; i < CaterpillarData.getInventoryPageSize(); ++i)
 		{
 			Slot addingSlot = myDrillHeads.getSlot(i);
 			//addingSlot.putStack(null);
-			if (changepos)
-			{
-				this.setSlotPos(addingSlot, 12, -1000);
-			}
+			this.setSlotPos(addingSlot, 12, -1000);
 		}
 	}
 	public void placeSlotsforReinforcements(Container myDrillHeads)
@@ -201,7 +186,7 @@ public class CaterpillarData implements Cloneable{
 
 		}
 		//Everything else
-		for (int i = 8; i < CaterpillarData.getMaxSize() + this.storage.added; ++i)
+		for (int i = 8; i < CaterpillarData.getInventoryPageSize(); ++i)
 		{
 			Slot AddingSlot = myDrillHeads.getSlot(i);
 			this.setSlotPos(AddingSlot, -100, -100);
@@ -225,7 +210,7 @@ public class CaterpillarData implements Cloneable{
 		}
 
 		//Everything else
-		for (int i = 12; i < CaterpillarData.getMaxSize() + this.storage.added; ++i)
+		for (int i = 12; i < CaterpillarData.getInventoryPageSize(); ++i)
 		{
 			Slot AddingSlot = myDrillHeads.getSlot(i);
 			this.setSlotPos(AddingSlot, -100, -100);
@@ -242,48 +227,56 @@ public class CaterpillarData implements Cloneable{
 
 		//Burner
 		Slot addingSlot = myDrillHeads.getSlot(ID);
-		addingSlot.putStack(this.inventory[ID]);
+		addingSlot.putStack(fuelSlotStack);
 		this.setSlotPos(myDrillHeads.getSlot(ID), 8 + (4) * 18, 7 + (3) * 18);
 		ID++;
 
 		//Left Side
-		int idMiddle = (CaterpillarData.getMaxSize() + this.storage.added - this.storage.startingIndex )/2;
-		for (i = 0; i < (idMiddle/3); ++i)
+		for (i = 0; i < 4; ++i)
 		{
 			for (j = 0; j < 3; ++j)
 			{
 				addingSlot = myDrillHeads.getSlot(ID);
-				addingSlot.putStack(this.inventory[ID]);
+				addingSlot.putStack(this.getCurrentInventory()[ID]);
 				this.setSlotPos(myDrillHeads.getSlot(ID), 8 + j * 18, -100);
 				ID++;
 			}
 		}
 
 		//Right Side
-		for (i = 0; i < (idMiddle/3); ++i)
+		for (i = 0; i < 4; ++i)
 		{
 			for (j = 0; j < 3; ++j)
 			{
 				addingSlot = myDrillHeads.getSlot(ID);
-				addingSlot.putStack(this.inventory[ID]);
+				addingSlot.putStack(this.getCurrentInventory()[ID]);
 				this.setSlotPos(myDrillHeads.getSlot(ID), 8 + (j + 6) * 18, -100);
 				ID++;
 			}
 		}
-
-		this.updateScroll(myDrillHeads);
 	}
+
+	/**
+	 * Updates the BlockPos saved in the Caterpillar Data
+	 * @param drillhead
+	 * 	The BlockPos that the drillhead is at
+	 */
 	public void updatePos(BlockPos drillhead)
 	{
 		this.pos = new BlockPos(drillhead.getX(), drillhead.getY(), drillhead.getZ()) ;
 	}
-	public boolean addToOutInventory(ItemStack toAdd)
-	{
-		int Middleindex = (this.inventory.length - this.storage.startingIndex) / 2;
-		Middleindex += this.storage.startingIndex;
 
-		for (int i = Middleindex; i < this.inventory.length; i++) {
-			ItemStack slot = this.inventory[i];
+	/**
+	 * Puts an ItemStack in the right hand side of the Caterpillar inventory
+	 * @param toAdd
+	 * 	The itemstack to add to the inventory
+	 * @return
+	 * 	True if the stack was successfully storageComponentCount, otherwise false
+	 */
+	public boolean addToRightHandSlots(ItemStack toAdd)
+	{
+		for (int i = 12; i < this.getCurrentInventory().length; i++) {
+			ItemStack slot = this.getCurrentInventory()[i];
 			if (slot != null)
 			{
 				if (slot.stackSize + toAdd.stackSize < 65)
@@ -296,10 +289,10 @@ public class CaterpillarData implements Cloneable{
 				}
 			}
 		}
-		for (int i = Middleindex; i < this.inventory.length; i++) {
-			if (this.inventory[i] == null)
+		for (int i = 12; i < this.getCurrentInventory().length; i++) {
+			if (this.getCurrentInventory()[i] == null)
 			{
-				this.inventory[i] = new ItemStack(toAdd.getItem(), toAdd.stackSize, toAdd.getItemDamage());
+				this.getCurrentInventory()[i] = new ItemStack(toAdd.getItem(), toAdd.stackSize, toAdd.getItemDamage());
 				return true;
 			}
 		}
@@ -313,132 +306,118 @@ public class CaterpillarData implements Cloneable{
 		String key = this.name;
 		BlockPos posP = new BlockPos(this.pos.getX(), this.pos.getY(), this.pos.getZ());
 		CaterpillarData newCatp = new CaterpillarData(posP, key);
-		newCatp.inventory = this.inventory.clone();
+		newCatp.inventoryPages = (LinkedList<ItemStack[]>)this.inventoryPages.clone();
+		newCatp.fuelSlotStack = fuelSlotStack.copy();
 		newCatp.maxburntime = this.maxburntime;
-		newCatp.storage.added = this.storage.added;
+		newCatp.storage.storageComponentCount = this.storage.storageComponentCount;
 		newCatp.burntime = this.burntime;
 		newCatp.decoration = this.decoration.clone();
 		newCatp.reinforcement.reinforcementMap = this.reinforcement.reinforcementMap.clone();
 
 		return newCatp;
 	}
-	public void changeStorage( int Change, World worldIn) {
-		if (this.storage.added + Change < 0)
+
+	/**
+	 * Adjusts the number of storage components in the caterpillar.
+	 * @param changeBy
+	 * 	The amount to change by
+	 * @param worldIn
+	 * 	The world the caterpillar is in
+	 */
+	public void changeStorage(int changeBy, World worldIn) {
+		if (this.storage.storageComponentCount + changeBy < 0)
 		{
+			Reference.printDebug("Error: Attempted to reduce Caterpillar inventories to less than 1.");
 			return;
 		}
-		ItemStack[] tmpIT = new ItemStack[CaterpillarData.getMaxSize() + this.storage.added + Change];
 
-		int MiddleOldStorage = (this.inventory.length - this.storage.startingIndex) / 2;
-		int MiddleNewStorage = (tmpIT.length - this.storage.startingIndex) / 2;
-		int offset = this.storage.startingIndex;
-		if (MiddleNewStorage > MiddleOldStorage)// if new inv is bigger than the old one, short it
+		if (changeBy < 0)
 		{
-			ItemStack[] tmpITRight = new ItemStack[MiddleNewStorage];
-			for (int i = 0; i < this.inventory.length; i++) {
-				if (i < MiddleOldStorage + offset)
-				{
-					tmpIT[i] = this.inventory[i];
-				}
-				else
-				{
-					tmpITRight[i - MiddleOldStorage + offset] = this.inventory[i];
-				}
+			for (int i = 0; i < this.inventoryPages.getLast().length; i++) {
+				if (this.inventoryPages.getLast()[i] != null)
+					Reference.dropItem(worldIn, this.pos, this.inventoryPages.getLast()[i]);
 			}
-			System.arraycopy(tmpITRight, 0, tmpIT, MiddleNewStorage - offset, tmpITRight.length);
-
+			inventoryPages.removeLast();
 		}
-		else if (MiddleNewStorage < MiddleOldStorage)
+		else if (changeBy > 0)
 		{
-			int newchange = Math.abs(Change);
-			newchange /= 2;
-			for (int i = 0; i < this.inventory.length; i++) {
-				if (i < MiddleNewStorage + offset )
-				{
-					tmpIT[i] = this.inventory[i];
-				}else if (i >= MiddleNewStorage + offset && i < MiddleOldStorage + offset)
-				{
-					if (this.inventory[i] != null)
-					{
-						Reference.dropItem(worldIn, this.pos, this.inventory[i]);
-					}
-				}else if (i >= MiddleOldStorage + offset && i < MiddleOldStorage + MiddleNewStorage + offset )
-				{
-
-					tmpIT[i - newchange ] = this.inventory[i];
-				}
-				else
-				{
-					if (this.inventory[i] != null)
-					{
-						Reference.dropItem(worldIn, this.pos, this.inventory[i]);
-					}
-				}
-			}
+			inventoryPages.add(new ItemStack[getInventoryPageSize()]);
 		}
-		else
-		{
-			tmpIT = this.inventory.clone();
-		}
-		this.storage.startingIndex = 1;
-		this.inventory = tmpIT.clone();
-		this.storage.added = this.storage.added + Change;
+		this.storage.storageComponentCount += changeBy;
 	}
-	public static CaterpillarData readCaterpiller(NBTTagCompound NBTconCat)
+
+	/**
+	 * Recreate CaterpillarData from NBT
+	 * @param catNbt
+	 * 	The NBT Data to turn back in to a Caterpillar
+	 * @return
+	 * 	The new Caterpillar Data
+	 */
+	public static CaterpillarData readCaterpiller(NBTTagCompound catNbt)
 	{
-		String key = NBTconCat.getString("name");
-		BlockPos posP = new BlockPos(NBTconCat.getInteger("X"), NBTconCat.getInteger("Y"), NBTconCat.getInteger("Z"));
+		String key = catNbt.getString("name");
+		BlockPos posP = new BlockPos(catNbt.getInteger("X"), catNbt.getInteger("Y"), catNbt.getInteger("Z"));
 		CaterpillarData newCatp = new CaterpillarData(posP, key);
-		newCatp.tabs.selected = GuiTabs.values()[NBTconCat.getInteger("selectedtab")];
-		newCatp.decoration.selected = NBTconCat.getInteger("decorationsselected");
-		newCatp.maxburntime = NBTconCat.getInteger("burntimemax");
-		newCatp.storage.added = NBTconCat.getInteger("addedStorage");
-		newCatp.burntime = NBTconCat.getInteger("burntime");
-		newCatp.running = NBTconCat.getBoolean("running");
-		newCatp.inventory = Reference.MainNBT.readItemStacks(NBTconCat);
+		newCatp.tabs.selected = GuiTabs.values()[catNbt.getByte("selectedtab")];
+		newCatp.decoration.selected = catNbt.getByte("decorationsselected");
+		newCatp.maxburntime = catNbt.getInteger("burntimemax");
+		newCatp.storage.storageComponentCount = catNbt.getByte("addedStorage");
+		newCatp.burntime = catNbt.getInteger("burntime");
+		newCatp.running = catNbt.getBoolean("running");
+		newCatp.fuelSlotStack = ItemStack.loadItemStackFromNBT(catNbt.getCompoundTag("fuelStack"));
+		ItemStack[] stacks = Reference.MainNBT.readItemStacks(catNbt);
+		newCatp.inventoryPages = new LinkedList<>();
+		while(stacks.length > 0){
+			newCatp.inventoryPages.add(ArrayUtils.subarray(stacks, 0, getInventoryPageSize()));
+			stacks = ArrayUtils.subarray(stacks, getInventoryPageSize(), stacks.length);
+		}
 
-		if (newCatp.inventory.length < getMaxSize() + newCatp.storage.added || newCatp.inventory.length > getMaxSize() + newCatp.storage.added){
-			ItemStack[] tmpY = new ItemStack[getMaxSize() + newCatp.storage.added];
-
-			Reference.printDebug("Inventory length was wrong had to resize: " + newCatp.inventory.length + "," + tmpY.length);
-			int length = newCatp.inventory.length;
-			if (tmpY.length < length)
-			{
-				length = tmpY.length;
+		if (newCatp.inventoryPages.size() < newCatp.storage.storageComponentCount+1){
+			Reference.printDebug("Inventory count too low, adding "+(newCatp.storage.storageComponentCount+1-newCatp.inventoryPages.size())+" pages.");
+			for(int i=0;i<newCatp.storage.storageComponentCount+1-newCatp.inventoryPages.size();i++){
+				newCatp.inventoryPages.add(new ItemStack[getInventoryPageSize()]);
 			}
-			System.arraycopy(newCatp.inventory, 0, tmpY, 0, length);
-			newCatp.inventory = tmpY.clone();
-
 		}
 
-		if (NBTconCat.hasKey("incinerator"))
+		if (catNbt.hasKey("incinerator"))
 		{
-			newCatp.incinerator.readNBT(NBTconCat.getCompoundTag("incinerator"));
+			newCatp.incinerator.readNBT(catNbt.getCompoundTag("incinerator"));
 		}
-		if (NBTconCat.hasKey("decoration"))
+		if (catNbt.hasKey("decoration"))
 		{
-			newCatp.decoration.readNBT(NBTconCat.getCompoundTag("decoration"));
+			newCatp.decoration.readNBT(catNbt.getCompoundTag("decoration"));
 		}
-		if (NBTconCat.hasKey("movementTicks")){
-			newCatp.movement.readNBT(NBTconCat.getCompoundTag("movementTicks"));
+		if (catNbt.hasKey("movementTicks")){
+			newCatp.movement.readNBT(catNbt.getCompoundTag("movementTicks"));
 		}
-		if (NBTconCat.hasKey("reinforcement"))
+		if (catNbt.hasKey("reinforcement"))
 		{
-			newCatp.reinforcement.readNBT(NBTconCat.getCompoundTag("reinforcement"));
+			newCatp.reinforcement.readNBT(catNbt.getCompoundTag("reinforcement"));
 		}
 		return newCatp;
 	}
+
+	/**
+	 * Turn the Caterpillar in to NBT Data.
+	 * @return
+	 * 	The NBT Form of the Caterpillar
+	 */
 	public NBTTagCompound writeNBTCaterpillar() {
-		NBTTagCompound NBTconCat = Reference.MainNBT.writeItemStacks(this.inventory);
+		ItemStack[] totalInv = new ItemStack[0];
+		for(ItemStack[] inv:inventoryPages)
+			totalInv = ArrayUtils.addAll(totalInv, inv);
+		NBTTagCompound NBTconCat = Reference.MainNBT.writeItemStacks(totalInv);
+		if(this.fuelSlotStack != null)
+			NBTconCat.setTag("fuelStack", this.fuelSlotStack.writeToNBT(new NBTTagCompound()));
 		NBTconCat.setTag("decoration", this.decoration.saveNBT());
 		NBTconCat.setTag("reinforcement", this.reinforcement.saveNBT());
 		NBTconCat.setTag("incinerator", this.incinerator.saveNBT());
 		NBTconCat.setTag("movementTicks", this.movement.saveNBT());
 		NBTconCat.setString("name", this.name);
-		NBTconCat.setInteger("selectedtab", this.tabs.selected.value);
-		NBTconCat.setInteger("decorationsselected", this.decoration.selected);
+		NBTconCat.setByte("selectedtab", this.tabs.selected.value);
+		NBTconCat.setByte("decorationsselected", this.decoration.selected);
 		NBTconCat.setInteger("burntime", this.burntime);
-		NBTconCat.setInteger("addedStorage", this.storage.added);
+		NBTconCat.setByte("addedStorage", this.storage.storageComponentCount);
 		NBTconCat.setInteger("burntimemax", this.maxburntime);
 		NBTconCat.setBoolean("running", this.running);
 		NBTconCat.setInteger("X", this.pos.getX());

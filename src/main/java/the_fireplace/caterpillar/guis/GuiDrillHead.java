@@ -1,6 +1,9 @@
 package the_fireplace.caterpillar.guis;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.EntityPlayer;
@@ -20,7 +23,8 @@ import the_fireplace.caterpillar.abstracts.AbstractRunnerWidgets;
 import the_fireplace.caterpillar.containers.CaterpillarData;
 import the_fireplace.caterpillar.containers.ContainerDrillHead;
 import the_fireplace.caterpillar.network.PacketDispatcher;
-import the_fireplace.caterpillar.network.PacketSendCatData;
+import the_fireplace.caterpillar.network.packets.serverbound.PacketIncrementInventory;
+import the_fireplace.caterpillar.network.packets.serverbound.PacketSendCatData;
 import the_fireplace.caterpillar.parts.PartsGuiWidgets;
 import the_fireplace.caterpillar.parts.PartsTexture;
 import the_fireplace.caterpillar.parts.PartsTutorial;
@@ -35,12 +39,13 @@ import java.util.List;
 @SideOnly(Side.CLIENT)
 public class GuiDrillHead extends GuiContainer
 {
-	/** The inventory contained within the corresponding Dispenser. */
 	public IInventory dispenserInventory;
 	private CaterpillarData caterpillar;
 	private HashMap<GuiTabs, List<PartsGuiWidgets>> widgetsHolder;
 	private List<PartsGuiWidgets> selectedWidgets;
 	private PartsTutorial howTut;
+	private GuiButton left;
+	private GuiButton right;
 	public GuiDrillHead(EntityPlayer player, IInventory dispenserInv, CaterpillarData DH)
 	{
 		super(new ContainerDrillHead(player, dispenserInv, DH));
@@ -51,6 +56,28 @@ public class GuiDrillHead extends GuiContainer
 		this.caterpillar.tabs.selected = GuiTabs.MAIN;
 		this.sendUpdates();
 	}
+
+	@Override
+	public void initGui() {
+		ScaledResolution res = new ScaledResolution(Minecraft.getMinecraft());
+		width = res.getScaledWidth();
+		height = res.getScaledHeight();
+		guiLeft = (width - xSize) / 2;
+		guiTop = (height - ySize) / 2;
+		this.buttonList.clear();
+		this.buttonList.add(left = new GuiButton(0, guiLeft+25, guiTop+23, 20, 20, "<-"));
+		this.buttonList.add(right = new GuiButton(1, guiLeft+94, guiTop+23, 20, 20, "->"));
+		setButtonRules();
+		super.initGui();
+	}
+
+	private void setButtonRules(){
+		left.enabled=this.caterpillar.pageIndex > 0;
+		left.visible=this.checkShowtabs(GuiTabs.MAIN);
+		right.enabled=this.caterpillar.pageIndex < this.caterpillar.inventoryPages.size()-1;
+		right.visible=this.checkShowtabs(GuiTabs.MAIN);
+	}
+
 	public void setupWidgets()
 	{
 		Reference.printDebug("Setting up widgets...");
@@ -163,71 +190,6 @@ public class GuiDrillHead extends GuiContainer
 					}
 				};
 				toAddWid.add(tmpAdding);
-
-				int indexForBar = 2;
-
-				tmpHoover  = new AbstractRunnerWidgets() {
-					@Override
-					public void run(PartsGuiWidgets widget) {
-						List tmoString = new ArrayList<String>();
-						if (widget.Name.equals("scrollbar"))
-						{
-							tmoString.add(TextFormatting.RED + I18n.format("wheelstorage"));
-						}
-						GuiDrillHead.this.drawHoveringText(tmoString,widget.getMouseX() - widget.getGuiX(), widget.getMouseY() - widget.getGuiY());
-					}
-				};
-				tmpRun = new AbstractRunnerWidgets() {
-
-					@Override
-					public void run(PartsGuiWidgets widget) {
-						if (widget.Name.equals("scrollbar"))
-						{
-							widget.drawA = GuiDrillHead.this.caterpillar.storage.added != 0;
-						}
-						if (widget.Name.equals("scrollbarmoving"))
-						{
-							if (GuiDrillHead.this.caterpillar.storage.added == 0)
-							{
-								widget.drawA = false;
-							}
-							else
-							{
-								widget.drawA = true;
-								int where = (GuiDrillHead.this.caterpillar.storage.startingIndex - 2) / 3;
-								int Max = (GuiDrillHead.this.caterpillar.storage.added) / 6;
-								//Max -= 11;
-								//-18 - 36 == 54
-								widget.Y = (int)(-18 + 54 *((double)where/(double)Max));
-							}
-						}
-						widget.drawH = widget.drawA;
-					}
-				};
-
-				indexForBar = 1;
-				tmpAdding = new PartsGuiWidgets("scrollbar",this, 107, 58 - 52, 5, 42);
-				guiTextureA = new PartsTexture("base", GuiTabs.MAIN.guiTextures, 176 + (indexForBar *10), 12 + 3, 5, 42);
-				tmpAdding.setTexture(guiTextureA, guiTextureB);
-				tmpAdding.beforeDraw = tmpRun;
-				tmpAdding.hooverrun = tmpHoover;
-				toAddWid.add(tmpAdding);
-
-				tmpAdding = new PartsGuiWidgets("scrollbar",this, 107, 58 - 52 + 28, 5, 42);
-				guiTextureA = new PartsTexture("base", GuiTabs.MAIN.guiTextures, 176 + (indexForBar *10), 12 + 3, 5, 42);
-				tmpAdding.YPercentShownA = 0.9f;
-				tmpAdding.setTexture(guiTextureA, guiTextureB);
-				tmpAdding.beforeDraw = tmpRun;
-				tmpAdding.hooverrun = tmpHoover;
-				toAddWid.add(tmpAdding);
-				// -18 - 36
-				tmpAdding = new PartsGuiWidgets("scrollbarmoving",this, 107, -18, 5, 42);
-				guiTextureA = new PartsTexture("base", GuiTabs.MAIN.guiTextures, 176 + (indexForBar *10) + 5, 12 + 3 , 5, 38);
-				tmpAdding.YPercentShownA = 0.3f;
-				tmpAdding.setTexture(guiTextureA, guiTextureB);
-				tmpAdding.beforeDraw = tmpRun;
-				toAddWid.add(tmpAdding);
-
 				break;
 			case DECORATION:
 				tmpHoover = new AbstractRunnerWidgets() {
@@ -267,7 +229,7 @@ public class GuiDrillHead extends GuiContainer
 					}
 				};
 
-				indexForBar = 1;
+				int indexForBar = 1;
 				tmpAdding = new PartsGuiWidgets("scrollbar",this, 120, 58 - 52, 5, 42);
 				guiTextureA = new PartsTexture("base", GuiTabs.MAIN.guiTextures, 176 + (indexForBar *10), 12 + 3, 5, 42);
 				tmpAdding.setTexture(guiTextureA, guiTextureB);
@@ -758,36 +720,28 @@ public class GuiDrillHead extends GuiContainer
 		{
 			if (Config.tutorial[0])
 			{
-				this.howTut = new PartsTutorial("placeheads", 0, this, -74, -111, false);
-			}
-			else if (Config.tutorial[1])
-			{
-				this.howTut = new PartsTutorial("placefuel", 1, this, -74, 11, true);
-			}else if (Config.tutorial[2])
-			{
-				this.howTut = new PartsTutorial("poweron", 2, this, -91, 11, true);
-			}else if (this.caterpillar.storage.added > 0 && Config.tutorial[3])
-			{
-				this.howTut = new PartsTutorial("wheelstorage", 3, this, -52, -111, false);
-			}
-			else
-			{
+				this.howTut = new PartsTutorial("placefuel", 0, this, -74, 11, true);
+			}else if (Config.tutorial[1]){
+				this.howTut = new PartsTutorial("poweron", 1, this, -91, 11, true);
+			}else if (this.caterpillar.storage.storageComponentCount > 0 && Config.tutorial[2]){
+				this.howTut = new PartsTutorial("buttonstorage", 2, this, -48, -111, false);
+			}else{
 				this.howTut = null;
 			}
 		}
 		if (this.caterpillar.tabs.selected == GuiTabs.DECORATION)
 		{
-			if (Config.tutorial[4])
+			if (Config.tutorial[3])
 			{
-				this.howTut = new PartsTutorial("selection", 4, this, -35, 15, true);
+				this.howTut = new PartsTutorial("selection", 3, this, -35, 15, true);
+			}
+			else if (Config.tutorial[4])
+			{
+				this.howTut = new PartsTutorial("selectionzero", 4, this, -175, -24, true);
 			}
 			else if (Config.tutorial[5])
 			{
-				this.howTut = new PartsTutorial("selectionzero", 5, this, -175, -24, true);
-			}
-			else if (Config.tutorial[6])
-			{
-				this.howTut = new PartsTutorial("selectionpatter", 6, this, -75, 14, true);
+				this.howTut = new PartsTutorial("selectionpatter", 5, this, -75, 14, true);
 			}
 			else
 			{
@@ -796,20 +750,19 @@ public class GuiDrillHead extends GuiContainer
 		}
 		if (this.caterpillar.tabs.selected == GuiTabs.REINFORCEMENT)
 		{
-			if (Config.tutorial[7])
+			if (Config.tutorial[6])
 			{
-				this.howTut = new PartsTutorial("options", 7, this, -95, -28, true);
+				this.howTut = new PartsTutorial("options", 6, this, -95, -28, true);
 			}
-			else if (Config.tutorial[8])
+			else if (Config.tutorial[7])
 			{
-				this.howTut = new PartsTutorial("options2", 8, this, -75, 5, true);
+				this.howTut = new PartsTutorial("options2", 7, this, -75, 5, true);
 			}
 			else
 			{
 				this.howTut = null;
 			}
 		}
-
 
 		if (this.howTut != null)
 		{
@@ -826,7 +779,6 @@ public class GuiDrillHead extends GuiContainer
 	@Override
 	protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException
 	{
-
 		if (this.howTut != null)
 		{
 			if( this.howTut.checkClicked())
@@ -894,6 +846,7 @@ public class GuiDrillHead extends GuiContainer
 					this.sendUpdates();
 					break;
 				}
+				setButtonRules();
 				Reference.printDebug("Placement complete!");
 			}
 		}
@@ -1039,10 +992,6 @@ public class GuiDrillHead extends GuiContainer
 
 		if (speed != 0)
 		{
-			if (this.caterpillar.tabs.selected.equals(GuiTabs.MAIN))
-			{
-				this.mouseWheelMoved(speed);
-			}
 			if (this.caterpillar.tabs.selected.equals(GuiTabs.DECORATION))
 			{
 				this.mouseWheelMovedDecoration(speed);
@@ -1050,6 +999,20 @@ public class GuiDrillHead extends GuiContainer
 		}
 
 	}
+
+	@Override
+	protected void actionPerformed(GuiButton button) {
+		if (button.enabled) {
+			switch(button.id){
+				case 0:
+					PacketDispatcher.sendToServer(new PacketIncrementInventory(caterpillar, 1));
+					break;
+				case 1:
+					PacketDispatcher.sendToServer(new PacketIncrementInventory(caterpillar, -1));
+			}
+		}
+	}
+
 	public void mouseWheelMovedDecoration(int speed)
 	{
 		if (speed < 0)
@@ -1088,31 +1051,5 @@ public class GuiDrillHead extends GuiContainer
 		this.caterpillar.running = false;
 		PacketDispatcher.sendToServer(new PacketSendCatData(this.caterpillar));
 		this.caterpillar.running = whatamI;
-	}
-
-	public void mouseWheelMoved(int speed)
-	{
-		if (speed < 0)
-		{
-			this.caterpillar.storage.startingIndex+=3;
-
-			int resetindex = ((this.caterpillar.storage.added + CaterpillarData.getMaxSize() - this.caterpillar.storage.startingIndex) / 2) - 10;
-
-			if (Integer.compare(this.caterpillar.storage.startingIndex, resetindex)  >  0)
-			{
-				this.caterpillar.storage.startingIndex = resetindex;
-			}
-		}
-		else
-		{
-			this.caterpillar.storage.startingIndex-=3;
-
-			if (this.caterpillar.storage.startingIndex < 1)
-			{
-				this.caterpillar.storage.startingIndex = 1;
-			}
-		}
-
-		this.caterpillar.updateScroll(this.inventorySlots);
 	}
 }

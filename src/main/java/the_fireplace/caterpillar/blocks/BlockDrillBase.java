@@ -9,6 +9,7 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
@@ -25,7 +26,8 @@ import the_fireplace.caterpillar.Config;
 import the_fireplace.caterpillar.Reference;
 import the_fireplace.caterpillar.containers.CaterpillarData;
 import the_fireplace.caterpillar.network.PacketDispatcher;
-import the_fireplace.caterpillar.network.PacketParticles;
+import the_fireplace.caterpillar.network.packets.clientbound.PacketParticles;
+import the_fireplace.caterpillar.network.packets.clientbound.PacketRetrieveCatData;
 import the_fireplace.caterpillar.tileentity.TileEntityDrillComponent;
 
 import javax.annotation.Nonnull;
@@ -59,11 +61,9 @@ public class BlockDrillBase extends BlockContainer {
 				worldIn.setBlockToAir(pos);
 				return;
 			}
-			int Middleindex = (thisCat.inventory.length - thisCat.storage.startingIndex) / 2;
-			//Middleindex += thisCat.storage.startingIndex;
-			ItemStack[] thisGuyInv = thisCat.inventory;
+			ItemStack[] thisGuyInv = thisCat.getCurrentInventory();
 
-			for (int i = 0; i < Middleindex; i++) {
+			for (int i = 0; i < 12; i++) {
 				if (thisGuyInv[i] != null)
 				{
 					Block inIvn = Block.getBlockFromItem(thisGuyInv[i].getItem());
@@ -74,7 +74,7 @@ public class BlockDrillBase extends BlockContainer {
 						{
 							//ItemStack justOne = new ItemStack(thisGuyInv[i].getItem(), 1, thisGuyInv[i].getItemDamage());
 							ItemStack theRest = null;
-							if ( thisGuyInv[i].stackSize > 1)
+							if (thisGuyInv[i].stackSize > 1)
 							{
 								theRest = new ItemStack(thisGuyInv[i].getItem(), thisGuyInv[i].stackSize - 1, thisGuyInv[i].getItemDamage());
 							}
@@ -88,17 +88,17 @@ public class BlockDrillBase extends BlockContainer {
 		}
 
 	}
-	protected int getCountIndex(int[] movingXZ, BlockPos Wherepos) {
-		int Count  = movingXZ[0] * Wherepos.getX() +  movingXZ[1] * Wherepos.getZ();
-		String newT = Count + "";
+	protected int getCountIndex(int[] movingXZ, BlockPos loc) {
+		int count  = movingXZ[0] * loc.getX() +  movingXZ[1] * loc.getZ();
+		String newT = count + "";
 		newT = newT.substring(newT.length() - 1, newT.length());
-		Count = Integer.parseInt(newT);
+		count = Integer.parseInt(newT);
 		if ( movingXZ[0] < 0 ||  movingXZ[1] > 0)
 		{
-			Count = 9 - Count;
+			count = 9 - count;
 		}
 
-		return Count;
+		return count;
 	}
 
 	public void calculateMovement(World worldIn, BlockPos pos, IBlockState state)
@@ -190,6 +190,7 @@ public class BlockDrillBase extends BlockContainer {
 			{
 				Reference.printDebug("Gui Called; Stage 3");
 				CaterpillarData thisCat = Caterpillar.instance.getContainerCaterpillar(pos, state);
+				PacketDispatcher.sendTo(new PacketRetrieveCatData(thisCat), (EntityPlayerMP)playerIn);
 				if (thisCat != null)
 				{
 					Reference.printDebug("Gui Called; Stage 4");

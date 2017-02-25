@@ -15,6 +15,7 @@ import the_fireplace.caterpillar.blocks.BlockDrillBase;
 import the_fireplace.caterpillar.containers.CaterpillarData;
 import the_fireplace.caterpillar.containers.ContainerDrillHead;
 import the_fireplace.caterpillar.guis.GuiDrillHead;
+import the_fireplace.caterpillar.network.packets.serverbound.PacketSendCatData;
 import the_fireplace.caterpillar.tileentity.TileEntityDrillComponent;
 
 public class GUIHandler implements IGuiHandler
@@ -32,11 +33,13 @@ public class GUIHandler implements IGuiHandler
 
 			TileEntityDrillComponent te = (TileEntityDrillComponent) world.getTileEntity(new BlockPos(x, y, z));
 			te.isSelected = true;
-			CaterpillarData conCat =  Caterpillar.instance.getSelectedCaterpillar();
+			CaterpillarData conCat = Caterpillar.instance.getSelectedCaterpillar();
 			if (conCat != null)
 			{
 				Reference.printDebug("Client GUI: " + conCat.name);
 				return new GuiDrillHead(player,  (te), conCat);
+			}else{
+				Reference.printDebug("Error: Cat Data not found on the Client.");
 			}
 		}
 		return null;

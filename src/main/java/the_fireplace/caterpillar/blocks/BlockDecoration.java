@@ -49,7 +49,7 @@ public class BlockDecoration extends BlockDrillBase
 		}
 	}
 	@Override
-	protected void fired(World worldIn, BlockPos pos, IBlockState state, String catID, int[] movingXZ, int Count)
+	protected void fired(World worldIn, BlockPos pos, IBlockState state, String catID, int[] movingXZ, int count)
 	{
 		CaterpillarData myCat = Caterpillar.instance.getContainerCaterpillar(catID);
 		if (myCat == null)
@@ -58,8 +58,8 @@ public class BlockDecoration extends BlockDrillBase
 		}
 		PartsDecoration thisSection = myCat.decoration;
 		thisSection.howclose = 2;
-		ItemStack[] whattoPlace = thisSection.placementMap.get(Count);
-		thisSection.countindex = Count;
+		ItemStack[] whattoPlace = thisSection.placementMap.get(count);
+		thisSection.countindex = count;
 		int slot = 7;
 		if (movingXZ[1] == -1 || movingXZ[0] == 1)
 		{

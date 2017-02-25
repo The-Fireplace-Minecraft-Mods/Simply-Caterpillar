@@ -4,7 +4,7 @@ import net.minecraft.nbt.NBTTagCompound;
 
 public class PartsTabbed {
 
-	public int howclose = 0;
+	public byte howclose = 0;
 	public PartsTabbed()
 	{
 
@@ -13,7 +13,7 @@ public class PartsTabbed {
 	{
 		if (NBTconCat.hasKey("howclose"))
 		{
-			this.howclose = NBTconCat.getInteger("howclose");
+			this.howclose = NBTconCat.getByte("howclose");
 		}
 		else
 		{
@@ -23,12 +23,12 @@ public class PartsTabbed {
 	public NBTTagCompound saveNBT()
 	{
 		NBTTagCompound NBTconCat = new NBTTagCompound();
-		NBTconCat.setInteger("howclose", this.howclose);
+		NBTconCat.setByte("howclose", this.howclose);
 		return NBTconCat;
 	}
 	public NBTTagCompound saveNBT(NBTTagCompound NBTconCat)
 	{
-		NBTconCat.setInteger("howclose", this.howclose);
+		NBTconCat.setByte("howclose", this.howclose);
 		return NBTconCat;
 	}
 }

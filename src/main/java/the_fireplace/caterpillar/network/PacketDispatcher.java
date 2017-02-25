@@ -7,6 +7,11 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
 import the_fireplace.caterpillar.Caterpillar;
+import the_fireplace.caterpillar.network.packets.clientbound.PacketIncrementClientInventory;
+import the_fireplace.caterpillar.network.packets.clientbound.PacketParticles;
+import the_fireplace.caterpillar.network.packets.clientbound.PacketRetrieveCatData;
+import the_fireplace.caterpillar.network.packets.serverbound.PacketIncrementInventory;
+import the_fireplace.caterpillar.network.packets.serverbound.PacketSendCatData;
 
 /**
  * @author coolAlias
@@ -21,6 +26,8 @@ public class PacketDispatcher {
         PacketDispatcher.registerMessage(PacketParticles.Handler.class, PacketParticles.class, Side.CLIENT);
         PacketDispatcher.registerMessage(PacketRetrieveCatData.Handler.class, PacketRetrieveCatData.class, Side.CLIENT);
         PacketDispatcher.registerMessage(PacketSendCatData.Handler.class, PacketSendCatData.class, Side.SERVER);
+        PacketDispatcher.registerMessage(PacketIncrementInventory.Handler.class, PacketIncrementInventory.class, Side.SERVER);
+        PacketDispatcher.registerMessage(PacketIncrementClientInventory.Handler.class, PacketIncrementClientInventory.class, Side.CLIENT);
     }
 
     private static final void registerMessage(Class handlerClass, Class messageClass, Side side) {

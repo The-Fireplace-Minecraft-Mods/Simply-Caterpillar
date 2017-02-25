@@ -36,7 +36,7 @@ public class BlockStorage extends BlockDrillBase
 		CaterpillarData thisCat = Caterpillar.instance.getContainerCaterpillar(catID);
 		if (thisCat != null)
 		{
-			thisCat.storage.count += 24;
+			thisCat.storage.storageComponentCount += 1;
 		}
 	}
 

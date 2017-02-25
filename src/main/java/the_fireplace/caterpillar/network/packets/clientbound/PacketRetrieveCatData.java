@@ -1,4 +1,4 @@
-package the_fireplace.caterpillar.network;
+package the_fireplace.caterpillar.network.packets.clientbound;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
@@ -8,12 +8,14 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import the_fireplace.caterpillar.Caterpillar;
 import the_fireplace.caterpillar.Reference;
 import the_fireplace.caterpillar.containers.CaterpillarData;
+import the_fireplace.caterpillar.network.packets.AbstractClientMessageHandler;
 
 /**
  * @author The_Fireplace
  */
 public class PacketRetrieveCatData implements IMessage {
     public CaterpillarData remoteCaterpillar;
+    public PacketRetrieveCatData(){}
     public PacketRetrieveCatData(CaterpillarData remoteCaterpillar)
     {
         this.remoteCaterpillar = remoteCaterpillar;

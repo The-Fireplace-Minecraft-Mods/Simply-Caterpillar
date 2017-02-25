@@ -20,7 +20,7 @@ public class BlockReinforcements extends BlockDrillBase
 	}
 
 	private void checkCustomizer(World worldIn, String catID,
-								 BlockPos Wherepos, int[] thisPart, IBlockState thiState,
+								 BlockPos Wherepos, byte[] thisPart, IBlockState thiState,
 								 Block BlocktoPlace, int meta) {
 		if (thisPart[0] == 1 && thiState.equals(Blocks.AIR.getDefaultState()))
 		{
@@ -111,7 +111,7 @@ public class BlockReinforcements extends BlockDrillBase
 							{
 								Side = -1 * j + 2;
 							}
-							int[] thisPart = mycaterpillar.reinforcement.replacers.get(0);
+							byte[] thisPart = mycaterpillar.reinforcement.replacers.get(0);
 							Reference.printDebug(Side + "," + movingXZ[0] + "," + movingXZ[1]);
 							if (mycaterpillar.reinforcement.reinforcementMap[Side] != null)
 							{
@@ -137,7 +137,7 @@ public class BlockReinforcements extends BlockDrillBase
 							{
 								Side = 12 + -1*j + 1;
 							}
-							int[] thisPart = mycaterpillar.reinforcement.replacers.get(3);
+							byte[] thisPart = mycaterpillar.reinforcement.replacers.get(3);
 							if (mycaterpillar.reinforcement.reinforcementMap[Side] != null)
 							{
 								Block blockToPlace = Block.getBlockFromItem(mycaterpillar.reinforcement.reinforcementMap[Side].getItem());
@@ -155,7 +155,7 @@ public class BlockReinforcements extends BlockDrillBase
 						{
 							//left
 							int Side = 4 + (-1* i) + 1;
-							int[] thisPart = mycaterpillar.reinforcement.replacers.get(1);
+							byte[] thisPart = mycaterpillar.reinforcement.replacers.get(1);
 							if (mycaterpillar.reinforcement.reinforcementMap[Side] != null)
 							{
 								Block blockToPlace = Block.getBlockFromItem(mycaterpillar.reinforcement.reinforcementMap[Side].getItem());
@@ -174,7 +174,7 @@ public class BlockReinforcements extends BlockDrillBase
 						{
 							//right
 							int Side = 8 + (-1* i) + 2;
-							int[] thisPart = mycaterpillar.reinforcement.replacers.get(2);
+							byte[] thisPart = mycaterpillar.reinforcement.replacers.get(2);
 							if (mycaterpillar.reinforcement.reinforcementMap[Side] != null)
 							{
 								Block blockToPlace = Block.getBlockFromItem(mycaterpillar.reinforcement.reinforcementMap[Side].getItem());

@@ -10,7 +10,7 @@ import java.util.List;
 
 public class PartsDecoration extends PartsTabbed implements Cloneable{
 	public List<ItemStack[]> placementMap;
-	public int selected = 0;
+	public byte selected = 0;
 	public int countindex = 0;
 	public final int maxSlots = 10;
 	public PartsDecoration ()

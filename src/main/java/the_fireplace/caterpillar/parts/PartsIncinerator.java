@@ -67,7 +67,6 @@ public class PartsIncinerator extends PartsTabbed implements Cloneable {
 	@Override
 	public NBTTagCompound saveNBT()
 	{
-
 		NBTTagCompound NBTconCat = super.saveNBT();
 		NBTconCat.setTag("toburn", Reference.MainNBT.writeItemStacks(this.placementMap));
 		return NBTconCat;

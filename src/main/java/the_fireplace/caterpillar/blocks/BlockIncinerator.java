@@ -55,26 +55,23 @@ public class BlockIncinerator extends BlockDrillBase
 		{
 			PartsIncinerator thisSection = myCat.incinerator;
 			thisSection.howclose = 2;
-		}
 
-		int middleIndex = (myCat.inventory.length - 2) / 2;
-		middleIndex += 2;
-		ItemStack[] myCatInv = myCat.inventory;
-
-		for (int i = middleIndex; i < myCatInv.length; i++) {
-			for (ItemStack element : myCat.incinerator.placementMap) {
-				if (element != null)
-				{
-					if (myCatInv[i] != null)
-					{
-						if (myCatInv[i].getItem().equals(element.getItem()) && myCatInv[i].getItemDamage() == element.getItemDamage())
+			for(ItemStack[] myCatInv : myCat.inventoryPages)
+				for (int i = 1; i < myCatInv.length; i++) {
+					for (ItemStack element : myCat.incinerator.placementMap) {
+						if (element != null)
 						{
-							myCatInv[i] = null;
-							break;
+							if (myCatInv[i] != null)
+							{
+								if (myCatInv[i].getItem().equals(element.getItem()) && myCatInv[i].getItemDamage() == element.getItemDamage())
+								{
+									myCatInv[i] = null;
+									break;
+								}
+							}
 						}
 					}
 				}
-			}
 		}
 	}
 

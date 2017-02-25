@@ -1,4 +1,4 @@
-package the_fireplace.caterpillar.network;
+package the_fireplace.caterpillar.network.packets.serverbound;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
@@ -8,6 +8,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import the_fireplace.caterpillar.Caterpillar;
 import the_fireplace.caterpillar.Reference;
 import the_fireplace.caterpillar.containers.CaterpillarData;
+import the_fireplace.caterpillar.network.packets.AbstractServerMessageHandler;
 
 public class PacketSendCatData implements IMessage{
 
@@ -34,13 +35,13 @@ public class PacketSendCatData implements IMessage{
 		}
 
 	}
-	public static class Handler extends AbstractServerMessageHandler<PacketSendCatData>{
+	public static class Handler extends AbstractServerMessageHandler<PacketSendCatData> {
 
 		@Override
 		public IMessage handleServerMessage(EntityPlayer player, PacketSendCatData message, MessageContext ctx) {
 			CaterpillarData cater =  message.remoteCaterpillar;
 			boolean foundcat  =Caterpillar.instance.doesHaveCaterpillar(cater.name);
-			Reference.printDebug("Packets(" + ctx.side.toString() +"): Received, " + cater.name + ", " + foundcat);
+			Reference.printDebug("Packets(" + ctx.side.toString() +"): Received, " + cater.name + " found: " + foundcat);
 
 			if (Caterpillar.instance.getContainerCaterpillar(cater.name) != null)
 			{

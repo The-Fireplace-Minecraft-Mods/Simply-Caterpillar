@@ -23,6 +23,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.ShapedOreRecipe;
+import org.apache.commons.lang3.ArrayUtils;
 import the_fireplace.caterpillar.blocks.BlockDrillBase;
 import the_fireplace.caterpillar.blocks.BlockDrillHeads;
 import the_fireplace.caterpillar.containers.CaterpillarData;
@@ -300,7 +301,8 @@ public class Caterpillar
 		{
 			switch (selected.value) {
 			case 0:
-				return caterpillarData.inventory;
+				ItemStack[] initial = new ItemStack[]{caterpillarData.fuelSlotStack};
+				return ArrayUtils.addAll(initial, caterpillarData.getCurrentInventory());
 			case 1:
 				return caterpillarData.decoration.getSelectedInventory();
 			case 2:
@@ -329,16 +331,16 @@ public class Caterpillar
 		}
 	}
 	public enum GuiTabs {
-		MAIN(0, proxy.translateToLocal("tabs1"), false, new ResourceLocation(MODID  + ":textures/gui/guicatapiller.png")),
-		DECORATION(1, proxy.translateToLocal("tabs2"), true, new ResourceLocation(MODID  + ":textures/gui/guidecoration.png")),
-		REINFORCEMENT(2, proxy.translateToLocal("tabs3"), true, new ResourceLocation(MODID  + ":textures/gui/guireinfocement.png")),
-		INCINERATOR(3, proxy.translateToLocal("tabs4"), true, new ResourceLocation(MODID  + ":textures/gui/guiincinerator.png"));
-		public final int value;
+		MAIN((byte)0, proxy.translateToLocal("tabs1"), false, new ResourceLocation(MODID  + ":textures/gui/guicatapiller.png")),
+		DECORATION((byte)1, proxy.translateToLocal("tabs2"), true, new ResourceLocation(MODID  + ":textures/gui/guidecoration.png")),
+		REINFORCEMENT((byte)2, proxy.translateToLocal("tabs3"), true, new ResourceLocation(MODID  + ":textures/gui/guireinfocement.png")),
+		INCINERATOR((byte)3, proxy.translateToLocal("tabs4"), true, new ResourceLocation(MODID  + ":textures/gui/guiincinerator.png"));
+		public final byte value;
 		public final String name;
 		public final boolean isCrafting;
 		public final ResourceLocation guiTextures;
 
-		GuiTabs(int value, String name, boolean isCrafting, ResourceLocation guiTextures) {
+		GuiTabs(byte value, String name, boolean isCrafting, ResourceLocation guiTextures) {
 			this.value = value;
 			this.name = name;
 			this.guiTextures = guiTextures;

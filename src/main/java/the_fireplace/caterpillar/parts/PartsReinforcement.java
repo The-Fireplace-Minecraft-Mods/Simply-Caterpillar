@@ -10,7 +10,7 @@ import java.util.List;
 
 public class PartsReinforcement extends PartsTabbed{
 	public ItemStack[] reinforcementMap = new ItemStack[16];
-	public List<int[]> replacers = new ArrayList();
+	public List<byte[]> replacers = new ArrayList();
 
 	public PartsReinforcement()
 	{
@@ -48,7 +48,7 @@ public class PartsReinforcement extends PartsTabbed{
 
 	private void setReplacers() {
 		for (int i = 0; i < 4; i++) {
-			this.replacers.add(new int[5]);
+			this.replacers.add(new byte[5]);
 		}
 		this.replacers.get(0)[0] = 0;
 		this.replacers.get(0)[1] = 1;
@@ -94,7 +94,7 @@ public class PartsReinforcement extends PartsTabbed{
 		for (int i = 0; i < 4; i++) {
 			if (NBTconCat.hasKey("replacers" + i))
 			{
-				this.replacers.add(NBTconCat.getIntArray("replacers" + i));
+				this.replacers.add(NBTconCat.getByteArray("replacers" + i));
 			}
 		}
 		// convert old saves.
@@ -111,11 +111,10 @@ public class PartsReinforcement extends PartsTabbed{
 	@Override
 	public NBTTagCompound saveNBT()
 	{
-
 		NBTTagCompound NBTconCat = Reference.MainNBT.writeItemStacks(this.reinforcementMap);
 		NBTconCat = super.saveNBT(NBTconCat);
 		for (int i = 0; i < 4; i++) {
-			NBTconCat.setIntArray("replacers" + i, this.replacers.get(i));
+			NBTconCat.setByteArray("replacers" + i, this.replacers.get(i));
 		}
 
 		return NBTconCat;

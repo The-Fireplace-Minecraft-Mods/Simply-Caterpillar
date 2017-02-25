@@ -60,11 +60,11 @@ public class TileEntityDrillComponent extends TileEntityLockable implements ITic
 	{
 		return this.getItemStacks().length;
 	}
-	private void setCustomItem(int index, ItemStack inwego)
+	private void setCustomItem(int index, ItemStack itemStack)
 	{
 		if (index < this.getItemStacks().length)
 		{
-			this.getItemStacks()[index] = inwego;
+			this.getItemStacks()[index] = itemStack;
 		}
 	}
 	private ItemStack getCustomItem(int index)
@@ -78,7 +78,6 @@ public class TileEntityDrillComponent extends TileEntityLockable implements ITic
 	@Override
 	public ItemStack getStackInSlot(int index)
 	{
-
 		return this.getCustomItem(index);
 	}
 

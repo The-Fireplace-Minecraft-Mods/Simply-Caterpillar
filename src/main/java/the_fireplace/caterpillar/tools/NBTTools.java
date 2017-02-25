@@ -1,7 +1,5 @@
 package the_fireplace.caterpillar.tools;
 
-import the_fireplace.caterpillar.Caterpillar;
-import the_fireplace.caterpillar.Reference;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
@@ -9,6 +7,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
+import the_fireplace.caterpillar.Caterpillar;
+import the_fireplace.caterpillar.Reference;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -166,8 +166,7 @@ public class NBTTools {
 	{
 		NBTTagCompound tmpNBT = new NBTTagCompound();
 
-		int i = 0;
-		for (i = 0; i < its.length; i++) {
+		for (int i = 0; i < its.length; i++) {
 			tmpNBT.setTag(i + "Item", this.writeItemStack(its[i]));
 		}
 		tmpNBT.setInteger("Count", its.length);
@@ -178,18 +177,22 @@ public class NBTTools {
 	{
 		NBTTagCompound tmpNBT = new NBTTagCompound();
 		Item toAdd = null;
-		byte StackSize = 0;
-		short Damage = 0;
+		byte stackSize = 0;
+		short damage = 0;
 		if (its != null)
 		{
 			toAdd = its.getItem();
-			StackSize = (byte)its.stackSize;
-			Damage = (short)its.getItemDamage();
+			stackSize = (byte)its.stackSize;
+			damage = (short)its.getItemDamage();
+			if (its.getTagCompound() != null)
+			{
+				tmpNBT.setTag("tag", its.getTagCompound());
+			}
 		}
 		ResourceLocation resourcelocation = Item.REGISTRY.getNameForObject(toAdd);
 		tmpNBT.setString("id", resourcelocation == null ? "minecraft:air" : resourcelocation.toString());
-		tmpNBT.setByte("Count", StackSize);
-		tmpNBT.setShort("Damage", Damage);
+		tmpNBT.setByte("Count", stackSize);
+		tmpNBT.setShort("Damage", damage);
 
 		return tmpNBT;
 	}

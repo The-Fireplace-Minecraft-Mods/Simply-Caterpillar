@@ -1,4 +1,4 @@
-package the_fireplace.caterpillar.network;
+package the_fireplace.caterpillar.network.packets;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;

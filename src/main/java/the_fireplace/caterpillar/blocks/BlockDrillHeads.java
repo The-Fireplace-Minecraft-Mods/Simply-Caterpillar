@@ -19,7 +19,7 @@ import the_fireplace.caterpillar.Reference;
 import the_fireplace.caterpillar.containers.CaterpillarData;
 import the_fireplace.caterpillar.inits.InitBlocks;
 import the_fireplace.caterpillar.network.PacketDispatcher;
-import the_fireplace.caterpillar.network.PacketParticles;
+import the_fireplace.caterpillar.network.packets.clientbound.PacketParticles;
 
 import java.util.Random;
 
@@ -53,8 +53,8 @@ public class BlockDrillHeads extends BlockDrillBase
 			if (Caterpillar.instance.doesHaveCaterpillar(catID))
 			{
 				CaterpillarData conCata = Caterpillar.instance.getContainerCaterpillar(catID);
-				for (ItemStack element : conCata.inventory) {
-
+				for(ItemStack[] inventory : conCata.inventoryPages)
+				for (ItemStack element : inventory) {
 					if (element != null)
 					{
 						Reference.dropItem(worldIn, pos, element);
@@ -92,7 +92,7 @@ public class BlockDrillHeads extends BlockDrillBase
 					return;
 				}
 
-				this.fixStorage(pos, thisCat);
+				thisCat.storage.storageComponentCount=0;//fixStorage
 
 				if (thisCat.decoration.howclose > 0)
 				{
@@ -198,10 +198,6 @@ public class BlockDrillHeads extends BlockDrillBase
 		return 0;
 	}
 
-	private void fixStorage(BlockPos pos, CaterpillarData thisCat) {
-		thisCat.storage.count = 0;
-	}
-
 	@Override
 	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand)
 	{
@@ -215,18 +211,16 @@ public class BlockDrillHeads extends BlockDrillBase
 			if (thisCat.burntime < 1)
 			{
 				//thisCat.burntime = 0;
-				ItemStack[] thisGuyInv = thisCat.inventory;
-				int i = 0;
 
-				if (TileEntityFurnace.isItemFuel(thisGuyInv[i]))
+				if (TileEntityFurnace.isItemFuel(thisCat.fuelSlotStack))
 				{
-					ItemStack justOne = new ItemStack(thisGuyInv[i].getItem(), 1, thisGuyInv[i].getItemDamage());
+					ItemStack justOne = new ItemStack(thisCat.fuelSlotStack.getItem(), 1, thisCat.fuelSlotStack.getItemDamage());
 					ItemStack theRest = null;
-					if ( thisGuyInv[i].stackSize > 1)
+					if (thisCat.fuelSlotStack.stackSize > 1)
 					{
-						theRest = new ItemStack(thisGuyInv[i].getItem(), thisGuyInv[i].stackSize - 1, thisGuyInv[i].getItemDamage());
+						theRest = new ItemStack(thisCat.fuelSlotStack.getItem(), thisCat.fuelSlotStack.stackSize - 1, thisCat.fuelSlotStack.getItemDamage());
 					}
-					thisGuyInv[i] = theRest;
+					thisCat.fuelSlotStack = theRest;
 					thisCat.maxburntime = TileEntityFurnace.getItemBurnTime(justOne);
 					thisCat.burntime += thisCat.maxburntime;
 				}

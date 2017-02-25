@@ -1,5 +1,6 @@
 package the_fireplace.caterpillar.containers;
 
+import com.google.common.collect.Lists;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
@@ -13,6 +14,7 @@ import the_fireplace.caterpillar.Caterpillar;
 import the_fireplace.caterpillar.Reference;
 
 import javax.annotation.Nonnull;
+import java.util.List;
 
 public class ContainerDrillHead extends Container
 {
@@ -33,8 +35,7 @@ public class ContainerDrillHead extends Container
 		this.addSlotToContainer(new Slot(tileEntityInventoryIn, ID++, 8 + (4) * 18, 7 + (3) * 18));
 
 		//Left Side
-		int IDMiddle   = (CaterpillarData.getMaxSize() + this.myCaterpillar.storage.added - this.myCaterpillar.storage.startingIndex )/2;
-		for (i = 0; i < (IDMiddle/3); ++i)
+		for (i = 0; i < 4; ++i)
 		{
 			for (j = 0; j < 3; ++j)
 			{
@@ -43,7 +44,7 @@ public class ContainerDrillHead extends Container
 		}
 
 		//Right Side
-		for (i = 0; i < (IDMiddle/3); ++i)
+		for (i = 0; i < 4; ++i)
 		{
 			for (j = 0; j < 3; ++j)
 			{
@@ -52,8 +53,6 @@ public class ContainerDrillHead extends Container
 		}
 
 		Reference.printDebug("Slot Count: "+ID);
-
-		this.myCaterpillar.updateScroll(this);
 
 		//Player Inventory
 		for (i = 0; i < 3; ++i)
@@ -73,6 +72,21 @@ public class ContainerDrillHead extends Container
 	public boolean canInteractWith(@Nonnull EntityPlayer playerIn)
 	{
 		return this.tileEntityInventory.isUsableByPlayer(playerIn);
+	}
+
+	@Override
+	public List<ItemStack> getInventory()//TODO: Verify that this works; potentially need to use Caterpillar.getInventory
+	{
+		List<ItemStack> list = Lists.newArrayList();
+
+		list.add(this.myCaterpillar.fuelSlotStack);
+
+		for (int i = 0; i < this.myCaterpillar.getCurrentInventory().length; ++i)
+		{
+			list.add(this.myCaterpillar.getCurrentInventory()[i]);
+		}
+
+		return list;
 	}
 
 	@Override

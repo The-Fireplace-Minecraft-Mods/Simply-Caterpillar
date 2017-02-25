@@ -1,4 +1,4 @@
-package the_fireplace.caterpillar.network;
+package the_fireplace.caterpillar.network.packets.clientbound;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
@@ -8,6 +8,7 @@ import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import the_fireplace.caterpillar.Reference;
+import the_fireplace.caterpillar.network.packets.AbstractClientMessageHandler;
 
 public class PacketParticles implements IMessage{
 
@@ -15,10 +16,7 @@ public class PacketParticles implements IMessage{
 	public int posX;
 	public int posY;
 	public int posZ;
-	public PacketParticles()
-	{
-
-	}
+	public PacketParticles() {}
 	public PacketParticles(String particletype, int posX, int posY, int posZ)
 	{
 		this.particletype = particletype;
@@ -45,7 +43,7 @@ public class PacketParticles implements IMessage{
 		ByteBufUtils.writeVarInt(buf, this.posZ, 5);
 
 	}
-	public static class Handler extends AbstractClientMessageHandler<PacketParticles>{
+	public static class Handler extends AbstractClientMessageHandler<PacketParticles> {
 
 		@Override
 		public IMessage handleClientMessage(EntityPlayer player, PacketParticles message, MessageContext ctx) {
