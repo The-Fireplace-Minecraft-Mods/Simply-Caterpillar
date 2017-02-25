@@ -1,3 +1,5 @@
+image: openjdk:8-jdk
+
 variables:
   CACHE_DIR: "$CI_PROJECT_DIR/build"
   CACHE_DIR2: "$CI_PROJECT_DIR/.gradle"
@@ -14,8 +16,20 @@ cache:
 
 stages:
 - deploy
-    
+
 deploy:
+  stage: deploy
+  script:
+  - ./gradlew clean
+  - ./gradlew build curseforge uploadToModsIO -PcurseForgeApiKey=$curseForgeApiKey -PmodsioApiKey=$modsioApiKey
+  - cp $ORIG_ARTIFACTS .
+  when: manual
+  artifacts:
+    name: "SimplyCaterpillar-1.10.2-$(cat $CACHE_DIR/.version)"
+    paths:
+    - $ARTIFACTS
+    
+deployMaven:
   stage: deploy
   script:
   - ./gradlew clean
