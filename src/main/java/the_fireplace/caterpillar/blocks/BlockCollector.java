@@ -5,8 +5,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import the_fireplace.caterpillar.Caterpillar;
-import the_fireplace.caterpillar.containers.CaterpillarData;
+import the_fireplace.caterpillar.Reference;
+import the_fireplace.caterpillar.tileentity.TileEntityDrillHead;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +19,7 @@ public class BlockCollector extends BlockDrillBase
 	}
 
 	@Override
-	protected void fired(World worldIn, BlockPos pos, IBlockState state, String catID, int[] movingXZ, int Count)
+	protected void fired(World worldIn, BlockPos pos, IBlockState state, TileEntityDrillHead myCat, int[] movingXZ, int Count)
 	{
 		List<Entity> entityList = new ArrayList<>();
 
@@ -35,9 +35,12 @@ public class BlockCollector extends BlockDrillBase
 		}
 
 		entityList.stream().filter(entity -> entity instanceof EntityItem).forEach(ETObject -> {
-			CaterpillarData myCat = Caterpillar.instance.getContainerCaterpillar(pos, state);
-			if (myCat.addToRightHandSlots(((EntityItem) ETObject).getEntityItem())) {
-				worldIn.removeEntity(ETObject);
+			if(myCat != null) {
+				if (myCat.addToRightHandSlots(((EntityItem) ETObject).getEntityItem())) {
+					worldIn.removeEntity(ETObject);
+				}
+			}else{
+				Reference.printDebug("Error: Null TE");
 			}
 		});
 	}

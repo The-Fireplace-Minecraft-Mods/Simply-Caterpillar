@@ -12,21 +12,20 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityFurnace;
 import the_fireplace.caterpillar.Caterpillar;
 import the_fireplace.caterpillar.Reference;
+import the_fireplace.caterpillar.tileentity.TileEntityDrillHead;
 
 import javax.annotation.Nonnull;
 import java.util.List;
 
 public class ContainerDrillHead extends Container
 {
-	private CaterpillarData myCaterpillar;
 	private IInventory playerInventory;
-	private IInventory tileEntityInventory;
-	public ContainerDrillHead(EntityPlayer player, IInventory tileEntityInventoryIn, CaterpillarData inCaterpillar)
+	private TileEntityDrillHead myCaterpillarTe;
+	public ContainerDrillHead(EntityPlayer player, TileEntityDrillHead tileEntityInventoryIn)
 	{
 		this.playerInventory = player.inventory;
-		this.myCaterpillar = inCaterpillar;
-		this.myCaterpillar.myDrillHead = this;
-		this.tileEntityInventory = tileEntityInventoryIn;
+		this.myCaterpillarTe = tileEntityInventoryIn;
+		this.myCaterpillarTe.myDrillHead = this;
 		int i;
 		int j;
 		int ID = 0;
@@ -71,7 +70,7 @@ public class ContainerDrillHead extends Container
 	@Override
 	public boolean canInteractWith(@Nonnull EntityPlayer playerIn)
 	{
-		return this.tileEntityInventory.isUsableByPlayer(playerIn);
+		return this.myCaterpillarTe.isUsableByPlayer(playerIn);
 	}
 
 	@Override
@@ -79,11 +78,11 @@ public class ContainerDrillHead extends Container
 	{
 		List<ItemStack> list = Lists.newArrayList();
 
-		list.add(this.myCaterpillar.fuelSlotStack);
+		list.add(this.myCaterpillarTe.fuelSlotStack);
 
-		for (int i = 0; i < this.myCaterpillar.getCurrentInventory().length; ++i)
+		for (int i = 0; i < this.myCaterpillarTe.getCurrentInventory().length; ++i)
 		{
-			list.add(this.myCaterpillar.getCurrentInventory()[i]);
+			list.add(this.myCaterpillarTe.getCurrentInventory()[i]);
 		}
 
 		return list;
@@ -108,9 +107,9 @@ public class ContainerDrillHead extends Container
 	@Override
 	public ItemStack slotClick(int slotId, int clickedButton, ClickType mode, EntityPlayer playerIn)
 	{
-		if (this.myCaterpillar != null)
+		if (this.myCaterpillarTe != null)
 		{
-			if (this.myCaterpillar.tabs.selected.isCrafting)
+			if (this.myCaterpillarTe.tabs.selected.isCrafting)
 			{
 				if (slotId < this.getInventory().size() - 36)
 				{
@@ -147,7 +146,7 @@ public class ContainerDrillHead extends Container
 		{
 			ItemStack itemstack1 = slot.getStack();
 			itemstack = itemstack1.copy();
-			if (this.myCaterpillar == null)
+			if (this.myCaterpillarTe == null)
 			{
 				return null;
 			}
@@ -159,7 +158,7 @@ public class ContainerDrillHead extends Container
 					return null;
 				}
 			}
-			else if (this.myCaterpillar.tabs.selected.equals(Caterpillar.GuiTabs.MAIN))
+			else if (this.myCaterpillarTe.tabs.selected.equals(Caterpillar.GuiTabs.MAIN))
 			{
 				if (TileEntityFurnace.isItemFuel(itemstack1) && !this.isWood(itemstack1))
 				{
@@ -176,7 +175,7 @@ public class ContainerDrillHead extends Container
 					}
 				}
 			}
-			else //if (!this.mergeItemStack(itemstack1, 0, tileEntityInventory.getSizeInventory(), false))
+			else //if (!this.mergeItemStack(itemstack1, 0, myCaterpillarTe.getSizeInventory(), false))
 			{
 				return null;
 			}
@@ -200,9 +199,8 @@ public class ContainerDrillHead extends Container
 
 		return itemstack;
 	}
-	public void updateCaterpillar(CaterpillarData caterpillar)
+	public void updateCaterpillar()
 	{
-		this.myCaterpillar = caterpillar;
-		this.myCaterpillar.myDrillHead = this;
+		this.myCaterpillarTe.myDrillHead = this;
 	}
 }

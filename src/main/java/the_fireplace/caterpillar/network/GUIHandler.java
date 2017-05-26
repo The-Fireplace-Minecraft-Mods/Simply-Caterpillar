@@ -3,7 +3,6 @@ package the_fireplace.caterpillar.network;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -12,11 +11,9 @@ import the_fireplace.caterpillar.Caterpillar;
 import the_fireplace.caterpillar.Caterpillar.GuiTabs;
 import the_fireplace.caterpillar.Reference;
 import the_fireplace.caterpillar.blocks.BlockDrillBase;
-import the_fireplace.caterpillar.containers.CaterpillarData;
 import the_fireplace.caterpillar.containers.ContainerDrillHead;
 import the_fireplace.caterpillar.guis.GuiDrillHead;
-import the_fireplace.caterpillar.network.packets.serverbound.PacketSendCatData;
-import the_fireplace.caterpillar.tileentity.TileEntityDrillComponent;
+import the_fireplace.caterpillar.tileentity.TileEntityDrillHead;
 
 public class GUIHandler implements IGuiHandler
 {
@@ -31,15 +28,14 @@ public class GUIHandler implements IGuiHandler
 		{
 			Caterpillar.instance.getWayMoving(thisState);
 
-			TileEntityDrillComponent te = (TileEntityDrillComponent) world.getTileEntity(new BlockPos(x, y, z));
+			TileEntityDrillHead te = (TileEntityDrillHead) world.getTileEntity(new BlockPos(x, y, z));
 			te.isSelected = true;
-			CaterpillarData conCat = Caterpillar.instance.getSelectedCaterpillar();
-			if (conCat != null)
+			if (te != null)
 			{
-				Reference.printDebug("Client GUI: " + conCat.name);
-				return new GuiDrillHead(player,  (te), conCat);
+				Reference.printDebug("Client GUI: " + te.getName());
+				return new GuiDrillHead(player, te);
 			}else{
-				Reference.printDebug("Error: Cat Data not found on the Client.");
+				Reference.printDebug("Error: TE not found on the Client.");
 			}
 		}
 		return null;
@@ -52,15 +48,15 @@ public class GUIHandler implements IGuiHandler
 		{
 			if (ID == 0)
 			{
-				CaterpillarData conCat = Caterpillar.instance.getContainerCaterpillar(tileEntity.getPos(), world);
-				if (conCat != null)
+				if (tileEntity instanceof TileEntityDrillHead)
 				{
-					conCat.tabs.selected = GuiTabs.MAIN;
-					TileEntityDrillComponent tileEntityB = (TileEntityDrillComponent) world.getTileEntity(conCat.pos);
+					TileEntityDrillHead tileEntityB = (TileEntityDrillHead)tileEntity;
+					tileEntityB.tabs.selected = GuiTabs.MAIN;
 					tileEntityB.isSelected = false;
-					PacketDispatcher.sendTo(new PacketSendCatData(conCat), (EntityPlayerMP) player);
-					Reference.printDebug("Server GUI: " + conCat.name);
-					return new ContainerDrillHead(player, tileEntityB, conCat);
+					//PacketDispatcher.sendTo(new PacketSendCatData(conCat), (EntityPlayerMP) player);
+					//TODO: See what should happen here
+					Reference.printDebug("Server GUI: " + tileEntityB.getName());
+					return new ContainerDrillHead(player, tileEntityB);
 				}
 			}
 		}

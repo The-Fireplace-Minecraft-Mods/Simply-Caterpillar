@@ -6,9 +6,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import the_fireplace.caterpillar.Caterpillar;
-import the_fireplace.caterpillar.Reference;
-import the_fireplace.caterpillar.containers.CaterpillarData;
 import the_fireplace.caterpillar.parts.PartsIncinerator;
+import the_fireplace.caterpillar.tileentity.TileEntityDrillHead;
 
 public class BlockIncinerator extends BlockDrillBase
 {
@@ -20,9 +19,9 @@ public class BlockIncinerator extends BlockDrillBase
 	@Override
 	public void onBlockDestroyedByPlayer(World worldIn, BlockPos pos, IBlockState state)
 	{
-		if (Reference.loaded && !worldIn.isRemote)
+		if (!worldIn.isRemote)
 		{
-			CaterpillarData cater = Caterpillar.instance.getContainerCaterpillar(pos, state);
+			TileEntityDrillHead cater = Caterpillar.getCaterpillar(worldIn, pos, state.getValue(FACING));
 			if (cater != null)
 			{
 				PartsIncinerator thisSection = cater.incinerator;
@@ -35,9 +34,9 @@ public class BlockIncinerator extends BlockDrillBase
 	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack)
 	{
 		super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
-		if (Reference.loaded && !worldIn.isRemote)
+		if (!worldIn.isRemote)
 		{
-			CaterpillarData cater = Caterpillar.instance.getContainerCaterpillar(pos, worldIn);
+			TileEntityDrillHead cater = Caterpillar.getCaterpillar(worldIn, pos, state.getValue(FACING));
 			if (cater != null)
 			{
 				PartsIncinerator thisSection = cater.incinerator;
@@ -47,10 +46,8 @@ public class BlockIncinerator extends BlockDrillBase
 	}
 
 	@Override
-	protected void fired(World worldIn, BlockPos pos, IBlockState state, String catID, int[] movingXZ, int Count)
+	protected void fired(World worldIn, BlockPos pos, IBlockState state, TileEntityDrillHead myCat, int[] movingXZ, int Count)
 	{
-		CaterpillarData myCat =  Caterpillar.instance.getContainerCaterpillar(catID);
-
 		if (myCat != null)
 		{
 			PartsIncinerator thisSection = myCat.incinerator;
@@ -76,7 +73,7 @@ public class BlockIncinerator extends BlockDrillBase
 	}
 
 	@Override
-	public void updateCat(CaterpillarData cat){
+	public void updateCat(TileEntityDrillHead cat){
 		cat.incinerator.howclose = 2;
 	}
 }

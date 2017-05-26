@@ -146,7 +146,6 @@ public class NBTTools {
 
 	public ItemStack[] readItemStacks(NBTTagCompound tmpNBT)
 	{
-
 		if (tmpNBT.hasKey("Count"))
 		{
 			int size = tmpNBT.getInteger("Count");

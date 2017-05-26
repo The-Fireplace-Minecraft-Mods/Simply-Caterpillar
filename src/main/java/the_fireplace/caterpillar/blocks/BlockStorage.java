@@ -7,7 +7,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import the_fireplace.caterpillar.Caterpillar;
 import the_fireplace.caterpillar.Reference;
-import the_fireplace.caterpillar.containers.CaterpillarData;
+import the_fireplace.caterpillar.tileentity.TileEntityDrillHead;
 
 public class BlockStorage extends BlockDrillBase
 {
@@ -16,24 +16,12 @@ public class BlockStorage extends BlockDrillBase
 		this.movementTicks = 50;
 	}
 
-	public void changeStorage(BlockPos pos, IBlockState state, int Amount, World objworld) {
-		CaterpillarData myCate = Caterpillar.instance.getContainerCaterpillar(pos, state);
-		this.changeStorage(myCate, Amount, objworld);
-	}
-
-	public void changeStorage(CaterpillarData myCate, int Amount, World objworld) {
-
-		myCate.changeStorage(Amount, objworld);
-
-		Caterpillar.instance.putContainerCaterpillar(myCate, objworld);
-
-		Caterpillar.instance.saveNBTDrills();
-
+	public void changeStorage(TileEntityDrillHead myCate, int amount, World objworld) {
+		myCate.changeStorage(amount, objworld);
 	}
 	@Override
-	protected void fired(World worldIn, BlockPos pos, IBlockState state, String catID, int[] movingXZ, int Count)
+	protected void fired(World worldIn, BlockPos pos, IBlockState state, TileEntityDrillHead thisCat, int[] movingXZ, int Count)
 	{
-		CaterpillarData thisCat = Caterpillar.instance.getContainerCaterpillar(catID);
 		if (thisCat != null)
 		{
 			thisCat.storage.storageComponentCount += 1;
@@ -43,11 +31,12 @@ public class BlockStorage extends BlockDrillBase
 	@Override
 	public void onBlockDestroyedByPlayer(World worldIn, BlockPos pos, IBlockState state)
 	{
-		if (!worldIn.isRemote && Reference.loaded)
+		if (!worldIn.isRemote)
 		{
-			if (Caterpillar.instance.doesHaveCaterpillar(pos, state))
+			TileEntityDrillHead myCat = Caterpillar.getCaterpillar(worldIn, pos, state.getValue(FACING));
+			if (myCat != null)
 			{
-				this.changeStorage(pos, state, -24, worldIn);
+				myCat.changeStorage(-1, worldIn);
 			}
 		}
 	}
@@ -55,7 +44,7 @@ public class BlockStorage extends BlockDrillBase
 	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack)
 	{
 		super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
-		if (Reference.loaded && !worldIn.isRemote)
+		if (!worldIn.isRemote)
 		{
 			BlockPos whereItAt = new BlockPos(pos.getX(), pos.getY(), pos.getZ());
 			if (!(worldIn.getBlockState(pos).getBlock() instanceof BlockDrillBase))
@@ -64,10 +53,10 @@ public class BlockStorage extends BlockDrillBase
 			}
 
 			state = state.withProperty(FACING, placer.getHorizontalFacing().getOpposite());
-			if (Caterpillar.instance.doesHaveCaterpillar(whereItAt, state))
+			TileEntityDrillHead myCate = Caterpillar.getCaterpillar(worldIn, whereItAt, state.getValue(FACING));
+			if (myCate != null)
 			{
-				CaterpillarData myCate = Caterpillar.instance.getContainerCaterpillar(whereItAt, state);
-				this.changeStorage(myCate,  24, worldIn);
+				this.changeStorage(myCate,  1, worldIn);
 				return;
 			}
 

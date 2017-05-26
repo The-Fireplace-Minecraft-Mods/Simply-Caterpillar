@@ -9,8 +9,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import the_fireplace.caterpillar.Caterpillar;
 import the_fireplace.caterpillar.Reference;
-import the_fireplace.caterpillar.containers.CaterpillarData;
 import the_fireplace.caterpillar.parts.PartsReinforcement;
+import the_fireplace.caterpillar.tileentity.TileEntityDrillHead;
 
 public class BlockReinforcements extends BlockDrillBase
 {
@@ -19,50 +19,50 @@ public class BlockReinforcements extends BlockDrillBase
 		this.movementTicks = 50;
 	}
 
-	private void checkCustomizer(World worldIn, String catID,
-								 BlockPos Wherepos, byte[] thisPart, IBlockState thiState,
-								 Block BlocktoPlace, int meta) {
+	private void checkCustomizer(World worldIn, TileEntityDrillHead cat,
+								 BlockPos loc, byte[] thisPart, IBlockState thiState,
+								 Block toPlace, int meta) {
 		if (thisPart[0] == 1 && thiState.equals(Blocks.AIR.getDefaultState()))
 		{
-			this.takeOutMatsandPlace(worldIn, catID, Wherepos, BlocktoPlace.getStateFromMeta(meta));
+			this.takeOutMatsandPlace(worldIn, loc, cat, toPlace.getStateFromMeta(meta));
 		}
 		if (thisPart[1] == 1 && thiState.getBlock().equals(Blocks.FLOWING_WATER))
 		{
-			this.takeOutMatsandPlace(worldIn, catID, Wherepos, BlocktoPlace.getStateFromMeta(meta));
+			this.takeOutMatsandPlace(worldIn, loc, cat, toPlace.getStateFromMeta(meta));
 		}
 		if (thisPart[1] == 1 && thiState.equals(Blocks.WATER.getDefaultState()))
 		{
-			this.takeOutMatsandPlace(worldIn, catID, Wherepos, BlocktoPlace.getStateFromMeta(meta));
+			this.takeOutMatsandPlace(worldIn, loc, cat, toPlace.getStateFromMeta(meta));
 		}
 		if (thisPart[2] == 1 && thiState.getBlock().equals(Blocks.FLOWING_LAVA))
 		{
-			this.takeOutMatsandPlace(worldIn, catID, Wherepos, BlocktoPlace.getStateFromMeta(meta));
+			this.takeOutMatsandPlace(worldIn, loc, cat, toPlace.getStateFromMeta(meta));
 		}
 
 		if (thisPart[2] == 1 && thiState.equals(Blocks.LAVA.getDefaultState()))
 		{
-			this.takeOutMatsandPlace(worldIn, catID, Wherepos, BlocktoPlace.getStateFromMeta(meta));
+			this.takeOutMatsandPlace(worldIn, loc, cat, toPlace.getStateFromMeta(meta));
 		}
 		if (thisPart[3] == 1 && thiState.equals(Blocks.SAND.getDefaultState()))
 		{
-			this.takeOutMatsandPlace(worldIn, catID, Wherepos, BlocktoPlace.getStateFromMeta(meta));
+			this.takeOutMatsandPlace(worldIn, loc, cat, toPlace.getStateFromMeta(meta));
 		}
 		if (thisPart[3] == 1 && thiState.equals(Blocks.GRAVEL.getDefaultState()))
 		{
-			this.takeOutMatsandPlace(worldIn, catID, Wherepos, BlocktoPlace.getStateFromMeta(meta));
+			this.takeOutMatsandPlace(worldIn, loc, cat, toPlace.getStateFromMeta(meta));
 		}
 		if (thisPart[4] == 1)
 		{
-			this.takeOutMatsandPlace(worldIn, catID, Wherepos, BlocktoPlace.getStateFromMeta(meta));
+			this.takeOutMatsandPlace(worldIn, loc, cat, toPlace.getStateFromMeta(meta));
 		}
 	}
 
 	@Override
 	public void onBlockDestroyedByPlayer(World worldIn, BlockPos pos, IBlockState state)
 	{
-		if (Reference.loaded && !worldIn.isRemote)
+		if (!worldIn.isRemote)
 		{
-			CaterpillarData cater = Caterpillar.instance.getContainerCaterpillar(pos, state);
+			TileEntityDrillHead cater = Caterpillar.getCaterpillar(worldIn, pos, state.getValue(FACING));
 			if (cater != null)
 			{
 				PartsReinforcement thisSection = cater.reinforcement;
@@ -75,9 +75,9 @@ public class BlockReinforcements extends BlockDrillBase
 	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack)
 	{
 		super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
-		if (Reference.loaded && !worldIn.isRemote)
+		if (!worldIn.isRemote)
 		{
-			CaterpillarData cater = Caterpillar.instance.getContainerCaterpillar(pos, worldIn);
+			TileEntityDrillHead cater = Caterpillar.getCaterpillar(worldIn, pos, state.getValue(FACING));
 			if (cater != null)
 			{
 				PartsReinforcement thisSection = cater.reinforcement;
@@ -86,12 +86,11 @@ public class BlockReinforcements extends BlockDrillBase
 		}
 	}
 	@Override
-	protected void fired(World worldIn, BlockPos pos, IBlockState state, String catID, int[] movingXZ, int Count)
+	protected void fired(World worldIn, BlockPos pos, IBlockState state, TileEntityDrillHead myCat, int[] movingXZ, int Count)
 	{
-		CaterpillarData mycaterpillar = Caterpillar.instance.getContainerCaterpillar(catID);
-		if (mycaterpillar != null)
+		if (myCat != null)
 		{
-			PartsReinforcement thisSection = mycaterpillar.reinforcement;
+			PartsReinforcement thisSection = myCat.reinforcement;
 			thisSection.howclose = 2;
 		}
 		for (int i = -2; i < 3; i++) {
@@ -111,16 +110,16 @@ public class BlockReinforcements extends BlockDrillBase
 							{
 								Side = -1 * j + 2;
 							}
-							byte[] thisPart = mycaterpillar.reinforcement.replacers.get(0);
+							byte[] thisPart = myCat.reinforcement.replacers.get(0);
 							Reference.printDebug(Side + "," + movingXZ[0] + "," + movingXZ[1]);
-							if (mycaterpillar.reinforcement.reinforcementMap[Side] != null)
+							if (myCat.reinforcement.reinforcementMap[Side] != null)
 							{
 								Reference.printDebug("Not Null" + "");
-								Block placementBlock = Block.getBlockFromItem(mycaterpillar.reinforcement.reinforcementMap[Side].getItem());
-								int meta = mycaterpillar.reinforcement.reinforcementMap[Side].getItemDamage();
+								Block placementBlock = Block.getBlockFromItem(myCat.reinforcement.reinforcementMap[Side].getItem());
+								int meta = myCat.reinforcement.reinforcementMap[Side].getItemDamage();
 								if (placementBlock != null)
 								{
-									this.checkCustomizer(worldIn, catID, Wherepos, thisPart, thiState, placementBlock, meta);
+									this.checkCustomizer(worldIn, myCat, Wherepos, thisPart, thiState, placementBlock, meta);
 								}
 							}
 						}
@@ -137,14 +136,14 @@ public class BlockReinforcements extends BlockDrillBase
 							{
 								Side = 12 + -1*j + 1;
 							}
-							byte[] thisPart = mycaterpillar.reinforcement.replacers.get(3);
-							if (mycaterpillar.reinforcement.reinforcementMap[Side] != null)
+							byte[] thisPart = myCat.reinforcement.replacers.get(3);
+							if (myCat.reinforcement.reinforcementMap[Side] != null)
 							{
-								Block blockToPlace = Block.getBlockFromItem(mycaterpillar.reinforcement.reinforcementMap[Side].getItem());
-								int meta = mycaterpillar.reinforcement.reinforcementMap[Side].getItemDamage();
+								Block blockToPlace = Block.getBlockFromItem(myCat.reinforcement.reinforcementMap[Side].getItem());
+								int meta = myCat.reinforcement.reinforcementMap[Side].getItemDamage();
 								if (blockToPlace != null)
 								{
-									this.checkCustomizer(worldIn, catID, Wherepos, thisPart, thiState, blockToPlace, meta);
+									this.checkCustomizer(worldIn, myCat, Wherepos, thisPart, thiState, blockToPlace, meta);
 								}
 							}
 						}
@@ -155,14 +154,14 @@ public class BlockReinforcements extends BlockDrillBase
 						{
 							//left
 							int Side = 4 + (-1* i) + 1;
-							byte[] thisPart = mycaterpillar.reinforcement.replacers.get(1);
-							if (mycaterpillar.reinforcement.reinforcementMap[Side] != null)
+							byte[] thisPart = myCat.reinforcement.replacers.get(1);
+							if (myCat.reinforcement.reinforcementMap[Side] != null)
 							{
-								Block blockToPlace = Block.getBlockFromItem(mycaterpillar.reinforcement.reinforcementMap[Side].getItem());
-								int meta = mycaterpillar.reinforcement.reinforcementMap[Side].getItemDamage();
+								Block blockToPlace = Block.getBlockFromItem(myCat.reinforcement.reinforcementMap[Side].getItem());
+								int meta = myCat.reinforcement.reinforcementMap[Side].getItemDamage();
 								if (blockToPlace != null)
 								{
-									this.checkCustomizer(worldIn, catID, Wherepos, thisPart, thiState, blockToPlace, meta);
+									this.checkCustomizer(worldIn, myCat, Wherepos, thisPart, thiState, blockToPlace, meta);
 								}
 							}
 						}
@@ -174,14 +173,14 @@ public class BlockReinforcements extends BlockDrillBase
 						{
 							//right
 							int Side = 8 + (-1* i) + 2;
-							byte[] thisPart = mycaterpillar.reinforcement.replacers.get(2);
-							if (mycaterpillar.reinforcement.reinforcementMap[Side] != null)
+							byte[] thisPart = myCat.reinforcement.replacers.get(2);
+							if (myCat.reinforcement.reinforcementMap[Side] != null)
 							{
-								Block blockToPlace = Block.getBlockFromItem(mycaterpillar.reinforcement.reinforcementMap[Side].getItem());
-								int meta = mycaterpillar.reinforcement.reinforcementMap[Side].getItemDamage();
+								Block blockToPlace = Block.getBlockFromItem(myCat.reinforcement.reinforcementMap[Side].getItem());
+								int meta = myCat.reinforcement.reinforcementMap[Side].getItemDamage();
 								if (blockToPlace != null)
 								{
-									this.checkCustomizer(worldIn, catID, Wherepos, thisPart, thiState, blockToPlace, meta);
+									this.checkCustomizer(worldIn, myCat, Wherepos, thisPart, thiState, blockToPlace, meta);
 								}
 							}
 						}
@@ -197,7 +196,7 @@ public class BlockReinforcements extends BlockDrillBase
 								worldIn.getBlockState(Wherepos).equals(Blocks.WATER.getDefaultState())
 								)
 						{
-							this.takeOutMatsandPlace(worldIn, catID, Wherepos, Blocks.AIR.getDefaultState());
+							this.takeOutMatsandPlace(worldIn, Wherepos, myCat, Blocks.AIR.getDefaultState());
 						}
 					}
 				}
@@ -206,7 +205,7 @@ public class BlockReinforcements extends BlockDrillBase
 	}
 
 	@Override
-	public void updateCat(CaterpillarData cat){
+	public void updateCat(TileEntityDrillHead cat){
 		cat.reinforcement.howclose = 2;
 	}
 }

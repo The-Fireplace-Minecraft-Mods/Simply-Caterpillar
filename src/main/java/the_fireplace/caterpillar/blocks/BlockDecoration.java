@@ -8,8 +8,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import the_fireplace.caterpillar.Caterpillar;
 import the_fireplace.caterpillar.Reference;
-import the_fireplace.caterpillar.containers.CaterpillarData;
 import the_fireplace.caterpillar.parts.PartsDecoration;
+import the_fireplace.caterpillar.tileentity.TileEntityDrillHead;
 
 public class BlockDecoration extends BlockDrillBase
 {
@@ -21,9 +21,9 @@ public class BlockDecoration extends BlockDrillBase
 	@Override
 	public void onBlockDestroyedByPlayer(World worldIn, BlockPos pos, IBlockState state)
 	{
-		if (Reference.loaded && !worldIn.isRemote)
+		if (!worldIn.isRemote)
 		{
-			CaterpillarData cater = Caterpillar.instance.getContainerCaterpillar(pos, state);
+			TileEntityDrillHead cater = Caterpillar.getCaterpillar(worldIn, pos, state.getValue(FACING));
 			if (cater != null)
 			{
 				PartsDecoration thisSection = cater.decoration;
@@ -35,9 +35,9 @@ public class BlockDecoration extends BlockDrillBase
 	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack)
 	{
 		super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
-		if (Reference.loaded && !worldIn.isRemote)
+		if (!worldIn.isRemote)
 		{
-			CaterpillarData cater = Caterpillar.instance.getContainerCaterpillar(pos, worldIn);
+			TileEntityDrillHead cater = Caterpillar.getCaterpillar(worldIn, pos, state.getValue(FACING));
 			if (cater != null)
 			{
 				PartsDecoration thisSection = cater.decoration;
@@ -49,11 +49,11 @@ public class BlockDecoration extends BlockDrillBase
 		}
 	}
 	@Override
-	protected void fired(World worldIn, BlockPos pos, IBlockState state, String catID, int[] movingXZ, int count)
+	protected void fired(World worldIn, BlockPos pos, IBlockState state, TileEntityDrillHead myCat, int[] movingXZ, int count)
 	{
-		CaterpillarData myCat = Caterpillar.instance.getContainerCaterpillar(catID);
 		if (myCat == null)
 		{
+			Reference.printDebug("Drill Head not found, but Block was fired.");
 			return;
 		}
 		PartsDecoration thisSection = myCat.decoration;
@@ -93,7 +93,7 @@ public class BlockDecoration extends BlockDrillBase
 							if (toPlaceC.getDefaultState() != null)
 							{
 
-								this.takeOutMatsandPlace(worldIn, catID, loc, toPlaceC.getStateFromMeta(thisone.getItemDamage()));
+								this.takeOutMatsandPlace(worldIn, loc, toPlaceC.getStateFromMeta(thisone.getItemDamage()));
 							}
 						}
 					}
@@ -103,7 +103,7 @@ public class BlockDecoration extends BlockDrillBase
 	}
 
 	@Override
-	public void updateCat(CaterpillarData cat){
+	public void updateCat(TileEntityDrillHead cat){
 		cat.decoration.howclose = 2;
 	}
 }

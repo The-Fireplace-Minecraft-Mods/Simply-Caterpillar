@@ -6,14 +6,11 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
@@ -26,18 +23,15 @@ import net.minecraftforge.oredict.ShapedOreRecipe;
 import org.apache.commons.lang3.ArrayUtils;
 import the_fireplace.caterpillar.blocks.BlockDrillBase;
 import the_fireplace.caterpillar.blocks.BlockDrillHeads;
-import the_fireplace.caterpillar.containers.CaterpillarData;
 import the_fireplace.caterpillar.inits.InitBlocks;
 import the_fireplace.caterpillar.network.GUIHandler;
 import the_fireplace.caterpillar.network.PacketDispatcher;
 import the_fireplace.caterpillar.proxy.ProxyCommon;
 import the_fireplace.caterpillar.tabs.TabCaterpillar;
-import the_fireplace.caterpillar.tileentity.TileEntityDrillComponent;
+import the_fireplace.caterpillar.tileentity.TileEntityDrillHead;
 import the_fireplace.caterpillar.tools.NBTTools;
 
 import javax.annotation.Nullable;
-import java.util.HashMap;
-import java.util.Map.Entry;
 
 @Mod(name = Caterpillar.MODNAME, modid = Caterpillar.MODID, guiFactory=Reference.guiFactory, updateJSON = "http://thefireplace.bitnamiapp.com/jsons/simplycaterpillar.json", acceptedMinecraftVersions = "[1.9.4,1.10.2]")
 public class Caterpillar
@@ -48,11 +42,7 @@ public class Caterpillar
 	public static Caterpillar instance;
 
 	public static final CreativeTabs tabCaterpillar = new TabCaterpillar();
-	public boolean savedyet = false;
 	boolean dev = false;
-
-	private HashMap<String, CaterpillarData> mainContainers;
-	private CaterpillarData selectedCaterpillar;
 
 	@SidedProxy(clientSide = Reference.CLIENT_PROXY_CLASS, serverSide = Reference.SERVER_PROXY_CLASS)
 	public static ProxyCommon proxy;
@@ -63,8 +53,6 @@ public class Caterpillar
 		Config.init(event.getSuggestedConfigurationFile());
 
 		Reference.MainNBT = new NBTTools(MODID);
-
-		this.mainContainers = new HashMap<>();
 
 		NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GUIHandler());
 
@@ -78,7 +66,7 @@ public class Caterpillar
 	@EventHandler
 	public void init(FMLInitializationEvent event)
 	{
-		GameRegistry.registerTileEntity(TileEntityDrillComponent.class, "DrillHead");
+		GameRegistry.registerTileEntity(TileEntityDrillHead.class, "DrillHead");
 		MinecraftForge.EVENT_BUS.register(new CommonEvents());
 		this.recipes();
 		Reference.cleanModsFolder();
@@ -97,22 +85,6 @@ public class Caterpillar
 
 	private void addRecipe(Block block, Object... args){
 		GameRegistry.addRecipe(new ShapedOreRecipe(block, args));
-	}
-
-	public String getCaterpillarID(int[] movingXZ, BlockPos pos)
-	{
-		int firstID = movingXZ[1] * pos.getX() + movingXZ[0] * pos.getZ();
-		int secondID = pos.getY();
-		int third = 0;
-		if (movingXZ[0] != 0)
-		{
-			third = movingXZ[0] + 2;
-		}
-		if (movingXZ[1] != 0)
-		{
-			third = movingXZ[1] + 3;
-		}
-		return firstID + "," + secondID + "," + third;
 	}
 
 	public int[] getWayMoving(IBlockState state) {
@@ -141,174 +113,20 @@ public class Caterpillar
 		}
 	}
 
-	public CaterpillarData getSelectedCaterpillar()
+	public ItemStack[] getInventory(TileEntityDrillHead caterpillarTe, GuiTabs selected)
 	{
-		return this.selectedCaterpillar;
-	}
-	public void setSelectedCaterpillar(CaterpillarData selectedcat)
-	{
-		this.selectedCaterpillar = selectedcat;
-	}
-	public void removeSelectedCaterpillar()
-	{
-		this.selectedCaterpillar = null;
-	}
-	public void removeCaterpillar(String catId)
-	{
-		Caterpillar.instance.mainContainers.remove(catId);
-		this.removeSelectedCaterpillar();
-	}
-
-	public boolean doesHaveCaterpillar(String catId)
-	{
-		try {
-			return this.mainContainers.containsKey(catId);
-		} catch (Exception e) {
-			return false;
-		}
-	}
-
-	public boolean doesHaveCaterpillar(BlockPos pos, IBlockState state)
-	{
-		int[] movingXZ = this.getWayMoving(state);
-		if (movingXZ[0] == -2 || movingXZ[1] == -2)
-		{
-			Reference.printDebug("Null: facing");
-			return false;
-		}
-		String CatID = this.getCaterpillarID(movingXZ, pos);
-		return this.doesHaveCaterpillar(CatID);
-	}
-
-	public void putContainerCaterpillar(CaterpillarData conCat, World objworld) {
-		IBlockState thisState =  objworld.getBlockState(conCat.pos);
-		int[] movingXZ = this.getWayMoving(thisState);
-		if (movingXZ[0] == -2 || movingXZ[1] == -2)
-		{
-			Reference.printDebug("Null: facing");
-		}
-		String catId = this.getCaterpillarID(movingXZ, conCat.pos);
-		this.putContainerCaterpillar(catId, conCat);
-	}
-
-	public void putContainerCaterpillar(String CaterpillarID, CaterpillarData conCat) {
-		this.mainContainers.put(CaterpillarID, conCat);
-	}
-
-	public CaterpillarData getContainerCaterpillar(String caterpillarID) {
-		return this.mainContainers.get(caterpillarID);
-	}
-
-	public CaterpillarData getContainerCaterpillar(BlockPos pos, World objWorld)
-	{
-		IBlockState thisState =  objWorld.getBlockState(pos);
-		int[] movingXZ = this.getWayMoving(thisState);
-		if (movingXZ[0] == -2 || movingXZ[1] == -2)
-		{
-			Reference.printDebug("Null: facing");
-			return null;
-		}
-		String catID = this.getCaterpillarID(movingXZ, pos);
-		return this.getContainerCaterpillar(catID);
-	}
-
-	@Nullable
-	public CaterpillarData getContainerCaterpillar(BlockPos pos, IBlockState thisState)
-	{
-		int[] movingXZ = this.getWayMoving(thisState);
-		if (movingXZ[0] == -2 || movingXZ[1] == -2)
-		{
-			Reference.printDebug("Null: facing");
-			return null;
-		}
-		String catID =this.getCaterpillarID(movingXZ, pos);
-		return this.getContainerCaterpillar(catID);
-	}
-
-	public void saveNBTDrills()
-	{
-		if (Reference.loaded)
-		{
-			NBTTagCompound tmpNBT = new NBTTagCompound();
-			int i = 0;
-			for (Entry<String, CaterpillarData> key : this.mainContainers.entrySet()) {
-				CaterpillarData conCat = key.getValue();
-				tmpNBT.setTag("caterpillar" + i++, conCat.writeNBTCaterpillar());
-			}
-			tmpNBT.setInteger("count", i);
-			Reference.MainNBT.saveNBTSettings(tmpNBT, Reference.MainNBT.getFolderLocationWorld(), "DrillHeads.dat");
-		}
-	}
-	@Nullable
-	private World getCaterpillarWorld(BlockPos pos){
-		if (FMLCommonHandler.instance().getMinecraftServerInstance().worlds != null)
-		{
-			if (FMLCommonHandler.instance().getMinecraftServerInstance().worlds.length > 0)
-			{
-				for (WorldServer worldServer : FMLCommonHandler.instance().getMinecraftServerInstance().worlds) {
-					IBlockState state  = worldServer.getBlockState(pos);
-					if (state.getBlock() instanceof BlockDrillBase)
-					{
-						return worldServer;
-					}
-				}
-			}
-		}
-		return null;
-	}
-
-	public void readNBTDrills()
-	{
-		NBTTagCompound tmpNBT =  Reference.MainNBT.readNBTSettings(Reference.MainNBT.getFolderLocationWorld(), "DrillHeads.dat");
-		this.mainContainers.clear();
-
-		if (tmpNBT.hasKey("count"))
-		{
-			int size = tmpNBT.getInteger("count");
-			for(int i=0;i<size;i++)
-			{
-				CaterpillarData conCata = CaterpillarData.readCaterpiller(tmpNBT.getCompoundTag("caterpillar" + i));
-				conCata.tabs.selected = GuiTabs.MAIN;
-				World objWorld = this.getCaterpillarWorld(conCata.pos);
-				if (objWorld != null)
-				{
-					IBlockState state = objWorld.getBlockState(conCata.pos);
-					if (state.getBlock() instanceof BlockDrillBase)
-					{
-						int[] movingXZ = this.getWayMoving(state);
-						if (movingXZ[0] != -2 && movingXZ[1] != -2)
-						{
-							this.mainContainers.put(conCata.name, conCata);
-						}
-					}
-				}
-				else
-				{
-					Reference.printDebug("Load error NBT Drills");
-				}
-			}
-		}
-	}
-
-	public void reset() {
-		Reference.printDebug("Resetting....");
-		Reference.loaded = false;
-		this.mainContainers.clear();
-	}
-	public ItemStack[] getInventory(CaterpillarData caterpillarData, GuiTabs selected)
-	{
-		if (caterpillarData != null)
+		if (caterpillarTe != null)
 		{
 			switch (selected.value) {
 			case 0:
-				ItemStack[] initial = new ItemStack[]{caterpillarData.fuelSlotStack};
-				return ArrayUtils.addAll(initial, caterpillarData.getCurrentInventory());
+				ItemStack[] initial = new ItemStack[]{caterpillarTe.fuelSlotStack};
+				return ArrayUtils.addAll(initial, caterpillarTe.getCurrentInventory());
 			case 1:
-				return caterpillarData.decoration.getSelectedInventory();
+				return caterpillarTe.decoration.getSelectedInventory();
 			case 2:
-				return caterpillarData.reinforcement.reinforcementMap;
+				return caterpillarTe.reinforcement.reinforcementMap;
 			case 3:
-				return caterpillarData.incinerator.placementMap;
+				return caterpillarTe.incinerator.placementMap;
 			default:
 				break;
 			}
@@ -346,5 +164,59 @@ public class Caterpillar
 			this.guiTextures = guiTextures;
 			this.isCrafting = isCrafting;
 		}
+	}
+
+	/**
+	 * Gets the drill data for the exact position. Only should be used if you know the exact position of the drill head.
+	 * @param worldIn
+	 * 	The drill's world
+	 * @param pos
+	 * 	The drill head's position
+	 * @return
+	 * 	The tile entity, if one is found, else null
+	 */
+	@Nullable
+	@Deprecated
+	public static TileEntityDrillHead getCaterpillar(World worldIn, BlockPos pos){
+		if(worldIn.getTileEntity(pos) != null && worldIn.getTileEntity(pos) instanceof TileEntityDrillHead)
+			return (TileEntityDrillHead)worldIn.getTileEntity(pos);
+		else
+			return null;
+	}
+
+	/**
+	 * Returns the first drill head in the chain, based on the facing of the component.
+	 * @param worldIn
+	 * 	The world to check
+	 * @param pos
+	 * 	The position to start at
+	 * @param facing
+	 * 	The direction to go in
+	 * @return
+	 * 	The drill head, if one is found, else null
+	 */
+	@Nullable
+	public static TileEntityDrillHead getCaterpillar(World worldIn, BlockPos pos, EnumFacing facing){
+		BlockPos pos2 = pos;
+		boolean flag = false;
+		while(worldIn.getBlockState(pos2).getBlock() instanceof BlockDrillBase || flag){
+			//TODO: Verify that the head is facing the same direction as the component
+			if(worldIn.getTileEntity(pos2) != null && worldIn.getTileEntity(pos2) instanceof TileEntityDrillHead)
+				return (TileEntityDrillHead)worldIn.getTileEntity(pos2);
+			pos2.add(facing.getFrontOffsetX(), 0, facing.getFrontOffsetZ());
+			Reference.printDebug("Searching for the drill head. Initial Pos: "+pos.toString()+", New Pos: "+pos2.toString());
+			//Let it skip 1 block while looking, to allow use with a moving caterpillar.
+			if(flag){
+				if(worldIn.getBlockState(pos2).getBlock() instanceof BlockDrillBase){
+					flag = false;
+				}else{
+					break;
+				}
+			}else{
+				if(!(worldIn.getBlockState(pos2).getBlock() instanceof BlockDrillBase))
+					flag = true;
+			}
+		}
+		return null;
 	}
 }

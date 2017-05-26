@@ -9,7 +9,6 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
@@ -24,11 +23,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import the_fireplace.caterpillar.Caterpillar;
 import the_fireplace.caterpillar.Config;
 import the_fireplace.caterpillar.Reference;
-import the_fireplace.caterpillar.containers.CaterpillarData;
 import the_fireplace.caterpillar.network.PacketDispatcher;
 import the_fireplace.caterpillar.network.packets.clientbound.PacketParticles;
-import the_fireplace.caterpillar.network.packets.clientbound.PacketRetrieveCatData;
-import the_fireplace.caterpillar.tileentity.TileEntityDrillComponent;
+import the_fireplace.caterpillar.tileentity.TileEntityDrillHead;
+import the_fireplace.caterpillar.tileentity.TileEntityDrillPart;
 
 import javax.annotation.Nonnull;
 import java.util.Hashtable;
@@ -51,9 +49,10 @@ public class BlockDrillBase extends BlockContainer {
 		this.setHarvestLevel("pickaxe", 0);
 	}
 
-	protected void takeOutMatsandPlace(World worldIn, String id, BlockPos pos, IBlockState state)
+	@Deprecated
+	protected void takeOutMatsandPlace(World worldIn, BlockPos pos, IBlockState state)
 	{
-		CaterpillarData thisCat = Caterpillar.instance.getContainerCaterpillar(id);
+		TileEntityDrillHead thisCat = Caterpillar.getCaterpillar(worldIn, pos);
 		if (thisCat != null)
 		{
 			if (state.getBlock().equals(Blocks.AIR))
@@ -86,8 +85,103 @@ public class BlockDrillBase extends BlockContainer {
 				}
 			}
 		}
-
 	}
+
+	/**
+	 * Drops materials and places a block
+	 * @param worldIn
+	 * 	The world to do this in
+	 * @param pos
+	 * 	The block position to do this in
+	 * @param facing
+	 * 	The facing of the caterpillar
+	 * @param state
+	 * 	The block state to place
+	 */
+	protected void takeOutMatsandPlace(World worldIn, BlockPos pos, EnumFacing facing, IBlockState state)
+	{
+		TileEntityDrillHead thisCat = Caterpillar.getCaterpillar(worldIn, pos, facing);
+		if (thisCat != null)
+		{
+			if (state.getBlock().equals(Blocks.AIR))
+			{
+				worldIn.setBlockToAir(pos);
+				return;
+			}
+			ItemStack[] thisGuyInv = thisCat.getCurrentInventory();
+
+			for (int i = 0; i < 12; i++) {
+				if (thisGuyInv[i] != null)
+				{
+					Block inIvn = Block.getBlockFromItem(thisGuyInv[i].getItem());
+					if (inIvn != null)
+					{
+
+						if (inIvn.getStateFromMeta(thisGuyInv[i].getItemDamage()).equals(state))
+						{
+							//ItemStack justOne = new ItemStack(thisGuyInv[i].getItem(), 1, thisGuyInv[i].getItemDamage());
+							ItemStack theRest = null;
+							if (thisGuyInv[i].stackSize > 1)
+							{
+								theRest = new ItemStack(thisGuyInv[i].getItem(), thisGuyInv[i].stackSize - 1, thisGuyInv[i].getItemDamage());
+							}
+							thisGuyInv[i] = theRest;
+							worldIn.setBlockState(pos, state);
+							return;
+						}
+					}
+				}
+			}
+		}
+	}
+
+	/**
+	 * Drops materials and places a block
+	 * @param worldIn
+	 * 	The world to do this in
+	 * @param pos
+	 * 	The block position to do this in
+	 * @param thisCat
+	 * 	The caterpillar TE
+	 * @param state
+	 * 	The block state to place
+	 */
+	protected void takeOutMatsandPlace(World worldIn, BlockPos pos, TileEntityDrillHead thisCat, IBlockState state)
+	{
+		if (thisCat != null)
+		{
+			if (state.getBlock().equals(Blocks.AIR))
+			{
+				worldIn.setBlockToAir(pos);
+				return;
+			}
+			ItemStack[] thisGuyInv = thisCat.getCurrentInventory();
+
+			for (int i = 0; i < 12; i++) {
+				if (thisGuyInv[i] != null)
+				{
+					Block inIvn = Block.getBlockFromItem(thisGuyInv[i].getItem());
+					if (inIvn != null)
+					{
+
+						if (inIvn.getStateFromMeta(thisGuyInv[i].getItemDamage()).equals(state))
+						{
+							//ItemStack justOne = new ItemStack(thisGuyInv[i].getItem(), 1, thisGuyInv[i].getItemDamage());
+							ItemStack theRest = null;
+							if (thisGuyInv[i].stackSize > 1)
+							{
+								theRest = new ItemStack(thisGuyInv[i].getItem(), thisGuyInv[i].stackSize - 1, thisGuyInv[i].getItemDamage());
+							}
+							thisGuyInv[i] = theRest;
+							worldIn.setBlockState(pos, state);
+							return;
+						}
+					}
+				}
+			}
+		}
+	}
+
 	protected int getCountIndex(int[] movingXZ, BlockPos loc) {
 		int count  = movingXZ[0] * loc.getX() +  movingXZ[1] * loc.getZ();
 		String newT = count + "";
@@ -104,7 +198,7 @@ public class BlockDrillBase extends BlockContainer {
 	public void calculateMovement(World worldIn, BlockPos pos, IBlockState state)
 	{
 		try {
-			if (Reference.loaded && !worldIn.isRemote)
+			if (!worldIn.isRemote)
 			{
 				if (!(worldIn.getBlockState(pos).getBlock() instanceof BlockDrillBase))
 				{
@@ -151,16 +245,14 @@ public class BlockDrillBase extends BlockContainer {
 						worldIn.playSound(null, pos, SoundEvents.BLOCK_PISTON_EXTEND, SoundCategory.BLOCKS, 0.5F, worldIn.rand.nextFloat() * 0.25F + 0.6F);
 					}
 
-					String catID = Caterpillar.instance.getCaterpillarID(movingXZ, newPlace);
 					int count = this.getCountIndex(movingXZ, newPlace);
-					CaterpillarData thiscater = Caterpillar.instance.getContainerCaterpillar(catID);
-					this.fired(worldIn, newPlace, state, catID, movingXZ, count);
-					if (thiscater != null)
+					TileEntityDrillHead cater = Caterpillar.getCaterpillar(worldIn, pos, state.getValue(FACING));
+					if (cater != null)
 					{
-						this.setDrag(thiscater);
-						thiscater.headTick = 0;
+						this.fired(worldIn, newPlace, state, cater, movingXZ, count);
+						this.setDrag(cater);
+						cater.headTick = 0;
 					}
-					Caterpillar.instance.saveNBTDrills();
 				}
 			}
 		} catch (Exception e) {
@@ -171,30 +263,31 @@ public class BlockDrillBase extends BlockContainer {
 	@Override
 	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {}
 
-	protected void setDrag(CaterpillarData cat){
+	protected void setDrag(TileEntityDrillHead cat){
 		cat.movement.value += this.movementTicks;
 	}
 
-	protected void fired(World worldIn, BlockPos pos, IBlockState state, String catID, int[] movingXZ, int Count) {}
+	protected void fired(World worldIn, BlockPos pos, IBlockState state, TileEntityDrillHead cat, int[] movingXZ, int Count) {}
 
 	@Override
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack held, EnumFacing side, float hitX, float hitY, float hitZ)
 	{
 		Reference.printDebug("Gui Called; Stage 1");
-		if (Reference.loaded && !worldIn.isRemote)
+		if (!worldIn.isRemote)
 		{
 			TileEntity tileentity = worldIn.getTileEntity(pos);
 
 			Reference.printDebug("Gui Called; Stage 2");
-			if (tileentity instanceof TileEntityDrillComponent)
+			if (tileentity instanceof TileEntityDrillHead)
 			{
 				Reference.printDebug("Gui Called; Stage 3");
-				CaterpillarData thisCat = Caterpillar.instance.getContainerCaterpillar(pos, state);
-				PacketDispatcher.sendTo(new PacketRetrieveCatData(thisCat), (EntityPlayerMP)playerIn);
+				TileEntityDrillHead thisCat = Caterpillar.getCaterpillar(worldIn, pos, state.getValue(FACING));
+				//PacketDispatcher.sendTo(new PacketRetrieveCatData(thisCat), (EntityPlayerMP)playerIn);
+				//TODO: Send data if needed
 				if (thisCat != null)
 				{
 					Reference.printDebug("Gui Called; Stage 4");
-					playerIn.openGui(Caterpillar.instance, 0, worldIn, thisCat.pos.getX(), thisCat.pos.getY(), thisCat.pos.getZ());
+					playerIn.openGui(Caterpillar.instance, 0, worldIn, thisCat.getPos().getX(), thisCat.getPos().getY(), thisCat.getPos().getZ());
 				}
 				else
 				{
@@ -320,13 +413,13 @@ public class BlockDrillBase extends BlockContainer {
 			if (worldIn.getBlockState(pos.add(placer.getHorizontalFacing().getFrontOffsetX(), placer.getHorizontalFacing().getFrontOffsetY(),placer.getHorizontalFacing().getFrontOffsetZ())).getBlock() instanceof BlockDrillBase)
 			{
 				worldIn.setBlockState(pos, state.withProperty(FACING, placer.getHorizontalFacing().getOpposite()), 2);
-				updateCatC(pos, worldIn);
+				updateCatC(pos, worldIn, state.getValue(FACING));//TODO: Ensure correct value passed
 				return;
 			}
 			if (worldIn.getBlockState(pos.add(0,1,0)).equals(Blocks.AIR.getDefaultState()))
 			{
 				worldIn.setBlockState(pos.add(0,1,0), state.withProperty(FACING, placer.getHorizontalFacing().getOpposite()), 2);
-				updateCatC(pos, worldIn);
+				updateCatC(pos, worldIn, state.getValue(FACING));//TODO: Ensure correct value passed
 			}
 			else
 			{
@@ -342,31 +435,24 @@ public class BlockDrillBase extends BlockContainer {
 	@Nonnull
 	public TileEntity createNewTileEntity(@Nonnull World worldIn, int meta)
 	{
-		return new TileEntityDrillComponent();
+		return new TileEntityDrillPart();
 	}
 
-	private void updateCatC(BlockPos pos, World worldIn){
-		CaterpillarData cat = Caterpillar.instance.getContainerCaterpillar(pos, worldIn);
-		boolean changeMade = false;
+	private void updateCatC(BlockPos pos, World worldIn, EnumFacing facing){
+		TileEntityDrillHead cat = Caterpillar.getCaterpillar(worldIn, pos, facing);
 		if (cat != null) {
 			Reference.printDebug("Caterpillar found on first attempt, updating");
 			updateCat(cat);
-			changeMade = true;
 		} else {
-			cat = Caterpillar.instance.getContainerCaterpillar(pos.add(0, 1, 0), worldIn);
+			cat = Caterpillar.getCaterpillar(worldIn, pos.add(0, 1, 0), facing);
 			if (cat != null) {
 				Reference.printDebug("Caterpillar found on second attempt, updating");
 				updateCat(cat);
-				changeMade = true;
 			}
 		}
-		if(changeMade)
-			Caterpillar.instance.saveNBTDrills();
-		else
-			Reference.printDebug("Caterpillar not found");
 	}
 
-	public void updateCat(CaterpillarData cat){
+	public void updateCat(TileEntityDrillHead cat){
 
 	}
 }

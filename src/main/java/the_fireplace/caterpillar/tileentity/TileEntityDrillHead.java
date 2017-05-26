@@ -1,28 +1,38 @@
-package the_fireplace.caterpillar.containers;
+package the_fireplace.caterpillar.tileentity;
 
 import com.google.common.collect.Lists;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntityLockable;
+import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.apache.commons.lang3.ArrayUtils;
-import the_fireplace.caterpillar.Caterpillar.GuiTabs;
+import the_fireplace.caterpillar.Caterpillar;
 import the_fireplace.caterpillar.Reference;
+import the_fireplace.caterpillar.blocks.BlockDrillBase;
+import the_fireplace.caterpillar.blocks.BlockDrillHeads;
+import the_fireplace.caterpillar.containers.ContainerDrillHead;
 import the_fireplace.caterpillar.parts.*;
 
+import javax.annotation.Nonnull;
 import java.util.LinkedList;
 
-public class CaterpillarData implements Cloneable{
+public class TileEntityDrillHead extends TileEntityLockable implements ITickable
+{
+	protected String customName;
+	public boolean isSelected = false;
 
 	public LinkedList<ItemStack[]> inventoryPages;
 	public ItemStack fuelSlotStack;
 	public int pageIndex;
 	public int burntime;
-	public BlockPos pos;
 	public int maxburntime;
-	public String name;
 	public int headTick;
 	public PartsMovement movement;
 	public PartsStorage storage;
@@ -32,13 +42,14 @@ public class CaterpillarData implements Cloneable{
 	public PartsTabs tabs;
 	public boolean running = true;
 	public ContainerDrillHead myDrillHead;
-	public CaterpillarData(BlockPos drillhead, String key)
+
+	public TileEntityDrillHead()
 	{
+		Reference.printDebug("Initializing Caterpillar");
 		this.inventoryPages = Lists.newLinkedList();
-		this.inventoryPages.add(new ItemStack[CaterpillarData.getInventoryPageSize()]);
+		this.inventoryPages.add(new ItemStack[getInventoryPageSize()]);
 		pageIndex=0;
 		this.burntime = 0;
-		this.name = key;
 		this.headTick = 0;
 		this.movement = new PartsMovement();
 		this.storage = new PartsStorage();
@@ -46,10 +57,197 @@ public class CaterpillarData implements Cloneable{
 		this.reinforcement = new PartsReinforcement();
 		this.tabs = new PartsTabs();
 		this.incinerator = new PartsIncinerator();
-
-		this.updatePos(drillhead);
+	}
+	private ItemStack[] ensureValidStacksizes(ItemStack[] toFix)
+	{
+		for (int i = 0; i < toFix.length; i++) {
+			ItemStack K = toFix[i];
+			if (K != null)
+			{
+				if (K.stackSize < 1)
+				{
+					toFix[i] = null;
+				}
+			}
+		}
+		return toFix;
+	}
+	public ItemStack[] getItemStacks()
+	{
+		try {
+			return this.ensureValidStacksizes(Caterpillar.instance.getInventory(this, this.tabs.selected));
+		} catch (Exception e) {
+			Reference.printDebug(e.getLocalizedMessage());
+			Caterpillar.proxy.closeDrillGui();
+			return null;
+		}
 	}
 
+	@Override
+	public int getSizeInventory()
+	{
+		return this.getItemStacks().length;
+	}
+	private void setCustomItem(int index, ItemStack itemStack)
+	{
+		if (index < this.getItemStacks().length)
+		{
+			this.getItemStacks()[index] = itemStack;
+		}
+	}
+	private ItemStack getCustomItem(int index)
+	{
+		if (index >= this.getItemStacks().length)
+		{
+			return null;
+		}
+		return this.getItemStacks()[index];
+	}
+	@Override
+	public ItemStack getStackInSlot(int index)
+	{
+		return this.getCustomItem(index);
+	}
+
+	@Override
+	public ItemStack decrStackSize(int index, int count)
+	{
+		if (this.getCustomItem(index) != null)
+		{
+			ItemStack itemstack;
+
+			if (this.getCustomItem(index).stackSize <= count)
+			{
+				itemstack =this.getCustomItem(index);
+				this.setCustomItem(index, null);
+				this.markDirty();
+				return itemstack;
+			}
+			else
+			{
+				itemstack =this.getCustomItem(index).splitStack(count);
+
+				if (this.getCustomItem(index).stackSize == 0)
+				{
+					this.setCustomItem(index, null);
+				}
+
+				this.markDirty();
+				return itemstack;
+			}
+		}
+		else
+		{
+			return null;
+		}
+	}
+
+	@Override
+	public ItemStack removeStackFromSlot(int index)
+	{
+		this.clear();
+		return null;
+	}
+
+	@Override
+	public void setInventorySlotContents(int index, ItemStack stack)
+	{
+		this.setCustomItem(index, stack);
+
+		if (stack != null && stack.stackSize > this.getInventoryStackLimit())
+		{
+			stack.stackSize = this.getInventoryStackLimit();
+		}
+		this.markDirty();
+	}
+
+	@Override
+	@Nonnull
+	public String getName()
+	{
+		return this.hasCustomName() ? this.customName : "Caterpillar";
+	}
+
+	@Override
+	public boolean hasCustomName()
+	{
+		return this.customName != null;
+	}
+
+	@Override
+	public int getInventoryStackLimit()
+	{
+		if (this.tabs.selected.equals(Caterpillar.GuiTabs.DECORATION) || this.tabs.selected.equals(Caterpillar.GuiTabs.REINFORCEMENT))
+		{
+			return 1;
+		}
+		return 64;
+	}
+
+	@Override
+	public boolean isUsableByPlayer(@Nonnull EntityPlayer player)
+	{
+		return this.world.getTileEntity(this.pos) == this && player.getDistanceSq(this.pos.getX() + 0.5D, this.pos.getY() + 0.5D, this.pos.getZ() + 0.5D) <= 64.0D;
+	}
+
+	@Override
+	public void openInventory(@Nonnull EntityPlayer player) {}
+
+	@Override
+	public void closeInventory(@Nonnull EntityPlayer player) {}
+
+	@Override
+	public boolean isItemValidForSlot(int index, @Nonnull ItemStack stack)
+	{
+		return true;
+	}
+
+	@Override
+	@Nonnull
+	public String getGuiID()
+	{
+		return Caterpillar.MODID  + ":" + this.blockType.getUnlocalizedName().substring(5);
+	}
+
+	@Override
+	@Nonnull
+	public Container createContainer(@Nonnull InventoryPlayer playerInventory, @Nonnull EntityPlayer playerIn)
+	{
+		return new ContainerDrillHead(playerIn, this);
+	}
+
+	@Override
+	public int getField(int id)
+	{
+		return 0;
+	}
+
+	@Override
+	public void setField(int id, int value) {}
+
+	@Override
+	public int getFieldCount()
+	{
+		return 0;
+	}
+
+	@Override
+	public void clear()
+	{
+	}
+	@Override
+	public void update() {
+		IBlockState blockdriller =  this.world.getBlockState(this.pos);
+
+		if (blockdriller.getBlock() instanceof BlockDrillBase || blockdriller.getBlock() instanceof BlockDrillHeads)
+		{
+			((BlockDrillBase)blockdriller.getBlock()).calculateMovement(this.world, this.pos, this.world.getBlockState(this.pos));
+		}
+	}
+
+	/*
+	********BEGIN CATERPILLAR DATA***********
+	 */
 	/**
 	 * Get the inventory that is currently loaded
 	 * @return
@@ -81,7 +279,7 @@ public class CaterpillarData implements Cloneable{
 	 */
 	public void resetSlots(Container myDrillHeads)
 	{
-		for (int i = 0; i < CaterpillarData.getInventoryPageSize(); ++i)
+		for (int i = 0; i < getInventoryPageSize(); ++i)
 		{
 			Slot addingSlot = myDrillHeads.getSlot(i);
 			//addingSlot.putStack(null);
@@ -186,7 +384,7 @@ public class CaterpillarData implements Cloneable{
 
 		}
 		//Everything else
-		for (int i = 8; i < CaterpillarData.getInventoryPageSize(); ++i)
+		for (int i = 8; i < getInventoryPageSize(); ++i)
 		{
 			Slot AddingSlot = myDrillHeads.getSlot(i);
 			this.setSlotPos(AddingSlot, -100, -100);
@@ -210,7 +408,7 @@ public class CaterpillarData implements Cloneable{
 		}
 
 		//Everything else
-		for (int i = 12; i < CaterpillarData.getInventoryPageSize(); ++i)
+		for (int i = 12; i < getInventoryPageSize(); ++i)
 		{
 			Slot AddingSlot = myDrillHeads.getSlot(i);
 			this.setSlotPos(AddingSlot, -100, -100);
@@ -300,12 +498,11 @@ public class CaterpillarData implements Cloneable{
 		return false;
 
 	}
+	//TODO: Is clone needed?
 	@Override
-	public CaterpillarData clone()
+	public TileEntityDrillHead clone()
 	{
-		String key = this.name;
-		BlockPos posP = new BlockPos(this.pos.getX(), this.pos.getY(), this.pos.getZ());
-		CaterpillarData newCatp = new CaterpillarData(posP, key);
+		TileEntityDrillHead newCatp = new TileEntityDrillHead();
 		newCatp.inventoryPages = (LinkedList<ItemStack[]>)this.inventoryPages.clone();
 		newCatp.fuelSlotStack = fuelSlotStack.copy();
 		newCatp.maxburntime = this.maxburntime;
@@ -320,7 +517,7 @@ public class CaterpillarData implements Cloneable{
 	/**
 	 * Adjusts the number of storage components in the caterpillar.
 	 * @param changeBy
-	 * 	The amount to change by
+	 * 	The pageIndex to change by
 	 * @param worldIn
 	 * 	The world the caterpillar is in
 	 */
@@ -347,54 +544,50 @@ public class CaterpillarData implements Cloneable{
 	}
 
 	/**
-	 * Recreate CaterpillarData from NBT
+	 * Read Cat data from NBT
 	 * @param catNbt
-	 * 	The NBT Data to turn back in to a Caterpillar
-	 * @return
-	 * 	The new Caterpillar Data
+	 * 	The NBT Data to read on to this TE
 	 */
-	public static CaterpillarData readCaterpiller(NBTTagCompound catNbt)
+	public void readCaterpiller(NBTTagCompound catNbt)
 	{
-		String key = catNbt.getString("name");
-		BlockPos posP = new BlockPos(catNbt.getInteger("X"), catNbt.getInteger("Y"), catNbt.getInteger("Z"));
-		CaterpillarData newCatp = new CaterpillarData(posP, key);
-		newCatp.tabs.selected = GuiTabs.values()[catNbt.getByte("selectedtab")];
-		newCatp.decoration.selected = catNbt.getByte("decorationsselected");
-		newCatp.maxburntime = catNbt.getInteger("burntimemax");
-		newCatp.storage.storageComponentCount = catNbt.getByte("addedStorage");
-		newCatp.burntime = catNbt.getInteger("burntime");
-		newCatp.running = catNbt.getBoolean("running");
-		newCatp.fuelSlotStack = ItemStack.loadItemStackFromNBT(catNbt.getCompoundTag("fuelStack"));
+		tabs.selected = Caterpillar.GuiTabs.values()[catNbt.getByte("selectedtab")];
+		decoration.selected = catNbt.getByte("decorationsselected");
+		maxburntime = catNbt.getInteger("burntimemax");
+		storage.storageComponentCount = catNbt.getByte("addedStorage");
+		burntime = catNbt.getInteger("burntime");
+		running = catNbt.getBoolean("running");
+		fuelSlotStack = ItemStack.loadItemStackFromNBT(catNbt.getCompoundTag("fuelStack"));
 		ItemStack[] stacks = Reference.MainNBT.readItemStacks(catNbt);
-		newCatp.inventoryPages = new LinkedList<>();
+		inventoryPages = new LinkedList<>();
+		if(stacks == null)
+			stacks = new ItemStack[getInventoryPageSize()];
 		while(stacks.length > 0){
-			newCatp.inventoryPages.add(ArrayUtils.subarray(stacks, 0, getInventoryPageSize()));
+			inventoryPages.add(ArrayUtils.subarray(stacks, 0, getInventoryPageSize()));
 			stacks = ArrayUtils.subarray(stacks, getInventoryPageSize(), stacks.length);
 		}
 
-		if (newCatp.inventoryPages.size() < newCatp.storage.storageComponentCount+1){
-			Reference.printDebug("Inventory count too low, adding "+(newCatp.storage.storageComponentCount+1-newCatp.inventoryPages.size())+" pages.");
-			for(int i=0;i<newCatp.storage.storageComponentCount+1-newCatp.inventoryPages.size();i++){
-				newCatp.inventoryPages.add(new ItemStack[getInventoryPageSize()]);
+		if (inventoryPages.size() < storage.storageComponentCount+1){
+			Reference.printDebug("Inventory count too low, adding "+(storage.storageComponentCount+1-inventoryPages.size())+" pages.");
+			for(int i=0;i<storage.storageComponentCount+1-inventoryPages.size();i++){
+				inventoryPages.add(new ItemStack[getInventoryPageSize()]);
 			}
 		}
 
 		if (catNbt.hasKey("incinerator"))
 		{
-			newCatp.incinerator.readNBT(catNbt.getCompoundTag("incinerator"));
+			incinerator.readNBT(catNbt.getCompoundTag("incinerator"));
 		}
 		if (catNbt.hasKey("decoration"))
 		{
-			newCatp.decoration.readNBT(catNbt.getCompoundTag("decoration"));
+			decoration.readNBT(catNbt.getCompoundTag("decoration"));
 		}
 		if (catNbt.hasKey("movementTicks")){
-			newCatp.movement.readNBT(catNbt.getCompoundTag("movementTicks"));
+			movement.readNBT(catNbt.getCompoundTag("movementTicks"));
 		}
 		if (catNbt.hasKey("reinforcement"))
 		{
-			newCatp.reinforcement.readNBT(catNbt.getCompoundTag("reinforcement"));
+			reinforcement.readNBT(catNbt.getCompoundTag("reinforcement"));
 		}
-		return newCatp;
 	}
 
 	/**
@@ -406,23 +599,39 @@ public class CaterpillarData implements Cloneable{
 		ItemStack[] totalInv = new ItemStack[0];
 		for(ItemStack[] inv:inventoryPages)
 			totalInv = ArrayUtils.addAll(totalInv, inv);
-		NBTTagCompound NBTconCat = Reference.MainNBT.writeItemStacks(totalInv);
+		NBTTagCompound catData = Reference.MainNBT.writeItemStacks(totalInv);
 		if(this.fuelSlotStack != null)
-			NBTconCat.setTag("fuelStack", this.fuelSlotStack.writeToNBT(new NBTTagCompound()));
-		NBTconCat.setTag("decoration", this.decoration.saveNBT());
-		NBTconCat.setTag("reinforcement", this.reinforcement.saveNBT());
-		NBTconCat.setTag("incinerator", this.incinerator.saveNBT());
-		NBTconCat.setTag("movementTicks", this.movement.saveNBT());
-		NBTconCat.setString("name", this.name);
-		NBTconCat.setByte("selectedtab", this.tabs.selected.value);
-		NBTconCat.setByte("decorationsselected", this.decoration.selected);
-		NBTconCat.setInteger("burntime", this.burntime);
-		NBTconCat.setByte("addedStorage", this.storage.storageComponentCount);
-		NBTconCat.setInteger("burntimemax", this.maxburntime);
-		NBTconCat.setBoolean("running", this.running);
-		NBTconCat.setInteger("X", this.pos.getX());
-		NBTconCat.setInteger("Y", this.pos.getY());
-		NBTconCat.setInteger("Z", this.pos.getZ());
-		return NBTconCat;
+			catData.setTag("fuelStack", this.fuelSlotStack.writeToNBT(new NBTTagCompound()));
+		catData.setTag("decoration", this.decoration.saveNBT());
+		catData.setTag("reinforcement", this.reinforcement.saveNBT());
+		catData.setTag("incinerator", this.incinerator.saveNBT());
+		catData.setTag("movementTicks", this.movement.saveNBT());
+		catData.setByte("selectedtab", this.tabs.selected.value);
+		catData.setByte("decorationsselected", this.decoration.selected);
+		catData.setInteger("burntime", this.burntime);
+		catData.setByte("addedStorage", this.storage.storageComponentCount);
+		catData.setInteger("burntimemax", this.maxburntime);
+		catData.setBoolean("running", this.running);
+		catData.setInteger("X", this.pos.getX());
+		catData.setInteger("Y", this.pos.getY());
+		catData.setInteger("Z", this.pos.getZ());
+		return catData;
+	}
+
+	@Override
+	public void readFromNBT(NBTTagCompound compound)
+	{
+		super.readFromNBT(compound);
+		readCaterpiller(compound.getCompoundTag("catData"));
+	}
+
+	@Override
+	public NBTTagCompound writeToNBT(NBTTagCompound compound)
+	{
+		super.writeToNBT(compound);
+
+		compound.setTag("catData", writeNBTCaterpillar());
+
+		return compound;
 	}
 }

@@ -22,14 +22,16 @@ public class Reference {
 	public static final String SERVER_PROXY_CLASS = "the_fireplace.caterpillar.proxy.ProxyCommon";
 	public static final String guiFactory = "the_fireplace.caterpillar.guis.GuiFactoryConfig";
 
-	public static boolean loaded;
-
 	public static NBTTools MainNBT;
 
 	public static void printDebug(String what)
 	{
-		if (Caterpillar.instance.dev)
-			FMLLog.log(Caterpillar.MODNAME + "/Debug", Level.INFO,  what);
+		if (Caterpillar.instance.dev){
+			FMLLog.log(Caterpillar.MODNAME, Level.INFO,  what);
+			System.out.println(what);
+		}else{
+			FMLLog.log(Caterpillar.MODNAME, Level.DEBUG,  what);
+		}
 	}
 
 	/**
@@ -67,7 +69,7 @@ public class Reference {
 	@SideOnly(Side.CLIENT)
 	public static void spawnParticles(BlockPos pos, EnumParticleTypes typeofdots)
 	{
-		if (loaded && Config.useparticles)
+		if (Config.useparticles)
 		{
 			for (int o = 0; o < 1; ++o)
 			{

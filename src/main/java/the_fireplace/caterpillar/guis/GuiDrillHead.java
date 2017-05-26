@@ -6,11 +6,10 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.client.resources.I18n;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.input.Mouse;
@@ -20,14 +19,13 @@ import the_fireplace.caterpillar.Caterpillar.Replacement;
 import the_fireplace.caterpillar.Config;
 import the_fireplace.caterpillar.Reference;
 import the_fireplace.caterpillar.abstracts.AbstractRunnerWidgets;
-import the_fireplace.caterpillar.containers.CaterpillarData;
 import the_fireplace.caterpillar.containers.ContainerDrillHead;
 import the_fireplace.caterpillar.network.PacketDispatcher;
 import the_fireplace.caterpillar.network.packets.serverbound.PacketIncrementInventory;
-import the_fireplace.caterpillar.network.packets.serverbound.PacketSendCatData;
 import the_fireplace.caterpillar.parts.PartsGuiWidgets;
 import the_fireplace.caterpillar.parts.PartsTexture;
 import the_fireplace.caterpillar.parts.PartsTutorial;
+import the_fireplace.caterpillar.tileentity.TileEntityDrillHead;
 
 import javax.annotation.Nonnull;
 import java.awt.*;
@@ -39,20 +37,18 @@ import java.util.List;
 @SideOnly(Side.CLIENT)
 public class GuiDrillHead extends GuiContainer
 {
-	public IInventory dispenserInventory;
-	private CaterpillarData caterpillar;
+	private TileEntityDrillHead caterpillar;
 	private HashMap<GuiTabs, List<PartsGuiWidgets>> widgetsHolder;
 	private List<PartsGuiWidgets> selectedWidgets;
 	private PartsTutorial howTut;
 	private GuiButton left;
 	private GuiButton right;
-	public GuiDrillHead(EntityPlayer player, IInventory dispenserInv, CaterpillarData DH)
+	public GuiDrillHead(EntityPlayer player, TileEntityDrillHead drillTe)
 	{
-		super(new ContainerDrillHead(player, dispenserInv, DH));
-		this.dispenserInventory = dispenserInv;
+		super(new ContainerDrillHead(player, drillTe));
 		this.widgetsHolder = new HashMap<>();
 		this.setupWidgets();
-		this.caterpillar = DH;
+		this.caterpillar = drillTe;
 		this.caterpillar.tabs.selected = GuiTabs.MAIN;
 		this.sendUpdates();
 	}
@@ -65,8 +61,8 @@ public class GuiDrillHead extends GuiContainer
 		guiLeft = (width - xSize) / 2;
 		guiTop = (height - ySize) / 2;
 		this.buttonList.clear();
-		this.buttonList.add(left = new GuiButton(0, guiLeft+25, guiTop+23, 20, 20, "<-"));
-		this.buttonList.add(right = new GuiButton(1, guiLeft+94, guiTop+23, 20, 20, "->"));
+		this.buttonList.add(left = new GuiButton(0, guiLeft+68, guiTop+23, 20, 20, "<-"));
+		this.buttonList.add(right = new GuiButton(1, guiLeft+88, guiTop+23, 20, 20, "->"));
 		setButtonRules();
 		super.initGui();
 	}
@@ -829,17 +825,17 @@ public class GuiDrillHead extends GuiContainer
 				case DECORATION:
 					this.caterpillar.placeSlotsforDecorations(this.inventorySlots);
 					this.sendUpdates();
-					this.dispenserInventory.markDirty();
+					this.caterpillar.markDirty();
 					break;
 				case REINFORCEMENT:
 					this.caterpillar.placeSlotsforReinforcements(this.inventorySlots);
 					this.sendUpdates();
-					this.dispenserInventory.markDirty();
+					this.caterpillar.markDirty();
 					break;
 				case INCINERATOR:
 					this.caterpillar.placeSlotsforIncinerator(this.inventorySlots);
 					this.sendUpdates();
-					this.dispenserInventory.markDirty();
+					this.caterpillar.markDirty();
 					break;
 				default:
 					this.caterpillar.placeSlotsforMain(this.inventorySlots);
@@ -997,7 +993,6 @@ public class GuiDrillHead extends GuiContainer
 				this.mouseWheelMovedDecoration(speed);
 			}
 		}
-
 	}
 
 	@Override
@@ -1005,10 +1000,10 @@ public class GuiDrillHead extends GuiContainer
 		if (button.enabled) {
 			switch(button.id){
 				case 0:
-					PacketDispatcher.sendToServer(new PacketIncrementInventory(caterpillar, 1));
+					PacketDispatcher.sendToServer(new PacketIncrementInventory(caterpillar.getPos(), 1));
 					break;
 				case 1:
-					PacketDispatcher.sendToServer(new PacketIncrementInventory(caterpillar, -1));
+					PacketDispatcher.sendToServer(new PacketIncrementInventory(caterpillar.getPos(), -1));
 			}
 		}
 	}
@@ -1022,7 +1017,6 @@ public class GuiDrillHead extends GuiContainer
 			{
 				this.caterpillar.decoration.selected = 0;
 			}
-
 		}
 		else
 		{
@@ -1036,20 +1030,18 @@ public class GuiDrillHead extends GuiContainer
 	@Override
 	public void onGuiClosed()
 	{
-		Reference.printDebug("GUI: Closing, " + this.caterpillar.name);
+		Reference.printDebug("GUI: Closing, " + this.caterpillar.getName());
 		this.caterpillar.tabs.selected = GuiTabs.MAIN;
-		PacketDispatcher.sendToServer(new PacketSendCatData(this.caterpillar));
-
+		//PacketDispatcher.sendToServer(new PacketSendCatData(this.caterpillar));
+		//TODO: See what is needed here
 		Reference.printDebug("Closing: Saving...");
-		Caterpillar.instance.saveNBTDrills();
-
-		Caterpillar.instance.removeSelectedCaterpillar();
 	}
 	private void sendUpdates() {
-		Reference.printDebug("GUI: Updating Server, " + this.caterpillar.name);
+		Reference.printDebug("GUI: Updating Server, " + this.caterpillar.getName());
 		boolean whatamI = this.caterpillar.running;
 		this.caterpillar.running = false;
-		PacketDispatcher.sendToServer(new PacketSendCatData(this.caterpillar));
+		//PacketDispatcher.sendToServer(new PacketSendCatData(this.caterpillar));
+		//TODO: See what is needed here
 		this.caterpillar.running = whatamI;
 	}
 }
