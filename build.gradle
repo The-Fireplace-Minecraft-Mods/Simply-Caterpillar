@@ -39,10 +39,14 @@ curseforge {
   }
 }
 
+<<<<<<< HEAD
 
 version = "!!VERSION!!"
+=======
+version = "7.0.0"
+>>>>>>> 19792f74e9144291a8aa5b5621840d416ba1199d
 group= "the_fireplace.caterpillar"
-archivesBaseName = "SimplyCaterpillar-Forge"
+archivesBaseName = "SimplyCaterpillar-1.11.2"
 
 
 modsIO {
