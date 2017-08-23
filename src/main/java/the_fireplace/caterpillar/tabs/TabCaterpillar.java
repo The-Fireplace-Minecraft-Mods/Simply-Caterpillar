@@ -2,6 +2,7 @@ package the_fireplace.caterpillar.tabs;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import the_fireplace.caterpillar.Caterpillar;
 import the_fireplace.caterpillar.inits.InitBlocks;
 
@@ -14,7 +15,7 @@ public class TabCaterpillar extends CreativeTabs {
 	}
 
 	@Override
-	public Item getTabIconItem() {
-		return Item.getItemFromBlock(InitBlocks.drillbase);
+	public ItemStack getTabIconItem() {
+		return new ItemStack(Item.getItemFromBlock(InitBlocks.drillbase));
 	}
 }

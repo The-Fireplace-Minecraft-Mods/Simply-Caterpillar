@@ -42,7 +42,7 @@ import the_fireplace.caterpillar.timers.TimerMain;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
-@Mod(name = Caterpillar.MODNAME, modid = Caterpillar.MODID, guiFactory=Reference.guiFactory, updateJSON = "http://caterpillar.bitnamiapp.com/jsons/simplycaterpillar.json", acceptedMinecraftVersions = "[1.9.4,1.10.2]")
+@Mod(name = Caterpillar.MODNAME, modid = Caterpillar.MODID, guiFactory=Reference.guiFactory, updateJSON = "http://caterpillar.bitnamiapp.com/jsons/simplycaterpillar.json", acceptedMinecraftVersions = "[1.11.2]")
 public class Caterpillar
 {
 	public static final String MODID = "simplycaterpillar";
@@ -253,11 +253,11 @@ public class Caterpillar
 		}
 	}
 	private World getCaterpillarWorld(BlockPos pos){
-		if (FMLCommonHandler.instance().getMinecraftServerInstance().worldServers != null)
+		if (FMLCommonHandler.instance().getMinecraftServerInstance().worlds != null)
 		{
-			if (FMLCommonHandler.instance().getMinecraftServerInstance().worldServers.length >0)
+			if (FMLCommonHandler.instance().getMinecraftServerInstance().worlds.length >0)
 			{
-				for (WorldServer worldServer : FMLCommonHandler.instance().getMinecraftServerInstance().worldServers) {
+				for (WorldServer worldServer : FMLCommonHandler.instance().getMinecraftServerInstance().worlds) {
 					IBlockState state  = worldServer.getBlockState(pos);
 					if (state.getBlock() instanceof BlockDrillBase)
 					{

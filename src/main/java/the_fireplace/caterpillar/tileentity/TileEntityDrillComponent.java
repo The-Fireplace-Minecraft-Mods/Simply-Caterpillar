@@ -28,7 +28,7 @@ public class TileEntityDrillComponent extends TileEntityLockable implements ITic
 		{
 			return Caterpillar.instance.getSelectedCaterpillar();
 		}
-		return Caterpillar.instance.getContainerCaterpillar(this.pos, this.worldObj);
+		return Caterpillar.instance.getContainerCaterpillar(this.pos, this.world);
 	}
 	private ItemStack[] ensureValidStacksizes(ItemStack[] toFix)
 	{
@@ -36,7 +36,7 @@ public class TileEntityDrillComponent extends TileEntityLockable implements ITic
 			ItemStack K = toFix[i];
 			if (K != null)
 			{
-				if (K.stackSize < 1)
+				if (K.getCount() < 1)
 				{
 					toFix[i] = null;
 				}
@@ -98,7 +98,7 @@ public class TileEntityDrillComponent extends TileEntityLockable implements ITic
 		{
 			ItemStack itemstack;
 
-			if (this.getCustomItem(index).stackSize <= count)
+			if (this.getCustomItem(index).getCount() <= count)
 			{
 				itemstack =this.getCustomItem(index);
 				this.setCustomItem(index, null);
@@ -109,7 +109,7 @@ public class TileEntityDrillComponent extends TileEntityLockable implements ITic
 			{
 				itemstack =this.getCustomItem(index).splitStack(count);
 
-				if (this.getCustomItem(index).stackSize == 0)
+				if (this.getCustomItem(index).getCount() == 0)
 				{
 					this.setCustomItem(index, null);
 				}
@@ -136,9 +136,9 @@ public class TileEntityDrillComponent extends TileEntityLockable implements ITic
 	{
 		this.setCustomItem(index, stack);
 
-		if (stack != null && stack.stackSize > this.getInventoryStackLimit())
+		if (stack != null && stack.getCount() > this.getInventoryStackLimit())
 		{
-			stack.stackSize = this.getInventoryStackLimit();
+			stack.equals(this.getInventoryStackLimit());
 		}
 		this.markDirty();
 	}
@@ -169,9 +169,9 @@ public class TileEntityDrillComponent extends TileEntityLockable implements ITic
 	}
 
 	@Override
-	public boolean isUseableByPlayer(EntityPlayer player)
+	public boolean isUsableByPlayer(EntityPlayer player)
 	{
-		return this.worldObj.getTileEntity(this.pos) == this && player.getDistanceSq(this.pos.getX() + 0.5D, this.pos.getY() + 0.5D, this.pos.getZ() + 0.5D) <= 64.0D;
+		return this.world.getTileEntity(this.pos) == this && player.getDistanceSq(this.pos.getX() + 0.5D, this.pos.getY() + 0.5D, this.pos.getZ() + 0.5D) <= 64.0D;
 	}
 
 	@Override
@@ -219,11 +219,15 @@ public class TileEntityDrillComponent extends TileEntityLockable implements ITic
 	}
 	@Override
 	public void update() {
-		IBlockState blockdriller =  this.worldObj.getBlockState(this.pos);
+		IBlockState blockdriller =  this.world.getBlockState(this.pos);
 
 		if (blockdriller.getBlock() instanceof BlockDrillBase || blockdriller.getBlock() instanceof BlockDrillHeads)
 		{
-			((BlockDrillBase)blockdriller.getBlock()).calculateMovement(this.worldObj, this.pos, this.worldObj.getBlockState(this.pos));
+			((BlockDrillBase)blockdriller.getBlock()).calculateMovement(this.world, this.pos, this.world.getBlockState(this.pos));
 		}
+	}
+	@Override
+	public boolean isEmpty() {
+		return false;
 	}
 }

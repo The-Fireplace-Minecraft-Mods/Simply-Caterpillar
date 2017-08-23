@@ -153,7 +153,7 @@ public class BlockDrillHeads extends BlockDrillBase
 				}
 
 				BlockPos newPlace = pos.add(movingXZ[0], 0, movingXZ[1]);
-				TargetPoint targetPoint = new TargetPoint(worldIn.getWorldType().getWorldTypeID(), newPlace.getX(), newPlace.getY(), newPlace.getZ(), 5);
+				TargetPoint targetPoint = new TargetPoint(worldIn.getWorldType().getId(), newPlace.getX(), newPlace.getY(), newPlace.getZ(), 5);
 				Caterpillar.network.sendToAllAround(new PacketParticles(EnumParticleTypes.FLAME.name(), newPlace.getX(), newPlace.getY(), newPlace.getZ()), targetPoint);
 
 				worldIn.setBlockState(newPlace, basedrillhead.getDefaultState().withProperty(FACING, state.getValue(FACING)));
@@ -230,9 +230,9 @@ public class BlockDrillHeads extends BlockDrillBase
 				{
 					ItemStack justOne = new ItemStack(thisGuyInv[i].getItem(), 1, thisGuyInv[i].getItemDamage());
 					ItemStack theRest = null;
-					if ( thisGuyInv[i].stackSize > 1)
+					if ( thisGuyInv[i].getCount() > 1)
 					{
-						theRest = new ItemStack(thisGuyInv[i].getItem(), thisGuyInv[i].stackSize - 1, thisGuyInv[i].getItemDamage());
+						theRest = new ItemStack(thisGuyInv[i].getItem(), thisGuyInv[i].getCount() - 1, thisGuyInv[i].getItemDamage());
 					}
 					thisGuyInv[i] = theRest;
 					thisCat.maxburntime = TileEntityFurnace.getItemBurnTime(justOne);

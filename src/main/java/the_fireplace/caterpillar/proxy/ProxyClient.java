@@ -22,11 +22,11 @@ public class ProxyClient extends ProxyCommon{
 	}
 	@Override
 	public EntityPlayer getPlayer(){
-		return Minecraft.getMinecraft().thePlayer;
+		return Minecraft.getMinecraft().player;
 	}
 	@Override
 	public World getWorld(){
-		return Minecraft.getMinecraft().theWorld;
+		return Minecraft.getMinecraft().world;
 	}
 	@Override
 	public boolean isServerSide()

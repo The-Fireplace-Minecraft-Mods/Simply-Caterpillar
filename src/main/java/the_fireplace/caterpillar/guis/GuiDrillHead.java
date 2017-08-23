@@ -70,7 +70,7 @@ public class GuiDrillHead extends GuiContainer
 
 					@Override
 					public void run(PartsGuiWidgets widget) {
-						List tmoString = new ArrayList<String>();
+						ArrayList<String> tmoString = new ArrayList<String>();
 						if (widget.Name.equals("power"))
 						{
 							String powertxt = TextFormatting.GREEN + I18n.format("on");
@@ -122,7 +122,7 @@ public class GuiDrillHead extends GuiContainer
 
 					@Override
 					public void run(PartsGuiWidgets widget) {
-						List tmoString = new ArrayList<String>();
+						ArrayList<String> tmoString = new ArrayList<String>();
 
 						if (widget.Name.equals("burner"))
 						{
@@ -166,7 +166,7 @@ public class GuiDrillHead extends GuiContainer
 				tmpHoover  = new AbstractRunnerWidgets() {
 					@Override
 					public void run(PartsGuiWidgets widget) {
-						List tmoString = new ArrayList<String>();
+						ArrayList<String> tmoString = new ArrayList<String>();
 						if (widget.Name.equals("scrollbar"))
 						{
 							tmoString.add(TextFormatting.RED + I18n.format("wheelstorage"));
@@ -231,7 +231,7 @@ public class GuiDrillHead extends GuiContainer
 
 					@Override
 					public void run(PartsGuiWidgets widget) {
-						List tmoString = new ArrayList<String>();
+						ArrayList<String> tmoString = new ArrayList<String>();
 						if (widget.Name.equals("scrollbar") || widget.Name.equals("scrollbarmoving"))
 						{
 							int where = GuiDrillHead.this.caterpillar.decoration.countindex;
@@ -291,7 +291,7 @@ public class GuiDrillHead extends GuiContainer
 
 					@Override
 					public void run(PartsGuiWidgets widget) {
-						List tmoString = new ArrayList<String>();
+						ArrayList<String> tmoString = new ArrayList<String>();
 						if (widget.Name.equals("scrollbar2") || widget.Name.equals("scrollbarmoving2"))
 						{
 							tmoString.add(I18n.format("wheelstorage"));
@@ -351,7 +351,7 @@ public class GuiDrillHead extends GuiContainer
 
 					@Override
 					public void run(PartsGuiWidgets widget) {
-						List tmoString = new ArrayList<String>();
+						ArrayList<String> tmoString = new ArrayList<String>();
 						if (widget.Name.equals("selected"))
 						{
 							tmoString.add(I18n.format("selected")  + (GuiDrillHead.this.caterpillar.decoration.selected));
@@ -394,7 +394,7 @@ public class GuiDrillHead extends GuiContainer
 
 					@Override
 					public void run(PartsGuiWidgets widget) {
-						List tmoString = new ArrayList<String>();
+						ArrayList<String> tmoString = new ArrayList<String>();
 						if (widget.Name.startsWith("check"))
 						{
 							String[] getinfo = widget.Name.split(",");
@@ -910,7 +910,7 @@ public class GuiDrillHead extends GuiContainer
 		{
 			if (j > YSide && j < YSide + YHeight)
 			{
-				List tmoString = new ArrayList<String>();
+				ArrayList<String> tmoString = new ArrayList<String>();
 				tmoString.add(tabHoveredOver.name);
 				//If any tooltip is needed for a tab, add it to tmoString here.
 				this.drawHoveringText(tmoString, i - k, j - l);
@@ -919,7 +919,7 @@ public class GuiDrillHead extends GuiContainer
 	}
 	public FontRenderer getfontRendererObj()
 	{
-		return this.fontRendererObj;
+		return this.fontRenderer;
 	}
 	private void drawTabsForeground(GuiTabs tabToDraw) {
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
@@ -932,11 +932,11 @@ public class GuiDrillHead extends GuiContainer
 
 		if (this.caterpillar.tabs.selected.equals(tabToDraw))
 		{
-			this.fontRendererObj.drawString(Caption,-31 + 5 ,  3 + tabToDraw.value*20 + 5, Color.BLACK.getRGB());
+			this.fontRenderer.drawString(Caption,-31 + 5 ,  3 + tabToDraw.value*20 + 5, Color.BLACK.getRGB());
 		}
 		else
 		{
-			this.fontRendererObj.drawString(Caption,-31 + 3,  3 + tabToDraw.value*20 + 5, Color.GRAY.getRGB());
+			this.fontRenderer.drawString(Caption,-31 + 3,  3 + tabToDraw.value*20 + 5, Color.GRAY.getRGB());
 		}
 	}
 
@@ -982,7 +982,7 @@ public class GuiDrillHead extends GuiContainer
 			this.fontRendererObj.drawString("" + (i + 1), 13 + 18*i, 10, colort);
 		}
 		 */
-		this.fontRendererObj.drawString(this.caterpillar.decoration.selected + "", 13 + 18, 10 + 20*2, Color.BLUE.getRGB());
+		this.fontRenderer.drawString(this.caterpillar.decoration.selected + "", 13 + 18, 10 + 20*2, Color.BLUE.getRGB());
 	}
 
 	private void drawGuiIncineratorBackgroundLayer() {
@@ -1013,8 +1013,8 @@ public class GuiDrillHead extends GuiContainer
 	}
 
 	private void drawGuiDrillHeadForegroundLayer() {
-		this.fontRendererObj.drawString(I18n.format("consumption"), 2, -8, Color.WHITE.getRGB());
-		this.fontRendererObj.drawString(I18n.format("gathered"), 120, -8, Color.WHITE.getRGB());
+		this.fontRenderer.drawString(I18n.format("consumption"), 2, -8, Color.WHITE.getRGB());
+		this.fontRenderer.drawString(I18n.format("gathered"), 120, -8, Color.WHITE.getRGB());
 	}
 
 	private void drawGuiDrillHeadBackgroundLayer() {

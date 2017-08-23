@@ -199,7 +199,7 @@ public class HandlerNBTTag {
 		if (its != null)
 		{
 			toAdd = its.getItem();
-			StackSize = (byte)its.stackSize;
+			StackSize = (byte)its.getCount();
 			Damage = (short)its.getItemDamage();
 		}
 		ResourceLocation resourcelocation = Item.REGISTRY.getNameForObject(toAdd);

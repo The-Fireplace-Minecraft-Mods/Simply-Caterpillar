@@ -19,9 +19,9 @@ public class ProxyCommon {
 		return null;
 	}
 	public World getWorld(){
-		if (FMLCommonHandler.instance().getMinecraftServerInstance().worldServers != null)
+		if (FMLCommonHandler.instance().getMinecraftServerInstance().worlds != null)
 		{
-			if (FMLCommonHandler.instance().getMinecraftServerInstance().worldServers.length >0)
+			if (FMLCommonHandler.instance().getMinecraftServerInstance().worlds.length >0)
 			{
 				return FMLCommonHandler.instance().getMinecraftServerInstance().getEntityWorld();
 			}

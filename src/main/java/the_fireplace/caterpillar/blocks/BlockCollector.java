@@ -36,7 +36,7 @@ public class BlockCollector extends BlockDrillBase
 
 		ETList.stream().filter(ETObject -> ETObject instanceof EntityItem).forEach(ETObject -> {
 			CaterpillarData myCat = Caterpillar.instance.getContainerCaterpillar(pos, state);
-			if (myCat.addToOutInventory(((EntityItem) ETObject).getEntityItem())) {
+			if (myCat.addToOutInventory(((EntityItem) ETObject).getItem())) {
 				worldIn.removeEntity(ETObject);
 			}
 		});
