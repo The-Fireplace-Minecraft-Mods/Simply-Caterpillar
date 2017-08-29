@@ -67,7 +67,7 @@ public class BlockDrillBase extends BlockContainer {
 			ItemStack[] thisGuyInv = thisCat.inventory;
 
 			for (int i = 0; i < Middleindex; i++) {
-				if (thisGuyInv[i] != null)
+				if (!thisGuyInv[i].isEmpty())
 				{
 					Block inIvn = Block.getBlockFromItem(thisGuyInv[i].getItem());
 					if (inIvn != null)
@@ -76,7 +76,7 @@ public class BlockDrillBase extends BlockContainer {
 						if (inIvn.getStateFromMeta(thisGuyInv[i].getItemDamage()).equals(state))
 						{
 							//ItemStack justOne = new ItemStack(thisGuyInv[i].getItem(), 1, thisGuyInv[i].getItemDamage());
-							ItemStack theRest = null;
+							ItemStack theRest = ItemStack.EMPTY;
 							if ( thisGuyInv[i].getCount() > 1)
 							{
 								theRest = new ItemStack(thisGuyInv[i].getItem(), thisGuyInv[i].getCount() - 1, thisGuyInv[i].getItemDamage());

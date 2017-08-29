@@ -815,7 +815,7 @@ public class GuiDrillHead extends GuiContainer
 
 	}
 	@Override
-	public void drawHoveringText(List textLines, int x, int y)
+	public void drawHoveringText(List<String> textLines, int x, int y)
 	{
 		super.drawHoveringText(textLines, x, y);
 	}

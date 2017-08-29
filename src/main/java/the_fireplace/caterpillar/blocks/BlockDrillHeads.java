@@ -55,8 +55,7 @@ public class BlockDrillHeads extends BlockDrillBase
 			{
 				CaterpillarData conCata = Caterpillar.instance.getContainerCaterpillar(catID);
 				for (ItemStack element : conCata.inventory) {
-
-					if (element != null)
+					if (!element.isEmpty())
 					{
 						Reference.dropItem(worldIn, pos, element);
 					}
@@ -229,7 +228,7 @@ public class BlockDrillHeads extends BlockDrillBase
 				if (TileEntityFurnace.isItemFuel(thisGuyInv[i]))
 				{
 					ItemStack justOne = new ItemStack(thisGuyInv[i].getItem(), 1, thisGuyInv[i].getItemDamage());
-					ItemStack theRest = null;
+					ItemStack theRest = ItemStack.EMPTY;
 					if ( thisGuyInv[i].getCount() > 1)
 					{
 						theRest = new ItemStack(thisGuyInv[i].getItem(), thisGuyInv[i].getCount() - 1, thisGuyInv[i].getItemDamage());

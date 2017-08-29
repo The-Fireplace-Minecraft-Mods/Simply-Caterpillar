@@ -19,7 +19,7 @@ public class GuiConfiguration extends GuiConfig{
 
 	public static List<IConfigElement> generateConfigList()
 	{
-		ArrayList elements = new ArrayList();
+		ArrayList<IConfigElement> elements = new ArrayList<IConfigElement>();
 
 		elements.add(new ConfigElement(Config.configuration.getCategory("general")));
 		elements.add(new ConfigElement(Config.configuration.getCategory("tutorial")));
