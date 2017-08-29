@@ -4,6 +4,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import the_fireplace.caterpillar.Caterpillar;
@@ -58,7 +59,7 @@ public class BlockDecoration extends BlockDrillBase
 		}
 		PartsDecoration thisSection = myCat.decoration;
 		thisSection.howclose = 2;
-		ItemStack[] whattoPlace = thisSection.placementMap.get(Count);
+		NonNullList<ItemStack> whattoPlace = thisSection.placementMap.get(Count);
 		thisSection.countindex = Count;
 		int slot = 7;
 		if (movingXZ[1] == -1 || movingXZ[0] == 1)
@@ -76,7 +77,7 @@ public class BlockDecoration extends BlockDrillBase
 					}
 					//north and
 					BlockPos loc = pos.add(j*Math.abs(movingXZ[1]) + movingXZ[0], toporB, j*Math.abs(movingXZ[0]) +  movingXZ[1]);
-					ItemStack thisone = whattoPlace[slot];
+					NonNullList<ItemStack> thisone = whattoPlace[slot];
 					if (movingXZ[1] == -1 || movingXZ[0] == 1)
 					{
 						slot++;

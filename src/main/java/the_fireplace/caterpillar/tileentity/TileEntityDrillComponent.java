@@ -8,6 +8,7 @@ import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityLockable;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.NonNullList;
 import the_fireplace.caterpillar.Caterpillar;
 import the_fireplace.caterpillar.blocks.BlockDrillBase;
 import the_fireplace.caterpillar.blocks.BlockDrillHeads;
@@ -30,21 +31,21 @@ public class TileEntityDrillComponent extends TileEntityLockable implements ITic
 		}
 		return Caterpillar.instance.getContainerCaterpillar(this.pos, this.world);
 	}
-	private ItemStack[] ensureValidStacksizes(ItemStack[] toFix)
+	private NonNullList<ItemStack> ensureValidStacksizes(NonNullList<ItemStack> nonNullList)
 	{
-		for (int i = 0; i < toFix.length; i++) {
-			ItemStack K = toFix[i];
+		for (int i = 0; i < nonNullList.size(); i++) {
+			ItemStack K = nonNullList.get(i);
 			if (K != null)
 			{
 				if (K.getCount() < 1)
 				{
-					toFix[i] = null;
+					nonNullList.isEmpty();
 				}
 			}
 		}
-		return toFix;
+		return nonNullList;
 	}
-	public ItemStack[] getItemStacks()
+	public NonNullList<ItemStack> getItemStacks()
 	{
 		try {
 			return  this.ensureValidStacksizes(Caterpillar.instance.getInventory(this.MyCaterpillar(), this.MyCaterpillar().tabs.selected));
@@ -59,7 +60,7 @@ public class TileEntityDrillComponent extends TileEntityLockable implements ITic
 					Minecraft.getMinecraft().currentScreen = null;
 				}
 			}
-			return new ItemStack[256];
+			return NonNullList.withSize(256, ItemStack.EMPTY);
 		}
 
 	}
@@ -67,18 +68,18 @@ public class TileEntityDrillComponent extends TileEntityLockable implements ITic
 	@Override
 	public int getSizeInventory()
 	{
-		return this.getItemStacks().length;
+		return this.getItemStacks().size();
 	}
 	private void setCustomItem(int index, ItemStack inwego)
 	{
-		if (index < this.getItemStacks().length)
+		if (index < this.getItemStacks().size())
 		{
 			this.getItemStacks()[index] = inwego;
 		}
 	}
 	private ItemStack getCustomItem(int index)
 	{
-		if (index >= this.getItemStacks().length)
+		if (index >= this.getItemStacks().size())
 		{
 			return null;
 		}

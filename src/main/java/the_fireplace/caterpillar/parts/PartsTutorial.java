@@ -51,7 +51,7 @@ public class PartsTutorial {
 	{
 		return this.myGui.height - Mouse.getY() * this.myGui.height / Minecraft.getMinecraft().displayHeight - 1;
 	}
-	private void drawDownArrow(List tmoString)
+	private void drawDownArrow(List<String> tmoString)
 	{
 		String ctm = System.currentTimeMillis() + "";
 		ctm = ctm.substring(ctm.length() - 3);
@@ -73,7 +73,7 @@ public class PartsTutorial {
 			tmoString.add(TextFormatting.GREEN + "");
 		}
 	}
-	private void drawUpArrow(List tmoString)
+	private void drawUpArrow(List<String> tmoString)
 	{
 		String ctm = System.currentTimeMillis() + "";
 		ctm = ctm.substring(ctm.length() - 3);
@@ -119,7 +119,7 @@ public class PartsTutorial {
 	}
 	public void draw()
 	{
-		List tmoString = new ArrayList<String>();
+		List<String> tmoString = new ArrayList<String>();
 		if (this.drawUp)
 		{
 			this.drawUpArrow(tmoString);

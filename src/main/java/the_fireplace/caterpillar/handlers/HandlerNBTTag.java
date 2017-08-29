@@ -2,10 +2,12 @@ package the_fireplace.caterpillar.handlers;
 
 import the_fireplace.caterpillar.Caterpillar;
 import the_fireplace.caterpillar.Reference;
+import the_fireplace.caterpillar.containers.CaterpillarData;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -36,7 +38,7 @@ public class HandlerNBTTag {
 	{
 		if (this.theWorldServer() != null)
 		{
-			return this.theWorldServer().getSaveHandler().getWorldDirectory().getName();//TODO: Make sure this is correct
+			return this.theWorldServer().getSaveHandler().getWorldDirectory().getName();
 		}
 		return "";
 	}
@@ -147,7 +149,7 @@ public class HandlerNBTTag {
 		return MainLocation;
 	}
 
-	public ItemStack readItemStack(NBTTagCompound tmpNBT)
+	public NonNullList<ItemStack> readItemStack(NBTTagCompound tmpNBT)
 	{
 		String id = tmpNBT.getString("id");
 		if (id.equals("minecraft:air"))
@@ -156,20 +158,19 @@ public class HandlerNBTTag {
 		}
 		int Count = tmpNBT.getByte("Count");
 		int Damage = tmpNBT.getShort("Damage");
-		return new ItemStack(Item.getByNameOrId(id), Count, Damage);
-
+		return NonNullList.withSize(CaterpillarData.getMaxSize(), new ItemStack(Item.getByNameOrId((id)), Count, Damage));
 	}
 
-	public ItemStack[] readItemStacks(NBTTagCompound tmpNBT)
+	public NonNullList<ItemStack> readItemStacks(NBTTagCompound tmpNBT)
 	{
 
 		if (tmpNBT.hasKey("Count"))
 		{
 			int size = tmpNBT.getInteger("Count");
-			ItemStack[] tmpIS= new ItemStack[size];
+			NonNullList<ItemStack> tmpIS = NonNullList.withSize(CaterpillarData.getMaxSize(), ItemStack.EMPTY);
 			for(int i=0;i<size;i++)
 			{
-				tmpIS[i] = this.readItemStack(tmpNBT.getCompoundTag(i + "Item"));
+				tmpIS = this.readItemStack(tmpNBT.getCompoundTag(i + "Item"));
 			}
 
 			//int frequance = tmpNBT.getInteger("frequance");
@@ -178,15 +179,15 @@ public class HandlerNBTTag {
 		return null;
 	}
 
-	public NBTTagCompound writeItemStacks(ItemStack[] its)
+	public NBTTagCompound writeItemStacks(NonNullList<ItemStack> inventory)
 	{
 		NBTTagCompound tmpNBT = new NBTTagCompound();
 
 		int i = 0;
-		for (i = 0; i < its.length; i++) {
-			tmpNBT.setTag(i + "Item", this.writeItemStack(its[i]));
+		for (i = 0; i < inventory.size(); i++) {
+			tmpNBT.setTag(i + "Item", this.writeItemStack(inventory.get(i)));
 		}
-		tmpNBT.setInteger("Count", its.length);
+		tmpNBT.setInteger("Count", inventory.size());
 		return tmpNBT;
 	}
 

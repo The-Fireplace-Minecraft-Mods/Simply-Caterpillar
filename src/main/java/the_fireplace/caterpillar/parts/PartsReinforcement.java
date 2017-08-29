@@ -4,13 +4,14 @@ import the_fireplace.caterpillar.Reference;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.NonNullList;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class PartsReinforcement extends PartsTabbed{
-	public ItemStack[] reinforcementMap = new ItemStack[16];
-	public List<int[]> replacers = new ArrayList();
+	public NonNullList<ItemStack> reinforcementMap = NonNullList.withSize(16, ItemStack.EMPTY);
+	public List<int[]> replacers = new ArrayList<int[]>();
 
 	public PartsReinforcement()
 	{
@@ -42,7 +43,7 @@ public class PartsReinforcement extends PartsTabbed{
 
 	private void setMap() {
 		for (int i = 0; i < 16; i++) {
-			this.reinforcementMap[i] = new ItemStack(Blocks.COBBLESTONE);
+			this.reinforcementMap.add(i, new ItemStack(Blocks.COBBLESTONE));
 		}
 	}
 
@@ -79,13 +80,14 @@ public class PartsReinforcement extends PartsTabbed{
 	public void readNBT(NBTTagCompound NBTconCat)
 	{
 		super.readNBT(NBTconCat);
-		this.reinforcementMap = new  ItemStack[16];
+		
+		this.reinforcementMap = NonNullList.withSize(16, ItemStack.EMPTY);
 		this.reinforcementMap = Reference.MainNBT.readItemStacks(NBTconCat);
-		if (this.reinforcementMap.length < 16)
+		if (this.reinforcementMap.size() < 16)
 		{
-			this.reinforcementMap = new  ItemStack[16];
+			this.reinforcementMap = NonNullList.withSize(16, ItemStack.EMPTY);
 			for (int i = 0; i < 16; i++) {
-				this.reinforcementMap[i] = new ItemStack(Blocks.COBBLESTONE);
+				this.reinforcementMap.add(i, new ItemStack(Blocks.COBBLESTONE));
 			}
 		}
 
@@ -103,7 +105,7 @@ public class PartsReinforcement extends PartsTabbed{
 			this.replacers.clear();
 			this.setReplacers();
 		}
-		if (this.reinforcementMap.length !=  16)
+		if (this.reinforcementMap.size() !=  16)
 		{
 			this.setMap();
 		}

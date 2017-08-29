@@ -21,6 +21,7 @@ import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.Explosion;
@@ -62,26 +63,24 @@ public class BlockDrillBase extends BlockContainer {
 				worldIn.setBlockToAir(pos);
 				return;
 			}
-			int Middleindex = (thisCat.inventory.length - thisCat.storage.startingIndex) / 2;
+			int Middleindex = (thisCat.inventory.size() - thisCat.storage.startingIndex) / 2;
 			//Middleindex += thisCat.storage.startingIndex;
-			ItemStack[] thisGuyInv = thisCat.inventory;
+			NonNullList<ItemStack> thisGuyInv = thisCat.inventory;
 
 			for (int i = 0; i < Middleindex; i++) {
-				if (!thisGuyInv[i].isEmpty())
+				if (!thisGuyInv.get(i).isEmpty())
 				{
-					Block inIvn = Block.getBlockFromItem(thisGuyInv[i].getItem());
+					Block inIvn = Block.getBlockFromItem(thisGuyInv.get(i).getItem());
 					if (inIvn != null)
 					{
 
-						if (inIvn.getStateFromMeta(thisGuyInv[i].getItemDamage()).equals(state))
+						if (inIvn.getStateFromMeta(thisGuyInv.get(i).getItemDamage()).equals(state))
 						{
-							//ItemStack justOne = new ItemStack(thisGuyInv[i].getItem(), 1, thisGuyInv[i].getItemDamage());
-							ItemStack theRest = ItemStack.EMPTY;
-							if ( thisGuyInv[i].getCount() > 1)
+							//ItemStack justOne = new ItemStack(thisGuyInv.get(i).getItem(), 1, thisGuyInv.get(i).getItemDamage());
+							if ( thisGuyInv.get(i).getCount() > 1)
 							{
-								theRest = new ItemStack(thisGuyInv[i].getItem(), thisGuyInv[i].getCount() - 1, thisGuyInv[i].getItemDamage());
+								new ItemStack(thisGuyInv.get(i).getItem(), thisGuyInv.get(i).getCount() - 1, thisGuyInv.get(i).getItemDamage());
 							}
-							thisGuyInv[i] = theRest;
 							worldIn.setBlockState(pos, state);
 							return;
 						}

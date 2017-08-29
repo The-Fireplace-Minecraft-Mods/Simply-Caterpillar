@@ -10,6 +10,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -222,18 +223,16 @@ public class BlockDrillHeads extends BlockDrillBase
 			if (thisCat.burntime < 1)
 			{
 				//thisCat.burntime = 0;
-				ItemStack[] thisGuyInv = thisCat.inventory;
+				NonNullList<ItemStack> thisGuyInv = thisCat.inventory;
 				int i = 0;
 
-				if (TileEntityFurnace.isItemFuel(thisGuyInv[i]))
+				if (TileEntityFurnace.isItemFuel(thisGuyInv.get(i)))
 				{
-					ItemStack justOne = new ItemStack(thisGuyInv[i].getItem(), 1, thisGuyInv[i].getItemDamage());
-					ItemStack theRest = ItemStack.EMPTY;
-					if ( thisGuyInv[i].getCount() > 1)
+					ItemStack justOne = new ItemStack(thisGuyInv.get(i).getItem(), 1, thisGuyInv.get(i).getItemDamage());
+					if ( thisGuyInv.get(i).getCount() > 1)
 					{
-						theRest = new ItemStack(thisGuyInv[i].getItem(), thisGuyInv[i].getCount() - 1, thisGuyInv[i].getItemDamage());
+						new ItemStack(thisGuyInv.get(i).getItem(), thisGuyInv.get(i).getCount() - 1, thisGuyInv.get(i).getItemDamage());
 					}
-					thisGuyInv[i] = theRest;
 					thisCat.maxburntime = TileEntityFurnace.getItemBurnTime(justOne);
 					thisCat.burntime += thisCat.maxburntime;
 				}

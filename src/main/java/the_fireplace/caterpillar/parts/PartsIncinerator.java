@@ -3,19 +3,20 @@ package the_fireplace.caterpillar.parts;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-
+import net.minecraft.util.NonNullList;
 import the_fireplace.caterpillar.Reference;
+import the_fireplace.caterpillar.containers.CaterpillarData;
 
 public class PartsIncinerator extends PartsTabbed implements Cloneable {
 
-	public ItemStack[] placementMap;
+	public NonNullList<ItemStack> placementMap;
 
 	public PartsIncinerator()
 	{
-		this.placementMap = new ItemStack[12];
-		this.placementMap[0] = new ItemStack(Blocks.DIRT);
-		this.placementMap[1] = new ItemStack(Blocks.GRAVEL);
-		this.placementMap[2] = new ItemStack(Blocks.SAND);
+		this.placementMap = NonNullList.withSize(12, ItemStack.EMPTY);
+		this.placementMap = NonNullList.withSize(0, new ItemStack(Blocks.DIRT));
+		this.placementMap = NonNullList.withSize(1, new ItemStack(Blocks.GRAVEL));
+		this.placementMap = NonNullList.withSize(2, new ItemStack(Blocks.SAND));
 
 
 		boolean found = false;
@@ -48,8 +49,8 @@ public class PartsIncinerator extends PartsTabbed implements Cloneable {
 	public PartsIncinerator clone()
 	{
 		PartsIncinerator tmp = new PartsIncinerator();
-		for (int i = 0; i < this.placementMap.length; i++) {
-			tmp.placementMap[i] = this.placementMap[i].copy();
+		for (int i = 0; i < this.placementMap.size(); i++) {
+			tmp.placementMap = NonNullList.withSize(CaterpillarData.getMaxSize(), ItemStack.EMPTY).copy();
 		}
 		return tmp;
 	}

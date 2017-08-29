@@ -1,15 +1,17 @@
 package the_fireplace.caterpillar.parts;
 
 import the_fireplace.caterpillar.Reference;
+import the_fireplace.caterpillar.containers.CaterpillarData;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.NonNullList;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class PartsDecoration extends PartsTabbed implements Cloneable{
-	public List<ItemStack[]> placementMap;
+	public NonNullList<ItemStack> placementMap;
 	public int selected = 0;
 	public int countindex = 0;
 	public final int maxSlots = 10;
@@ -17,24 +19,23 @@ public class PartsDecoration extends PartsTabbed implements Cloneable{
 	{
 		this.placementMap = new ArrayList<>();
 		for (int i = 0; i < this.maxSlots; i++) {
-			this.placementMap.add(new ItemStack[8]);
-			this.placementMap.get(i)[4] = new ItemStack(Blocks.RAIL);
+			this.placementMap = NonNullList.withSize(8, ItemStack.EMPTY);
+			this.placementMap = NonNullList.withSize(4, new ItemStack(Blocks.RAIL));
 		}
-		this.placementMap.get(5)[0] = new ItemStack(Blocks.PLANKS);
-		this.placementMap.get(5)[3] = new ItemStack(Blocks.PLANKS);
-		this.placementMap.get(5)[5] = new ItemStack(Blocks.PLANKS);
+		this.placementMap = NonNullList.withSize(0, new ItemStack(Blocks.PLANKS));
+		this.placementMap = NonNullList.withSize(3, new ItemStack(Blocks.PLANKS));
+		this.placementMap = NonNullList.withSize(5, new ItemStack(Blocks.PLANKS));
 
-		this.placementMap.get(5)[1] = new ItemStack(Blocks.OAK_FENCE);
-		this.placementMap.get(5)[6] = new ItemStack(Blocks.OAK_FENCE);
-		this.placementMap.get(5)[2] = new ItemStack(Blocks.OAK_FENCE);
-		this.placementMap.get(5)[7] = new ItemStack(Blocks.OAK_FENCE);
+		this.placementMap = NonNullList.withSize(1, new ItemStack(Blocks.OAK_FENCE));
+		this.placementMap = NonNullList.withSize(6, new ItemStack(Blocks.OAK_FENCE));
+		this.placementMap = NonNullList.withSize(2, new ItemStack(Blocks.OAK_FENCE));
+		this.placementMap = NonNullList.withSize(7, new ItemStack(Blocks.OAK_FENCE));
 
-		this.placementMap.get(6)[2] = new ItemStack(Blocks.TORCH);
-		this.placementMap.get(6)[7] = new ItemStack(Blocks.TORCH);
+		this.placementMap = NonNullList.withSize(2, new ItemStack(Blocks.TORCH));
+		this.placementMap = NonNullList.withSize(7, new ItemStack(Blocks.TORCH));
 
-		this.placementMap.get(7)[2] = new ItemStack(Blocks.REDSTONE_TORCH);
-		this.placementMap.get(7)[4] = new ItemStack(Blocks.GOLDEN_RAIL);
-
+		this.placementMap = NonNullList.withSize(2, new ItemStack(Blocks.REDSTONE_TORCH));
+		this.placementMap = NonNullList.withSize(4, new ItemStack(Blocks.GOLDEN_RAIL));
 
 		boolean found = false;
 		NBTTagCompound tmpNBT =  Reference.MainNBT.readNBTSettings(Reference.MainNBT.getFolderLocationWorld(), "DecorationDefault.dat");
@@ -64,14 +65,14 @@ public class PartsDecoration extends PartsTabbed implements Cloneable{
 		PartsDecoration thisclone = new PartsDecoration();
 		thisclone.placementMap.clear();
 		for (int i = 0; i < this.maxSlots; i++) {
-			thisclone.placementMap.add(this.placementMap.get(i).clone());
+			thisclone.placementMap = NonNullList.withSize(CaterpillarData.getMaxSize(), ItemStack.EMPTY).clone();
 		}
 		thisclone.selected = this.selected;
 		return thisclone;
 	}
-	public ItemStack[] getSelectedInventory()
+	public NonNullList<ItemStack> getSelectedInventory()
 	{
-		return this.placementMap.get(this.selected);
+		return this.placementMap;
 	}
 
 	@Override

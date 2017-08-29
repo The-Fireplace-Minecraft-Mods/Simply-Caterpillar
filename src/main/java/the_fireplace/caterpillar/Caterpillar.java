@@ -8,6 +8,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -308,7 +309,7 @@ public class Caterpillar
 		this.ModTasks.inSetup = false;
 		this.mainContainers.clear();
 	}
-	public ItemStack[] getInventory(CaterpillarData MyCaterpillar, GuiTabs selected)
+	public NonNullList<ItemStack> getInventory(CaterpillarData MyCaterpillar, GuiTabs selected)
 	{
 		if (MyCaterpillar != null)
 		{
@@ -325,7 +326,7 @@ public class Caterpillar
 				break;
 			}
 		}
-		return new ItemStack[256];
+		return NonNullList.withSize(256, ItemStack.EMPTY);
 	}
 
 	public enum Replacement {

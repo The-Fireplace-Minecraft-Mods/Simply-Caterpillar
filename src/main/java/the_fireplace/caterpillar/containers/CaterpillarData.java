@@ -1,18 +1,24 @@
 package the_fireplace.caterpillar.containers;
 
-import the_fireplace.caterpillar.Caterpillar.GuiTabs;
-import the_fireplace.caterpillar.Reference;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import the_fireplace.caterpillar.parts.*;
+import the_fireplace.caterpillar.Caterpillar.GuiTabs;
+import the_fireplace.caterpillar.Reference;
+import the_fireplace.caterpillar.parts.PartsDecoration;
+import the_fireplace.caterpillar.parts.PartsIncinerator;
+import the_fireplace.caterpillar.parts.PartsMovement;
+import the_fireplace.caterpillar.parts.PartsReinforcement;
+import the_fireplace.caterpillar.parts.PartsStorage;
+import the_fireplace.caterpillar.parts.PartsTabs;
 
 public class CaterpillarData implements Cloneable{
 
-	public ItemStack[] inventory;
+	public NonNullList<ItemStack> inventory;
 	public int burntime;
 	public BlockPos pos;
 	public int maxburntime;
@@ -28,7 +34,7 @@ public class CaterpillarData implements Cloneable{
 	public ContainerDrillHead myDrillHead;
 	public CaterpillarData(BlockPos drillhead, String key)
 	{
-		this.inventory = new ItemStack[CaterpillarData.getMaxSize()];
+		this.inventory = NonNullList.withSize(CaterpillarData.getMaxSize(), ItemStack.EMPTY);
 		this.burntime = 0;
 		this.name = key;
 		this.headTick = 0;
@@ -242,7 +248,7 @@ public class CaterpillarData implements Cloneable{
 
 		//Burner
 		Slot AddingSlot = myDrillHeads.getSlot(ID);
-		AddingSlot.putStack(this.inventory[ID]);
+		AddingSlot.putStack(this.inventory.get(ID));
 		this.setSlotPos(myDrillHeads.getSlot(ID), 8 + (4) * 18, 7 + (3) * 18);
 		ID++;
 
@@ -253,7 +259,7 @@ public class CaterpillarData implements Cloneable{
 			for (j = 0; j < 3; ++j)
 			{
 				AddingSlot = myDrillHeads.getSlot(ID);
-				AddingSlot.putStack(this.inventory[ID]);
+				AddingSlot.putStack(this.inventory.get(ID));
 				this.setSlotPos(myDrillHeads.getSlot(ID), 8 + j * 18, -100);
 				ID++;
 			}
@@ -265,7 +271,7 @@ public class CaterpillarData implements Cloneable{
 			for (j = 0; j < 3; ++j)
 			{
 				AddingSlot = myDrillHeads.getSlot(ID);
-				AddingSlot.putStack(this.inventory[ID]);
+				AddingSlot.putStack(this.inventory.get(ID));
 				this.setSlotPos(myDrillHeads.getSlot(ID), 8 + (j + 6) * 18, -100);
 				ID++;
 			}
@@ -279,11 +285,11 @@ public class CaterpillarData implements Cloneable{
 	}
 	public boolean addToOutInventory(ItemStack toAdd)
 	{
-		int Middleindex = (this.inventory.length - this.storage.startingIndex) / 2;
+		int Middleindex = (this.inventory.size() - this.storage.startingIndex) / 2;
 		Middleindex += this.storage.startingIndex;
 
-		for (int i = Middleindex; i < this.inventory.length; i++) {
-			ItemStack slot = this.inventory[i];
+		for (int i = Middleindex; i < this.inventory.size(); i++) {
+			ItemStack slot = this.inventory.get(i);
 			if (slot != null)
 			{
 				if (slot.getCount() + toAdd.getCount() < 65)
@@ -296,10 +302,10 @@ public class CaterpillarData implements Cloneable{
 				}
 			}
 		}
-		for (int i = Middleindex; i < this.inventory.length; i++) {
-			if (this.inventory[i] == null)
+		for (int i = Middleindex; i < this.inventory.size(); i++) {
+			if (this.inventory.get(i) == ItemStack.EMPTY)
 			{
-				this.inventory[i] = new ItemStack(toAdd.getItem(), toAdd.getCount(), toAdd.getItemDamage());
+				this.inventory= NonNullList.withSize(CaterpillarData.getMaxSize(), ItemStack.EMPTY);
 				return true;
 			}
 		}
@@ -327,22 +333,22 @@ public class CaterpillarData implements Cloneable{
 		{
 			return;
 		}
-		ItemStack[] tmpIT = new ItemStack[CaterpillarData.getMaxSize() + this.storage.added + Change];
+		NonNullList<ItemStack >tmpIT = NonNullList.withSize(CaterpillarData.getMaxSize() + this.storage.added + Change, ItemStack.EMPTY);
 
-		int MiddleOldStorage = (this.inventory.length - this.storage.startingIndex) / 2;
-		int MiddleNewStorage = (tmpIT.length - this.storage.startingIndex) / 2;
+		int MiddleOldStorage = (this.inventory.size() - this.storage.startingIndex) / 2;
+		int MiddleNewStorage = (tmpIT.size() - this.storage.startingIndex) / 2;
 		int offset = this.storage.startingIndex;
 		if (MiddleNewStorage > MiddleOldStorage)// if new inv is bigger than the old one, short it
 		{
-			ItemStack[] tmpITRight = new ItemStack[MiddleNewStorage];
-			for (int i = 0; i < this.inventory.length; i++) {
+			NonNullList<ItemStack> tmpITRight = NonNullList.withSize(MiddleNewStorage, ItemStack.EMPTY);
+			for (int i = 0; i < this.inventory.size(); i++) {
 				if (i < MiddleOldStorage + offset)
 				{
-					tmpIT[i] = this.inventory[i];
+					tmpIT = this.inventory.get(i);
 				}
 				else
 				{
-					tmpITRight[i - MiddleOldStorage + offset] = this.inventory[i];
+					tmpITRight[i - MiddleOldStorage + offset] = this.inventory.get(i);
 				}
 			}
 			System.arraycopy(tmpITRight, 0, tmpIT, MiddleNewStorage - offset, tmpITRight.length);
@@ -352,26 +358,26 @@ public class CaterpillarData implements Cloneable{
 		{
 			int newchange = Math.abs(Change);
 			newchange /= 2;
-			for (int i = 0; i < this.inventory.length; i++) {
+			for (int i = 0; i < this.inventory.size(); i++) {
 				if (i < MiddleNewStorage + offset )
 				{
-					tmpIT[i] = this.inventory[i];
+					tmpIT = this.inventory.get(i);
 				}else if (i >= MiddleNewStorage + offset && i < MiddleOldStorage + offset)
 				{
-					if (this.inventory[i] != null)
+					if (this.inventory.get(i) != null)
 					{
-						Reference.dropItem(worldIn, this.pos, this.inventory[i]);
+						Reference.dropItem(worldIn, this.pos, this.inventory.get(i));
 					}
 				}else if (i >= MiddleOldStorage + offset && i < MiddleOldStorage + MiddleNewStorage + offset )
 				{
 
-					tmpIT[i - newchange ] = this.inventory[i];
+					tmpIT[i - newchange ] = this.inventory.get(i);
 				}
 				else
 				{
-					if (this.inventory[i] != null)
+					if (this.inventory.get(i) != null)
 					{
-						Reference.dropItem(worldIn, this.pos, this.inventory[i]);
+						Reference.dropItem(worldIn, this.pos, this.inventory.get(i));
 					}
 				}
 			}
@@ -397,11 +403,11 @@ public class CaterpillarData implements Cloneable{
 		newCatp.running = NBTconCat.getBoolean("running");
 		newCatp.inventory = Reference.MainNBT.readItemStacks(NBTconCat);
 
-		if (newCatp.inventory.length < getMaxSize() + newCatp.storage.added || newCatp.inventory.length > getMaxSize() + newCatp.storage.added){
+		if (newCatp.inventory.size() < getMaxSize() + newCatp.storage.added || newCatp.inventory.size() > getMaxSize() + newCatp.storage.added){
 			ItemStack[] tmpY = new ItemStack[getMaxSize() + newCatp.storage.added];
 
-			Reference.printDebug("Inventory length was wrong had to resize: " + newCatp.inventory.length + "," + tmpY.length);
-			int length = newCatp.inventory.length;
+			Reference.printDebug("Inventory length was wrong had to resize: " + newCatp.inventory.size() + "," + tmpY.length);
+			int length = newCatp.inventory.size();
 			if (tmpY.length < length)
 			{
 				length = tmpY.length;
