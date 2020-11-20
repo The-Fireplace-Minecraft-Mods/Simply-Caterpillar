@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "   ",
+    "dhd",
+    "   "
+  ],
+  "key":
+  {
+    "d":
+    {
+      "item": "simplycaterpillar:drill_base"
+    },
+    "h":
+    {
+      "item": "minecraft:hopper"
+    }
+  },
+  "result":
+  {
+    "item": "simplycaterpillar:collector",
+    "count": 1
+  }
+}
