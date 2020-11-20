@@ -1,8 +1,8 @@
 {
     "variants": {
-        "facing=north": { "model": "simplycaterpillar:collector" },
-        "facing=south": { "model": "simplycaterpillar:collector", "y": 180 },
-        "facing=west":  { "model": "simplycaterpillar:collector", "y": 270 },
-        "facing=east":  { "model": "simplycaterpillar:collector", "y": 90 }
+        "facing=north": { "model": "simplycaterpillar:block/collector" },
+        "facing=south": { "model": "simplycaterpillar:block/collector", "y": 180 },
+        "facing=west":  { "model": "simplycaterpillar:block/collector", "y": 270 },
+        "facing=east":  { "model": "simplycaterpillar:block/collector", "y": 90 }
     }
 }

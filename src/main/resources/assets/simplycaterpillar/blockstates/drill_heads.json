@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "facing=north": { "model": "simplycaterpillar:block/drill_heads/drill_heads_none" },
+        "facing=south": { "model": "simplycaterpillar:block/drill_heads/drill_heads_none", "y": 180 },
+        "facing=west":  { "model": "simplycaterpillar:block/drill_heads/drill_heads_none", "y": 270 },
+        "facing=east":  { "model": "simplycaterpillar:block/drill_heads/drill_heads_none", "y": 90 }
+    }
+}
