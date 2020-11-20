@@ -1,12 +1,12 @@
 {
-    "__createdwith": "opl's Model Creator",
+    "credit": "Made with Blockbench",
     "ambientocclusion": false,
     "textures": {
-        "particle": "simplycaterpillar:block/wooden_top",
-        "side": "simplycaterpillar:block/rock_side",
+        "particle": "simplycaterpillar:blocks/wooden_top",
+        "side": "simplycaterpillar:blocks/rock_side",
         "chest": "entity/chest/normal",
-        "top": "simplycaterpillar:block/wooden_top",
-        "rod": "simplycaterpillar:block/pieces/wood_piece"
+        "top": "simplycaterpillar:blocks/wooden_top",
+        "rod": "simplycaterpillar:blocks/pieces/wood_piece"
     },
     "elements": [
         {
@@ -268,5 +268,35 @@
                 }
             }
         }
-    ]
+    ],
+    "display": {
+        "thirdperson_righthand": {
+            "rotation": [40, 0, 0],
+            "translation": [0, 0.25, 0],
+            "scale": [0.3, 0.3, 0.3]
+        },
+        "thirdperson_lefthand": {
+            "rotation": [40, 0, 0],
+            "scale": [0.3, 0.3, 0.3]
+        },
+        "firstperson_righthand": {
+            "scale": [0.4, 0.4, 0.4]
+        },
+        "firstperson_lefthand": {
+            "scale": [0.4, 0.4, 0.4]
+        },
+        "ground": {
+            "translation": [0, 8.5, 0],
+            "scale": [0.5, 0.5, 0.5]
+        },
+        "gui": {
+            "rotation": [0, -180, 0],
+            "translation": [0, 3, 0],
+            "scale": [0.4, 0.4, 0.4]
+        },
+        "fixed": {
+            "translation": [0, 3, -3.75],
+            "scale": [0.4, 0.4, 0.4]
+        }
+    }
 }
