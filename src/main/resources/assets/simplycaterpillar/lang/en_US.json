@@ -1,14 +1,13 @@
 {
-  "block.drillheads": "Drill Heads",
-  "block.reinforcements": "Reinforcement Builder",
-  "block.decoration": "Decoration Placer",
-  "block.collector": "Item Collector",
-  "block.drillbase": "Basic Drill Segment",
-  "block.storage": "Drill Storage",
-  "block.incinerator": "Incinerator",
+  "block.simplycaterpillar.drill_heads": "Drill Heads",
+  "block.simplycaterpillar.reinforcements": "Reinforcement Builder",
+  "block.simplycaterpillar.decoration": "Decoration Placer",
+  "block.simplycaterpillar.collector": "Item Collector",
+  "block.simplycaterpillar.drill_base": "Basic Drill Segment",
+  "block.simplycaterpillar.storage": "Drill Storage",
+  "block.simplycaterpillar.incinerator": "Incinerator",
 
-  "itemGroup.simplycaterpillar": "Simply Caterpillar",
-  "itemGroup.caterpillar": "Caterpillar",
+  "itemGroup.caterpillarTab": "Caterpillar",
 
   "tutorial": "Tutorial",
   "tutorial2": "Dismiss",

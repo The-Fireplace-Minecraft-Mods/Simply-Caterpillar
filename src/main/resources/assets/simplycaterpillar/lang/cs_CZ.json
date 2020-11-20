@@ -1,14 +1,13 @@
 ﻿{
-  "block.drillheads": "Razicí hlava",
-  "block.reinforcements": "Vyzdívací sekce",
-  "block.decoration": "Dekorační sekce",
-  "block.collector": "Sběrač materiálu",
-  "block.drillbase": "Základní jednotka",
-  "block.storage": "Zásobník materiálu",
-  "block.incinerator": "Spalovna",
+  "block.simplycaterpillar.drill_heads": "Razicí hlava",
+  "block.simplycaterpillar.reinforcements": "Vyzdívací sekce",
+  "block.simplycaterpillar.decoration": "Dekorační sekce",
+  "block.simplycaterpillar.collector": "Sběrač materiálu",
+  "block.simplycaterpillar.drill_base": "Základní jednotka",
+  "block.simplycaterpillar.storage": "Zásobník materiálu",
+  "block.simplycaterpillar.incinerator": "Spalovna",
 
-  "itemGroup.simplycaterpillar": "Simply Caterpillar",
-  "itemGroup.caterpillar": "Caterpillar",
+  "itemGroup.caterpillarTab": "Caterpillar",
 
   "tutorial": "Návod k použití",
   "tutorial2": "Zavřít",
