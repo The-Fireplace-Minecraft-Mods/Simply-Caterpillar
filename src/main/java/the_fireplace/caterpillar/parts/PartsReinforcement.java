@@ -1,16 +1,17 @@
 package the_fireplace.caterpillar.parts;
 
+import net.minecraft.block.Blocks;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.NonNullList;
 import the_fireplace.caterpillar.Reference;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class PartsReinforcement extends PartsTabbed{
-	public ItemStack[] reinforcementMap = new ItemStack[16];
-	public List<byte[]> replacers = new ArrayList();
+public class PartsReinforcement extends PartsTabbed {
+	public NonNullList<ItemStack> reinforcementMap = NonNullList.withSize(16, ItemStack.EMPTY);
+	public List<int[]> replacers = new ArrayList<>();
 
 	public PartsReinforcement()
 	{
@@ -18,12 +19,12 @@ public class PartsReinforcement extends PartsTabbed{
 		this.setReplacers();
 
 		boolean found = false;
-		NBTTagCompound tmpNBT =  Reference.MainNBT.readNBTSettings(Reference.MainNBT.getFolderLocationWorld(), "ReinforcementDefault.dat");
+		CompoundNBT tmpNBT =  Reference.MainNBT.readNBTSettings(Reference.MainNBT.getFolderLocationWorld(), "ReinforcementDefault.dat");
 		if (tmpNBT != null)
 		{
-			if (tmpNBT.hasKey("reinforcement"))
+			if (tmpNBT.contains("reinforcement"))
 			{
-				this.readNBT(tmpNBT.getCompoundTag("reinforcement"));
+				this.readNBT(tmpNBT.getCompound("reinforcement"));
 				found = true;
 			}
 		}
@@ -32,9 +33,9 @@ public class PartsReinforcement extends PartsTabbed{
 			tmpNBT =  Reference.MainNBT.readNBTSettings(Reference.MainNBT.getFolderLocationMod(), "ReinforcementDefault.txt");
 			if (tmpNBT != null)
 			{
-				if (tmpNBT.hasKey("reinforcement"))
+				if (tmpNBT.contains("reinforcement"))
 				{
-					this.readNBT(tmpNBT.getCompoundTag("reinforcement"));
+					this.readNBT(tmpNBT.getCompound("reinforcement"));
 				}
 			}
 		}
@@ -42,13 +43,13 @@ public class PartsReinforcement extends PartsTabbed{
 
 	private void setMap() {
 		for (int i = 0; i < 16; i++) {
-			this.reinforcementMap[i] = new ItemStack(Blocks.COBBLESTONE);
+			this.reinforcementMap.add(i, new ItemStack(Blocks.COBBLESTONE));
 		}
 	}
 
 	private void setReplacers() {
 		for (int i = 0; i < 4; i++) {
-			this.replacers.add(new byte[5]);
+			this.replacers.add(new int[5]);
 		}
 		this.replacers.get(0)[0] = 0;
 		this.replacers.get(0)[1] = 1;
@@ -76,25 +77,26 @@ public class PartsReinforcement extends PartsTabbed{
 	}
 
 	@Override
-	public void readNBT(NBTTagCompound NBTconCat)
+	public void readNBT(CompoundNBT NBTconCat)
 	{
 		super.readNBT(NBTconCat);
-		this.reinforcementMap = new  ItemStack[16];
+
+		this.reinforcementMap = NonNullList.withSize(16, ItemStack.EMPTY);
 		this.reinforcementMap = Reference.MainNBT.readItemStacks(NBTconCat);
-		if (this.reinforcementMap.length < 16)
+		if (this.reinforcementMap.size() < 16)
 		{
-			this.reinforcementMap = new  ItemStack[16];
+			this.reinforcementMap = NonNullList.withSize(16, ItemStack.EMPTY);
 			for (int i = 0; i < 16; i++) {
-				this.reinforcementMap[i] = new ItemStack(Blocks.COBBLESTONE);
+				this.reinforcementMap.add(i, new ItemStack(Blocks.COBBLESTONE));
 			}
 		}
 
 
 		this.replacers.clear();
 		for (int i = 0; i < 4; i++) {
-			if (NBTconCat.hasKey("replacers" + i))
+			if (NBTconCat.contains("replacers" + i))
 			{
-				this.replacers.add(NBTconCat.getByteArray("replacers" + i));
+				this.replacers.add(NBTconCat.getIntArray("replacers" + i));
 			}
 		}
 		// convert old saves.
@@ -103,18 +105,18 @@ public class PartsReinforcement extends PartsTabbed{
 			this.replacers.clear();
 			this.setReplacers();
 		}
-		if (this.reinforcementMap.length !=  16)
+		if (this.reinforcementMap.size() !=  16)
 		{
 			this.setMap();
 		}
 	}
 	@Override
-	public NBTTagCompound saveNBT()
+	public CompoundNBT saveNBT()
 	{
-		NBTTagCompound NBTconCat = Reference.MainNBT.writeItemStacks(this.reinforcementMap);
+		CompoundNBT NBTconCat = Reference.MainNBT.writeItemStacks(this.reinforcementMap);
 		NBTconCat = super.saveNBT(NBTconCat);
 		for (int i = 0; i < 4; i++) {
-			NBTconCat.setByteArray("replacers" + i, this.replacers.get(i));
+			NBTconCat.putIntArray("replacers" + i, this.replacers.get(i));
 		}
 
 		return NBTconCat;

@@ -1,11 +1,12 @@
 package the_fireplace.caterpillar.parts;
 
+import net.minecraftforge.fml.client.gui.GuiUtils;
 import the_fireplace.caterpillar.Caterpillar;
-import the_fireplace.caterpillar.Config;
-import the_fireplace.caterpillar.guis.GuiDrillHead;
+import the_fireplace.caterpillar.config.Config;
+import the_fireplace.caterpillar.config.TutorialConfig;
+import the_fireplace.caterpillar.guis.DrillHeadScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.text.TextFormatting;
-import org.lwjgl.input.Mouse;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -14,7 +15,7 @@ import java.util.List;
 public class PartsTutorial {
 
 	public int Height;
-	protected GuiDrillHead myGui;
+	protected DrillHeadScreen drillHeadScreen;
 	public String Name;
 	public int Width;
 	protected int xSize = 176;
@@ -24,10 +25,10 @@ public class PartsTutorial {
 	protected int ID;
 	protected boolean drawUp = false;
 
-	public PartsTutorial(String Name, int ID, GuiDrillHead myGui, int x, int y, boolean drawUp)
+	public PartsTutorial(String Name, int ID, DrillHeadScreen drillHeadScreen, int x, int y, boolean drawUp)
 	{
 		this.Name = Name;
-		this.myGui = myGui;
+		this.drillHeadScreen = drillHeadScreen;
 		this.drawUp = drawUp;
 		this.x = x;
 		this.y = y;
@@ -43,12 +44,12 @@ public class PartsTutorial {
 	}
 	public int getMouseX()
 	{
-		return Mouse.getX() * this.myGui.width / Minecraft.getMinecraft().displayWidth;
+		return (int)Minecraft.getInstance().mouseHelper.getMouseX() * this.drillHeadScreen.width / Minecraft.getInstance().currentScreen.width;
 	}
 
 	public int getMouseY()
 	{
-		return this.myGui.height - Mouse.getY() * this.myGui.height / Minecraft.getMinecraft().displayHeight - 1;
+		return this.drillHeadScreen.height - (int)Minecraft.getInstance().mouseHelper.getMouseY() * this.drillHeadScreen.height / Minecraft.getInstance().currentScreen.height - 1;
 	}
 	private void drawDownArrow(List tmoString)
 	{
@@ -96,8 +97,8 @@ public class PartsTutorial {
 	}
 	public boolean checkClicked() {
 
-		int k = (this.myGui.width - this.xSize) / 2;
-		int l = (this.myGui.height - this.ySize) / 2;
+		int k = (this.drillHeadScreen.width - this.xSize) / 2;
+		int l = (this.drillHeadScreen.height - this.ySize) / 2;
 		k += this.xSize / 2;
 		l += this.ySize / 2;
 		k += 8;
@@ -108,8 +109,9 @@ public class PartsTutorial {
 		{
 			if (this.getMouseY() > l + this.y && this.getMouseY() <= l + this.y + 15)
 			{
-				Config.tutorial[this.ID] = false;
-				Config.forceSave();
+				// TODO: fix tutorial
+				//TutorialConfig.[this.ID] = false;
+				//Config.forceSave();
 
 				return true;
 			}
@@ -141,12 +143,13 @@ public class PartsTutorial {
 
 		if (tmoString.size() > 0)
 		{
-			this.myGui.drawHoveringText(tmoString, this.getGuiX() + this.x, this.getGuiY() + this.y);
+			// TODO: fix drawHoveringText
+			// GuiUtils.drawHoveringText(tmoString, this.getGuiX() + this.x, this.getGuiY() + this.y);
 
 			tmoString = new ArrayList<String>();
-			tmoString.add(TextFormatting.GOLD +  "" + TextFormatting.BOLD +  Caterpillar.proxy.translateToLocal("tutorial2"));
-			this.myGui.drawHoveringText(tmoString, this.getGuiX() + this.x, this.getGuiY() + this.y);
-
+			tmoString.add(TextFormatting.GOLD +  "" + TextFormatting.BOLD +  Caterpillar.proxy.translateToLocal("tutorial.dismiss"));
+			// TODO: fix drawHoveringText
+			//GuiUtils.drawHoveringText(tmoString, this.getGuiX() + this.x, this.getGuiY() + this.y);
 		}
 	}
 

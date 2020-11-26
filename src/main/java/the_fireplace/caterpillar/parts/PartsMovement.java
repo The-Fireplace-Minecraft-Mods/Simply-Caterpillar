@@ -1,6 +1,6 @@
 package the_fireplace.caterpillar.parts;
 
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 
 public class PartsMovement {
 
@@ -10,16 +10,16 @@ public class PartsMovement {
     {
 
     }
-    public void readNBT(NBTTagCompound NBTconCat)
+    public void readNBT(CompoundNBT NBTconCat)
     {
-        this.value = NBTconCat.getInteger("value");
-        this.total = NBTconCat.getInteger("total");
+        this.value = NBTconCat.getInt("value");
+        this.total = NBTconCat.getInt("total");
     }
-    public NBTTagCompound saveNBT()
+    public CompoundNBT saveNBT()
     {
-        NBTTagCompound NBTconCat = new NBTTagCompound();
-        NBTconCat.setInteger("value", this.value);
-        NBTconCat.setInteger("total", this.total);
+        CompoundNBT NBTconCat = new CompoundNBT();
+        NBTconCat.putInt("value", this.value);
+        NBTconCat.putInt("total", this.total);
         return NBTconCat;
     }
 }

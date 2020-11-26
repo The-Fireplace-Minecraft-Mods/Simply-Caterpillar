@@ -1,6 +1,6 @@
 package the_fireplace.caterpillar.parts;
 
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 
 public class PartsTabbed {
 
@@ -9,9 +9,9 @@ public class PartsTabbed {
 	{
 
 	}
-	public void readNBT(NBTTagCompound NBTconCat)
+	public void readNBT(CompoundNBT NBTconCat)
 	{
-		if (NBTconCat.hasKey("howclose"))
+		if (NBTconCat.contains("howclose"))
 		{
 			this.howclose = NBTconCat.getByte("howclose");
 		}
@@ -20,15 +20,15 @@ public class PartsTabbed {
 			this.howclose = 2;
 		}
 	}
-	public NBTTagCompound saveNBT()
+	public CompoundNBT saveNBT()
 	{
-		NBTTagCompound NBTconCat = new NBTTagCompound();
-		NBTconCat.setByte("howclose", this.howclose);
+		CompoundNBT NBTconCat = new CompoundNBT();
+		NBTconCat.putByte("howclose", this.howclose);
 		return NBTconCat;
 	}
-	public NBTTagCompound saveNBT(NBTTagCompound NBTconCat)
+	public CompoundNBT saveNBT(CompoundNBT NBTconCat)
 	{
-		NBTconCat.setByte("howclose", this.howclose);
+		NBTconCat.putByte("howclose", this.howclose);
 		return NBTconCat;
 	}
 }

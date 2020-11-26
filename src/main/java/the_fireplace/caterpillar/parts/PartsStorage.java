@@ -2,7 +2,9 @@ package the_fireplace.caterpillar.parts;
 
 public class PartsStorage {
 
-	public byte storageComponentCount = 0;
+	public int added = 0;
+	public int count = 0;
+	public int startingIndex = 1;
 	public PartsStorage()
 	{
 

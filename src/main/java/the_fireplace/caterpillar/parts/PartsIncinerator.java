@@ -1,30 +1,32 @@
 package the_fireplace.caterpillar.parts;
 
-import net.minecraft.init.Blocks;
+import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 
+import net.minecraft.util.NonNullList;
 import the_fireplace.caterpillar.Reference;
+import the_fireplace.caterpillar.containers.CaterpillarData;
 
 public class PartsIncinerator extends PartsTabbed implements Cloneable {
 
-	public ItemStack[] placementMap;
+	public NonNullList<ItemStack> placementMap;
 
 	public PartsIncinerator()
 	{
-		this.placementMap = new ItemStack[12];
-		this.placementMap[0] = new ItemStack(Blocks.DIRT);
-		this.placementMap[1] = new ItemStack(Blocks.GRAVEL);
-		this.placementMap[2] = new ItemStack(Blocks.SAND);
-
+		this.placementMap = NonNullList.withSize(12, ItemStack.EMPTY);
+		this.placementMap = NonNullList.withSize(0, new ItemStack(Blocks.DIRT));
+		this.placementMap = NonNullList.withSize(1, new ItemStack(Blocks.GRAVEL));
+		this.placementMap = NonNullList.withSize(2, new ItemStack(Blocks.SAND));
 
 		boolean found = false;
-		NBTTagCompound tmpNBT =  Reference.MainNBT.readNBTSettings(Reference.MainNBT.getFolderLocationWorld(), "IncineratorDefault.dat");
+
+		CompoundNBT tmpNBT =  Reference.MainNBT.readNBTSettings(Reference.MainNBT.getFolderLocationWorld(), "IncineratorDefault.dat");
 		if (tmpNBT != null)
 		{
-			if (tmpNBT.hasKey("incinerator"))
+			if (tmpNBT.contains("incinerator"))
 			{
-				this.readNBT(tmpNBT.getCompoundTag("incinerator"));
+				this.readNBT(tmpNBT.getCompound("incinerator"));
 				found = true;
 			}
 		}
@@ -33,9 +35,9 @@ public class PartsIncinerator extends PartsTabbed implements Cloneable {
 			tmpNBT =  Reference.MainNBT.readNBTSettings(Reference.MainNBT.getFolderLocationMod(), "IncineratorDefault.txt");
 			if (tmpNBT != null)
 			{
-				if (tmpNBT.hasKey("incinerator"))
+				if (tmpNBT.contains("incinerator"))
 				{
-					this.readNBT(tmpNBT.getCompoundTag("incinerator"));
+					this.readNBT(tmpNBT.getCompound("incinerator"));
 				}
 			}
 		}
@@ -48,27 +50,27 @@ public class PartsIncinerator extends PartsTabbed implements Cloneable {
 	public PartsIncinerator clone()
 	{
 		PartsIncinerator tmp = new PartsIncinerator();
-		for (int i = 0; i < this.placementMap.length; i++) {
-			tmp.placementMap[i] = this.placementMap[i].copy();
+		for (int i = 0; i < this.placementMap.size(); i++) {
+			tmp.placementMap = NonNullList.withSize(CaterpillarData.getMaxSize(), ItemStack.EMPTY);
 		}
 		return tmp;
 	}
 
 	@Override
-	public void readNBT(NBTTagCompound NBTconCat)
+	public void readNBT(CompoundNBT NBTconCat)
 	{
 		super.readNBT(NBTconCat);
 
-		NBTTagCompound NBTconCatsub = NBTconCat.getCompoundTag("toburn") ;
+		CompoundNBT NBTconCatsub = NBTconCat.getCompound("toburn") ;
 
 		this.placementMap = Reference.MainNBT.readItemStacks(NBTconCatsub);
 
 	}
 	@Override
-	public NBTTagCompound saveNBT()
+	public CompoundNBT saveNBT()
 	{
-		NBTTagCompound NBTconCat = super.saveNBT();
-		NBTconCat.setTag("toburn", Reference.MainNBT.writeItemStacks(this.placementMap));
+		CompoundNBT NBTconCat = super.saveNBT();
+		NBTconCat.put("toburn", Reference.MainNBT.writeItemStacks(this.placementMap));
 		return NBTconCat;
 	}
 }

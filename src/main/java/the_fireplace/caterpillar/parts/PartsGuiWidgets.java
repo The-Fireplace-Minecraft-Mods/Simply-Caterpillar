@@ -1,10 +1,11 @@
 package the_fireplace.caterpillar.parts;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GlStateManager;
-import org.lwjgl.input.Mouse;
+import net.minecraft.client.MouseHelper;
+import net.minecraftforge.fml.client.gui.GuiUtils;
 import the_fireplace.caterpillar.abstracts.AbstractRunnerWidgets;
-import the_fireplace.caterpillar.guis.GuiDrillHead;
+import the_fireplace.caterpillar.guis.DrillHeadScreen;
 
 import java.awt.*;
 
@@ -17,7 +18,7 @@ public class PartsGuiWidgets{
 	protected PartsTexture guiTextureA;
 	protected PartsTexture guiTextureB;
 	public int Height;
-	protected GuiDrillHead myGui;
+	protected DrillHeadScreen drillHeadScreen;
 
 	public String Name;
 	public String text;
@@ -39,14 +40,14 @@ public class PartsGuiWidgets{
 	public AbstractRunnerWidgets beforeDraw;
 
 	protected int ySize = 166;
-	public PartsGuiWidgets(String Name, GuiDrillHead myGui, int X, int Y,  int Width, int Height)
+	public PartsGuiWidgets(String Name, DrillHeadScreen drillHeadScreen, int X, int Y,  int Width, int Height)
 	{
 		this.Name = Name;
 		this.Y = Y;
 		this.X = X;
 		this.Height = Height;
 		this.Width = Width;
-		this.myGui = myGui;
+		this.drillHeadScreen = drillHeadScreen;
 		this.guiTextureA = null;
 		this.guiTextureB = null;
 		this.text = "";
@@ -81,41 +82,41 @@ public class PartsGuiWidgets{
 		{
 			int CustomH = (int) (this.guiTextureA.Height * this.YPercentShownA);
 
-			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-			GlStateManager.scale(this.ScaleXA, this.ScaleYA, 1);
+			RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+			RenderSystem.scaled(this.ScaleXA, this.ScaleYA, 1);
 
-			Minecraft.getMinecraft().getTextureManager().bindTexture(this.guiTextureA.guiTexture);
-			this.myGui.drawTexturedModalRect( (int)((this.getGuiX() + this.X)/this.ScaleXA), (int)((this.getGuiY() + this.Y + this.guiTextureA.Height - CustomH)/this.ScaleYA), this.guiTextureA.X, this.guiTextureA.Y + this.guiTextureA.Height - CustomH, this.guiTextureA.Width, CustomH);
+			Minecraft.getInstance().getTextureManager().bindTexture(this.guiTextureA.guiTexture);
+			GuiUtils.drawTexturedModalRect( (int)((this.getGuiX() + this.X)/this.ScaleXA), (int)((this.getGuiY() + this.Y + this.guiTextureA.Height - CustomH)/this.ScaleYA), this.guiTextureA.X, this.guiTextureA.Y + this.guiTextureA.Height - CustomH, this.guiTextureA.Width, CustomH, 0f);
 
 
-			GlStateManager.scale(1f/this.ScaleXA, 1f/this.ScaleYA, 1);
+			RenderSystem.scaled(1f/this.ScaleXA, 1f/this.ScaleYA, 1);
 		}
 		if (this.drawB)
 		{
 			int CustomH = (int) (this.guiTextureB.Height * this.YPercentShownB);
-			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-			GlStateManager.scale(this.ScaleXB, this.ScaleYB, 1);
-			Minecraft.getMinecraft().getTextureManager().bindTexture(this.guiTextureB.guiTexture);
-			this.myGui.drawTexturedModalRect((int)((this.getGuiX() + this.X)/this.ScaleXB), (int)((this.getGuiY() + this.Y + this.guiTextureB.Height - CustomH)/this.ScaleYB), this.guiTextureB.X, this.guiTextureB.Y + this.guiTextureB.Height - CustomH, this.guiTextureB.Width, CustomH);
-			GlStateManager.scale(1f/this.ScaleXB, 1f/this.ScaleYB, 1);
+			RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+			RenderSystem.scaled(this.ScaleXB, this.ScaleYB, 1);
+			Minecraft.getInstance().getTextureManager().bindTexture(this.guiTextureB.guiTexture);
+			GuiUtils.drawTexturedModalRect((int)((this.getGuiX() + this.X)/this.ScaleXB), (int)((this.getGuiY() + this.Y + this.guiTextureB.Height - CustomH)/this.ScaleYB), this.guiTextureB.X, this.guiTextureB.Y + this.guiTextureB.Height - CustomH, this.guiTextureB.Width, CustomH, 0f);
+			RenderSystem.scaled(1f/this.ScaleXB, 1f/this.ScaleYB, 1);
 		}
 	}
 	public int getGuiX()
 	{
-		return (this.myGui.width - this.xSize) / 2;
+		return (this.drillHeadScreen.width - this.xSize) / 2;
 	}
 	public int getGuiY()
 	{
-		return (this.myGui.height - this.ySize) / 2;
+		return (this.drillHeadScreen.height - this.ySize) / 2;
 	}
 	public int getMouseX()
 	{
-		return Mouse.getX() * this.myGui.width / Minecraft.getMinecraft().displayWidth;
+		return (int)Minecraft.getInstance().mouseHelper.getMouseX() * this.drillHeadScreen.width / Minecraft.getInstance().currentScreen.width;
 	}
 
 	public int getMouseY()
 	{
-		return this.myGui.height - Mouse.getY() * this.myGui.height / Minecraft.getMinecraft().displayHeight - 1;
+		return this.drillHeadScreen.height - (int)Minecraft.getInstance().mouseHelper.getMouseY() * this.drillHeadScreen.height / Minecraft.getInstance().currentScreen.height - 1;
 	}
 	public void drawforgroundlayer()
 	{
@@ -126,14 +127,15 @@ public class PartsGuiWidgets{
 			{
 				float smallX = 1 / (float)newText.length;
 				float smallY =  1 / (float)newText.length;
-				GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-				GlStateManager.scale(smallX, smallY, 1);
+				RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+				RenderSystem.scaled(smallX, smallY, 1);
 				for (int i = 0; i < newText.length; i++) {
 					String placing = newText[i];
-					this.myGui.getfontRendererObj().drawString(placing,(int)((this.X + 5)/smallX),  (int)((this.Y + this.Height/2  + (i-(float)newText.length/2)*4)/smallY) , Color.BLACK.getRGB());
+					// TODO: drawString need MatrixStack
+					// this.drillHeadScreen.getFontRenderer().drawString(placing,(int)((this.X + 5)/smallX),  (int)((this.Y + this.Height/2  + (i-(float)newText.length/2)*4)/smallY) , Color.BLACK.getRGB());
 				}
 
-				GlStateManager.scale(1/smallX, 1/smallY, 1);
+				RenderSystem.scaled(1/smallX, 1/smallY, 1);
 			}
 		}
 
