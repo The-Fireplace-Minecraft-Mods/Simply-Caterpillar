@@ -13,9 +13,9 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
-version = '7.0'
+version = '1.16.4-7.0'
 group = 'the_fireplace.caterpillar'
-archivesBaseName = 'SimplyCaterpillar-1.16.4'
+archivesBaseName = 'simplycaterpillar'
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 
@@ -84,17 +84,6 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 dependencies {
     minecraft 'net.minecraftforge:forge:1.16.4-35.0.18'
-}
-
-processResources {
-    inputs.property "version", project.version
-    from(sourceSets.main.resources.srcDirs) {
-        include '**/mods.toml'
-        expand 'version':project.version
-    }
-    from(sourceSets.main.resources.srcDirs) {
-        exclude '**/mods.toml'
-    }
 }
 
 jar {
