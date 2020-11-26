@@ -1,6 +1,6 @@
 {
     "credit": "Made with Blockbench",
-    "ambientocclusion": false,
+    "ambientocclusion": true,
     "textures": {
         "particle": "simplycaterpillar:blocks/wooden_top",
         "rod": "simplycaterpillar:blocks/pieces/wood_piece",
