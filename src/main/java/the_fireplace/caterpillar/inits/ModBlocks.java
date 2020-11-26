@@ -12,9 +12,9 @@ public class ModBlocks {
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, Caterpillar.MOD_ID);
 
     // Blocks
-    //public static final RegistryObject<Block> DRILL_BLADES_BLOCK = BLOCKS.register("drill_blades", DrillBlades::new);
+    public static final RegistryObject<Block> DRILL_BLADES = BLOCKS.register("drill_blades", DrillBlades::new);
     public static final RegistryObject<Block> DRILL_BASE = BLOCKS.register("drill_base", DrillBase::new);
-    //public static final RegistryObject<Block> DRILL_HEADS = BLOCKS.register("drill_heads", DrillHeads::new);
+    public static final RegistryObject<Block> DRILL_HEADS = BLOCKS.register("drill_heads", DrillHeads::new);
     public static final RegistryObject<Block> REINFORCEMENTS = BLOCKS.register("reinforcements", Reinforcements::new);
     public static final RegistryObject<Block> DECORATION = BLOCKS.register("decoration", Decoration::new);
     public static final RegistryObject<Block> COLLECTOR = BLOCKS.register("collector", Collector::new);
