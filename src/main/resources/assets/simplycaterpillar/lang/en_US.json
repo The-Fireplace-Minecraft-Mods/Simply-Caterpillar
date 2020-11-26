@@ -9,8 +9,31 @@
 
   "itemGroup.caterpillarTab": "Caterpillar",
 
-  "tutorial": "Tutorial",
-  "tutorial2": "Dismiss",
+  "gui.tabs.main": "Main",
+  "gui.tabs.decoration": "Decoration",
+  "gui.tabs.reinforcement": "Reinforcement",
+  "gui.tabs.incinerator": "Incinerator",
+
+  "gui.main.consumption": "Consumption",
+  "gui.main.gathered": "Gathered",
+
+  "TutorialConfig.drill_head": "Does this show the drill head tutorial ?",
+  "TutorialConfig.coal": "Does this show the coal tutorial ?",
+  "TutorialConfig.power": "Does this show the power tutorial ?",
+  "TutorialConfig.storage": "Does this show the storage tutorial ?",
+  "TutorialConfig.decoration_selection": "Does this show the selection tutorial for the decoration ?",
+  "TutorialConfig.decoration_selection_zero": "Does this show the selection zero tutorial for the decoration ?",
+  "TutorialConfig.decoration_pattern": "Does this show the patter tutorial for the decoration ?",
+  "TutorialConfig.reinforcement1l": "Does this show the reinforcement tutorial 1 ?",
+  "TutorialConfig.reinforcement2": "Does this show the reinforcement tutorial 2 ?",
+
+  "CaterpillarConfig.firstUse": "Show First Time Use Message ?",
+  "CaterpillarConfig.useParticles": "Use particles for effect ?",
+  "CaterpillarConfig.breakBedrock": "Can the drill break bedrock ?",
+  "CaterpillarConfig.enableSounds": "Does the drill make noise when it moves ?",
+
+  "tutorial.title": "Tutorial",
+  "tutorial.dismiss": "Dismiss",
   "options": "These are the options for each side\\nMouse over them to see what they are\\nClick to toggle\\nRed = off\\nGreen = on",
   "options2": "These are the blocks it will replace with\\nNo block means it will leave it alone\\nand not replace it. you\\nmust have the blocks in\\nthe inventory of the drill\\nfor it to place them",
   "selection": "The decoration places blocks in\\na pattern that repeats every 10 blocks\\n0-9. Use the mouse wheel to Select which\\nsection. The First scrollbar is where the drill\\nis at. The second scrollbar is which section\\nyou have selected.",
@@ -31,8 +54,7 @@
   "selected": "Selected:",
   "where": "Drill Is At:",
   "clicktoselect": "Click To Select:",
-  "consumption": "Consumption",
-  "gathered": "Gathered",
+
   "furnace": "Furnace:",
   "updatesaftermoving": "Updates after moving",
   "on": "On",
@@ -42,9 +64,5 @@
   "replacement2": "Water",
   "replacement3": "Lava",
   "replacement4": "Sand and Gravel",
-  "replacement5": "All",
-  "tabs1": "Main",
-  "tabs2": "Decoration",
-  "tabs3": "Reinforcement",
-  "tabs4": "Incinerator"
+  "replacement5": "All"
 }
