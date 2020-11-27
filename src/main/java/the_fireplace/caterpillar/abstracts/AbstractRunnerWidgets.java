@@ -4,6 +4,5 @@ import the_fireplace.caterpillar.parts.PartsGuiWidgets;
 
 public abstract class AbstractRunnerWidgets {
 
-	public abstract void run(PartsGuiWidgets widget);
-
+    public abstract void run(PartsGuiWidgets widget);
 }

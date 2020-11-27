@@ -2,12 +2,9 @@ package the_fireplace.caterpillar.parts;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.MouseHelper;
 import net.minecraftforge.fml.client.gui.GuiUtils;
 import the_fireplace.caterpillar.abstracts.AbstractRunnerWidgets;
-import the_fireplace.caterpillar.guis.DrillHeadScreen;
-
-import java.awt.*;
+import the_fireplace.caterpillar.client.guis.DrillHeadScreen;
 
 
 public class PartsGuiWidgets{

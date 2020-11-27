@@ -6,36 +6,34 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.fml.loading.FMLPaths;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import the_fireplace.caterpillar.blocks.DrillHeads;
-import the_fireplace.caterpillar.config.Config;
+import the_fireplace.caterpillar.config.ConfigHolder;
 import the_fireplace.caterpillar.containers.CaterpillarData;
-import the_fireplace.caterpillar.guis.DrillHeadScreen;
-import the_fireplace.caterpillar.inits.ModBlocks;
-import the_fireplace.caterpillar.inits.ModContainerTypes;
-import the_fireplace.caterpillar.inits.ModItems;
-import the_fireplace.caterpillar.inits.ModTileEntityTypes;
+import the_fireplace.caterpillar.client.guis.DrillHeadScreen;
+import the_fireplace.caterpillar.init.ModBlocks;
+import the_fireplace.caterpillar.init.ModContainerTypes;
+import the_fireplace.caterpillar.init.ModItems;
+import the_fireplace.caterpillar.init.ModTileEntityTypes;
 import the_fireplace.caterpillar.proxy.ClientProxy;
 import the_fireplace.caterpillar.proxy.CommonProxy;
 
 import java.util.HashMap;
 
-@Mod("simplycaterpillar")
+@Mod(Caterpillar.MOD_ID)
 public class Caterpillar
 {
-	public static final Logger LOGGER = LogManager.getLogger();
 	public static final String MOD_ID = "simplycaterpillar";
+
+	public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
+
 	public static Caterpillar instance;
 
 	public int saveCount = 0;
@@ -49,27 +47,21 @@ public class Caterpillar
 	public Caterpillar() {
 		instance = this;
 
-		ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, Config.client_config);
+		final ModLoadingContext modLoadingContext = ModLoadingContext.get();
+		final IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
-		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
-		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::doClientStuff);
+		// Register Configs
+		modLoadingContext.registerConfig(ModConfig.Type.CLIENT, ConfigHolder.CLIENT_SPEC);
+		modLoadingContext.registerConfig(ModConfig.Type.SERVER, ConfigHolder.SERVER_SPEC);
 
-		ModBlocks.BLOCKS.register(FMLJavaModLoadingContext.get().getModEventBus());
-		ModItems.ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
-		ModTileEntityTypes.TILE_ENTITY_TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());
-		ModContainerTypes.CONTAINER_TYPES.register((FMLJavaModLoadingContext.get().getModEventBus()));
-
-		Config.loadConfig(Config.client_config, FMLPaths.CONFIGDIR.get().resolve("simplycaterpillar-client.toml").toString());
+		// Register Deferred Registers
+		ModBlocks.BLOCKS.register(modEventBus);
+		ModItems.ITEMS.register(modEventBus);
+		ModContainerTypes.CONTAINER_TYPES.register(modEventBus);
+		ModTileEntityTypes.TILE_ENTITY_TYPES.register(modEventBus);
 
 		MinecraftForge.EVENT_BUS.register(this);
 	}
-
-	private void setup(final FMLCommonSetupEvent event) { }
-
-	private void doClientStuff(final FMLClientSetupEvent event) { }
-
-	@SubscribeEvent
-	public void onServerStarting(final FMLServerStartingEvent event) { }
 
 	public String getCaterpillarID(int[] movingXZ, BlockPos pos) {
 		int firstID = movingXZ[1] * pos.getX() + movingXZ[0] * pos.getZ();

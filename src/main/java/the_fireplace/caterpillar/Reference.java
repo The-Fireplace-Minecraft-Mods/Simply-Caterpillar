@@ -22,7 +22,7 @@ public class Reference {
 
     public static final String CLIENT_PROXY_CLASS = "the_fireplace.caterpillar.proxy.ProxyClient";
     public static final String SERVER_PROXY_CLASS = "the_fireplace.caterpillar.proxy.ProxyCommon";
-    public static final String GUI_FACTORY = "the_fireplace.caterpillar.guis.GuiFactoryConfig";
+    public static final String GUI_FACTORY = "the_fireplace.caterpillar.client.guis.GuiFactoryConfig";
 
     public static Timer ModTick = new Timer();
     public static boolean loaded;

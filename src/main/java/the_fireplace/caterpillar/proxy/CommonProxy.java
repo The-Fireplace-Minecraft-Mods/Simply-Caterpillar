@@ -22,10 +22,10 @@ public class CommonProxy {
         return null;
     }
 
-    public World getWorld() {
+    public ServerWorld getWorld() {
         if (ServerLifecycleHooks.getCurrentServer().getWorlds() != null) {
             if (Iterables.size(ServerLifecycleHooks.getCurrentServer().getWorlds()) > 0) {
-                return ServerLifecycleHooks.getCurrentServer().;
+                return ServerLifecycleHooks.getCurrentServer().getWorld(World.OVERWORLD);
             }
         }
         return null;
