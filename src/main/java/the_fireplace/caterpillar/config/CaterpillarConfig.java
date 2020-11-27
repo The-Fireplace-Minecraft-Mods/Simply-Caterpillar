@@ -1,32 +1,27 @@
 package the_fireplace.caterpillar.config;
 
-import net.minecraft.client.resources.I18n;
-import net.minecraftforge.common.ForgeConfigSpec;
-
+/**
+ * This holds the baked (runtime) values for our config.
+ * These values should never be from changed outside this package.
+ * This can be split into multiple classes (Server, Client, Player, Common)
+ * but has been kept in one class for simplicity
+ */
 public class CaterpillarConfig {
 
-    public static ForgeConfigSpec.BooleanValue firstUse;
-    public static ForgeConfigSpec.BooleanValue useParticles;
-    public static ForgeConfigSpec.BooleanValue breakBedrock;
-    public static ForgeConfigSpec.BooleanValue enableSounds;
+    // Client
+    public static boolean drill_head;
+    public static boolean coal;
+    public static boolean power;
+    public static boolean storage;
+    public static boolean decoration_selection;
+    public static boolean decoration_selection_zero;
+    public static boolean decoration_pattern;
+    public static boolean reinforcement_1;
+    public static boolean reinforcement_2;
 
-    public static void init(ForgeConfigSpec.Builder server, ForgeConfigSpec.Builder client) {
-        server.comment("Caterpillar Config");
-
-        firstUse = server
-                .comment(I18n.format("CaterpillarConfig.firstUse"))
-                .define("CaterpillarConfig.firstUse", true);
-
-        useParticles = server
-                .comment(I18n.format("CaterpillarConfig.useParticles"))
-                .define("CaterpillarConfig.useParticles", true);
-
-        breakBedrock = server
-                .comment(I18n.format("CaterpillarConfig.breakBedrock"))
-                .define("CaterpillarConfig.breakBedrock", true);
-
-        enableSounds = server
-                .comment(I18n.format("CaterpillarConfig.enableSounds"))
-                .define("CaterpillarConfig.enableSounds", true);
-    }
+    // Server
+    public static boolean firstUse;
+    public static boolean useParticles;
+    public static boolean breakBedrock;
+    public static boolean enableSounds;
 }
