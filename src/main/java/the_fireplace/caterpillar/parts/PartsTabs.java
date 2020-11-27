@@ -1,6 +1,6 @@
 package the_fireplace.caterpillar.parts;
 
-import the_fireplace.caterpillar.guis.DrillHeadScreen;
+import the_fireplace.caterpillar.client.guis.DrillHeadScreen;
 
 public class PartsTabs {
 	public final int max = 8; //not used, but 8 is the max...;

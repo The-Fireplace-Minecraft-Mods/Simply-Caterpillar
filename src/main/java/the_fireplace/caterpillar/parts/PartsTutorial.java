@@ -1,10 +1,7 @@
 package the_fireplace.caterpillar.parts;
 
-import net.minecraftforge.fml.client.gui.GuiUtils;
 import the_fireplace.caterpillar.Caterpillar;
-import the_fireplace.caterpillar.config.Config;
-import the_fireplace.caterpillar.config.TutorialConfig;
-import the_fireplace.caterpillar.guis.DrillHeadScreen;
+import the_fireplace.caterpillar.client.guis.DrillHeadScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.text.TextFormatting;
 
@@ -44,12 +41,12 @@ public class PartsTutorial {
 	}
 	public int getMouseX()
 	{
-		return (int)Minecraft.getInstance().mouseHelper.getMouseX() * this.drillHeadScreen.width / Minecraft.getInstance().currentScreen.width;
+		return (int)getMouseX() * this.drillHeadScreen.width / Minecraft.getInstance().currentScreen.width;
 	}
 
 	public int getMouseY()
 	{
-		return this.drillHeadScreen.height - (int)Minecraft.getInstance().mouseHelper.getMouseY() * this.drillHeadScreen.height / Minecraft.getInstance().currentScreen.height - 1;
+		return this.drillHeadScreen.height - (int)getMouseY() * this.drillHeadScreen.height / Minecraft.getInstance().currentScreen.height - 1;
 	}
 	private void drawDownArrow(List tmoString)
 	{

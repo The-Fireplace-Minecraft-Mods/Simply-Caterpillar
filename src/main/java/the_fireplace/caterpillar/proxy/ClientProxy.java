@@ -5,7 +5,7 @@ import net.minecraft.client.gui.screen.MainMenuScreen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.World;
-import the_fireplace.caterpillar.inits.ModBlocks;
+import net.minecraft.world.server.ServerWorld;
 
 import java.io.File;
 
@@ -27,8 +27,8 @@ public class ClientProxy extends CommonProxy {
     }
 
     @Override
-    public World getWorld() {
-        return Minecraft.getInstance().world;
+    public ServerWorld getWorld() {
+        return getWorld();
     }
 
     @Override
