@@ -12,7 +12,7 @@ public class ModTileEntityTypes {
     public static final DeferredRegister<TileEntityType<?>> TILE_ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.TILE_ENTITIES, Caterpillar.MOD_ID);
 
     // Tile entities
-    public static final RegistryObject<TileEntityType<DrillHeadTileEntity>> DRILL_HEAD = TILE_ENTITY_TYPES.register("drill_head", () -> TileEntityType.Builder.create(DrillHeadTileEntity::new, ModBlocks.DRILL_HEADS));
+    public static final RegistryObject<TileEntityType<DrillHeadTileEntity>> DRILL_HEAD = TILE_ENTITY_TYPES.register("drill_head", () -> TileEntityType.Builder.create(DrillHeadTileEntity::new, ModBlocks.DRILL_HEADS.get()).build(null));
     // DRILL_BASE
 
 

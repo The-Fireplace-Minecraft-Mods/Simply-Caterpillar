@@ -10,7 +10,7 @@ import the_fireplace.caterpillar.parts.*;
 
 public class CaterpillarData implements Cloneable {
 
-    public NonNullList<ItemStack> inventory;
+    public ItemStack[] inventory;
     public int burnTime;
     public BlockPos pos;
     public int maxBurnTime;
@@ -27,7 +27,7 @@ public class CaterpillarData implements Cloneable {
 
     public CaterpillarData(BlockPos drillHead, String key)
     {
-        this.inventory = NonNullList.withSize(CaterpillarData.getMaxSize(), ItemStack.EMPTY);
+        this.inventory = new ItemStack[CaterpillarData.getMaxSize()];
         this.burnTime = 0;
         this.name = key;
         this.headTick = 0;
@@ -57,7 +57,8 @@ public class CaterpillarData implements Cloneable {
         for (i = this.storage.startingIndex; i < getMaxSize() + this.storage.added; ++i)
         {
             Slot AddingSlot = drillHeads.getSlot(i);
-            AddingSlot.yPos = 7 + row * 18;
+            // TODO: fix error can't overide yPos
+            //AddingSlot.yPos = 7 + row * 18;
             column++;
             if (column > 2) {
                 row++;
@@ -72,7 +73,8 @@ public class CaterpillarData implements Cloneable {
         for (i = this.storage.startingIndex + Middle; i < this.storage.startingIndex + Middle + 12; ++i)
         {
             Slot AddingSlot = drillHeads.getSlot(i);
-            AddingSlot.yPos = 7 + row * 18;
+            // TODO: fix error can't overide yPos
+            // AddingSlot.yPos = 7 + row * 18;
             column++;
             if (column > 2) {
                 row++;
@@ -86,12 +88,14 @@ public class CaterpillarData implements Cloneable {
         String key = this.name;
         BlockPos posP = new BlockPos(this.pos.getX(), this.pos.getY(), this.pos.getZ());
         CaterpillarData newCatP = new CaterpillarData(posP, key);
-        newCatP.inventory = this.inventory.clone();
+        // TODO: I had to remove .clone() -> this.inventory.clone()
+        newCatP.inventory = this.inventory;
         newCatP.maxBurnTime = this.maxBurnTime;
         newCatP.storage.added = this.storage.added;
         newCatP.burnTime = this.burnTime;
         newCatP.decoration = this.decoration.clone();
-        newCatP.reinforcement.reinforcementMap = this.reinforcement.reinforcementMap.clone();
+        // TODO: I had to remove .clone() -> this.reinforcement.reinforcementMap.clone()
+        newCatP.reinforcement.reinforcementMap = this.reinforcement.reinforcementMap;
 
         return newCatP;
     }

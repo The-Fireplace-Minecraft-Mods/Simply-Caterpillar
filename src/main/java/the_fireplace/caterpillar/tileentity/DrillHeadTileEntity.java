@@ -1,6 +1,5 @@
 package the_fireplace.caterpillar.tileentity;
 
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -9,8 +8,6 @@ import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import the_fireplace.caterpillar.Caterpillar;
@@ -25,22 +22,18 @@ public class DrillHeadTileEntity extends TileEntity implements ITickableTileEnti
 
     public boolean isSelected = false;
 
-    public DrillHeadTileEntity(TileEntityType<?> tileEntityTypeIn) {
-        super(tileEntityTypeIn);
-    }
-
     public DrillHeadTileEntity() {
-        this(ModTileEntityTypes.DRILL_HEAD.get());
+        super(ModTileEntityTypes.DRILL_HEAD.get());
     }
 
-    private CaterpillarData Caterpillar() {
+    public CaterpillarData Caterpillar() {
         if (this.isSelected) {
             return Caterpillar.instance.getSelectedCaterpillar();
         }
         return Caterpillar.instance.getContainerCaterpillar(this.pos, this.world);
     }
 
-    public NonNullList<ItemStack> getItemStacks()
+    public ItemStack[] getItemStacks()
     {
         try {
             return  this.ensureValidStacksizes(Caterpillar.instance.getInventory(this.Caterpillar(), this.Caterpillar().tabs.selected));
@@ -55,24 +48,24 @@ public class DrillHeadTileEntity extends TileEntity implements ITickableTileEnti
                     Minecraft.getInstance().currentScreen = null;
                 }
             }
-            return NonNullList.withSize(256, ItemStack.EMPTY);
+            return new ItemStack[256];
         }
 
     }
 
-    private NonNullList<ItemStack> ensureValidStacksizes(NonNullList<ItemStack> nonNullList)
+    private ItemStack[] ensureValidStacksizes(ItemStack[] toFix)
     {
-        for (int i = 0; i < nonNullList.size(); i++) {
-            ItemStack K = nonNullList.get(i);
+        for (int i = 0; i < toFix.length; i++) {
+            ItemStack K = toFix[i];
             if (K != null)
             {
                 if (K.getCount() < 1)
                 {
-                    nonNullList.isEmpty();
+                    toFix[i] = null;
                 }
             }
         }
-        return nonNullList;
+        return toFix;
     }
 
     @Nonnull

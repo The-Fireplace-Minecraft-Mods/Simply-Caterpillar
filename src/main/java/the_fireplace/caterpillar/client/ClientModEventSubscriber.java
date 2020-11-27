@@ -4,8 +4,6 @@ import net.minecraft.client.gui.ScreenManager;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DeferredWorkQueue;
-import net.minecraftforge.fml.client.registry.ClientRegistry;
-import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import org.apache.logging.log4j.LogManager;
@@ -13,7 +11,6 @@ import org.apache.logging.log4j.Logger;
 import the_fireplace.caterpillar.Caterpillar;
 import the_fireplace.caterpillar.client.guis.DrillHeadScreen;
 import the_fireplace.caterpillar.init.ModContainerTypes;
-import the_fireplace.caterpillar.init.ModTileEntityTypes;
 
 /**
  * Subscribe to events from the MOD EventBus that should be handled on the PHYSICAL CLIENT side in this class
@@ -37,7 +34,7 @@ public class ClientModEventSubscriber {
 
         // Register TileEntity Renderers
         // ClientRegistry.bindTileEntityRenderer(ModTileEntityTypes.DRILL_HEAD.get(), MiniModelTileEntityRenderer::new);
-        LOGGER.debug("Registered TileEntity Renderers");
+        // LOGGER.debug("Registered TileEntity Renderers");
 
         // Register ContainerType Screens
         // ScreenManager.registerFactory is not safe to call during parallel mod loading so we queue it to run later

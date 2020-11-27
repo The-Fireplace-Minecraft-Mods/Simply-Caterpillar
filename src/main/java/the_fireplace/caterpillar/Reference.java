@@ -76,7 +76,7 @@ public class Reference {
     @OnlyIn(Dist.CLIENT)
     public static void spawnParticles(BlockPos pos, IParticleData typeofdots)
     {
-        if (loaded && CaterpillarConfig.useParticles.get())
+        if (loaded && CaterpillarConfig.useParticles)
         {
             for (int o = 0; o < 1; ++o)
             {

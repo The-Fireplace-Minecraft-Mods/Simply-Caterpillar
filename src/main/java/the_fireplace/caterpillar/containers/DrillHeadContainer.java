@@ -36,7 +36,7 @@ public class DrillHeadContainer extends Container {
      * Calls the logical-server-side constructor with the TileEntity at the pos in the PacketBuffer
      */
     public DrillHeadContainer(final int windowId, final PlayerInventory playerInventory, final PacketBuffer data) {
-        this(windowId, playerInventory, getTileEntity(playerInventory, data));
+        this(windowId, playerInventory, getTileEntity(playerInventory, data), getTileEntity(playerInventory, data).Caterpillar());
     }
 
     /**

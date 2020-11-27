@@ -7,6 +7,7 @@ import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 import the_fireplace.caterpillar.Caterpillar;
 import the_fireplace.caterpillar.Reference;
 import the_fireplace.caterpillar.containers.CaterpillarData;
@@ -25,11 +26,11 @@ public class HandlerNBTTag {
         this.modID = ModID;
     }
 
-    private World theWorldServer()
+    private ServerWorld theWorldServer()
     {
         try {
             // TODO: replace FMLCommonHandler
-            // return ServerLifecycleHooks.getCurrentServer().getWorld().getWorldServer();
+            //return FMLCommonHandler.getCurrentServer().getWorld().getWorldServer();
             //return FMLCommonHandler.instance().getMinecraftServerInstance().getEntityWorld();
         } catch (Exception e) {
             return null;
@@ -42,7 +43,7 @@ public class HandlerNBTTag {
     {
         if (this.theWorldServer() != null)
         {
-            return this.theWorldServer().getSaveHandler().getWorldDirectory().getName();
+            return this.theWorldServer().getWorldServer().getWorldDirectory().getName();
         }
         return "";
     }
@@ -107,7 +108,7 @@ public class HandlerNBTTag {
         return MainLocation;
     }
 
-    public NonNullList<ItemStack> readItemStack(CompoundNBT tmpNBT)
+    public ItemStack readItemStack(CompoundNBT tmpNBT)
     {
         String id = tmpNBT.getString("id");
         if (id.equals("minecraft:air"))
@@ -115,18 +116,19 @@ public class HandlerNBTTag {
             return null;
         }
         int Count = tmpNBT.getByte("Count");
+        // TODO: check if needed
         int Damage = tmpNBT.getShort("Damage");
-        return NonNullList.withSize(CaterpillarData.getMaxSize(), new ItemStack(Item.getByNameOrId((id), Count, Damage)));
+        return new ItemStack(Item.getItemById(Integer.getInteger(id)), Count, tmpNBT);
     }
 
-    public NonNullList<ItemStack> readItemStacks(CompoundNBT tmpNBT) {
+    public ItemStack[] readItemStacks(CompoundNBT tmpNBT) {
         if (tmpNBT.contains("Count"))
         {
             int size = tmpNBT.getInt("Count");
-            NonNullList<ItemStack> tmpIS = NonNullList.withSize(CaterpillarData.getMaxSize(), ItemStack.EMPTY);
+            ItemStack[] tmpIS = new ItemStack[size];
             for(int i=0;i<size;i++)
             {
-                tmpIS = this.readItemStack(tmpNBT.getCompound(i + "Item"));
+                tmpIS[i] = this.readItemStack(tmpNBT.getCompound(i + "Item"));
             }
 
             //int frequance = tmpNBT.getInteger("frequance");
@@ -135,15 +137,15 @@ public class HandlerNBTTag {
         return null;
     }
 
-    public CompoundNBT writeItemStacks(NonNullList<ItemStack> inventory)
+    public CompoundNBT writeItemStacks(ItemStack[] inventory)
     {
         CompoundNBT tmpNBT = new CompoundNBT();
 
         int i = 0;
-        for (i = 0; i < inventory.size(); i++) {
-            tmpNBT.put(i + "Item", this.writeItemStack(inventory.get(i)));
+        for (i = 0; i < inventory.length; i++) {
+            tmpNBT.put(i + "Item", this.writeItemStack(inventory[i]));
         }
-        tmpNBT.putInt("Count", inventory.size());
+        tmpNBT.putInt("Count", inventory.length);
         return tmpNBT;
     }
 

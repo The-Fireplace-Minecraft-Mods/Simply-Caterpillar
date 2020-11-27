@@ -20,7 +20,6 @@ import the_fireplace.caterpillar.containers.CaterpillarData;
 import the_fireplace.caterpillar.client.guis.DrillHeadScreen;
 import the_fireplace.caterpillar.init.ModBlocks;
 import the_fireplace.caterpillar.init.ModContainerTypes;
-import the_fireplace.caterpillar.init.ModItems;
 import the_fireplace.caterpillar.init.ModTileEntityTypes;
 import the_fireplace.caterpillar.proxy.ClientProxy;
 import the_fireplace.caterpillar.proxy.CommonProxy;
@@ -56,7 +55,8 @@ public class Caterpillar
 
 		// Register Deferred Registers
 		ModBlocks.BLOCKS.register(modEventBus);
-		ModItems.ITEMS.register(modEventBus);
+		// TODO: Remove if there is not items in the mod
+		// ModItems.ITEMS.register(modEventBus);
 		ModContainerTypes.CONTAINER_TYPES.register(modEventBus);
 		ModTileEntityTypes.TILE_ENTITY_TYPES.register(modEventBus);
 
@@ -175,7 +175,7 @@ public class Caterpillar
 		return this.getContainerCaterpillar(catID);
 	}
 
-    public NonNullList<ItemStack> getInventory(CaterpillarData caterpillar, DrillHeadScreen.GUI_TABS selected) {
+    public ItemStack[] getInventory(CaterpillarData caterpillar, DrillHeadScreen.GUI_TABS selected) {
 		if (caterpillar != null) {
 			switch (selected.value) {
 				case 0:
@@ -190,6 +190,6 @@ public class Caterpillar
 					break;
 			}
 		}
-		return NonNullList.withSize(256, ItemStack.EMPTY);
+		return new ItemStack[256];
     }
 }
