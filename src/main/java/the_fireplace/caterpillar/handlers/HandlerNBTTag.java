@@ -6,8 +6,11 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.Dimension;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.fml.server.ServerLifecycleHooks;
+import net.minecraftforge.registries.ForgeRegistries;
 import the_fireplace.caterpillar.Caterpillar;
 import the_fireplace.caterpillar.Reference;
 import the_fireplace.caterpillar.containers.CaterpillarData;
@@ -30,20 +33,17 @@ public class HandlerNBTTag {
     {
         try {
             // TODO: replace FMLCommonHandler
-            //return FMLCommonHandler.getCurrentServer().getWorld().getWorldServer();
-            //return FMLCommonHandler.instance().getMinecraftServerInstance().getEntityWorld();
+            return ServerLifecycleHooks.getCurrentServer().getWorld(World.OVERWORLD).getWorldServer();
         } catch (Exception e) {
             return null;
         }
-        // TODO: Remove after replacing FMLCommonHandler
-        return null;
     }
 
     public String SavedWorldFolder()
     {
         if (this.theWorldServer() != null)
         {
-            return this.theWorldServer().getWorldServer().getWorldDirectory().getName();
+            return this.theWorldServer().getProviderName();
         }
         return "";
     }
@@ -161,7 +161,7 @@ public class HandlerNBTTag {
             StackSize = (byte)its.getCount();
             Damage = (short)its.getDamage();
         }
-        ResourceLocation resourcelocation = Item.REGISTRY.getNameForObject(toAdd);
+        ResourceLocation resourcelocation = ForgeRegistries.ITEMS.getKey(toAdd);
         tmpNBT.putString("id", resourcelocation == null ? "minecraft:air" : resourcelocation.toString());
         tmpNBT.putByte("Count", StackSize);
         tmpNBT.putShort("Damage", Damage);

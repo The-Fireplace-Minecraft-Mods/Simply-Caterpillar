@@ -1,6 +1,8 @@
 package the_fireplace.caterpillar.blocks;
 
-import net.minecraft.block.*;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.HorizontalBlock;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.InventoryHelper;
@@ -31,7 +33,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.stream.Stream;
 
-public class DrillBase extends ContainerBlock {
+public class DrillBase extends Block {
 
     private static final DirectionProperty FACING = HorizontalBlock.HORIZONTAL_FACING;
 
@@ -79,13 +81,6 @@ public class DrillBase extends ContainerBlock {
     @Nullable
     @Override
     public TileEntity createTileEntity(final BlockState state, final IBlockReader world) {
-        // Always use TileEntityType#create to allow registry overrides to work.
-        return ModTileEntityTypes.DRILL_HEAD.get().create();
-    }
-
-    @Nullable
-    @Override
-    public TileEntity createNewTileEntity(IBlockReader worldIn) {
         // Always use TileEntityType#create to allow registry overrides to work.
         return ModTileEntityTypes.DRILL_HEAD.get().create();
     }

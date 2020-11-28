@@ -135,6 +135,8 @@ publishing {
 }
 
 // Process resources on build
+// TODO: does not work
+/*
 processResources {
     // This will ensure that this task is redone when the versions change.
     inputs.property 'version', project.version
@@ -152,3 +154,4 @@ processResources {
         exclude 'META-INF/mods.toml'
     }
 }
+ */

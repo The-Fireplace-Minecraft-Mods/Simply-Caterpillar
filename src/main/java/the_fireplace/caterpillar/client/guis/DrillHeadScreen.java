@@ -52,6 +52,11 @@ public class DrillHeadScreen extends ContainerScreen<DrillHeadContainer> {
         }
     }
 
+    public DrillHeadScreen(final DrillHeadContainer container, final PlayerInventory inventory, final ITextComponent title) {
+        super(container, inventory, title);
+    }
+
+    /* TODO: Look if needed
     public DrillHeadScreen(final DrillHeadContainer container, final PlayerInventory inventory, IInventory dispenserInventory, CaterpillarData caterpillarData, ITextComponent title) {
         super(container, inventory, title);
         this.guiLeft = 0;
@@ -67,6 +72,7 @@ public class DrillHeadScreen extends ContainerScreen<DrillHeadContainer> {
         // TODO: sendUpdates
         //this.sendUpdates();
     }
+     */
 
     @Override
     public void render(final MatrixStack matrixStack, final int mouseX, final int mouseY, final float partialTicks) {

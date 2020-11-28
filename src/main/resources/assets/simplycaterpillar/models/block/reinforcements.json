@@ -2,10 +2,10 @@
     "credit": "Made with Blockbench",
     "ambientocclusion": true,
     "textures": {
-        "particle": "simplycaterpillar:blocks/wooden_top",
-        "side": "simplycaterpillar:blocks/rock_side",
-        "top": "simplycaterpillar:blocks/wooden_top",
-        "rod": "simplycaterpillar:blocks/pieces/wood_piece"
+        "particle": "simplycaterpillar:block/wooden_top",
+        "side": "simplycaterpillar:block/rock_side",
+        "top": "simplycaterpillar:block/wooden_top",
+        "rod": "simplycaterpillar:block/pieces/wood_piece"
     },
     "elements": [
         {
