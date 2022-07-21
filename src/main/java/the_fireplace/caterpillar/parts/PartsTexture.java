@@ -1,6 +1,6 @@
 package the_fireplace.caterpillar.parts;
 
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 
 public class PartsTexture {
 	protected ResourceLocation guiTexture;

@@ -13,38 +13,42 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.FurnaceTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IWorldPosCallable;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraftforge.fml.network.IContainerFactory;
+import net.minecraftforge.items.ItemStackHandler;
 import the_fireplace.caterpillar.Caterpillar;
-import the_fireplace.caterpillar.init.ModBlocks;
-import the_fireplace.caterpillar.init.ModContainerTypes;
-import the_fireplace.caterpillar.init.ModItemGroups;
-import the_fireplace.caterpillar.tileentity.DrillHeadTileEntity;
+import the_fireplace.caterpillar.init.BlockInit;
+import the_fireplace.caterpillar.init.ContainerInit;
+import the_fireplace.caterpillar.init.ModCreativeTab;
+import the_fireplace.caterpillar.tileentity.DrillHeadBlockEntity;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Objects;
 
-public class DrillHeadContainer extends Container {
+public class DrillHeadContainer extends AbstractContainerMenu {
 
-    private CaterpillarData caterpillar;
-    private IInventory tileEntityInventory;
-    public final DrillHeadTileEntity tileEntity;
+    private CaterpillarContainer caterpillar;
+
+    private ItemStackHandler inventory;
+    public final DrillHeadBlockEntity tileEntity;
     private final IWorldPosCallable canInteractWithCallable;
 
     /**
      * Logical-client-side constructor, called from {@link net.minecraft.inventory.container.ContainerType#create(IContainerFactory)}
      * Calls the logical-server-side constructor with the TileEntity at the pos in the PacketBuffer
      */
-    public DrillHeadContainer(final int windowId, final PlayerInventory playerInventory, final PacketBuffer data) {
-        this(windowId, playerInventory, getTileEntity(playerInventory, data), getTileEntity(playerInventory, data).Caterpillar());
+    public DrillHeadContainer(final int id, final Inventory playerInventory) {
+        this(id, playerInventory, getTileEntity(playerInventory, data), getTileEntity(playerInventory, data).Caterpillar());
     }
 
     /**
-     * Constructor called logical-server-side from {@link DrillHeadTileEntity#createMenu}
+     * Constructor called logical-server-side from {@link DrillHeadBlockEntity#createMenu}
      * and logical-client-side from {@link #DrillHeadContainer(int, PlayerInventory, PacketBuffer)}
      */
-    public DrillHeadContainer(final int windowId, final PlayerInventory playerInventory, final DrillHeadTileEntity tileEntity, final CaterpillarData caterpillar) {
-        super(ModContainerTypes.DRILL_HEAD.get(), windowId);
+    public DrillHeadContainer(final int id, final Inventory playerInventory, final DrillHeadBlockEntity tileEntity, final CaterpillarContainer caterpillar) {
+        super(ContainerInit.DRILL_HEAD.get(), id);
 
         this.caterpillar = caterpillar;
         this.caterpillar.drillHeadContainer = this;
@@ -57,7 +61,7 @@ public class DrillHeadContainer extends Container {
         // Burner
         this.addSlot(new Slot(tileEntityInventory, ID++, 8 + (4) * 18, 7 + (3) * 18));
 
-        int IDMiddle = (CaterpillarData.getMaxSize() + this.caterpillar.storage.added - this.caterpillar.storage.startingIndex) / 2;
+        int IDMiddle = (CaterpillarContainer.getMaxSize() + this.caterpillar.storage.added - this.caterpillar.storage.startingIndex) / 2;
 
         // Left Side
         for (row = 0; row < (IDMiddle/3); ++row)
@@ -96,19 +100,19 @@ public class DrillHeadContainer extends Container {
         }
     }
 
-    private static DrillHeadTileEntity getTileEntity(final PlayerInventory playerInventory, final PacketBuffer data) {
+    private static DrillHeadBlockEntity getTileEntity(final PlayerInventory playerInventory, final PacketBuffer data) {
         Objects.requireNonNull(playerInventory, "playerInventory cannot be null");
         Objects.requireNonNull(data, "data cannot be null");
         final TileEntity tileAtPos = playerInventory.player.world.getTileEntity(data.readBlockPos());
-        if (tileAtPos instanceof DrillHeadTileEntity) {
-            return (DrillHeadTileEntity) tileAtPos;
+        if (tileAtPos instanceof DrillHeadBlockEntity) {
+            return (DrillHeadBlockEntity) tileAtPos;
         }
         throw new IllegalStateException("Tile entity is not correct!" + tileAtPos);
     }
 
     @Override
     public boolean canInteractWith(@Nonnull final PlayerEntity player) {
-        return isWithinUsableDistance(canInteractWithCallable, player, ModBlocks.DRILL_BASE.get());
+        return isWithinUsableDistance(canInteractWithCallable, player, BlockInit.DRILL_BASE.get());
     }
 
     @Override
@@ -180,7 +184,7 @@ public class DrillHeadContainer extends Container {
                     return null;
                 }
             }
-            else if (this.caterpillar.tabs.selected.equals(ModItemGroups.MOD_ITEM_GROUP))
+            else if (this.caterpillar.tabs.selected.equals(ModCreativeTab.MOD_ITEM_GROUP))
             {
                 if (FurnaceTileEntity.isFuel(itemStack1) && !this.isWood(itemStack1))
                 {
@@ -222,7 +226,7 @@ public class DrillHeadContainer extends Container {
         return itemstack;
     }
 
-    public void updateCaterpillar(CaterpillarData caterpillar)
+    public void updateCaterpillar(CaterpillarContainer caterpillar)
     {
         this.caterpillar = caterpillar;
         this.caterpillar.drillHeadContainer = this;

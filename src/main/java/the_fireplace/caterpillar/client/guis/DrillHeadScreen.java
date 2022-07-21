@@ -4,18 +4,18 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
-import net.minecraft.client.resources.I18n;
+import net.minecraft.client.resources.language.I18n;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.client.gui.GuiUtils;
+import net.minecraftforge.client.gui.ScreenUtils;
 import the_fireplace.caterpillar.Caterpillar;
-import the_fireplace.caterpillar.containers.CaterpillarData;
+import the_fireplace.caterpillar.containers.CaterpillarContainer;
 import the_fireplace.caterpillar.containers.DrillHeadContainer;
-import the_fireplace.caterpillar.parts.PartsGuiWidgets;
+import the_fireplace.caterpillar.parts.PartsScreenWidgets;
 import the_fireplace.caterpillar.parts.PartsTutorial;
 
 import java.awt.*;
@@ -28,9 +28,9 @@ public class DrillHeadScreen extends ContainerScreen<DrillHeadContainer> {
 
     // The inventory contained within the corresponding Dispenser.
     public IInventory dispenserInventory;
-    private CaterpillarData caterpillar;
-    private HashMap<GUI_TABS, List<PartsGuiWidgets>> widgetsHolder;
-    private List<PartsGuiWidgets> selectedWidgets;
+    private CaterpillarContainer caterpillar;
+    private HashMap<GUI_TABS, List<PartsScreenWidgets>> widgetsHolder;
+    private List<PartsScreenWidgets> selectedWidgets;
     private PartsTutorial tutorial;
 
     public enum GUI_TABS {
@@ -182,7 +182,7 @@ public class DrillHeadScreen extends ContainerScreen<DrillHeadContainer> {
         int x  = (this.width - this.xSize) / 2;
         int y = (this.height - this.ySize) / 2;
         this.blit(matrixStack, x, y, 0, 0, this.xSize, this.ySize);
-        GuiUtils.drawTexturedModalRect(x, y, 0, 0, this.xSize, this.ySize, 0.f);
+        ScreenUtils.drawTexturedModalRect(x, y, 0, 0, this.xSize, this.ySize, 0.f);
     }
 
     private void drawGuiReinforcementBackgroundLayer(MatrixStack matrixStack) {
@@ -191,7 +191,7 @@ public class DrillHeadScreen extends ContainerScreen<DrillHeadContainer> {
         int x  = (this.width - this.xSize) / 2;
         int y = (this.height - this.ySize) / 2;
         this.blit(matrixStack, x, y, 0, 0, this.xSize, this.ySize);
-        GuiUtils.drawTexturedModalRect(x, y, 0, 0, this.xSize, this.ySize, 0.f);
+        ScreenUtils.drawTexturedModalRect(x, y, 0, 0, this.xSize, this.ySize, 0.f);
     }
 
     private void drawGuiDecorationBackgroundLayer(MatrixStack matrixStack) {
@@ -200,7 +200,7 @@ public class DrillHeadScreen extends ContainerScreen<DrillHeadContainer> {
         int x  = (this.width - this.xSize) / 2;
         int y = (this.height - this.ySize) / 2;
         this.blit(matrixStack, x, y, 0, 0, this.xSize, this.ySize);
-        GuiUtils.drawTexturedModalRect(x, y, 0, 0, this.xSize, this.ySize, 0.f);
+        ScreenUtils.drawTexturedModalRect(x, y, 0, 0, this.xSize, this.ySize, 0.f);
     }
 
     private void drawGuiMainBackgroundLayer(MatrixStack matrixStack) {
@@ -209,7 +209,7 @@ public class DrillHeadScreen extends ContainerScreen<DrillHeadContainer> {
         int x  = (this.width - this.xSize) / 2;
         int y = (this.height - this.ySize) / 2;
         this.blit(matrixStack, x, y, 0, 0, this.xSize, this.ySize);
-        GuiUtils.drawTexturedModalRect(x, y, 0, 0, this.xSize, this.ySize, 0.f);
+        ScreenUtils.drawTexturedModalRect(x, y, 0, 0, this.xSize, this.ySize, 0.f);
     }
 
     private void drawTutorialHover() {
@@ -269,9 +269,9 @@ public class DrillHeadScreen extends ContainerScreen<DrillHeadContainer> {
         this.blit(matrixStack, 0, 0, x, y, this.xSize, this.ySize);
 
         if (this.caterpillar.tabs.selected.equals(tabToDraw)) {
-            GuiUtils.drawTexturedModalRect(matrixStack, x - 31 + 3, y + 3 + tabToDraw.value*20, 176, 58 + 20, 31, 20, 0f);
+            ScreenUtils.drawTexturedModalRect(matrixStack, x - 31 + 3, y + 3 + tabToDraw.value*20, 176, 58 + 20, 31, 20, 0f);
         } else {
-            GuiUtils.drawTexturedModalRect(matrixStack, x - 31, y + 3 + tabToDraw.value*20, 176, 58, 31, 20, 0f);
+            ScreenUtils.drawTexturedModalRect(matrixStack, x - 31, y + 3 + tabToDraw.value*20, 176, 58, 31, 20, 0f);
         }
     }
 

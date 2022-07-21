@@ -2,12 +2,12 @@ package the_fireplace.caterpillar.parts;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
-import net.minecraftforge.fml.client.gui.GuiUtils;
+import net.minecraftforge.client.gui.ScreenUtils;
 import the_fireplace.caterpillar.abstracts.AbstractRunnerWidgets;
 import the_fireplace.caterpillar.client.guis.DrillHeadScreen;
 
 
-public class PartsGuiWidgets{
+public class PartsScreenWidgets {
 
 	public boolean drawA;
 	public boolean drawB;
@@ -37,7 +37,7 @@ public class PartsGuiWidgets{
 	public AbstractRunnerWidgets beforeDraw;
 
 	protected int ySize = 166;
-	public PartsGuiWidgets(String Name, DrillHeadScreen drillHeadScreen, int X, int Y,  int Width, int Height)
+	public PartsScreenWidgets(String Name, DrillHeadScreen drillHeadScreen, int X, int Y, int Width, int Height)
 	{
 		this.Name = Name;
 		this.Y = Y;
@@ -83,7 +83,7 @@ public class PartsGuiWidgets{
 			RenderSystem.scaled(this.ScaleXA, this.ScaleYA, 1);
 
 			Minecraft.getInstance().getTextureManager().bindTexture(this.guiTextureA.guiTexture);
-			GuiUtils.drawTexturedModalRect( (int)((this.getGuiX() + this.X)/this.ScaleXA), (int)((this.getGuiY() + this.Y + this.guiTextureA.Height - CustomH)/this.ScaleYA), this.guiTextureA.X, this.guiTextureA.Y + this.guiTextureA.Height - CustomH, this.guiTextureA.Width, CustomH, 0f);
+			ScreenUtils.drawTexturedModalRect( (int)((this.getGuiX() + this.X)/this.ScaleXA), (int)((this.getGuiY() + this.Y + this.guiTextureA.Height - CustomH)/this.ScaleYA), this.guiTextureA.X, this.guiTextureA.Y + this.guiTextureA.Height - CustomH, this.guiTextureA.Width, CustomH, 0f);
 
 
 			RenderSystem.scaled(1f/this.ScaleXA, 1f/this.ScaleYA, 1);
@@ -94,7 +94,7 @@ public class PartsGuiWidgets{
 			RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 			RenderSystem.scaled(this.ScaleXB, this.ScaleYB, 1);
 			Minecraft.getInstance().getTextureManager().bindTexture(this.guiTextureB.guiTexture);
-			GuiUtils.drawTexturedModalRect((int)((this.getGuiX() + this.X)/this.ScaleXB), (int)((this.getGuiY() + this.Y + this.guiTextureB.Height - CustomH)/this.ScaleYB), this.guiTextureB.X, this.guiTextureB.Y + this.guiTextureB.Height - CustomH, this.guiTextureB.Width, CustomH, 0f);
+			ScreenUtils.drawTexturedModalRect((int)((this.getGuiX() + this.X)/this.ScaleXB), (int)((this.getGuiY() + this.Y + this.guiTextureB.Height - CustomH)/this.ScaleYB), this.guiTextureB.X, this.guiTextureB.Y + this.guiTextureB.Height - CustomH, this.guiTextureB.Width, CustomH, 0f);
 			RenderSystem.scaled(1f/this.ScaleXB, 1f/this.ScaleYB, 1);
 		}
 	}

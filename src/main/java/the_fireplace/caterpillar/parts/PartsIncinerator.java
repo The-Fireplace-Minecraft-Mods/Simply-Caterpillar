@@ -1,9 +1,8 @@
 package the_fireplace.caterpillar.parts;
 
-import net.minecraft.block.Blocks;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
-import the_fireplace.caterpillar.Reference;
 
 public class PartsIncinerator extends PartsTabbed implements Cloneable {
 

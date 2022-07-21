@@ -1,0 +1,13 @@
+{
+  "replace": false,
+  "values": [
+    "simplycatterpillar:drill_blades",
+    "simplycatterpillar:drill_base",
+    "simplycatterpillar:drill_heads",
+    "simplycatterpillar:reinforcements",
+    "simplycatterpillar:decoration",
+    "simplycatterpillar:collector",
+    "simplycatterpillar:storage",
+    "simplycatterpillar:incinerator"
+  ]
+}

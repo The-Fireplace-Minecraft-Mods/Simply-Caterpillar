@@ -3,7 +3,6 @@ package the_fireplace.caterpillar.parts;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
-import the_fireplace.caterpillar.Reference;
 
 import java.util.ArrayList;
 import java.util.List;

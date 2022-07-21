@@ -12,8 +12,6 @@ import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.fml.server.ServerLifecycleHooks;
 import net.minecraftforge.registries.ForgeRegistries;
 import the_fireplace.caterpillar.Caterpillar;
-import the_fireplace.caterpillar.Reference;
-import the_fireplace.caterpillar.containers.CaterpillarData;
 
 import java.io.File;
 import java.io.FileInputStream;

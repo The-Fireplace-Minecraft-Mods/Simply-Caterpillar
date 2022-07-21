@@ -1,8 +1,8 @@
 package the_fireplace.caterpillar.abstracts;
 
-import the_fireplace.caterpillar.parts.PartsGuiWidgets;
+import the_fireplace.caterpillar.parts.PartsScreenWidgets;
 
 public abstract class AbstractRunnerWidgets {
 
-    public abstract void run(PartsGuiWidgets widget);
+    public abstract void run(PartsScreenWidgets widget);
 }

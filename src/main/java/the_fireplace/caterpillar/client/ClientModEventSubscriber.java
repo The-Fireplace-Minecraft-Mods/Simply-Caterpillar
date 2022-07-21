@@ -10,7 +10,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import the_fireplace.caterpillar.Caterpillar;
 import the_fireplace.caterpillar.client.guis.DrillHeadScreen;
-import the_fireplace.caterpillar.init.ModContainerTypes;
+import the_fireplace.caterpillar.init.ContainerInit;
 
 /**
  * Subscribe to events from the MOD EventBus that should be handled on the PHYSICAL CLIENT side in this class
@@ -39,7 +39,7 @@ public class ClientModEventSubscriber {
         // Register ContainerType Screens
         // ScreenManager.registerFactory is not safe to call during parallel mod loading so we queue it to run later
         DeferredWorkQueue.runLater(() -> {
-            ScreenManager.registerFactory(ModContainerTypes.DRILL_HEAD.get(), DrillHeadScreen::new);
+            ScreenManager.registerFactory(ContainerInit.DRILL_HEAD.get(), DrillHeadScreen::new);
             LOGGER.debug("Registered ContainerType Screens");
         });
 
