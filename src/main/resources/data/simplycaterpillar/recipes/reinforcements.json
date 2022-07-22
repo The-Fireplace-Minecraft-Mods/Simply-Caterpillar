@@ -1,13 +1,11 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern":
-  [
+  "pattern": [
     " p ",
     "pdp",
-    " p  "
+    " p "
   ],
-  "key":
-  {
+  "key": {
     "d":
     {
       "item": "simplycaterpillar:drill_base"
@@ -17,8 +15,7 @@
       "item": "minecraft:piston"
     }
   },
-  "result":
-  {
+  "result": {
     "item": "simplycaterpillar:reinforcements",
     "count": 1
   }

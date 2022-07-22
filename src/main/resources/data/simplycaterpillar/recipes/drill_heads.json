@@ -1,13 +1,11 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern":
-  [
+  "pattern": [
     "iii",
     " d ",
     " f "
   ],
-  "key":
-  {
+  "key": {
     "d":
     {
       "item": "simplycaterpillar:drill_base"
@@ -21,8 +19,7 @@
       "item": "minecraft:iron_ingot"
     }
   },
-  "result":
-  {
+  "result": {
     "item": "simplycaterpillar:drill_heads",
     "count": 1
   }

@@ -1,13 +1,11 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern":
-  [
+  "pattern": [
     " f ",
     " d ",
-    " l  "
+    " l "
   ],
-  "key":
-  {
+  "key": {
     "d":
     {
       "item": "simplycaterpillar:drill_base"
@@ -21,8 +19,7 @@
       "item": "minecraft:lava_bucket"
     }
   },
-  "result":
-  {
+  "result": {
     "item": "simplycaterpillar:incinerator",
     "count": 1
   }

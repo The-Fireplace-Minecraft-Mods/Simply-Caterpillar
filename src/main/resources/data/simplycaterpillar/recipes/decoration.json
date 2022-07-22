@@ -1,13 +1,11 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern":
-  [
+  "pattern": [
     "bdb",
     " d ",
     "   "
   ],
-  "key":
-  {
+  "key": {
     "d":
     {
       "item": "simplycaterpillar:drill_base"
@@ -17,8 +15,7 @@
       "item": "minecraft:dispenser"
     }
   },
-  "result":
-  {
+  "result": {
     "item": "simplycaterpillar:decoration",
     "count": 1
   }
