@@ -4,8 +4,8 @@
     "textures": {
         "particle": "simplycaterpillar:block/wooden_top",
         "side": "simplycaterpillar:block/rock_side",
-        "chnage": "simplycaterpillar:block/blades/none_blades",
-        "front": "simplycaterpillar:block/blades",
+        "change": "simplycaterpillar:block/blades/none_blades",
+        "front": "simplycaterpillar:block/blades/blades",
         "top": "simplycaterpillar:block/wooden_top",
         "rod": "simplycaterpillar:block/pieces/wood_piece"
     },
@@ -183,11 +183,11 @@
                 },
                 "north": {
                     "uv": [0.0,0.0,16.0,16.0],
-                    "texture": "#chnage"
+                    "texture": "#change"
                 },
                 "south": {
                     "uv": [0.0,0.0,16.0,16.0],
-                    "texture": "#chnage",
+                    "texture": "#change",
                     "tintindex": 0
                 }
             }

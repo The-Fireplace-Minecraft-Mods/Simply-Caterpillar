@@ -1,5 +1,5 @@
 {
-    "parent": "simplycaterpillar:block/drillheads",
+    "parent": "simplycaterpillar:block/drill_heads",
     "display": {
         "thirdperson": {
             "rotation": [ 10, -45, 170 ],

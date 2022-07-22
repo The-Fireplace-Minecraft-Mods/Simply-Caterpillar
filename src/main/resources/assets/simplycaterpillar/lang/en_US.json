@@ -7,8 +7,9 @@
   "block.simplycaterpillar.storage": "Drill Storage",
   "block.simplycaterpillar.incinerator": "Incinerator",
 
-  "creativetab.simplycaterpillar": "Caterpillar",
-  "container.simplycaterpillar.drill_heads": "Container drill",
+  "itemGroup.simplycaterpillar": "Caterpillar",
+  "container.simplycaterpillar.drill_heads": "Drill heads",
+  "container.simplycaterpillar.incinerator": "Incinerator",
 
   "gui.simplycaterpillar.tabs.main": "Main",
   "gui.simplycaterpillar.tabs.decoration": "Decoration",

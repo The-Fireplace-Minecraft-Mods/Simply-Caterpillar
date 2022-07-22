@@ -1,5 +1,4 @@
-package the_fireplace.caterpillar.tileentity;
-
+package the_fireplace.caterpillar.common.block.entity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.ComponentContents;
@@ -7,9 +6,7 @@ import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import the_fireplace.caterpillar.Caterpillar;
-import the_fireplace.caterpillar.init.BlockEntityInit;
-
-import javax.annotation.Nonnull;
+import the_fireplace.caterpillar.core.init.BlockEntityInit;
 
 public class DrillHeadBlockEntity extends BlockEntity {
 

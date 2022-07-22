@@ -1,13 +1,11 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern":
-  [
+  "pattern": [
     "c c",
     "crc",
     "cic"
   ],
-  "key":
-  {
+  "key": {
     "c":
     {
       "item": "minecraft:cobblestone"
@@ -21,8 +19,7 @@
      "item": "minecraft:iron_ingot"
    }
   },
-  "result":
-  {
+  "result": {
     "item": "simplycaterpillar:drill_base",
     "count": 1
   }
