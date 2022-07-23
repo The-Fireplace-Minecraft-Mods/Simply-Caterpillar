@@ -23,26 +23,27 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 import the_fireplace.caterpillar.Caterpillar;
-import the_fireplace.caterpillar.common.block.entity.IncineratorBlockEntity;
-import the_fireplace.caterpillar.common.container.IncineratorContainer;
+import the_fireplace.caterpillar.common.block.entity.DrillHeadBlockEntity;
+import the_fireplace.caterpillar.common.container.DrillHeadContainer;
 
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-public class IncineratorBlock extends HorizontalDirectionalBlock implements EntityBlock {
+public class DrillHeadBlock extends HorizontalDirectionalBlock implements EntityBlock {
 
     private static final Map<Direction, VoxelShape> SHAPES = new EnumMap<>(Direction.class);
-    private static final Optional<VoxelShape> SHAPE = Stream.of(
-        Block.box(6, 0, 0, 10, 6, 16),
-        Block.box(0, 0, 0, 6, 16, 16),
-        Block.box(6, 6, -15, 10, 10, 0),
-        Block.box(10, 0, 0, 16, 16, 16),
-        Block.box(6, 10, 0, 10, 16, 16)
+    private static final Optional<VoxelShape> SHAPE =  Stream.of(
+            Block.box(0, 6, 0, 16, 10, 15),
+            Block.box(-16, -16, 16, 32, 32, 16.1),
+            Block.box(0, 0, 0, 16, 6, 15),
+            Block.box(6, 6, -15, 10, 10, 0),
+            Block.box(0, 10, 0, 16, 16, 15),
+            Block.box(-16, -16, 15.1, 32, 32, 16.1)
     ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR));
 
-    public IncineratorBlock(Properties properties) {
+    public DrillHeadBlock(Properties properties) {
         super(properties);
         registerDefaultState(defaultBlockState().setValue(FACING, Direction.NORTH));
         runCalculation(SHAPE.get());
@@ -76,8 +77,8 @@ public class IncineratorBlock extends HorizontalDirectionalBlock implements Enti
 
     protected void openContainer(Level level, BlockPos pos, Player player) {
         BlockEntity blockEntity = level.getBlockEntity(pos);
-        if (blockEntity instanceof IncineratorBlockEntity) {
-            MenuProvider container = new SimpleMenuProvider(IncineratorContainer.getServerContainer((IncineratorBlockEntity) blockEntity, pos), IncineratorBlockEntity.TITLE);
+        if (blockEntity instanceof DrillHeadBlockEntity) {
+            MenuProvider container = new SimpleMenuProvider(DrillHeadContainer.getServerContainer((DrillHeadBlockEntity) blockEntity, pos), DrillHeadBlockEntity.TITLE);
             player.openMenu(container);
         }
     }
@@ -90,6 +91,6 @@ public class IncineratorBlock extends HorizontalDirectionalBlock implements Enti
     @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return new IncineratorBlockEntity(pos, state);
+        return new DrillHeadBlockEntity(pos, state);
     }
 }

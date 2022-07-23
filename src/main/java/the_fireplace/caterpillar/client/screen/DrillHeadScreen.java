@@ -8,21 +8,21 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import the_fireplace.caterpillar.Caterpillar;
-import the_fireplace.caterpillar.common.container.IncineratorContainer;
+import the_fireplace.caterpillar.common.container.DrillHeadContainer;
 
-public class IncineratorScreen extends AbstractContainerScreen<IncineratorContainer> {
+public class DrillHeadScreen extends AbstractContainerScreen<DrillHeadContainer> {
 
-    private static final ResourceLocation TEXTURE = new ResourceLocation(Caterpillar.MOD_ID, "textures/gui/incinerator.png");
+    private static final ResourceLocation TEXTURE = new ResourceLocation(Caterpillar.MOD_ID, "textures/gui/caterpillar.png");
 
-    public IncineratorScreen(IncineratorContainer container, Inventory playerInventory, Component title) {
+    public DrillHeadScreen(DrillHeadContainer container, Inventory playerInventory, Component title) {
         super(container, playerInventory, title);
         this.leftPos = 0;
         this.topPos = 0;
         this.imageWidth = 176;
         this.imageHeight = 166;
         this.inventoryLabelX = 8;
-        this.inventoryLabelY = this.imageHeight - 94;
-        this.titleLabelX = 60;
+        this.inventoryLabelY = this.imageHeight - 92;
+        this.titleLabelX = 65;
         this.titleLabelY = 6;
     }
 

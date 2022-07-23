@@ -5,6 +5,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.block.state.BlockState;
 import the_fireplace.caterpillar.Caterpillar;
 import the_fireplace.caterpillar.common.block.entity.util.InventoryBlockEntity;
+import the_fireplace.caterpillar.common.container.IncineratorContainer;
 import the_fireplace.caterpillar.core.init.BlockEntityInit;
 
 public class IncineratorBlockEntity extends InventoryBlockEntity {
@@ -14,6 +15,6 @@ public class IncineratorBlockEntity extends InventoryBlockEntity {
     );
 
     public IncineratorBlockEntity(BlockPos pos, BlockState state) {
-        super(BlockEntityInit.INCINERATOR.get(), pos, state, 9);
+        super(BlockEntityInit.INCINERATOR.get(), pos, state, IncineratorContainer.SLOT_SIZE);
     }
 }

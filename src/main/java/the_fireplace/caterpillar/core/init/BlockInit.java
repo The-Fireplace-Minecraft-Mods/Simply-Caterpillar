@@ -10,8 +10,7 @@ import net.minecraftforge.registries.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import the_fireplace.caterpillar.Caterpillar;
-import the_fireplace.caterpillar.common.block.DrillBaseBlock;
-import the_fireplace.caterpillar.common.block.IncineratorBlock;
+import the_fireplace.caterpillar.common.block.*;
 
 import java.util.function.Supplier;
 
@@ -26,15 +25,9 @@ public class BlockInit {
             new Item.Properties().tab(Caterpillar.CATERPILLAR_CREATIVE_MODE_TAB)
     );
 
-    public static final RegistryObject<Block> DRILL_BLADES = register(
-            "drill_blades",
-            () -> new Block(BlockBehaviour.Properties.of(Material.BARRIER).strength(1.5F, 6.0F).sound(SoundType.STONE).requiresCorrectToolForDrops()),
-            new Item.Properties().tab(Caterpillar.CATERPILLAR_CREATIVE_MODE_TAB)
-    );
-
-    public static final RegistryObject<Block> DRILL_HEADS = register(
-            "drill_heads",
-            () -> new Block(BlockBehaviour.Properties.of(Material.STONE).strength(1.5F, 6.0F).sound(SoundType.STONE).requiresCorrectToolForDrops()),
+    public static final RegistryObject<DrillHeadBlock> DRILL_HEAD = register(
+            "drill_head",
+            () -> new DrillHeadBlock(BlockBehaviour.Properties.of(Material.STONE).strength(1.5F, 6.0F).sound(SoundType.STONE).requiresCorrectToolForDrops()),
             new Item.Properties().tab(Caterpillar.CATERPILLAR_CREATIVE_MODE_TAB)
     );
     public static final RegistryObject<Block> REINFORCEMENTS = register(
@@ -42,19 +35,19 @@ public class BlockInit {
             () -> new Block(BlockBehaviour.Properties.of(Material.STONE).strength(1.5F, 6.0F).sound(SoundType.STONE).requiresCorrectToolForDrops()),
             new Item.Properties().tab(Caterpillar.CATERPILLAR_CREATIVE_MODE_TAB)
     );
-    public static final RegistryObject<Block> DECORATION = register(
+    public static final RegistryObject<DecorationBlock> DECORATION = register(
             "decoration",
-            () -> new Block(BlockBehaviour.Properties.of(Material.STONE).strength(1.5F, 6.0F).sound(SoundType.STONE).requiresCorrectToolForDrops()),
+            () -> new DecorationBlock(BlockBehaviour.Properties.of(Material.STONE).strength(1.5F, 6.0F).sound(SoundType.STONE).requiresCorrectToolForDrops()),
             new Item.Properties().tab(Caterpillar.CATERPILLAR_CREATIVE_MODE_TAB)
     );
-    public static final RegistryObject<Block> COLLECTOR = register(
+    public static final RegistryObject<CollectorBlock> COLLECTOR = register(
             "collector",
-            () -> new Block(BlockBehaviour.Properties.of(Material.STONE).strength(1.5F, 6.0F).sound(SoundType.STONE).requiresCorrectToolForDrops()),
+            () -> new CollectorBlock(BlockBehaviour.Properties.of(Material.STONE).strength(1.5F, 6.0F).sound(SoundType.STONE).requiresCorrectToolForDrops()),
             new Item.Properties().tab(Caterpillar.CATERPILLAR_CREATIVE_MODE_TAB)
     );
-    public static final RegistryObject<Block> STORAGE = register(
+    public static final RegistryObject<StorageBlock> STORAGE = register(
             "storage",
-            () -> new Block(BlockBehaviour.Properties.of(Material.STONE).strength(1.5F, 6.0F).sound(SoundType.STONE).requiresCorrectToolForDrops()),
+            () -> new StorageBlock(BlockBehaviour.Properties.of(Material.STONE).strength(1.5F, 6.0F).sound(SoundType.STONE).requiresCorrectToolForDrops()),
             new Item.Properties().tab(Caterpillar.CATERPILLAR_CREATIVE_MODE_TAB)
     );
     public static final RegistryObject<IncineratorBlock> INCINERATOR = register(

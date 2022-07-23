@@ -8,7 +8,10 @@ import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import the_fireplace.caterpillar.Caterpillar;
+import the_fireplace.caterpillar.client.screen.DecorationScreen;
+import the_fireplace.caterpillar.client.screen.DrillHeadScreen;
 import the_fireplace.caterpillar.client.screen.IncineratorScreen;
+import the_fireplace.caterpillar.client.screen.StorageScreen;
 import the_fireplace.caterpillar.config.ConfigHelper;
 import the_fireplace.caterpillar.config.ConfigHolder;
 import the_fireplace.caterpillar.core.init.ContainerInit;
@@ -18,7 +21,10 @@ public class ClientModEvents {
 
     @SubscribeEvent
     public static void clientSetup(FMLClientSetupEvent event) {
+        MenuScreens.register(ContainerInit.DRILL_HEAD.get(), DrillHeadScreen::new);
         MenuScreens.register(ContainerInit.INCINERATOR.get(), IncineratorScreen::new);
+        MenuScreens.register(ContainerInit.STORAGE.get(), StorageScreen::new);
+        MenuScreens.register(ContainerInit.DECORATION.get(), DecorationScreen::new);
     }
 
     /**

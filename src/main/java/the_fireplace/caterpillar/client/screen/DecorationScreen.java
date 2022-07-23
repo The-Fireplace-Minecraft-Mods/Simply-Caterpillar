@@ -8,13 +8,13 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import the_fireplace.caterpillar.Caterpillar;
-import the_fireplace.caterpillar.common.container.IncineratorContainer;
+import the_fireplace.caterpillar.common.container.DecorationContainer;
 
-public class IncineratorScreen extends AbstractContainerScreen<IncineratorContainer> {
+public class DecorationScreen extends AbstractContainerScreen<DecorationContainer> {
 
-    private static final ResourceLocation TEXTURE = new ResourceLocation(Caterpillar.MOD_ID, "textures/gui/incinerator.png");
+    private static final ResourceLocation TEXTURE = new ResourceLocation(Caterpillar.MOD_ID, "textures/gui/decoration.png");
 
-    public IncineratorScreen(IncineratorContainer container, Inventory playerInventory, Component title) {
+    public DecorationScreen(DecorationContainer container, Inventory playerInventory, Component title) {
         super(container, playerInventory, title);
         this.leftPos = 0;
         this.topPos = 0;

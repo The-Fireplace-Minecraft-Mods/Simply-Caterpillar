@@ -1,5 +1,5 @@
 {
-  "block.simplycaterpillar.drill_heads": "Drill Heads",
+  "block.simplycaterpillar.drill_head": "Drill Head",
   "block.simplycaterpillar.reinforcements": "Reinforcement Builder",
   "block.simplycaterpillar.decoration": "Decoration Placer",
   "block.simplycaterpillar.collector": "Item Collector",
@@ -8,8 +8,12 @@
   "block.simplycaterpillar.incinerator": "Incinerator",
 
   "itemGroup.simplycaterpillar": "Caterpillar",
-  "container.simplycaterpillar.drill_heads": "Drill heads",
+
+  "container.simplycaterpillar.drill_head": "Drill head",
+  "container.simplycaterpillar.decoration": "Decoration",
+  "container.simplycaterpillar.reinforcement": "Reinforcement",
   "container.simplycaterpillar.incinerator": "Incinerator",
+  "container.simplycaterpillar.storage": "Storage",
 
   "gui.simplycaterpillar.tabs.main": "Main",
   "gui.simplycaterpillar.tabs.decoration": "Decoration",
