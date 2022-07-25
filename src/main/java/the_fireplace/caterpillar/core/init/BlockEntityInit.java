@@ -21,4 +21,6 @@ public class BlockEntityInit {
     public static final RegistryObject<BlockEntityType<DecorationBlockEntity>> DECORATION = BLOCK_ENTITIES.register("decoration", () -> BlockEntityType.Builder.of(DecorationBlockEntity::new, BlockInit.DECORATION.get()).build(null));
 
     public static final RegistryObject<BlockEntityType<CollectorBlockEntity>> COLLECTOR = BLOCK_ENTITIES.register("collector", () -> BlockEntityType.Builder.of(CollectorBlockEntity::new, BlockInit.COLLECTOR.get()).build(null));
+
+    public static final RegistryObject<BlockEntityType<ReinforcementBlockEntity>> REINFORCEMENT = BLOCK_ENTITIES.register("reinforcement", () -> BlockEntityType.Builder.of(ReinforcementBlockEntity::new, BlockInit.REINFORCEMENT.get()).build(null));
 }

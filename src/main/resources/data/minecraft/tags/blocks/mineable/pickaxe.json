@@ -1,10 +1,9 @@
 {
   "replace": false,
   "values": [
-    "simplycaterpillar:drill_blades",
     "simplycaterpillar:drill_base",
-    "simplycaterpillar:drill_heads",
-    "simplycaterpillar:reinforcements",
+    "simplycaterpillar:drill_head",
+    "simplycaterpillar:reinforcement",
     "simplycaterpillar:decoration",
     "simplycaterpillar:collector",
     "simplycaterpillar:storage",

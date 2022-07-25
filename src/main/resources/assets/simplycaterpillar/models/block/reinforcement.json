@@ -1,5 +1,4 @@
 {
-    "credit": "Made with Blockbench",
     "ambientocclusion": true,
     "textures": {
         "particle": "simplycaterpillar:block/wooden_top",

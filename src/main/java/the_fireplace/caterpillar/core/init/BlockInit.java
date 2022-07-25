@@ -30,9 +30,9 @@ public class BlockInit {
             () -> new DrillHeadBlock(BlockBehaviour.Properties.of(Material.STONE).strength(1.5F, 6.0F).sound(SoundType.STONE).requiresCorrectToolForDrops()),
             new Item.Properties().tab(Caterpillar.CATERPILLAR_CREATIVE_MODE_TAB)
     );
-    public static final RegistryObject<Block> REINFORCEMENTS = register(
-            "reinforcements",
-            () -> new Block(BlockBehaviour.Properties.of(Material.STONE).strength(1.5F, 6.0F).sound(SoundType.STONE).requiresCorrectToolForDrops()),
+    public static final RegistryObject<ReinforcementBlock> REINFORCEMENT = register(
+            "reinforcement",
+            () -> new ReinforcementBlock(BlockBehaviour.Properties.of(Material.STONE).strength(1.5F, 6.0F).sound(SoundType.STONE).requiresCorrectToolForDrops()),
             new Item.Properties().tab(Caterpillar.CATERPILLAR_CREATIVE_MODE_TAB)
     );
     public static final RegistryObject<DecorationBlock> DECORATION = register(

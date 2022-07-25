@@ -5,10 +5,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import the_fireplace.caterpillar.Caterpillar;
-import the_fireplace.caterpillar.common.container.DecorationContainer;
-import the_fireplace.caterpillar.common.container.DrillHeadContainer;
-import the_fireplace.caterpillar.common.container.IncineratorContainer;
-import the_fireplace.caterpillar.common.container.StorageContainer;
+import the_fireplace.caterpillar.common.container.*;
 
 public class ContainerInit {
 
@@ -22,4 +19,6 @@ public class ContainerInit {
     public static final RegistryObject<MenuType<StorageContainer>> STORAGE = CONTAINERS.register("storage", () -> new MenuType<>(StorageContainer::new));
 
     public static final RegistryObject<MenuType<DecorationContainer>> DECORATION = CONTAINERS.register("decoration", () -> new MenuType<>(DecorationContainer::new));
+
+    public static final RegistryObject<MenuType<ReinforcementContainer>> REINFORCEMENT = CONTAINERS.register("reinforcement", () -> new MenuType<>(ReinforcementContainer::new));
 }
