@@ -1,8 +1,8 @@
 {
     "variants": {
-        "facing=north": { "model": "simplycaterpillar:block/drill_head/drill_head_none" },
-        "facing=south": { "model": "simplycaterpillar:block/drill_head/drill_head_none", "y": 180 },
-        "facing=west":  { "model": "simplycaterpillar:block/drill_head/drill_head_none", "y": 270 },
-        "facing=east":  { "model": "simplycaterpillar:block/drill_head/drill_head_none", "y": 90 }
+        "facing=north": { "model": "simplycaterpillar:block/blades/none_blades" },
+        "facing=south": { "model": "simplycaterpillar:block/blades/none_blades", "y": 180 },
+        "facing=west":  { "model": "simplycaterpillar:block/blades/none_blades", "y": 270 },
+        "facing=east":  { "model": "simplycaterpillar:block/blades/none_blades", "y": 90 }
     }
 }

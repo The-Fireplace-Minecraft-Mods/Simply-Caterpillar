@@ -14,6 +14,14 @@ public class DrillHeadBlockEntity extends InventoryBlockEntity {
             "container." + Caterpillar.MOD_ID + ".drill_head"
     );
 
+    public static final Component GATHERED = Component.translatable(
+            "container." + Caterpillar.MOD_ID + ".drill_head.gathered"
+    );
+
+    public static final Component CONSUMPTION = Component.translatable(
+            "container." + Caterpillar.MOD_ID + ".drill_head.consumption"
+    );
+
     public DrillHeadBlockEntity(BlockPos pos, BlockState state) {
         super(BlockEntityInit.DRILL_HEAD.get(), pos, state, DrillHeadContainer.SLOT_SIZE);
     }

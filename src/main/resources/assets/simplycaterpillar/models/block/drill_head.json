@@ -1,5 +1,6 @@
 {
-    "credit": "Made with Blockbench",
+    "ambientocclusion": true,
+    "render_type": "cutout",
     "textures": {
         "side": "simplycaterpillar:block/rock_side",
         "change": "simplycaterpillar:block/blades/none_blades",
@@ -114,7 +115,7 @@
     },
     "groups": [
         {
-            "name": "VoxelShape",
+            "name": "VoxelShapes",
             "origin": [0, 0, 0],
             "color": 0,
             "children": [0, 1, 2, 3, 4, 5]

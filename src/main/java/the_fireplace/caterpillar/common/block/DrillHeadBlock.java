@@ -21,6 +21,7 @@ import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import the_fireplace.caterpillar.Caterpillar;
 import the_fireplace.caterpillar.common.block.entity.DrillHeadBlockEntity;
@@ -35,12 +36,12 @@ public class DrillHeadBlock extends HorizontalDirectionalBlock implements Entity
 
     private static final Map<Direction, VoxelShape> SHAPES = new EnumMap<>(Direction.class);
     private static final Optional<VoxelShape> SHAPE =  Stream.of(
-            Block.box(0, 6, 0, 16, 10, 15),
-            Block.box(-16, -16, 16, 32, 32, 16.1),
-            Block.box(0, 0, 0, 16, 6, 15),
-            Block.box(6, 6, -15, 10, 10, 0),
-            Block.box(0, 10, 0, 16, 16, 15),
-            Block.box(-16, -16, 15.1, 32, 32, 16.1)
+        Block.box(0, 6, 0, 16, 10, 15),
+        Block.box(-16, -16, 16, 32, 32, 16.1),
+        Block.box(0, 0, 0, 16, 6, 15),
+        Block.box(6, 6, -15, 10, 10, 0),
+        Block.box(0, 10, 0, 16, 16, 15),
+        Block.box(-16, -16, 15.1, 32, 32, 16.1)
     ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR));
 
     public DrillHeadBlock(Properties properties) {
@@ -66,7 +67,7 @@ public class DrillHeadBlock extends HorizontalDirectionalBlock implements Entity
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+    public @NotNull InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         if (level.isClientSide) {
             return InteractionResult.SUCCESS;
         } else {
