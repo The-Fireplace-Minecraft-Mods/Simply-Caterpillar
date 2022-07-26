@@ -5,7 +5,7 @@ issueTrackerURL="https://github.com/The-Fireplace/Simply-Caterpillar/issues"
 
 [[mods]] #mandatory
 modId="simplycaterpillar"
-version="1.19-8-0"
+version="1.19-1-0"
 displayName="Simply Caterpillar"
 #updateJSONURL="http://myurl.me/"
 displayURL="https://www.curseforge.com/minecraft/mc-mods/simply-caterpillar"
