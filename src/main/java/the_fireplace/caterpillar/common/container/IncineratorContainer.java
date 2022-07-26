@@ -1,6 +1,5 @@
 package the_fireplace.caterpillar.common.container;
 
-import net.minecraft.client.gui.screens.inventory.FurnaceScreen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -33,19 +32,19 @@ public class IncineratorContainer extends AbstractContainerMenu {
         this.containerAccess = ContainerLevelAccess.create(playerInventory.player.level, pos);
         this.data = data;
 
-        final int slotSizePlus2 = 18, startX = 8, startY = 84, hotbarY = 142, incineratorX = 62, incineratorY = 25;
+        final int slotSizePlus2 = 18, startX = 8, startY = 84, hotbarY = 142, incineratorX = 62, incineratorY = 17;
 
         // Incinerator slots
         for(int row = 0; row < 3; row++) {
             for(int column = 0; column < 3; column++) {
-                addSlot(new SlotItemHandler(slots, + column + row * 3, incineratorX + column * slotSizePlus2, incineratorY + row * slotSizePlus2));
+                addSlot(new SlotItemHandler(slots, column + row * 3, incineratorX + column * slotSizePlus2, incineratorY + row * slotSizePlus2));
             }
         }
 
         // Player Inventory slots
         for(int row = 0; row < 3; row++) {
             for(int column = 0; column < 9; column++) {
-                addSlot(new Slot(playerInventory, column + row  * 9 + 9 , startX + column * slotSizePlus2, startY + row * slotSizePlus2));
+                addSlot(new Slot(playerInventory, column + row * 9 + 9, startX + column * slotSizePlus2, startY + row * slotSizePlus2));
             }
         }
 

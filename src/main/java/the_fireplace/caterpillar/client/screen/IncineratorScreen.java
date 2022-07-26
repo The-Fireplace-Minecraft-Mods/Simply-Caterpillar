@@ -2,6 +2,8 @@ package the_fireplace.caterpillar.client.screen;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
@@ -14,15 +16,18 @@ public class IncineratorScreen extends AbstractContainerScreen<IncineratorContai
 
     private static final ResourceLocation TEXTURE = new ResourceLocation(Caterpillar.MOD_ID, "textures/gui/incinerator.png");
 
+    protected Font font;
+
     public IncineratorScreen(IncineratorContainer container, Inventory playerInventory, Component title) {
         super(container, playerInventory, title);
+        this.font = Minecraft.getInstance().font;
         this.leftPos = 0;
         this.topPos = 0;
         this.imageWidth = 176;
         this.imageHeight = 166;
         this.inventoryLabelX = 8;
         this.inventoryLabelY = this.imageHeight - 94;
-        this.titleLabelX = 60;
+        this.titleLabelX = (this.imageWidth - this.font.width(this.title)) / 2;
         this.titleLabelY = 6;
     }
 
