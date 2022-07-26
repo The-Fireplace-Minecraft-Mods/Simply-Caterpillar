@@ -2,18 +2,35 @@ package the_fireplace.caterpillar.common.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.SpawnPlacements;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.EntityBlock;
-import net.minecraft.world.level.block.HorizontalDirectionalBlock;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.Nullable;
 import the_fireplace.caterpillar.Caterpillar;
 import the_fireplace.caterpillar.common.block.entity.CollectorBlockEntity;
@@ -25,32 +42,52 @@ import java.util.stream.Stream;
 
 public class CollectorBlock extends HorizontalDirectionalBlock implements EntityBlock {
 
+    public static final EnumProperty<DoubleBlockHalf> HALF = BlockStateProperties.DOUBLE_BLOCK_HALF;
+
     private static final Map<Direction, VoxelShape> SHAPES = new EnumMap<>(Direction.class);
+
+    private static final Map<Direction, VoxelShape> SHAPES_UPPER = new EnumMap<>(Direction.class);
+
+    private static final Map<Direction, VoxelShape> SHAPES_LOWER = new EnumMap<>(Direction.class);
     private static final Optional<VoxelShape> SHAPE = Stream.of(
+        Block.box(6, 16, 0, 10, 22, 16),
+        Block.box(0, 16, 0, 6, 32, 16),
+        Block.box(10, 16, 0, 16, 32, 16),
+        Block.box(6, 26, 0, 10, 32, 16),
+        Block.box(6, 22, -15, 10, 26, 0),
+        Block.box(0, 4, 1, 4, 12, 5),
+        Block.box(0, 0, 5, 16, 16, 6),
+        Block.box(6, 6, 12, 10, 16, 16),
+        Block.box(3, 3, 6, 13, 13, 12),
+        Block.box(0, 12, 1, 16, 16, 5),
+        Block.box(12, 4, 1, 16, 12, 5),
+        Block.box(0, 0, 1, 16, 4, 5)
+    ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR));
+
+    private static final Optional<VoxelShape> SHAPE_UPPER = Stream.of(
+        Block.box(6, 0, 0, 10, 6, 16),
         Block.box(0, 0, 0, 6, 16, 16),
-        Block.box(6, 6, -15, 10, 10, 0),
-        Block.box(6, -10, 12, 10, 0, 16),
-        Block.box(0, -16, 1, 16, -12, 5),
         Block.box(10, 0, 0, 16, 16, 16),
         Block.box(6, 10, 0, 10, 16, 16),
-        Block.box(6, 0, 0, 10, 6, 16),
-        Block.box(0, -16, 5, 16, 0, 6),
-        Block.box(0, -4, 1, 16, 0, 5),
-        Block.box(0, -12, 1, 4, -4, 5),
-        Block.box(12, -12, 1, 16, -4, 5),
-        Block.box(3, -13, 6, 13, -3, 12)
+        Block.box(6, 6, -15, 10, 10, 0)
+    ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR));
+
+    private static final Optional<VoxelShape> SHAPE_LOWER = Stream.of(
+        Block.box(0, 0, 1, 16, 4, 5),
+        Block.box(12, 4, 1, 16, 12, 5),
+        Block.box(0, 12, 1, 16, 16, 5),
+        Block.box(3, 3, 6, 13, 13, 12),
+        Block.box(6, 6, 12, 10, 16, 16),
+        Block.box(0, 0, 5, 16, 16, 6),
+        Block.box(0, 4, 1, 4, 12, 5)
     ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR));
 
     public CollectorBlock(Properties properties) {
         super(properties);
-        registerDefaultState(defaultBlockState().setValue(FACING, Direction.NORTH));
-        runCalculation(SHAPE.get());
-    }
-
-    @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        super.createBlockStateDefinition(builder);
-        builder.add(FACING);
+        registerDefaultState(defaultBlockState().setValue(FACING, Direction.NORTH).setValue(HALF, DoubleBlockHalf.LOWER));
+        runCalculation(SHAPES, SHAPE.get());
+        runCalculation(SHAPES_UPPER, SHAPE_UPPER.get());
+        runCalculation(SHAPES_LOWER, SHAPE_LOWER.get());
     }
 
     @Override
@@ -59,13 +96,89 @@ public class CollectorBlock extends HorizontalDirectionalBlock implements Entity
     }
 
     @Override
-    public BlockState getStateForPlacement(BlockPlaceContext context) {
-        return defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
+    public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, LevelAccessor worldIn, BlockPos currentPos, BlockPos facingPos) {
+        DoubleBlockHalf doubleBlockHalf = stateIn.getValue(HALF);
+
+        if (facing.getAxis() == Direction.Axis.Y && doubleBlockHalf == DoubleBlockHalf.LOWER == (facing == Direction.UP)) {
+            return facingState.is(this) && facingState.getValue(HALF) != doubleBlockHalf ? stateIn.setValue(FACING, facingState.getValue(FACING)) : Blocks.AIR.defaultBlockState();
+        } else {
+            return doubleBlockHalf == DoubleBlockHalf.LOWER && facing == Direction.DOWN && !stateIn.canSurvive(worldIn, currentPos) ? Blocks.AIR.defaultBlockState() : super.updateShape(stateIn, facing, facingState, worldIn, currentPos, facingPos);
+        }
     }
 
-    protected void runCalculation(VoxelShape shape) {
+    @Override
+    public void playerWillDestroy(Level worldIn, BlockPos pos, BlockState state, Player player) {
+        if (!worldIn.isClientSide && player.isCreative()) {
+            DoubleBlockHalf doubleBlockHalf = state.getValue(HALF);
+
+            Caterpillar.LOGGER.debug("Collector destroying");
+
+            if (doubleBlockHalf == DoubleBlockHalf.UPPER) {
+                Caterpillar.LOGGER.debug("Collector destroying: is UPPER");
+                BlockPos belowBlockPos = pos.below();
+                BlockState belowBlockState = worldIn.getBlockState(belowBlockPos);
+
+                if (belowBlockState.is(state.getBlock()) && belowBlockState.getValue(HALF) == DoubleBlockHalf.LOWER) {
+                    Caterpillar.LOGGER.debug("Collector destroying: inside");
+                    worldIn.setBlock(belowBlockPos, Blocks.AIR.defaultBlockState(), 35);
+                    worldIn.levelEvent(player, 2001, belowBlockPos, Block.getId(belowBlockState));
+                }
+            }
+        }
+
+        super.playerWillDestroy(worldIn, pos, state, player);
+    }
+
+    @Override
+    public BlockState getStateForPlacement(BlockPlaceContext context) {
+        BlockPos blockPos = context.getClickedPos();
+        Level level = context.getLevel();
+
+        if (blockPos.getY() < level.getMaxBuildHeight() - 1 && level.getBlockState(blockPos.above()).canBeReplaced(context)) {
+            return defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite()).setValue(HALF, DoubleBlockHalf.LOWER);
+        } else {
+            return null;
+        }
+    }
+
+    @Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
+        return level.isClientSide ? null : (level0, pos, state0, blockEntity) -> ((CollectorBlockEntity) blockEntity).tick();
+    }
+
+    @Override
+    public void setPlacedBy(Level level, BlockPos blockPos, BlockState blockState, @Nullable LivingEntity livingEntity, ItemStack stack) {
+        level.setBlock(blockPos.above(), blockState.setValue(HALF, DoubleBlockHalf.UPPER), 3);
+    }
+
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public long getSeed(BlockState state, BlockPos pos) {
+        return Mth.getSeed(pos.getX(), pos.below(state.getValue(HALF) == DoubleBlockHalf.LOWER ? 0 : 1).getY(), pos.getZ());
+    }
+
+    @Override
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+        super.createBlockStateDefinition(builder);
+        builder.add(HALF, FACING);
+    }
+
+    @Override
+    public boolean canSurvive(BlockState state, LevelReader worldIn, BlockPos blockPos) {
+        BlockPos belowBlockpos = blockPos.below();
+        BlockState belowBlockState = worldIn.getBlockState(belowBlockpos);
+        return state.getValue(HALF) == DoubleBlockHalf.LOWER ? belowBlockState.isFaceSturdy(worldIn, belowBlockpos, Direction.UP) : belowBlockState.is(this);
+    }
+
+    @Override
+    public PushReaction getPistonPushReaction(BlockState p_60584_) {
+        return PushReaction.DESTROY;
+    }
+
+    protected void runCalculation(Map<Direction, VoxelShape> shapes, VoxelShape shape) {
         for (Direction direction : Direction.values())
-            SHAPES.put(direction, Caterpillar.calculateShapes(direction, shape));
+            shapes.put(direction, Caterpillar.calculateShapes(direction, shape));
     }
 
     @Nullable
