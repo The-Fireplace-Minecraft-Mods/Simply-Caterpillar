@@ -23,7 +23,7 @@ public class StorageContainer extends AbstractContainerMenu {
 
     // Client Constructor
     public StorageContainer(int id, Inventory playerInventory) {
-        this(id, playerInventory, new ItemStackHandler(12), BlockPos.ZERO, new SimpleContainerData(1));
+        this(id, playerInventory, new ItemStackHandler(SLOT_SIZE), BlockPos.ZERO, new SimpleContainerData(1));
     }
 
     // Server Constructor
@@ -37,14 +37,14 @@ public class StorageContainer extends AbstractContainerMenu {
         // Storage slots
         for(int row = 0; row < 4; row++) {
             for(int column = 0; column < 3; column++) {
-                addSlot(new SlotItemHandler(slots, row * 3 + column, storageX + column * slotSizePlus2, storageY + row * slotSizePlus2));
+                addSlot(new SlotItemHandler(slots, column + row * 3, storageX + column * slotSizePlus2, storageY + row * slotSizePlus2));
             }
         }
 
         // Player Inventory slots
         for(int row = 0; row < 3; row++) {
             for(int column = 0; column < 9; column++) {
-                addSlot(new Slot(playerInventory, row + column * 9 + 9 , startX + column * slotSizePlus2, startY + row * slotSizePlus2));
+                addSlot(new Slot(playerInventory, column + row * 9 + 12, startX + column * slotSizePlus2, startY + row * slotSizePlus2));
             }
         }
 

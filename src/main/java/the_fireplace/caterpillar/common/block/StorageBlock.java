@@ -35,15 +35,17 @@ public class StorageBlock extends HorizontalDirectionalBlock implements EntityBl
 
     private static final Map<Direction, VoxelShape> SHAPES = new EnumMap<>(Direction.class);
     private static final Optional<VoxelShape> SHAPE = Stream.of(
-        Block.box(-8.5, 9.5, 16, -6.5, 13, 17),
+        Block.box(16, 10, 1, 31, 14, 15),
         Block.box(0, 0, 0, 6, 16, 16),
         Block.box(6, 6, -15, 10, 10, 0),
         Block.box(10, 0, 0, 16, 16, 16),
         Block.box(6, 10, 0, 10, 16, 16),
         Block.box(6, 0, 0, 10, 6, 16),
-        Block.box(-15, 0.5, 0, 0, 15.5, 16),
-        Block.box(16, 0.5, 0, 31, 15.5, 16),
-        Block.box(22.5, 9.5, 16, 24.5, 13, 17)
+        Block.box(22.5, 7, 15, 24.5, 11, 16),
+        Block.box(-8.5, 7, 15, -6.5, 11, 16),
+        Block.box(-15, 10, 1, 0, 14, 15),
+        Block.box(-15, 0, 1, 0, 10, 15),
+        Block.box(16, 0, 1, 31, 10, 15)
     ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR));
 
     public StorageBlock(Properties properties) {
