@@ -18,11 +18,13 @@ public class DecorationContainer extends AbstractContainerMenu {
     private final ContainerLevelAccess containerAccess;
 
     public final ContainerData data;
+    private int slotId;
+
     public static final int SLOT_SIZE = 8;
 
     // Client Constructor
     public DecorationContainer(int id, Inventory playerInventory) {
-        this(id, playerInventory, new ItemStackHandler(12), BlockPos.ZERO, new SimpleContainerData(1));
+        this(id, playerInventory, new ItemStackHandler(SLOT_SIZE), BlockPos.ZERO, new SimpleContainerData(1));
     }
 
     // Server Constructor
@@ -30,14 +32,15 @@ public class DecorationContainer extends AbstractContainerMenu {
         super(ContainerInit.DECORATION.get(), id);
         this.containerAccess = ContainerLevelAccess.create(playerInventory.player.level, pos);
         this.data = data;
+        this.slotId = 0;
 
-        final int slotSizePlus2 = 18, startX = 8, startY = 84, hotbarY = 142, decorationX = 62, decorationY = 28;
+        final int slotSizePlus2 = 18, startX = 8, startY = 84, hotbarY = 142, decorationX = 62, decorationY = 17;
 
         // Decoration slots
         for(int row = 0; row < 3; row++) {
             for(int column = 0; column < 3; column++) {
-                if (!(row == 1 && column == 1)) {
-                    addSlot(new SlotItemHandler(slots, column + row * 3, decorationX + column * slotSizePlus2, decorationY + row * slotSizePlus2));
+                if (row != 1 || column != 1) {
+                    addSlot(new SlotItemHandler(slots, slotId++, decorationX + column * slotSizePlus2, decorationY + row * slotSizePlus2));
                 }
             }
         }
@@ -45,7 +48,7 @@ public class DecorationContainer extends AbstractContainerMenu {
         // Player Inventory slots
         for(int row = 0; row < 3; row++) {
             for(int column = 0; column < 9; column++) {
-                addSlot(new Slot(playerInventory, column + row * 9 + 9 , startX + column * slotSizePlus2, startY + row * slotSizePlus2));
+                addSlot(new Slot(playerInventory, column + row * 9 + 9, startX + column * slotSizePlus2, startY + row * slotSizePlus2));
             }
         }
 

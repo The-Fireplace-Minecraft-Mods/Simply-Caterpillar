@@ -1,6 +1,6 @@
 {
-	"credit": "Made with Blockbench",
 	"ambientocclusion": true,
+	"render_type": "cutout",
 	"textures": {
 		"rod": "simplycaterpillar:block/pieces/wood_piece",
 		"side": "simplycaterpillar:block/rock_side",
