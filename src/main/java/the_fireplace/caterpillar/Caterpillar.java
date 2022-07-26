@@ -20,6 +20,7 @@ import the_fireplace.caterpillar.core.init.ItemInit;
 import the_fireplace.caterpillar.core.init.BlockEntityInit;
 
 @Mod(Caterpillar.MOD_ID)
+@Mod.EventBusSubscriber(modid = Caterpillar.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class Caterpillar
 {
 	public static final String MOD_ID = "simplycaterpillar";

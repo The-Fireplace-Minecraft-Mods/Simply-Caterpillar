@@ -1,5 +1,6 @@
 {
     "ambientocclusion": true,
+    "render_type": "cutout",
     "textures": {
         "particle": "simplycaterpillar:block/wooden_top",
         "side": "simplycaterpillar:block/rock_side",
