@@ -13,7 +13,10 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
+import net.minecraft.world.level.block.LeverBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.phys.BlockHitResult;
@@ -64,6 +67,29 @@ public class DrillHeadBlock extends HorizontalDirectionalBlock implements Entity
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         return defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
+    }
+
+    @Override
+    public void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving) {
+        // Set the drill head container data value powered to 1
+        DrillHeadBlockEntity drillHeadBlockEntity = (DrillHeadBlockEntity) level.getBlockEntity(pos);
+        if (drillHeadBlockEntity != null) {
+            if(block instanceof LeverBlock) {
+                if (level.getBlockState(fromPos).getValue(LeverBlock.POWERED)) {
+                    drillHeadBlockEntity.setPowered(true);
+                }
+            } else {
+                drillHeadBlockEntity.setPowered(false);
+            }
+        }
+
+        super.neighborChanged(state, level, pos, block, fromPos, isMoving);
+    }
+
+    @Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
+        return level.isClientSide ? null : (level0, pos, state0, blockEntity) -> ((DrillHeadBlockEntity) blockEntity).tick();
     }
 
     @Override

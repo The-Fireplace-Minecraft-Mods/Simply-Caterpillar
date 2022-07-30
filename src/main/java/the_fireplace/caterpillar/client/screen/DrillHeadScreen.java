@@ -48,7 +48,7 @@ public class DrillHeadScreen extends AbstractContainerScreen<DrillHeadContainer>
     protected void renderLabels(PoseStack stack, int mouseX, int mouseY) {
         this.font.draw(stack, DrillHeadBlockEntity.CONSUMPTION, (float)this.consumptionX, (float)this.consumptionY, 0x404040);
         this.font.draw(stack, this.title, (float)this.titleLabelX, (float)this.titleLabelY, 0xFFFFFF);
-        this.font.draw(stack, DrillHeadBlockEntity.GATHERED, (float)this.gatheredX, (float)this.consumptionY, 0x404040);
+        this.font.draw(stack, DrillHeadBlockEntity.GATHERED, (float)this.gatheredX, (float)this.gatheredY, 0x404040);
         this.font.draw(stack, this.playerInventoryTitle, (float)this.inventoryLabelX, (float)this.inventoryLabelY, 0x404040);
     }
 

@@ -111,15 +111,11 @@ public class CollectorBlock extends HorizontalDirectionalBlock implements Entity
         if (!worldIn.isClientSide && player.isCreative()) {
             DoubleBlockHalf doubleBlockHalf = state.getValue(HALF);
 
-            Caterpillar.LOGGER.debug("Collector destroying");
-
             if (doubleBlockHalf == DoubleBlockHalf.UPPER) {
-                Caterpillar.LOGGER.debug("Collector destroying: is UPPER");
                 BlockPos belowBlockPos = pos.below();
                 BlockState belowBlockState = worldIn.getBlockState(belowBlockPos);
 
                 if (belowBlockState.is(state.getBlock()) && belowBlockState.getValue(HALF) == DoubleBlockHalf.LOWER) {
-                    Caterpillar.LOGGER.debug("Collector destroying: inside");
                     worldIn.setBlock(belowBlockPos, Blocks.AIR.defaultBlockState(), 35);
                     worldIn.levelEvent(player, 2001, belowBlockPos, Block.getId(belowBlockState));
                 }

@@ -1,5 +1,5 @@
 {
-    "ambientocclusion": true,
+    "ambientocclusion": false,
     "render_type": "cutout",
     "textures": {
         "rod": "simplycaterpillar:block/pieces/wood_piece",
