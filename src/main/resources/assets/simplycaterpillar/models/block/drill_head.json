@@ -1,4 +1,5 @@
 {
+	"credit": "Made with Blockbench",
 	"ambientocclusion": false,
 	"render_type": "cutout",
 	"textures": {
@@ -49,18 +50,6 @@
 			}
 		},
 		{
-			"from": [6, 6, -15],
-			"to": [10, 10, 0],
-			"faces": {
-				"north": {"uv": [2.90909, 4.36364, 13.09091, 10.18182], "texture": "#rod"},
-				"east": {"uv": [2.90909, 4.36364, 13, 10.18182], "texture": "#rod"},
-				"south": {"uv": [2.90909, 4.36364, 13.09091, 10.18182], "texture": "#rod", "tintindex": 0},
-				"west": {"uv": [2.90909, 4.36364, 13.09091, 10.18182], "texture": "#rod"},
-				"up": {"uv": [2.90909, 4.36364, 13.09091, 10.18182], "rotation": 90, "texture": "#rod"},
-				"down": {"uv": [2.90909, 4.36364, 13.09091, 10.18182], "rotation": 90, "texture": "#rod"}
-			}
-		},
-		{
 			"from": [0, 10, 0],
 			"to": [16, 16, 15],
 			"faces": {
@@ -108,35 +97,48 @@
 				"up": {"uv": [5, 0, 11, 3], "rotation": 270, "texture": "#lever_base"},
 				"down": {"uv": [5, 0, 11, 3], "rotation": 270, "texture": "#lever_base"}
 			}
+		},
+		{
+			"from": [6, 6, -15],
+			"to": [10, 10, 0],
+			"faces": {
+				"north": {"uv": [3, 5, 13, 10], "texture": "#rod"},
+				"east": {"uv": [3, 5, 13, 10], "texture": "#rod"},
+				"south": {"uv": [3, 5, 13, 10], "texture": "#rod", "tintindex": 0},
+				"west": {"uv": [3, 5, 13, 10], "texture": "#rod"},
+				"up": {"uv": [3, 5, 13, 10], "rotation": 90, "texture": "#rod"},
+				"down": {"uv": [3, 5, 13, 10], "rotation": 90, "texture": "#rod"}
+			}
 		}
 	],
 	"display": {
 		"thirdperson_righthand": {
-			"rotation": [40, 0, 0],
+			"rotation": [-140, 0, 180],
 			"translation": [0, 0.25, 0],
 			"scale": [0.3, 0.3, 0.3]
 		},
 		"thirdperson_lefthand": {
-			"rotation": [40, 0, 0],
+			"rotation": [-140, 0, 180],
 			"scale": [0.3, 0.3, 0.3]
 		},
 		"firstperson_righthand": {
+			"rotation": [0, 180, 0],
 			"scale": [0.4, 0.4, 0.4]
 		},
 		"firstperson_lefthand": {
+			"rotation": [0, 180, 0],
 			"scale": [0.4, 0.4, 0.4]
 		},
 		"ground": {
 			"translation": [0, 8.5, 0],
-			"scale": [0.5, 0.5, 0.5]
+			"scale": [0.4, 0.4, 0.4]
 		},
 		"gui": {
 			"rotation": [0, -180, 0],
-			"translation": [0, 3, 0],
-			"scale": [0.4, 0.4, 0.4]
+			"scale": [0.3, 0.3, 0.3]
 		},
 		"fixed": {
-			"translation": [0, 3, -3.75],
+			"translation": [0, 0, -3.75],
 			"scale": [0.4, 0.4, 0.4]
 		}
 	},
@@ -145,7 +147,8 @@
 			"name": "VoxelShapes",
 			"origin": [0, 0, 0],
 			"color": 0,
-			"children": [0, 1, 2, 3, 4, 5, 6, 7]
-		}
+			"children": [0, 1, 2, 3, 4, 5, 6]
+		},
+		7
 	]
 }

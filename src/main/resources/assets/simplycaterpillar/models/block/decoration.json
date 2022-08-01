@@ -1,6 +1,7 @@
 {
+	"credit": "Made with Blockbench",
 	"ambientocclusion": false,
-	"render_type": "cutout",
+	"parent": "block/block",
 	"textures": {
 		"rod": "simplycaterpillar:block/pieces/wood_piece",
 		"side": "simplycaterpillar:block/rock_side",
@@ -19,18 +20,6 @@
 				"west": {"uv": [0, 0, 16, 16], "texture": "#side"},
 				"up": {"uv": [0, 0, 6, 16], "texture": "#side"},
 				"down": {"uv": [0, 0, 6, 16], "texture": "#side"}
-			}
-		},
-		{
-			"from": [6, 6, -15],
-			"to": [10, 10, 0],
-			"faces": {
-				"north": {"uv": [2.90909, 4.36364, 13.09091, 10.18182], "texture": "#rod"},
-				"east": {"uv": [2.90909, 4.36364, 13, 10.18182], "texture": "#rod"},
-				"south": {"uv": [2.90909, 4.36364, 13.09091, 10.18182], "texture": "#rod", "tintindex": 0},
-				"west": {"uv": [2.90909, 4.36364, 13.09091, 10.18182], "texture": "#rod"},
-				"up": {"uv": [2.90909, 4.36364, 13.09091, 10.18182], "rotation": 90, "texture": "#rod"},
-				"down": {"uv": [2.90909, 4.36364, 13.09091, 10.18182], "rotation": 90, "texture": "#rod"}
 			}
 		},
 		{
@@ -116,6 +105,18 @@
 				"up": {"uv": [0, 0, 16, 16], "texture": "#side"},
 				"down": {"uv": [0, 0, 16, 16], "texture": "#side"}
 			}
+		},
+		{
+			"from": [6, 6, -15],
+			"to": [10, 10, 0],
+			"faces": {
+				"north": {"uv": [3, 5, 13, 10], "texture": "#rod"},
+				"east": {"uv": [3, 5, 13, 10], "texture": "#rod"},
+				"south": {"uv": [3, 5, 13, 10], "texture": "#rod", "tintindex": 0},
+				"west": {"uv": [3, 5, 13, 10], "texture": "#rod"},
+				"up": {"uv": [3, 5, 13, 10], "rotation": 90, "texture": "#rod"},
+				"down": {"uv": [3, 5, 13, 10], "rotation": 90, "texture": "#rod"}
+			}
 		}
 	],
 	"display": {
@@ -136,16 +137,14 @@
 			"scale": [0.4, 0.4, 0.4]
 		},
 		"ground": {
-			"translation": [0, 1.25, 0],
 			"scale": [0.4, 0.4, 0.4]
 		},
 		"gui": {
 			"rotation": [0, -180, 0],
-			"translation": [0, 0.25, 0],
 			"scale": [0.3, 0.3, 0.3]
 		},
 		"fixed": {
-			"translation": [0, 0.5, -3.25],
+			"translation": [0, 0, -3.25],
 			"scale": [0.35, 0.35, 0.35]
 		}
 	}
