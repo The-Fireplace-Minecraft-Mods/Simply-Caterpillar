@@ -44,25 +44,9 @@ public class CollectorBlock extends HorizontalDirectionalBlock implements Entity
 
     public static final EnumProperty<DoubleBlockHalf> HALF = BlockStateProperties.DOUBLE_BLOCK_HALF;
 
-    private static final Map<Direction, VoxelShape> SHAPES = new EnumMap<>(Direction.class);
-
     private static final Map<Direction, VoxelShape> SHAPES_UPPER = new EnumMap<>(Direction.class);
 
     private static final Map<Direction, VoxelShape> SHAPES_LOWER = new EnumMap<>(Direction.class);
-    private static final Optional<VoxelShape> SHAPE = Stream.of(
-        Block.box(6, 16, 0, 10, 22, 16),
-        Block.box(0, 16, 0, 6, 32, 16),
-        Block.box(10, 16, 0, 16, 32, 16),
-        Block.box(6, 26, 0, 10, 32, 16),
-        Block.box(6, 22, -15, 10, 26, 0),
-        Block.box(0, 4, 1, 4, 12, 5),
-        Block.box(0, 0, 5, 16, 16, 6),
-        Block.box(6, 6, 12, 10, 16, 16),
-        Block.box(3, 3, 6, 13, 13, 12),
-        Block.box(0, 12, 1, 16, 16, 5),
-        Block.box(12, 4, 1, 16, 12, 5),
-        Block.box(0, 0, 1, 16, 4, 5)
-    ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR));
 
     private static final Optional<VoxelShape> SHAPE_UPPER = Stream.of(
         Block.box(6, 0, 0, 10, 6, 16),
@@ -85,14 +69,17 @@ public class CollectorBlock extends HorizontalDirectionalBlock implements Entity
     public CollectorBlock(Properties properties) {
         super(properties);
         registerDefaultState(defaultBlockState().setValue(FACING, Direction.NORTH).setValue(HALF, DoubleBlockHalf.LOWER));
-        runCalculation(SHAPES, SHAPE.get());
         runCalculation(SHAPES_UPPER, SHAPE_UPPER.get());
         runCalculation(SHAPES_LOWER, SHAPE_LOWER.get());
     }
 
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-        return SHAPES.get(state.getValue(FACING));
+        if (state.getValue(HALF) == DoubleBlockHalf.LOWER) {
+            return SHAPES_LOWER.get(state.getValue(FACING));
+        } else {
+            return SHAPES_UPPER.get(state.getValue(FACING));
+        }
     }
 
     @Override

@@ -1,6 +1,6 @@
 {
 	"ambientocclusion": false,
-	"render_type": "cutout",
+	"parent": "block/block",
 	"textures": {
 		"rod": "simplycaterpillar:block/pieces/wood_piece",
 		"side": "simplycaterpillar:block/rock_side",
@@ -169,16 +169,15 @@
 			"scale": [0.4, 0.4, 0.4]
 		},
 		"ground": {
-			"translation": [0, 7, 0],
 			"scale": [0.4, 0.4, 0.4]
 		},
 		"gui": {
 			"rotation": [0, -180, 0],
-			"translation": [0, 3.75, 0],
+			"translation": [0, -3.25, 0],
 			"scale": [0.4, 0.4, 0.4]
 		},
 		"fixed": {
-			"translation": [0, 3, -3.25],
+			"translation": [0, -3, -3.25],
 			"scale": [0.4, 0.4, 0.4]
 		}
 	},
