@@ -43,7 +43,7 @@ public class DrillHeadBlockEntity extends InventoryBlockEntity {
     }
 
     public void tick() {
-        if (this.ticks != 0 && this.ticks % 60 == 0) { // 60 ticks equals 3 seconds
+        if (this.ticks != 0 && this.ticks % 120 == 0) { // 60 ticks equals 3 seconds
             this.move();
         }
         this.ticks++;
@@ -51,12 +51,20 @@ public class DrillHeadBlockEntity extends InventoryBlockEntity {
 
     private void move() {
         if (!this.level.isClientSide) {
-            if (isPowered()) {
-                this.getLevel().setBlock(this.getBlockPos(), Blocks.AIR.defaultBlockState(), 35);
-                this.getLevel().levelEvent(null, 2001, this.getBlockPos(), Block.getId(this.getBlockState()));
+            if (true) { // isPowered()
+                this.drillFrontBlocks();
+                this.moveToFront();
+            }
+        }
+    }
 
-                BlockPos nextPos = this.getBlockPos();
-                BlockPos upperNextPos = this.getBlockPos().above();
+    private void moveToFront() {
+        this.getLevel().setBlock(this.getBlockPos(), Blocks.AIR.defaultBlockState(), 35);
+        this.getLevel().levelEvent(null, 2001, this.getBlockPos(), Block.getId(this.getBlockState()));
+
+        BlockPos nextPos = this.getBlockPos().relative(this.getBlockState().getValue(FACING).getOpposite());
+        BlockPos upperNextPos = nextPos.above();
+                /*
                 switch (this.getBlockState().getValue(FACING)) {
                     case NORTH:
                         nextPos = nextPos.south();
@@ -75,14 +83,38 @@ public class DrillHeadBlockEntity extends InventoryBlockEntity {
                         upperNextPos = upperNextPos.north();
                         break;
                 }
+                 */
 
-                this.getLevel().playSound(null, this.getBlockPos(), SoundEvents.PISTON_EXTEND, SoundSource.BLOCKS, 1.0F, 1.0F);
+        this.getLevel().playSound(null, this.getBlockPos(), SoundEvents.PISTON_EXTEND, SoundSource.BLOCKS, 1.0F, 1.0F);
 
-                this.getLevel().setBlock(nextPos, this.getBlockState(), 35);
+        this.getLevel().setBlock(nextPos, this.getBlockState(), 35);
+        this.getLevel().levelEvent(null, 2001, nextPos, Block.getId(this.getBlockState()));
+
+        // this.getLevel().setBlock(upperNextPos, this.getBlockState().setValue(HALF, DoubleBlockHalf.UPPER), 35);
+        // this.getLevel().levelEvent(null, 2001, upperNextPos, Block.getId(this.getBlockState()));
+    }
+
+    private void drillFrontBlocks() {
+        System.out.println("DRILL HEAD POS: " + this.getBlockPos());
+        for (int i = -1; i < 2; i++) {
+            for (int j = -1; j < 2; j++) {
+                // Drill a 3x3 zone of blocks
+                BlockPos destroyPos = this.getBlockPos().offset(-1, i, j);
+                // BlockPos destroyPos = new BlockPos(this.getBlockPos().getX() + j, this.getBlockPos().getY() + i, this.getBlockPos().getZ() + 1);
+                System.out.println("DESTROY POS: " + destroyPos);
+
+                this.getLevel().destroyBlock(destroyPos, true);
+
+                //this.getLevel().setBlock(destroyPos, Blocks.AIR.defaultBlockState(), 35);
+
+                /*
+                this.getLevel().setBlock(this.getBlockPos(), Blocks.AIR.defaultBlockState(), 35);
+                this.getLevel().levelEvent(null, 2001, this.getBlockPos(), Block.getId(this.getBlockState()));
+
+                BlockPos nextPos = this.getBlockPos().relative(this.getBlockState().getValue(FACING).getOpposite());
+                this.getLevel().setBlock(nextPos, Blocks.AIR.defaultBlockState(), 35);
                 this.getLevel().levelEvent(null, 2001, nextPos, Block.getId(this.getBlockState()));
-
-                // this.getLevel().setBlock(upperNextPos, this.getBlockState().setValue(HALF, DoubleBlockHalf.UPPER), 35);
-                // this.getLevel().levelEvent(null, 2001, upperNextPos, Block.getId(this.getBlockState()));
+                 */
             }
         }
     }
