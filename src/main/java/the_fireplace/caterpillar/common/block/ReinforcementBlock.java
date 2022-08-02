@@ -6,7 +6,9 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.SimpleMenuProvider;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -16,6 +18,7 @@ import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -25,6 +28,7 @@ import org.jetbrains.annotations.Nullable;
 import the_fireplace.caterpillar.Caterpillar;
 import the_fireplace.caterpillar.common.block.entity.ReinforcementBlockEntity;
 import the_fireplace.caterpillar.common.container.ReinforcementContainer;
+import the_fireplace.caterpillar.core.util.ReinforcementPart;
 
 import java.util.EnumMap;
 import java.util.Map;
@@ -33,43 +37,89 @@ import java.util.stream.Stream;
 
 public class ReinforcementBlock extends HorizontalDirectionalBlock implements EntityBlock {
 
-    private static final Map<Direction, VoxelShape> SHAPES = new EnumMap<>(Direction.class);
-    private static final Optional<VoxelShape> SHAPE = Stream.of(
-        Block.box(6, 0, 0, 10, 6, 16),
-        Block.box(0, 0, 0, 6, 16, 16),
+    public static final EnumProperty<ReinforcementPart> PART = EnumProperty.create("part", ReinforcementPart.class);
+
+    private static final Map<Direction, VoxelShape> SHAPES_LEFT = new EnumMap<>(Direction.class);
+
+    private static final Map<Direction, VoxelShape> SHAPES_BASE = new EnumMap<>(Direction.class);
+
+    private static final Map<Direction, VoxelShape> SHAPES_RIGHT = new EnumMap<>(Direction.class);
+
+    private static final Map<Direction, VoxelShape> SHAPES_TOP = new EnumMap<>(Direction.class);
+
+    private static final Map<Direction, VoxelShape> SHAPES_BOTTOM = new EnumMap<>(Direction.class);
+
+    private static final Optional<VoxelShape> SHAPE_LEFT = Stream.of(
+        Block.box(0, 0, 0, 1, 16, 16),
+        Block.box(1, 6, 6, 16, 10, 10)
+    ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR));
+
+    private static final Optional<VoxelShape> SHAPE_BASE = Stream.of(
         Block.box(6, 6, -15, 10, 10, 0),
-        Block.box(-15, 6, 6, 0, 10, 10),
-        Block.box(6, -15, 6, 10, 0, 10),
-        Block.box(16, 6, 6, 31, 10, 10),
-        Block.box(0, 31, 0, 16, 32, 16),
-        Block.box(0, -16, 0, 16, -15, 16),
-        Block.box(-16, 0, 0, -15, 16, 16),
-        Block.box(31, 0, 0, 32, 16, 16),
+        Block.box(0, 0, 0, 6, 16, 16),
         Block.box(10, 0, 0, 16, 16, 16),
         Block.box(6, 10, 0, 10, 16, 16),
-        Block.box(6, 16, 6, 10, 31, 10)
+        Block.box(6, 0, 0, 10, 6, 16)
+    ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR));
+
+    private static final Optional<VoxelShape> SHAPE_RIGHT = Stream.of(
+        Block.box(0, 6, 6, 15, 10, 10),
+        Block.box(15, 0, 0, 16, 16, 16)
+    ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR));
+
+    private static final Optional<VoxelShape> SHAPE_TOP = Stream.of(
+        Block.box(6, 0, 6, 10, 15, 10),
+        Block.box(0, 15, 0, 16, 16, 16)
+    ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR));
+
+    private static final Optional<VoxelShape> SHAPE_BOTTOM = Stream.of(
+        Block.box(6, 1, 6, 10, 16, 10),
+        Block.box(0, 0, 0, 16, 1, 16)
     ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR));
 
     public ReinforcementBlock(Properties properties) {
         super(properties);
-        registerDefaultState(defaultBlockState().setValue(FACING, Direction.NORTH));
-        runCalculation(SHAPE.get());
+        registerDefaultState(defaultBlockState().setValue(FACING, Direction.NORTH).setValue(PART, ReinforcementPart.BOTTOM));
+        runCalculation(SHAPES_LEFT, SHAPE_LEFT.get());
+        runCalculation(SHAPES_BASE, SHAPE_BASE.get());
+        runCalculation(SHAPES_RIGHT, SHAPE_RIGHT.get());
+        runCalculation(SHAPES_TOP, SHAPE_TOP.get());
+        runCalculation(SHAPES_BOTTOM, SHAPE_BOTTOM.get());
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
-        builder.add(FACING);
+        builder.add(FACING, PART);
     }
 
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-        return SHAPES.get(state.getValue(FACING));
+        switch (state.getValue(PART)) {
+            case LEFT:
+                return SHAPES_LEFT.get(state.getValue(FACING));
+            case RIGHT:
+                return SHAPES_RIGHT.get(state.getValue(FACING));
+            case TOP:
+                return SHAPES_TOP.get(state.getValue(FACING));
+            case BOTTOM:
+                return SHAPES_BOTTOM.get(state.getValue(FACING));
+            default:
+                return SHAPES_BASE.get(state.getValue(FACING));
+        }
     }
 
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
-        return defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
+        BlockPos blockPos = context.getClickedPos();
+        Level level = context.getLevel();
+        Direction direction = context.getNearestLookingDirection();
+
+        if (blockPos.getY() < level.getMaxBuildHeight() - 1 && level.getBlockState(blockPos.above().relative(direction.getClockWise())).canBeReplaced(context) && level.getBlockState(blockPos.above().relative(direction.getCounterClockWise())).canBeReplaced(context) && level.getBlockState(blockPos.above()).canBeReplaced(context) && level.getBlockState(blockPos.above(2)).canBeReplaced(context)) {
+            return defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite()).setValue(PART, ReinforcementPart.BOTTOM);
+        }
+
+        return null;
     }
 
     @Override
@@ -82,6 +132,56 @@ public class ReinforcementBlock extends HorizontalDirectionalBlock implements En
         }
     }
 
+    @Override
+    public void setPlacedBy(Level level, BlockPos blockPos, BlockState blockState, @Nullable LivingEntity livingEntity, ItemStack stack) {
+        Direction direction = blockState.getValue(FACING);
+
+        level.setBlock(blockPos.above().relative(direction.getCounterClockWise()), blockState.setValue(PART, ReinforcementPart.LEFT), 3);
+        level.setBlock(blockPos.above().relative(direction.getClockWise()), blockState.setValue(PART, ReinforcementPart.RIGHT), 3);
+        level.setBlock(blockPos.above(), blockState.setValue(PART, ReinforcementPart.BASE), 3);
+        level.setBlock(blockPos.above(2), blockState.setValue(PART, ReinforcementPart.TOP), 3);
+
+    }
+
+    @Override
+    public void playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
+        Direction direction = state.getValue(FACING);
+        ReinforcementPart part = state.getValue(PART);
+
+        switch (part) {
+            case LEFT:
+                level.destroyBlock(pos.relative(direction.getClockWise()), false);
+                level.destroyBlock(pos.relative(direction.getClockWise(), 2), false);
+                level.destroyBlock(pos.relative(direction.getClockWise()).above(), false);
+                level.destroyBlock(pos.relative(direction.getClockWise()).below(), false);
+                break;
+            case RIGHT:
+                level.destroyBlock(pos.relative(direction.getCounterClockWise()), false);
+                level.destroyBlock(pos.relative(direction.getCounterClockWise(), 2), false);
+                level.destroyBlock(pos.relative(direction.getCounterClockWise()).above(), false);
+                level.destroyBlock(pos.relative(direction.getCounterClockWise()).below(), false);
+                break;
+            case TOP:
+                level.destroyBlock(pos.below(), false);
+                level.destroyBlock(pos.below(2), false);
+                level.destroyBlock(pos.below().relative(direction.getClockWise()), false);
+                level.destroyBlock(pos.below().relative(direction.getCounterClockWise()), false);
+                break;
+            case BOTTOM:
+                level.destroyBlock(pos.above(), false);
+                level.destroyBlock(pos.above(2), false);
+                level.destroyBlock(pos.above().relative(direction.getClockWise()), false);
+                level.destroyBlock(pos.above().relative(direction.getCounterClockWise()), false);
+                break;
+            default:
+                level.destroyBlock(pos.relative(direction.getCounterClockWise()), false);
+                level.destroyBlock(pos.relative(direction.getClockWise()), false);
+                level.destroyBlock(pos.above(), false);
+                level.destroyBlock(pos.below(), false);
+                break;
+        }
+    }
+
     protected void openContainer(Level level, BlockPos pos, Player player) {
         BlockEntity blockEntity = level.getBlockEntity(pos);
         if (blockEntity instanceof ReinforcementBlockEntity) {
@@ -90,9 +190,9 @@ public class ReinforcementBlock extends HorizontalDirectionalBlock implements En
         }
     }
 
-    protected void runCalculation(VoxelShape shape) {
+    protected void runCalculation(Map<Direction, VoxelShape> shapes, VoxelShape shape) {
         for (Direction direction : Direction.values())
-            SHAPES.put(direction, Caterpillar.calculateShapes(direction, shape));
+            shapes.put(direction, Caterpillar.calculateShapes(direction, shape));
     }
 
     @Nullable
