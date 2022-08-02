@@ -1,7 +1,6 @@
 {
 	"credit": "Made with Blockbench",
 	"ambientocclusion": false,
-	"parent": "block/block",
 	"textures": {
 		"side": "simplycaterpillar:block/rock_side",
 		"chest": "entity/chest/normal",
@@ -126,7 +125,7 @@
 				"east": {"uv": [0, 8.25, 3.5, 10.75], "texture": "#chest"},
 				"south": {"uv": [10.5, 10.75, 14, 8.25], "texture": "#chest", "tintindex": 0},
 				"west": {"uv": [7, 8.25, 10.5, 10.75], "texture": "#chest"},
-				"up": {"uv": [9.5, 10.5, 4.25, 14.5], "rotation": 180, "texture": "#missing"},
+				"up": {"uv": [9.5, 10.5, 4.25, 14.5], "rotation": 180, "texture": "#chest"},
 				"down": {"uv": [7, 0, 10.5, 3.5], "texture": "#chest"}
 			}
 		},
@@ -138,7 +137,7 @@
 				"east": {"uv": [0, 8.25, 3.5, 10.75], "texture": "#chest"},
 				"south": {"uv": [10.5, 10.75, 14, 8.25], "texture": "#chest", "tintindex": 0},
 				"west": {"uv": [7, 8.25, 10.5, 10.75], "texture": "#chest"},
-				"up": {"uv": [9.5, 10.5, 4.25, 14.5], "rotation": 180, "texture": "#missing"},
+				"up": {"uv": [9.5, 10.5, 4.25, 14.5], "rotation": 180, "texture": "#chest"},
 				"down": {"uv": [7, 0, 10.5, 3.5], "texture": "#chest"}
 			}
 		}
