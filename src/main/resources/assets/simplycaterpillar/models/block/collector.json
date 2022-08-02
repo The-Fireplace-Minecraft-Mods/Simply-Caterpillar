@@ -1,6 +1,5 @@
 {
 	"ambientocclusion": false,
-	"parent": "block/block",
 	"textures": {
 		"rod": "simplycaterpillar:block/pieces/wood_piece",
 		"side": "simplycaterpillar:block/rock_side",

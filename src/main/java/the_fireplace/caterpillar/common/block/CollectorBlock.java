@@ -2,12 +2,8 @@ package the_fireplace.caterpillar.common.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
-import net.minecraft.util.RandomSource;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -24,7 +20,6 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
-import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
@@ -83,33 +78,14 @@ public class CollectorBlock extends HorizontalDirectionalBlock implements Entity
     }
 
     @Override
-    public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, LevelAccessor worldIn, BlockPos currentPos, BlockPos facingPos) {
-        DoubleBlockHalf doubleBlockHalf = stateIn.getValue(HALF);
+    public void playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
+        DoubleBlockHalf half = state.getValue(HALF);
 
-        if (facing.getAxis() == Direction.Axis.Y && doubleBlockHalf == DoubleBlockHalf.LOWER == (facing == Direction.UP)) {
-            return facingState.is(this) && facingState.getValue(HALF) != doubleBlockHalf ? stateIn.setValue(FACING, facingState.getValue(FACING)) : Blocks.AIR.defaultBlockState();
+        if (half == DoubleBlockHalf.UPPER) {
+            level.destroyBlock(pos.below(), false);
         } else {
-            return doubleBlockHalf == DoubleBlockHalf.LOWER && facing == Direction.DOWN && !stateIn.canSurvive(worldIn, currentPos) ? Blocks.AIR.defaultBlockState() : super.updateShape(stateIn, facing, facingState, worldIn, currentPos, facingPos);
+            level.destroyBlock(pos.above(), false);
         }
-    }
-
-    @Override
-    public void playerWillDestroy(Level worldIn, BlockPos pos, BlockState state, Player player) {
-        if (!worldIn.isClientSide && player.isCreative()) {
-            DoubleBlockHalf doubleBlockHalf = state.getValue(HALF);
-
-            if (doubleBlockHalf == DoubleBlockHalf.UPPER) {
-                BlockPos belowBlockPos = pos.below();
-                BlockState belowBlockState = worldIn.getBlockState(belowBlockPos);
-
-                if (belowBlockState.is(state.getBlock()) && belowBlockState.getValue(HALF) == DoubleBlockHalf.LOWER) {
-                    worldIn.setBlock(belowBlockPos, Blocks.AIR.defaultBlockState(), 35);
-                    worldIn.levelEvent(player, 2001, belowBlockPos, Block.getId(belowBlockState));
-                }
-            }
-        }
-
-        super.playerWillDestroy(worldIn, pos, state, player);
     }
 
     @Override
@@ -119,9 +95,9 @@ public class CollectorBlock extends HorizontalDirectionalBlock implements Entity
 
         if (blockPos.getY() < level.getMaxBuildHeight() - 1 && level.getBlockState(blockPos.above()).canBeReplaced(context)) {
             return defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite()).setValue(HALF, DoubleBlockHalf.LOWER);
-        } else {
-            return null;
         }
+
+        return null;
     }
 
     @Nullable
@@ -136,27 +112,9 @@ public class CollectorBlock extends HorizontalDirectionalBlock implements Entity
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
-    public long getSeed(BlockState state, BlockPos pos) {
-        return Mth.getSeed(pos.getX(), pos.below(state.getValue(HALF) == DoubleBlockHalf.LOWER ? 0 : 1).getY(), pos.getZ());
-    }
-
-    @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
         builder.add(HALF, FACING);
-    }
-
-    @Override
-    public boolean canSurvive(BlockState state, LevelReader worldIn, BlockPos blockPos) {
-        BlockPos belowBlockpos = blockPos.below();
-        BlockState belowBlockState = worldIn.getBlockState(belowBlockpos);
-        return state.getValue(HALF) == DoubleBlockHalf.LOWER ? belowBlockState.isFaceSturdy(worldIn, belowBlockpos, Direction.UP) : belowBlockState.is(this);
-    }
-
-    @Override
-    public PushReaction getPistonPushReaction(BlockState p_60584_) {
-        return PushReaction.DESTROY;
     }
 
     protected void runCalculation(Map<Direction, VoxelShape> shapes, VoxelShape shape) {
