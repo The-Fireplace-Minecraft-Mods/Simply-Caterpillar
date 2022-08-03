@@ -140,46 +140,37 @@ public class ReinforcementBlock extends HorizontalDirectionalBlock implements En
         level.setBlock(blockPos.above().relative(direction.getClockWise()), blockState.setValue(PART, ReinforcementPart.RIGHT), 3);
         level.setBlock(blockPos.above(), blockState.setValue(PART, ReinforcementPart.BASE), 3);
         level.setBlock(blockPos.above(2), blockState.setValue(PART, ReinforcementPart.TOP), 3);
-
     }
 
     @Override
     public void playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
         Direction direction = state.getValue(FACING);
         ReinforcementPart part = state.getValue(PART);
+        BlockPos basePos;
 
         switch (part) {
             case LEFT:
-                level.destroyBlock(pos.relative(direction.getClockWise()), false);
-                level.destroyBlock(pos.relative(direction.getClockWise(), 2), false);
-                level.destroyBlock(pos.relative(direction.getClockWise()).above(), false);
-                level.destroyBlock(pos.relative(direction.getClockWise()).below(), false);
+                basePos = pos.relative(direction.getClockWise());
                 break;
             case RIGHT:
-                level.destroyBlock(pos.relative(direction.getCounterClockWise()), false);
-                level.destroyBlock(pos.relative(direction.getCounterClockWise(), 2), false);
-                level.destroyBlock(pos.relative(direction.getCounterClockWise()).above(), false);
-                level.destroyBlock(pos.relative(direction.getCounterClockWise()).below(), false);
+                basePos = pos.relative(direction.getCounterClockWise());
                 break;
             case TOP:
-                level.destroyBlock(pos.below(), false);
-                level.destroyBlock(pos.below(2), false);
-                level.destroyBlock(pos.below().relative(direction.getClockWise()), false);
-                level.destroyBlock(pos.below().relative(direction.getCounterClockWise()), false);
+                basePos = pos.below();
                 break;
             case BOTTOM:
-                level.destroyBlock(pos.above(), false);
-                level.destroyBlock(pos.above(2), false);
-                level.destroyBlock(pos.above().relative(direction.getClockWise()), false);
-                level.destroyBlock(pos.above().relative(direction.getCounterClockWise()), false);
+                basePos = pos.above();
                 break;
             default:
-                level.destroyBlock(pos.relative(direction.getCounterClockWise()), false);
-                level.destroyBlock(pos.relative(direction.getClockWise()), false);
-                level.destroyBlock(pos.above(), false);
-                level.destroyBlock(pos.below(), false);
+                basePos = pos;
                 break;
         }
+
+        level.destroyBlock(basePos, player.isCreative() ? false : true);
+        level.destroyBlock(basePos.relative(direction.getCounterClockWise()), false);
+        level.destroyBlock(basePos.relative(direction.getClockWise()), false);
+        level.destroyBlock(basePos.above(), false);
+        level.destroyBlock(basePos.below(), false);
     }
 
     protected void openContainer(Level level, BlockPos pos, Player player) {

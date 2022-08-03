@@ -1,6 +1,6 @@
 {
 	"credit": "Made with Blockbench",
-	"parent": "block/orientable",
+	"ambientocclusion": false,
 	"textures": {
 		"rod": "simplycaterpillar:block/pieces/wood_piece",
 		"side": "simplycaterpillar:block/rock_side",
