@@ -1,0 +1,36 @@
+{
+	"credit": "Made with Blockbench",
+	"ambientocclusion": false,
+	"render_type": "cutout",
+	"textures": {
+		"0": "simplycaterpillar:block/blades/blades",
+		"1": "simplycaterpillar:block/blades/none_blades",
+		"particle": "simplycaterpillar:block/blades/blades"
+	},
+	"elements": [
+		{
+			"from": [0, 0, 15],
+			"to": [16, 16, 16],
+			"faces": {
+				"north": {"uv": [5.33333, 0, 10.66667, 5.33333], "texture": "#1"},
+				"south": {"uv": [5.33333, 0, 10.66667, 5.33333], "texture": "#1", "tintindex": 0}
+			}
+		},
+		{
+			"from": [0, 0, 15.5],
+			"to": [16, 16, 15.5],
+			"faces": {
+				"north": {"uv": [0, 10.66667, 5.33333, 16], "texture": "#0"},
+				"south": {"uv": [0, 10.66667, 5.33333, 16], "texture": "#0", "tintindex": 0}
+			}
+		}
+	],
+	"groups": [
+		{
+			"name": "VoxelShapes",
+			"origin": [0, 0, 0],
+			"color": 0,
+			"children": [0, 1]
+		}
+	]
+}

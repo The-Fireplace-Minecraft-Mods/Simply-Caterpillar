@@ -1,8 +1,43 @@
 {
     "variants": {
-        "facing=north": { "model": "simplycaterpillar:block/blades/none_blades" },
-        "facing=south": { "model": "simplycaterpillar:block/blades/none_blades", "y": 180 },
-        "facing=west":  { "model": "simplycaterpillar:block/blades/none_blades", "y": 270 },
-        "facing=east":  { "model": "simplycaterpillar:block/blades/none_blades", "y": 90 }
+        "facing=north,part=base": { "model": "simplycaterpillar:block/drill_head_base" },
+        "facing=south,part=base": { "model": "simplycaterpillar:block/drill_head_base", "y": 180 },
+        "facing=west,part=base":  { "model": "simplycaterpillar:block/drill_head_base", "y": 270 },
+        "facing=east,part=base":  { "model": "simplycaterpillar:block/drill_head_base", "y": 90 },
+
+        "facing=north,part=blade_top": { "model": "simplycaterpillar:block/drill_head_blade_top" },
+        "facing=south,part=blade_top": { "model": "simplycaterpillar:block/drill_head_blade_top", "y": 180 },
+        "facing=west,part=blade_top":  { "model": "simplycaterpillar:block/drill_head_blade_top", "y": 270 },
+        "facing=east,part=blade_top":  { "model": "simplycaterpillar:block/drill_head_blade_top", "y": 90 },
+
+        "facing=north,part=blade_bottom": { "model": "simplycaterpillar:block/drill_head_blade_bottom" },
+        "facing=south,part=blade_bottom": { "model": "simplycaterpillar:block/drill_head_blade_bottom", "y": 180 },
+        "facing=west,part=blade_bottom":  { "model": "simplycaterpillar:block/drill_head_blade_bottom", "y": 270 },
+        "facing=east,part=blade_bottom":  { "model": "simplycaterpillar:block/drill_head_blade_bottom", "y": 90 },
+
+        "facing=north,part=blade_left": { "model": "simplycaterpillar:block/drill_head_blade_left" },
+        "facing=south,part=blade_left": { "model": "simplycaterpillar:block/drill_head_blade_left", "y": 180 },
+        "facing=west,part=blade_left":  { "model": "simplycaterpillar:block/drill_head_blade_left", "y": 270 },
+        "facing=east,part=blade_left":  { "model": "simplycaterpillar:block/drill_head_blade_left", "y": 90 },
+
+        "facing=north,part=blade_left_top": { "model": "simplycaterpillar:block/drill_head_blade_left_top" },
+        "facing=south,part=blade_left_top": { "model": "simplycaterpillar:block/drill_head_blade_left_top", "y": 180 },
+        "facing=west,part=blade_left_top":  { "model": "simplycaterpillar:block/drill_head_blade_left_top", "y": 270 },
+        "facing=east,part=blade_left_top":  { "model": "simplycaterpillar:block/drill_head_blade_left_top", "y": 90 },
+
+        "facing=north,part=blade_left_bottom": { "model": "simplycaterpillar:block/drill_head_blade_left_bottom" },
+        "facing=south,part=blade_left_bottom": { "model": "simplycaterpillar:block/drill_head_blade_left_bottom", "y": 180 },
+        "facing=west,part=blade_left_bottom":  { "model": "simplycaterpillar:block/drill_head_blade_left_bottom", "y": 270 },
+        "facing=east,part=blade_left_bottom":  { "model": "simplycaterpillar:block/drill_head_blade_left_bottom", "y": 90 },
+
+        "facing=north,part=blade_right_top": { "model": "simplycaterpillar:block/drill_head_blade_right_top" },
+        "facing=south,part=blade_right_top": { "model": "simplycaterpillar:block/drill_head_blade_right_top", "y": 180 },
+        "facing=west,part=blade_right_top":  { "model": "simplycaterpillar:block/drill_head_blade_right_top", "y": 270 },
+        "facing=east,part=blade_right_top":  { "model": "simplycaterpillar:block/drill_head_blade_right_top", "y": 90 },
+
+        "facing=north,part=blade_right_bottom": { "model": "simplycaterpillar:block/drill_head_blade_right_bottom" },
+        "facing=south,part=blade_right_bottom": { "model": "simplycaterpillar:block/drill_head_blade_right_bottom", "y": 180 },
+        "facing=west,part=blade_right_bottom":  { "model": "simplycaterpillar:block/drill_head_blade_right_bottom", "y": 270 },
+        "facing=east,part=blade_right_bottom":  { "model": "simplycaterpillar:block/drill_head_blade_right_bottom", "y": 90 }
     }
 }
