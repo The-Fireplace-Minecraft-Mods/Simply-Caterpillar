@@ -30,7 +30,7 @@ public class DrillHeadLeverBlock extends LeverBlock {
         level.destroyBlock(pos.below().relative(direction.getOpposite()), false);
         level.destroyBlock(pos.below().relative(direction.getOpposite(), 2), false);
 
-        level.removeBlockEntity(pos.below().relative(direction.getOpposite()));
+        super.playerWillDestroy(level, pos, state, player);
     }
 
     @Override
