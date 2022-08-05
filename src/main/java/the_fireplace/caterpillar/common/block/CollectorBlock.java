@@ -2,15 +2,12 @@ package the_fireplace.caterpillar.common.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
@@ -24,8 +21,6 @@ import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.Nullable;
 import the_fireplace.caterpillar.Caterpillar;
 import the_fireplace.caterpillar.common.block.entity.CollectorBlockEntity;
@@ -35,15 +30,16 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+
 public class CollectorBlock extends HorizontalDirectionalBlock implements EntityBlock {
 
     public static final EnumProperty<DoubleBlockHalf> HALF = BlockStateProperties.DOUBLE_BLOCK_HALF;
 
-    private static final Map<Direction, VoxelShape> SHAPES_UPPER = new EnumMap<>(Direction.class);
+    public static final Map<Direction, VoxelShape> SHAPES_UPPER = new EnumMap<>(Direction.class);
 
-    private static final Map<Direction, VoxelShape> SHAPES_LOWER = new EnumMap<>(Direction.class);
+    public static final Map<Direction, VoxelShape> SHAPES_LOWER = new EnumMap<>(Direction.class);
 
-    private static final Optional<VoxelShape> SHAPE_UPPER = Stream.of(
+    public static final Optional<VoxelShape> SHAPE_UPPER = Stream.of(
         Block.box(6, 0, 0, 10, 6, 16),
         Block.box(0, 0, 0, 6, 16, 16),
         Block.box(10, 0, 0, 16, 16, 16),
@@ -51,7 +47,7 @@ public class CollectorBlock extends HorizontalDirectionalBlock implements Entity
         Block.box(6, 6, -15, 10, 10, 0)
     ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR));
 
-    private static final Optional<VoxelShape> SHAPE_LOWER = Stream.of(
+    public static final Optional<VoxelShape> SHAPE_LOWER = Stream.of(
         Block.box(0, 0, 1, 16, 4, 5),
         Block.box(12, 4, 1, 16, 12, 5),
         Block.box(0, 12, 1, 16, 16, 5),
@@ -103,7 +99,7 @@ public class CollectorBlock extends HorizontalDirectionalBlock implements Entity
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
-        return level.isClientSide ? null : (level0, pos, state0, blockEntity) -> ((CollectorBlockEntity) blockEntity).tick();
+        return level.isClientSide ? null : (level0, pos0, state0, blockEntity) -> ((CollectorBlockEntity) blockEntity).tick(level0, pos0, state0, blockEntity);
     }
 
     @Override
