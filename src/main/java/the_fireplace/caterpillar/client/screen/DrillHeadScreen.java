@@ -15,7 +15,7 @@ import the_fireplace.caterpillar.common.container.DrillHeadContainer;
 
 public class DrillHeadScreen extends AbstractContainerScreen<DrillHeadContainer> {
 
-    private static final ResourceLocation TEXTURE = new ResourceLocation(Caterpillar.MOD_ID, "textures/gui/caterpillar.png");
+    public static final ResourceLocation TEXTURE = new ResourceLocation(Caterpillar.MOD_ID, "textures/gui/caterpillar.png");
 
     protected Font font;
 
@@ -27,8 +27,11 @@ public class DrillHeadScreen extends AbstractContainerScreen<DrillHeadContainer>
 
     private final int gatheredY;
 
+    private DrillHeadContainer container;
+
     public DrillHeadScreen(DrillHeadContainer container, Inventory playerInventory, Component title) {
         super(container, playerInventory, title);
+        this.container = container;
         this.font = Minecraft.getInstance().font;
         this.leftPos = 0;
         this.topPos = 0;
@@ -57,6 +60,12 @@ public class DrillHeadScreen extends AbstractContainerScreen<DrillHeadContainer>
         renderBackground(stack);
         bindTexture();
         blit(stack, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
+
+        if (this.container.isLit()) {
+            int k = this.container.getLitProgress();
+            blit(stack, this.leftPos + 81, this.topPos + 36 + 12 - k, 176, 12 - k, 14, k + 1);
+        }
+
     }
 
     public static void bindTexture() {

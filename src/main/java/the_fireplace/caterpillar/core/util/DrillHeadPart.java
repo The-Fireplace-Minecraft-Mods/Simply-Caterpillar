@@ -15,7 +15,7 @@ public enum DrillHeadPart implements StringRepresentable {
 
     private final String name;
 
-    private DrillHeadPart(String name) {
+    DrillHeadPart(String name) {
         this.name = name;
     }
 

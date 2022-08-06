@@ -24,6 +24,9 @@ public class DrillHeadContainer extends AbstractContainerMenu {
 
     public final ContainerData data;
 
+    private int burnTime;
+
+    private int maxBurnTime;
     private int slotId;
 
     public static final int SLOT_SIZE = 19;
@@ -113,5 +116,18 @@ public class DrillHeadContainer extends AbstractContainerMenu {
 
     public static MenuConstructor getServerContainer(DrillHeadBlockEntity drill_head, BlockPos pos) {
         return (id, playerInventory, player) -> new DrillHeadContainer(id, playerInventory, drill_head.inventory, pos, new DrillHeadContainerData(drill_head, 1));
+    }
+
+    public boolean isLit() {
+        return this.data.get(0) > 0;
+    }
+
+    public int getLitProgress() {
+        int i = this.data.get(1);
+        if (i == 0) {
+            i = 200;
+        }
+
+        return this.data.get(0) * 13 / i;
     }
 }

@@ -159,6 +159,23 @@ public class DrillHeadBlock extends HorizontalDirectionalBlock implements Entity
     @Override
     public void playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
         Direction direction = state.getValue(FACING);
+        BlockPos basePos = getBasePos(state, pos);
+
+        level.destroyBlock(basePos, player.isCreative() ? false : true);
+        level.destroyBlock(basePos.relative(direction.getCounterClockWise()), false);
+        level.destroyBlock(basePos.relative(direction.getClockWise()), false);
+        level.destroyBlock(basePos.above(), false);
+        level.destroyBlock(basePos.below(), false);
+        level.destroyBlock(basePos.above().relative(direction.getCounterClockWise()), false);
+        level.destroyBlock(basePos.above().relative(direction.getClockWise()), false);
+        level.destroyBlock(basePos.below().relative(direction.getCounterClockWise()), false);
+        level.destroyBlock(basePos.below().relative(direction.getClockWise()), false);
+
+        super.playerWillDestroy(level, pos, state, player);
+    }
+
+    private BlockPos getBasePos(BlockState state, BlockPos pos) {
+        Direction direction = state.getValue(FACING);
         DrillHeadPart part = state.getValue(PART);
         BlockPos basePos;
 
@@ -189,23 +206,17 @@ public class DrillHeadBlock extends HorizontalDirectionalBlock implements Entity
                 break;
         }
 
-        level.destroyBlock(basePos, player.isCreative() ? false : true);
-        level.destroyBlock(basePos.relative(direction.getCounterClockWise()), false);
-        level.destroyBlock(basePos.relative(direction.getClockWise()), false);
-        level.destroyBlock(basePos.above(), false);
-        level.destroyBlock(basePos.below(), false);
-        level.destroyBlock(basePos.above().relative(direction.getCounterClockWise()), false);
-        level.destroyBlock(basePos.above().relative(direction.getClockWise()), false);
-        level.destroyBlock(basePos.below().relative(direction.getCounterClockWise()), false);
-        level.destroyBlock(basePos.below().relative(direction.getClockWise()), false);
-
-        super.playerWillDestroy(level, pos, state, player);
+        return basePos;
     }
 
     protected void openContainer(Level level, BlockPos pos, Player player) {
         BlockEntity blockEntity = level.getBlockEntity(pos);
         if (blockEntity instanceof DrillHeadBlockEntity) {
-            MenuProvider container = new SimpleMenuProvider(DrillHeadContainer.getServerContainer((DrillHeadBlockEntity) blockEntity, pos), DrillHeadBlockEntity.TITLE);
+            BlockState state = level.getBlockState(pos);
+            BlockPos basePos = getBasePos(state, pos);
+            BlockEntity baseBlockEntity = level.getBlockEntity(basePos);
+
+            MenuProvider container = new SimpleMenuProvider(DrillHeadContainer.getServerContainer((DrillHeadBlockEntity) baseBlockEntity, basePos), DrillHeadBlockEntity.TITLE);
             player.openMenu(container);
         }
     }

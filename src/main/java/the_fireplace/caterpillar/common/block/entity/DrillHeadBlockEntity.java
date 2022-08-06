@@ -10,22 +10,17 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.AttachFace;
 import the_fireplace.caterpillar.Caterpillar;
 import the_fireplace.caterpillar.common.block.entity.util.InventoryBlockEntity;
 import the_fireplace.caterpillar.common.container.DrillHeadContainer;
 import the_fireplace.caterpillar.core.init.BlockEntityInit;
 import the_fireplace.caterpillar.core.util.DrillHeadPart;
 
-import static net.minecraft.world.level.block.FaceAttachedHorizontalDirectionalBlock.FACE;
 import static net.minecraft.world.level.block.HorizontalDirectionalBlock.FACING;
 import static the_fireplace.caterpillar.common.block.DrillHeadBlock.PART;
 import static the_fireplace.caterpillar.common.block.DrillHeadBlock.POWERED;
-import static the_fireplace.caterpillar.core.init.BlockInit.DRILL_HEAD_LEVER;
 
 public class DrillHeadBlockEntity extends InventoryBlockEntity {
-
-    private int ticks;
 
     public static final Component TITLE = Component.translatable(
             "container." + Caterpillar.MOD_ID + ".drill_head"
@@ -42,14 +37,15 @@ public class DrillHeadBlockEntity extends InventoryBlockEntity {
     public DrillHeadBlockEntity(BlockPos pos, BlockState state) {
         super(BlockEntityInit.DRILL_HEAD.get(), pos, state, DrillHeadContainer.SLOT_SIZE);
 
-        this.ticks = 0;
+        this.timer = 0;
     }
 
     public void tick(Level level, BlockPos pos, BlockState state, BlockEntity blockEntity) {
-        if (this.ticks != 0 && this.ticks % 60 == 0) { // 60 ticks equals 3 seconds
+        if (this.timer != 0 && this.timer % 60 == 0) { // 60 ticks equals 3 seconds
             this.move(level, pos, state);
         }
-        this.ticks++;
+
+        super.tick();
     }
 
     private void move(Level level, BlockPos pos, BlockState state) {
@@ -68,7 +64,8 @@ public class DrillHeadBlockEntity extends InventoryBlockEntity {
         BlockPos basePos = pos;
         BlockPos nextBasePos = pos.relative(state.getValue(FACING).getOpposite());
 
-        level.setBlock(nextBasePos, state, 35);
+        level.setBlockAndUpdate(nextBasePos, state);
+        // super.requiresUpdate = true;
         level.setBlock(nextBasePos.relative(direction.getCounterClockWise()), state.setValue(PART, DrillHeadPart.BLADE_LEFT).setValue(POWERED, Boolean.valueOf(false)), 35);
         level.setBlock(nextBasePos.below(), state.setValue(PART, DrillHeadPart.BLADE_BOTTOM).setValue(POWERED, Boolean.valueOf(false)), 35);
         level.setBlock(nextBasePos.below().relative(direction.getClockWise()), state.setValue(PART, DrillHeadPart.BLADE_RIGHT_BOTTOM).setValue(POWERED, Boolean.valueOf(false)), 35);
