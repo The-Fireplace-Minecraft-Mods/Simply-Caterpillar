@@ -28,7 +28,9 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 import the_fireplace.caterpillar.Caterpillar;
+import the_fireplace.caterpillar.common.block.entity.DecorationBlockEntity;
 import the_fireplace.caterpillar.common.block.entity.StorageBlockEntity;
+import the_fireplace.caterpillar.common.container.DecorationContainer;
 import the_fireplace.caterpillar.common.container.StorageContainer;
 import the_fireplace.caterpillar.core.util.StoragePart;
 
@@ -148,8 +150,26 @@ public class StorageBlock extends HorizontalDirectionalBlock implements EntityBl
     protected void openContainer(Level level, BlockPos pos, Player player) {
         BlockEntity blockEntity = level.getBlockEntity(pos);
         if (blockEntity instanceof StorageBlockEntity) {
-            MenuProvider container = new SimpleMenuProvider(StorageContainer.getServerContainer((StorageBlockEntity) blockEntity, pos), StorageBlockEntity.TITLE);
+            BlockState state = level.getBlockState(pos);
+            BlockPos basePos = getBasePos(state, pos);
+            BlockEntity baseBlockEntity = level.getBlockEntity(basePos);
+
+            MenuProvider container = new SimpleMenuProvider(StorageContainer.getServerContainer((StorageBlockEntity) baseBlockEntity, basePos), StorageBlockEntity.TITLE);
             player.openMenu(container);
+        }
+    }
+
+    protected BlockPos getBasePos(BlockState state, BlockPos pos) {
+        Direction direction = state.getValue(FACING);
+        StoragePart part = state.getValue(PART);
+
+        switch (part) {
+            case LEFT:
+                return pos.relative(direction.getClockWise());
+            case RIGHT:
+                return pos.relative(direction.getCounterClockWise());
+            default:
+                return pos;
         }
     }
 

@@ -14,7 +14,7 @@ import the_fireplace.caterpillar.common.container.DecorationContainer;
 
 public class DecorationScreen extends AbstractContainerScreen<DecorationContainer> {
 
-    private static final ResourceLocation TEXTURE = new ResourceLocation(Caterpillar.MOD_ID, "textures/gui/decoration.png");
+    public static final ResourceLocation TEXTURE = new ResourceLocation(Caterpillar.MOD_ID, "textures/gui/decoration.png");
 
     protected Font font;
 

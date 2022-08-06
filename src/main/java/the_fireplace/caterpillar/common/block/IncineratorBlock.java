@@ -23,7 +23,9 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 import the_fireplace.caterpillar.Caterpillar;
+import the_fireplace.caterpillar.common.block.entity.DrillHeadBlockEntity;
 import the_fireplace.caterpillar.common.block.entity.IncineratorBlockEntity;
+import the_fireplace.caterpillar.common.container.DrillHeadContainer;
 import the_fireplace.caterpillar.common.container.IncineratorContainer;
 
 import java.util.EnumMap;

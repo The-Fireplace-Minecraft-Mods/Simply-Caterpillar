@@ -34,6 +34,7 @@ public class InventoryBlockEntity extends BlockEntity {
         }
 
         this.size = size;
+        this.timer = 0;
         this.inventory = createInventory();
         this.handler = LazyOptional.of(() -> this.inventory);
     }

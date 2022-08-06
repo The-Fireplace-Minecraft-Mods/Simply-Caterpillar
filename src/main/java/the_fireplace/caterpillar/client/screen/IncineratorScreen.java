@@ -14,7 +14,7 @@ import the_fireplace.caterpillar.common.container.IncineratorContainer;
 
 public class IncineratorScreen extends AbstractContainerScreen<IncineratorContainer> {
 
-    private static final ResourceLocation TEXTURE = new ResourceLocation(Caterpillar.MOD_ID, "textures/gui/incinerator.png");
+    public static final ResourceLocation TEXTURE = new ResourceLocation(Caterpillar.MOD_ID, "textures/gui/incinerator.png");
 
     protected Font font;
 

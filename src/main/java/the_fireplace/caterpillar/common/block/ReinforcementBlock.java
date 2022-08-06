@@ -145,6 +145,29 @@ public class ReinforcementBlock extends HorizontalDirectionalBlock implements En
     @Override
     public void playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
         Direction direction = state.getValue(FACING);
+        BlockPos basePos = getBasePos(state, pos);
+
+        level.destroyBlock(basePos, player.isCreative() ? false : true);
+        level.destroyBlock(basePos.relative(direction.getCounterClockWise()), false);
+        level.destroyBlock(basePos.relative(direction.getClockWise()), false);
+        level.destroyBlock(basePos.above(), false);
+        level.destroyBlock(basePos.below(), false);
+    }
+
+    protected void openContainer(Level level, BlockPos pos, Player player) {
+        BlockEntity blockEntity = level.getBlockEntity(pos);
+        if (blockEntity instanceof ReinforcementBlockEntity) {
+            BlockState state = level.getBlockState(pos);
+            BlockPos basePos = getBasePos(state, pos);
+            BlockEntity baseBlockEntity = level.getBlockEntity(basePos);
+
+            MenuProvider container = new SimpleMenuProvider(ReinforcementContainer.getServerContainer((ReinforcementBlockEntity) baseBlockEntity, basePos), ReinforcementBlockEntity.TITLE);
+            player.openMenu(container);
+        }
+    }
+
+    private BlockPos getBasePos(BlockState state, BlockPos pos) {
+        Direction direction = state.getValue(FACING);
         ReinforcementPart part = state.getValue(PART);
         BlockPos basePos;
 
@@ -166,19 +189,7 @@ public class ReinforcementBlock extends HorizontalDirectionalBlock implements En
                 break;
         }
 
-        level.destroyBlock(basePos, player.isCreative() ? false : true);
-        level.destroyBlock(basePos.relative(direction.getCounterClockWise()), false);
-        level.destroyBlock(basePos.relative(direction.getClockWise()), false);
-        level.destroyBlock(basePos.above(), false);
-        level.destroyBlock(basePos.below(), false);
-    }
-
-    protected void openContainer(Level level, BlockPos pos, Player player) {
-        BlockEntity blockEntity = level.getBlockEntity(pos);
-        if (blockEntity instanceof ReinforcementBlockEntity) {
-            MenuProvider container = new SimpleMenuProvider(ReinforcementContainer.getServerContainer((ReinforcementBlockEntity) blockEntity, pos), ReinforcementBlockEntity.TITLE);
-            player.openMenu(container);
-        }
+        return basePos;
     }
 
     protected void runCalculation(Map<Direction, VoxelShape> shapes, VoxelShape shape) {

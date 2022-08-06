@@ -61,9 +61,9 @@
   "on": "On",
   "off": "Off",
   "power": "Power:",
-  "replacement1": "Air",
-  "replacement2": "Water",
-  "replacement3": "Lava",
-  "replacement4": "Sand and Gravel",
-  "replacement5": "All"
+  "replacement.air": "Air",
+  "replacement.water": "Water",
+  "replacement.lava": "Lava",
+  "replacement.falling_blocks": "Sand and Gravel",
+  "replacement.all": "All"
 }

@@ -14,7 +14,7 @@ import the_fireplace.caterpillar.common.container.ReinforcementContainer;
 
 public class ReinforcementScreen extends AbstractContainerScreen<ReinforcementContainer> {
 
-    private static final ResourceLocation TEXTURE = new ResourceLocation(Caterpillar.MOD_ID, "textures/gui/reinforcement.png");
+    public static final ResourceLocation TEXTURE = new ResourceLocation(Caterpillar.MOD_ID, "textures/gui/reinforcement.png");
 
     protected Font font;
 

@@ -27,7 +27,9 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 import the_fireplace.caterpillar.Caterpillar;
 import the_fireplace.caterpillar.common.block.entity.DecorationBlockEntity;
+import the_fireplace.caterpillar.common.block.entity.DrillHeadBlockEntity;
 import the_fireplace.caterpillar.common.container.DecorationContainer;
+import the_fireplace.caterpillar.common.container.DrillHeadContainer;
 import the_fireplace.caterpillar.core.util.DecorationPart;
 import the_fireplace.caterpillar.core.util.StoragePart;
 
@@ -145,8 +147,26 @@ public class DecorationBlock extends HorizontalDirectionalBlock implements Entit
     protected void openContainer(Level level, BlockPos pos, Player player) {
         BlockEntity blockEntity = level.getBlockEntity(pos);
         if (blockEntity instanceof DecorationBlockEntity) {
-            MenuProvider container = new SimpleMenuProvider(DecorationContainer.getServerContainer((DecorationBlockEntity) blockEntity, pos), DecorationBlockEntity.TITLE);
+            BlockState state = level.getBlockState(pos);
+            BlockPos basePos = getBasePos(state, pos);
+            BlockEntity baseBlockEntity = level.getBlockEntity(basePos);
+
+            MenuProvider container = new SimpleMenuProvider(DecorationContainer.getServerContainer((DecorationBlockEntity) baseBlockEntity, basePos), DecorationBlockEntity.TITLE);
             player.openMenu(container);
+        }
+    }
+
+    protected BlockPos getBasePos(BlockState state, BlockPos pos) {
+        Direction direction = state.getValue(FACING);
+        DecorationPart part = state.getValue(PART);
+
+        switch (part) {
+            case LEFT:
+                return pos.relative(direction.getClockWise());
+            case RIGHT:
+                return pos.relative(direction.getCounterClockWise());
+            default:
+                return pos;
         }
     }
 
