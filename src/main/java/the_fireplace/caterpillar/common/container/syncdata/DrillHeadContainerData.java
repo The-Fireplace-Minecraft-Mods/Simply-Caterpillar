@@ -16,7 +16,8 @@ public class DrillHeadContainerData extends SimpleContainerData {
     @Override
     public int get(int key) {
         return switch (key) {
-            case 0 -> this.blockEntity.getItemInSlot(0).getCount();
+            case 0 -> this.blockEntity.getLitTime();
+            case 1 -> this.blockEntity.getLitDuration();
             default -> throw new UnsupportedOperationException("There is no value corresponding to key: '" + key + "' in: '" + blockEntity + "'");
         };
     }
@@ -24,22 +25,8 @@ public class DrillHeadContainerData extends SimpleContainerData {
     @Override
     public void set(int key, int value) {
         switch (key) {
-            case 0:
-                ItemStack stack = this.blockEntity.getItemInSlot(0);
-
-                if (value > 0 && value < stack.getMaxStackSize()) {
-                    stack.setCount(value);
-                } else if (value <= 0) {
-                    stack = ItemStack.EMPTY;
-                    this.blockEntity.inventory.setStackInSlot(0, ItemStack.EMPTY);
-                } else if (value > stack.getMaxStackSize()) {
-                    stack.setCount(stack.getMaxStackSize());
-                }
-
-                this.blockEntity.inventory.setStackInSlot(0, stack);
-                break;
-            default:
-                throw new UnsupportedOperationException("There is no value corresponding to key: '" + key + "' in: '" + blockEntity + "'");
+            case 0 -> this.blockEntity.setLitTime(value);
+            case 1 -> this.blockEntity.setLitDuration(value);
         }
     }
 }

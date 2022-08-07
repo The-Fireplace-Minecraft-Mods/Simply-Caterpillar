@@ -1,12 +1,10 @@
 package the_fireplace.caterpillar.common.container;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.entity.FurnaceBlockEntity;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.SlotItemHandler;
@@ -24,16 +22,13 @@ public class DrillHeadContainer extends AbstractContainerMenu {
 
     public final ContainerData data;
 
-    private int burnTime;
-
-    private int maxBurnTime;
     private int slotId;
 
     public static final int SLOT_SIZE = 19;
 
     // Client Constructor
     public DrillHeadContainer(int id, Inventory playerInventory) {
-        this(id, playerInventory, new ItemStackHandler(SLOT_SIZE), BlockPos.ZERO, new SimpleContainerData(1));
+        this(id, playerInventory, new ItemStackHandler(SLOT_SIZE), BlockPos.ZERO, new SimpleContainerData(2));
     }
 
     // Server Constructor
@@ -115,7 +110,7 @@ public class DrillHeadContainer extends AbstractContainerMenu {
     }
 
     public static MenuConstructor getServerContainer(DrillHeadBlockEntity drill_head, BlockPos pos) {
-        return (id, playerInventory, player) -> new DrillHeadContainer(id, playerInventory, drill_head.inventory, pos, new DrillHeadContainerData(drill_head, 1));
+        return (id, playerInventory, player) -> new DrillHeadContainer(id, playerInventory, drill_head.inventory, pos, new DrillHeadContainerData(drill_head, 2));
     }
 
     public boolean isLit() {
