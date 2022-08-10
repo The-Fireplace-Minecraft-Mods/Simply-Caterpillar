@@ -2,31 +2,24 @@ package the_fireplace.caterpillar.common.block.entity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.MoverType;
-import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
-import net.minecraft.world.level.block.piston.PistonMath;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.ForgeHooks;
 import the_fireplace.caterpillar.Caterpillar;
 import the_fireplace.caterpillar.common.block.entity.util.InventoryBlockEntity;
-import the_fireplace.caterpillar.common.container.DrillHeadContainer;
 import the_fireplace.caterpillar.core.init.BlockEntityInit;
 import the_fireplace.caterpillar.core.util.DrillHeadPart;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static net.minecraft.world.level.block.HorizontalDirectionalBlock.FACING;
 import static the_fireplace.caterpillar.common.block.DrillHeadBlock.PART;
@@ -51,12 +44,13 @@ public class DrillHeadBlockEntity extends InventoryBlockEntity implements BlockE
     // 60 ticks equals 3 seconds
     public static final int MOVEMENT_TICK = 60;
 
+    public static final int CONTAINER_SIZE = 19;
     private int litTime;
 
     private int litDuration;
 
     public DrillHeadBlockEntity(BlockPos pos, BlockState state) {
-        super(BlockEntityInit.DRILL_HEAD.get(), pos, state, DrillHeadContainer.SLOT_SIZE);
+        super(BlockEntityInit.DRILL_HEAD.get(), pos, state, CONTAINER_SIZE);
     }
 
     public void tick(Level level, BlockPos pos, BlockState state, DrillHeadBlockEntity blockEntity) {
@@ -112,8 +106,25 @@ public class DrillHeadBlockEntity extends InventoryBlockEntity implements BlockE
         Direction direction = state.getValue(FACING);
         BlockPos basePos = pos;
         BlockPos nextBasePos = pos.relative(state.getValue(FACING).getOpposite());
+        BlockEntity blockEntity = level.getBlockEntity(basePos);
 
-        level.setBlock(nextBasePos, state, 35);
+        if (blockEntity instanceof DrillHeadBlockEntity drillHeadBlockEntity) {
+            CompoundTag oldTag = drillHeadBlockEntity.saveWithFullMetadata();
+            oldTag.remove("x");
+            oldTag.remove("y");
+            oldTag.remove("z");
+
+            level.setBlock(nextBasePos, state, 35);
+            BlockEntity newBlockEntity =  level.getBlockEntity(nextBasePos);
+
+            if (newBlockEntity instanceof DrillHeadBlockEntity newDrillHeadBlockEntity) {
+                newDrillHeadBlockEntity.load(oldTag);
+                newDrillHeadBlockEntity.setLitTime(drillHeadBlockEntity.getLitTime());
+                newDrillHeadBlockEntity.setLitDuration(drillHeadBlockEntity.getLitDuration());
+                newDrillHeadBlockEntity.setChanged();
+            }
+        }
+
         level.setBlock(nextBasePos.relative(direction.getCounterClockWise()), state.setValue(PART, DrillHeadPart.BLADE_LEFT).setValue(POWERED, Boolean.valueOf(false)), 35);
         level.setBlock(nextBasePos.below(), state.setValue(PART, DrillHeadPart.BLADE_BOTTOM).setValue(POWERED, Boolean.valueOf(false)), 35);
         level.setBlock(nextBasePos.below().relative(direction.getClockWise()), state.setValue(PART, DrillHeadPart.BLADE_RIGHT_BOTTOM).setValue(POWERED, Boolean.valueOf(false)), 35);
@@ -141,9 +152,11 @@ public class DrillHeadBlockEntity extends InventoryBlockEntity implements BlockE
      */
     private void drill(Level level, BlockPos pos, BlockState state) {
         BlockPos destroyPos = pos;
+        Direction direction = state.getValue(FACING);
+        Direction.Axis direction$axis = direction.getAxis();
         for (int i = -1; i < 2; i++) {
             for (int j = -1; j < 2; j++) {
-                switch (state.getValue(FACING).getOpposite()) {
+                switch (direction.getOpposite()) {
                     case NORTH:
                         destroyPos = pos.offset(j, i, -1);
                         break;
@@ -160,7 +173,18 @@ public class DrillHeadBlockEntity extends InventoryBlockEntity implements BlockE
 
                 if (level.getBlockState(destroyPos).getBlock() == Blocks.BEDROCK) {
                    setPowerOff(level, state, pos);
-                } else {
+                } else if (level.getBlockState(destroyPos).getBlock() != Blocks.AIR) {
+                    /*
+                    double d0 = (double)pos.getX() + 0.5D;
+                    double d1 = (double)pos.getY();
+                    double d2 = (double)pos.getZ() + 0.5D;
+                    //double d4 = RandomSource.nextDouble() * 0.6D - 0.3D;
+                    double d5 = direction$axis == Direction.Axis.X ? (double)direction.getStepX() * 0.52D : ;
+                    //double d6 = RandomSource.nextDouble() * 6.0D / 16.0D;
+                    double d7 = direction$axis == Direction.Axis.Z ? (double)direction.getStepZ() * 0.52D : d4;
+
+                    level.addParticle(ParticleTypes.SMOKE, d0, d1, d2, 0.0D, 0.0D, 0.0D);
+                     */
                     level.destroyBlock(destroyPos, true);
                 }
             }
