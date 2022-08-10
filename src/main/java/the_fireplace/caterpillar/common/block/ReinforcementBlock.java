@@ -28,7 +28,7 @@ import org.jetbrains.annotations.Nullable;
 import the_fireplace.caterpillar.Caterpillar;
 import the_fireplace.caterpillar.common.block.entity.ReinforcementBlockEntity;
 import the_fireplace.caterpillar.common.container.ReinforcementContainer;
-import the_fireplace.caterpillar.core.util.ReinforcementPart;
+import the_fireplace.caterpillar.common.block.util.ReinforcementPart;
 
 import java.util.EnumMap;
 import java.util.Map;

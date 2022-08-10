@@ -2,12 +2,10 @@ package the_fireplace.caterpillar.common.block.entity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
@@ -19,7 +17,7 @@ import net.minecraftforge.common.ForgeHooks;
 import the_fireplace.caterpillar.Caterpillar;
 import the_fireplace.caterpillar.common.block.entity.util.InventoryBlockEntity;
 import the_fireplace.caterpillar.core.init.BlockEntityInit;
-import the_fireplace.caterpillar.core.util.DrillHeadPart;
+import the_fireplace.caterpillar.common.block.util.DrillHeadPart;
 
 import static net.minecraft.world.level.block.HorizontalDirectionalBlock.FACING;
 import static the_fireplace.caterpillar.common.block.DrillHeadBlock.PART;

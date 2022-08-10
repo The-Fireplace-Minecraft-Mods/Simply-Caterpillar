@@ -1,4 +1,4 @@
-package the_fireplace.caterpillar.core.util;
+package the_fireplace.caterpillar.client.screen.util;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;

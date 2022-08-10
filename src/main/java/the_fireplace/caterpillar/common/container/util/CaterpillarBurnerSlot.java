@@ -1,4 +1,4 @@
-package the_fireplace.caterpillar.core;
+package the_fireplace.caterpillar.common.container.util;
 
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;

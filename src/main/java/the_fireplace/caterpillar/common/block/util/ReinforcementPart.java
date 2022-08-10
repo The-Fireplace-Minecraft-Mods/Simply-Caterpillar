@@ -1,16 +1,18 @@
-package the_fireplace.caterpillar.core.util;
+package the_fireplace.caterpillar.common.block.util;
 
 import net.minecraft.util.StringRepresentable;
 
-public enum StoragePart implements StringRepresentable {
+public enum ReinforcementPart implements StringRepresentable {
 
     LEFT("left"),
     BASE("base"),
-    RIGHT("right");
+    RIGHT("right"),
+    TOP("top"),
+    BOTTOM("bottom");
 
     private final String name;
 
-    private StoragePart(String name) {
+    private ReinforcementPart(String name) {
         this.name = name;
     }
 

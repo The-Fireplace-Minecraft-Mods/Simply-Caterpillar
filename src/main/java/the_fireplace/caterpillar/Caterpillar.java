@@ -21,7 +21,7 @@ import the_fireplace.caterpillar.core.init.BlockInit;
 import the_fireplace.caterpillar.core.init.ContainerInit;
 import the_fireplace.caterpillar.core.init.ItemInit;
 import the_fireplace.caterpillar.core.init.BlockEntityInit;
-import the_fireplace.caterpillar.core.util.ScreenTabs;
+import the_fireplace.caterpillar.client.screen.util.ScreenTabs;
 
 import java.util.HashMap;
 

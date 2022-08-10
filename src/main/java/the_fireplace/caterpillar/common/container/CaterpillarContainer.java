@@ -3,8 +3,7 @@ package the_fireplace.caterpillar.common.container;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.items.ItemStackHandler;
-import the_fireplace.caterpillar.core.util.ScreenTabs;
+import the_fireplace.caterpillar.client.screen.util.ScreenTabs;
 
 public class CaterpillarContainer implements Cloneable {
 

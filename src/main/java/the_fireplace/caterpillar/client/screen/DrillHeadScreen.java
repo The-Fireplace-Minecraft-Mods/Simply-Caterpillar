@@ -4,14 +4,21 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import the_fireplace.caterpillar.Caterpillar;
+import the_fireplace.caterpillar.common.block.entity.DecorationBlockEntity;
 import the_fireplace.caterpillar.common.block.entity.DrillHeadBlockEntity;
+import the_fireplace.caterpillar.common.block.entity.IncineratorBlockEntity;
+import the_fireplace.caterpillar.common.block.entity.ReinforcementBlockEntity;
 import the_fireplace.caterpillar.common.container.DrillHeadContainer;
+
+import java.util.List;
 
 public class DrillHeadScreen extends AbstractContainerScreen<DrillHeadContainer> {
 
@@ -26,6 +33,10 @@ public class DrillHeadScreen extends AbstractContainerScreen<DrillHeadContainer>
     private final int gatheredX;
 
     private final int gatheredY;
+
+    private final int buttonsTextX;
+
+    private final int buttonsTextY;
 
     private DrillHeadContainer container;
 
@@ -43,6 +54,8 @@ public class DrillHeadScreen extends AbstractContainerScreen<DrillHeadContainer>
         this.titleLabelY = -10;
         this.gatheredX = 11;
         this.gatheredY = 6;
+        this.buttonsTextX = this.imageWidth - 40;
+        this.buttonsTextY = 10;
         this.inventoryLabelX = 8;
         this.inventoryLabelY = this.imageHeight - 94;
     }
@@ -56,6 +69,12 @@ public class DrillHeadScreen extends AbstractContainerScreen<DrillHeadContainer>
     }
 
     @Override
+    public void render(PoseStack stack, int mouseX, int mouseY, float partialTicks) {
+        super.render(stack, mouseX, mouseY, partialTicks);
+        this.renderTabButtons(stack);
+    }
+
+    @Override
     protected void renderBg(PoseStack stack, float mouseX, int mouseY, int partialTicks) {
         renderBackground(stack);
         bindTexture();
@@ -65,7 +84,36 @@ public class DrillHeadScreen extends AbstractContainerScreen<DrillHeadContainer>
             int k = this.container.getLitProgress();
             blit(stack, this.leftPos + 81, this.topPos + 36 + 12 - k, 176, 12 - k, 14, k + 1);
         }
+    }
 
+    private void renderTabButtons(PoseStack stack) {
+        this.addRenderableWidget(new ImageButton(this.leftPos - 28, this.topPos + 3, 31, 20, 176 , 78, 0, TEXTURE, (onPress) -> {
+            setTab(0);
+        }));
+
+        this.addRenderableWidget(new ImageButton(this.leftPos - 30, this.topPos + 23, 31, 20, 176 , 118, 0, TEXTURE, (onPress) -> {
+            setTab(1);
+        }));
+
+        this.addRenderableWidget(new ImageButton(this.leftPos - 30, this.topPos + 43, 31, 20, 176 , 118, 0, TEXTURE, (onPress) -> {
+            setTab(2);
+        }));
+
+        this.addRenderableWidget(new ImageButton(this.leftPos - 30, this.topPos + 63, 31, 20, 176 , 118, 0, TEXTURE, 10, 10, (onPress) -> {
+            setTab(2);
+        }, (onTooltip) -> {
+            renderComponentTooltip(stack, (List<Component>) IncineratorBlockEntity.TITLE, 10, 20);
+        }, DrillHeadBlockEntity.TITLE));
+
+        this.font.draw(stack, DrillHeadBlockEntity.TITLE, (float)this.buttonsTextX, (float)this.buttonsTextY, 0xFFFFFF);
+        this.font.draw(stack, DecorationBlockEntity.TITLE, (float)this.buttonsTextX, (float)this.buttonsTextY + 20, 0xFFFFFF);
+        this.font.draw(stack, ReinforcementBlockEntity.TITLE, (float)this.buttonsTextX, (float)this.buttonsTextY + 40, 0xFFFFFF);
+        this.font.draw(stack, IncineratorBlockEntity.TITLE, (float)this.buttonsTextX, (float)this.buttonsTextY + 60, 0xFFFFFF);
+    }
+
+    private void setTab(int selectedTab) {
+        // BUTTON PRESSED
+        System.out.println("BUTTON PRESSED : " + selectedTab);
     }
 
     public static void bindTexture() {

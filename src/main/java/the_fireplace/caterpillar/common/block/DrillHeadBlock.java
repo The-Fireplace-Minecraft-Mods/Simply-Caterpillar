@@ -32,7 +32,7 @@ import org.jetbrains.annotations.Nullable;
 import the_fireplace.caterpillar.Caterpillar;
 import the_fireplace.caterpillar.common.block.entity.DrillHeadBlockEntity;
 import the_fireplace.caterpillar.common.container.DrillHeadContainer;
-import the_fireplace.caterpillar.core.util.DrillHeadPart;
+import the_fireplace.caterpillar.common.block.util.DrillHeadPart;
 
 import java.util.EnumMap;
 import java.util.Map;

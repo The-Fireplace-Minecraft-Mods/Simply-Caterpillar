@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import the_fireplace.caterpillar.Caterpillar;
 import the_fireplace.caterpillar.common.block.entity.DrillHeadBlockEntity;
 import the_fireplace.caterpillar.common.container.syncdata.DrillHeadContainerData;
-import the_fireplace.caterpillar.core.CaterpillarBurnerSlot;
+import the_fireplace.caterpillar.common.container.util.CaterpillarBurnerSlot;
 import the_fireplace.caterpillar.core.init.BlockInit;
 import the_fireplace.caterpillar.core.init.ContainerInit;
 
