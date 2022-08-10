@@ -18,17 +18,17 @@ import the_fireplace.caterpillar.core.init.ContainerInit;
 
 public class DrillHeadContainer extends AbstractContainerMenu {
 
-    private final ContainerLevelAccess containerAccess;
+    public final ContainerLevelAccess containerAccess;
 
     public final ContainerData data;
 
     private int slotId;
 
-    public static final int SLOT_SIZE = 19;
+    public static final int CONTAINER_SIZE = 19;
 
     // Client Constructor
     public DrillHeadContainer(int id, Inventory playerInventory) {
-        this(id, playerInventory, new ItemStackHandler(SLOT_SIZE), BlockPos.ZERO, new SimpleContainerData(2));
+        this(id, playerInventory, new ItemStackHandler(CONTAINER_SIZE), BlockPos.ZERO, new SimpleContainerData(2));
     }
 
     // Server Constructor
@@ -85,10 +85,10 @@ public class DrillHeadContainer extends AbstractContainerMenu {
                 Caterpillar.LOGGER.debug("DrillHeadItem is fuel" + item);
                 if (!moveItemStackTo(item, 9, this.slots.size(), false))
                     return ItemStack.EMPTY;
-            } else if (index < SLOT_SIZE) {
-                if (!moveItemStackTo(item, SLOT_SIZE, this.slots.size(), true))
+            } else if (index < CONTAINER_SIZE) {
+                if (!moveItemStackTo(item, CONTAINER_SIZE, this.slots.size(), true))
                     return ItemStack.EMPTY;
-            } else if (!moveItemStackTo(item, 0, SLOT_SIZE, false))
+            } else if (!moveItemStackTo(item, 0, CONTAINER_SIZE, false))
                 return ItemStack.EMPTY;
             if (item.isEmpty()) {
                 slot.set(ItemStack.EMPTY);

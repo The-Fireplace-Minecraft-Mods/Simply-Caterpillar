@@ -1,5 +1,8 @@
 {
   "block.simplycaterpillar.drill_head": "Drill Head",
+  "block.simplycaterpillar.drill_head.noFuel" : "You need to add a fuel source to start the drill.",
+  "block.simplycaterpillar.drill_head.powered" : "Drill is turning off.",
+  "block.simplycaterpillar.drill_head.powered_on" : "Drill is turning on.",
   "block.simplycaterpillar.reinforcement": "Reinforcement Builder",
   "block.simplycaterpillar.decoration": "Decoration Placer",
   "block.simplycaterpillar.collector": "Item Collector",

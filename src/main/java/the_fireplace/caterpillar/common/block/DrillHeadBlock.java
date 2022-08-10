@@ -2,11 +2,9 @@ package the_fireplace.caterpillar.common.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.MenuProvider;
-import net.minecraft.world.SimpleMenuProvider;
+import net.minecraft.world.*;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -41,7 +39,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import static net.minecraft.world.level.block.Blocks.LEVER;
 import static net.minecraft.world.level.block.FaceAttachedHorizontalDirectionalBlock.FACE;
 import static the_fireplace.caterpillar.core.init.BlockInit.DRILL_HEAD_LEVER;
 
@@ -138,35 +135,61 @@ public class DrillHeadBlock extends HorizontalDirectionalBlock implements Entity
     }
 
     @Override
-    public void setPlacedBy(Level level, BlockPos blockPos, BlockState blockState, @Nullable LivingEntity livingEntity, ItemStack stack) {
-        Direction direction = blockState.getValue(FACING);
-
-        level.setBlock(blockPos.relative(direction.getCounterClockWise()), blockState.setValue(PART, DrillHeadPart.BLADE_LEFT_BOTTOM), 3);
-        level.setBlock(blockPos.relative(direction.getClockWise()), blockState.setValue(PART, DrillHeadPart.BLADE_RIGHT_BOTTOM), 3);
-        level.setBlock(blockPos.above().relative(direction.getCounterClockWise()), blockState.setValue(PART, DrillHeadPart.BLADE_LEFT), 3);
-        level.setBlock(blockPos.above(2), blockState.setValue(PART, DrillHeadPart.BLADE_TOP), 3);
-        level.setBlock(blockPos.above(2).relative(direction.getCounterClockWise()), blockState.setValue(PART, DrillHeadPart.BLADE_LEFT_TOP), 3);
-        level.setBlock(blockPos.above(2).relative(direction.getClockWise()), blockState.setValue(PART, DrillHeadPart.BLADE_RIGHT_TOP), 3);
-        level.setBlock(blockPos.above(), blockState.setValue(PART, DrillHeadPart.BASE), 3);
-        level.setBlock(blockPos.above().relative(direction.getClockWise()), DRILL_HEAD_LEVER.get().defaultBlockState().setValue(FACING, direction.getClockWise()).setValue(FACE, AttachFace.WALL).setValue(POWERED, Boolean.valueOf(false)), 3);
+    public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity livingEntity, ItemStack stack) {
+        buildStructure(level, pos, state);
     }
 
     @Override
     public void playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
-        Direction direction = state.getValue(FACING);
         BlockPos basePos = getBasePos(state, pos);
 
-        level.destroyBlock(basePos, player.isCreative() ? false : true);
-        level.destroyBlock(basePos.relative(direction.getCounterClockWise()), false);
-        level.destroyBlock(basePos.relative(direction.getClockWise()), false);
-        level.destroyBlock(basePos.above(), false);
-        level.destroyBlock(basePos.below(), false);
-        level.destroyBlock(basePos.above().relative(direction.getCounterClockWise()), false);
-        level.destroyBlock(basePos.above().relative(direction.getClockWise()), false);
-        level.destroyBlock(basePos.below().relative(direction.getCounterClockWise()), false);
-        level.destroyBlock(basePos.below().relative(direction.getClockWise()), false);
+        if (!player.isCreative()) dropItems(level, basePos);
+        destroyStructure(level, basePos, state, player);
 
         super.playerWillDestroy(level, pos, state, player);
+    }
+
+    private void destroyStructure(Level level, BlockPos pos, BlockState state, Player player) {
+        Direction direction = state.getValue(FACING);
+
+        level.destroyBlock(pos, player.isCreative() ? false : true);
+        level.destroyBlock(pos.relative(direction.getCounterClockWise()), false);
+        level.destroyBlock(pos.relative(direction.getClockWise()), false);
+        level.destroyBlock(pos.above(), false);
+        level.destroyBlock(pos.below(), false);
+        level.destroyBlock(pos.above().relative(direction.getCounterClockWise()), false);
+        level.destroyBlock(pos.above().relative(direction.getClockWise()), false);
+        level.destroyBlock(pos.below().relative(direction.getCounterClockWise()), false);
+        level.destroyBlock(pos.below().relative(direction.getClockWise()), false);
+    }
+
+    private void buildStructure(Level level, BlockPos pos, BlockState state) {
+        Direction direction = state.getValue(FACING);
+
+        level.setBlock(pos.relative(direction.getCounterClockWise()), state.setValue(PART, DrillHeadPart.BLADE_LEFT_BOTTOM), 3);
+        level.setBlock(pos.relative(direction.getClockWise()), state.setValue(PART, DrillHeadPart.BLADE_RIGHT_BOTTOM), 3);
+        level.setBlock(pos.above().relative(direction.getCounterClockWise()), state.setValue(PART, DrillHeadPart.BLADE_LEFT), 3);
+        level.setBlock(pos.above(2), state.setValue(PART, DrillHeadPart.BLADE_TOP), 3);
+        level.setBlock(pos.above(2).relative(direction.getCounterClockWise()), state.setValue(PART, DrillHeadPart.BLADE_LEFT_TOP), 3);
+        level.setBlock(pos.above(2).relative(direction.getClockWise()), state.setValue(PART, DrillHeadPart.BLADE_RIGHT_TOP), 3);
+        level.setBlock(pos.above(), state.setValue(PART, DrillHeadPart.BASE), 3);
+        level.setBlock(pos.above().relative(direction.getClockWise()), DRILL_HEAD_LEVER.get().defaultBlockState().setValue(FACING, direction.getClockWise()).setValue(FACE, AttachFace.WALL).setValue(POWERED, Boolean.valueOf(false)), 3);
+    }
+
+    /*
+     Drop items inside the drill head
+     */
+    private void dropItems(Level level, BlockPos pos) {
+        BlockEntity blockEntity = level.getBlockEntity(pos);
+        if (blockEntity instanceof DrillHeadBlockEntity drillHeadBlockEntity) {
+            for(int i = 0; i < drillHeadBlockEntity.getContainerSize(); ++i) {
+                ItemStack itemStack = drillHeadBlockEntity.getItemInSlot(i);
+                if (!itemStack.isEmpty()) {
+                    ItemEntity itemEntity = new ItemEntity(level, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, itemStack);
+                    level.addFreshEntity(itemEntity);
+                }
+            }
+        }
     }
 
     private BlockPos getBasePos(BlockState state, BlockPos pos) {
