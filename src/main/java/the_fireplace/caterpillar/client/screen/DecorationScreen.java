@@ -8,6 +8,7 @@ import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
 import the_fireplace.caterpillar.Caterpillar;
 import the_fireplace.caterpillar.common.container.DecorationContainer;
@@ -17,6 +18,8 @@ public class DecorationScreen extends AbstractContainerScreen<DecorationContaine
     public static final ResourceLocation TEXTURE = new ResourceLocation(Caterpillar.MOD_ID, "textures/gui/decoration.png");
 
     protected Font font;
+
+    private float scrollOffs;
 
     public DecorationScreen(DecorationContainer container, Inventory playerInventory, Component title) {
         super(container, playerInventory, title);
@@ -29,6 +32,7 @@ public class DecorationScreen extends AbstractContainerScreen<DecorationContaine
         this.inventoryLabelY = this.imageHeight - 94;
         this.titleLabelX = (this.imageWidth - this.font.width(this.title)) / 2;
         this.titleLabelY = 6;
+        this.scrollOffs = 0.0F;
     }
 
     @Override
@@ -42,6 +46,22 @@ public class DecorationScreen extends AbstractContainerScreen<DecorationContaine
         renderBackground(stack);
         bindTexture();
         blit(stack, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
+        renderScrollBar(stack);
+    }
+
+    private void renderScrollBar(PoseStack stack) {
+        int i = this.leftPos + 156;
+        int j = this.topPos + 17;
+        int k = j + 54;
+        blit(stack, i, j + (int)((float)(k - j - 17) * this.scrollOffs), 176, 0, 12, 15);
+    }
+
+    @Override
+    public boolean mouseScrolled(double p_94686_, double p_94687_, double p_94688_) {
+        int i = 9;
+        float f = (float)(p_94688_ / (double)i);
+        this.scrollOffs = Mth.clamp(this.scrollOffs - f, 0.0F, 1.0F);
+        return true;
     }
 
     public static void bindTexture() {
