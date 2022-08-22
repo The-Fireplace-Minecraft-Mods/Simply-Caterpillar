@@ -4,20 +4,21 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
+import the_fireplace.caterpillar.common.container.CaterpillarContainer;
 import the_fireplace.caterpillar.common.container.DrillHeadContainer;
 
 public class CaterpillarBurnerSlot extends SlotItemHandler {
 
-    private final DrillHeadContainer container;
+    private final CaterpillarContainer container;
 
-    public CaterpillarBurnerSlot(DrillHeadContainer container, IItemHandler slots, int index, int xPosition, int yPosition) {
+    public CaterpillarBurnerSlot(CaterpillarContainer container, IItemHandler slots, int index, int xPosition, int yPosition) {
         super(slots, index, xPosition, yPosition);
         this.container = container;
     }
 
     @Override
     public boolean mayPlace(ItemStack itemStack) {
-        return this.container.isFuel(itemStack) || isBucket(itemStack);
+        return this.container.drillHead.isFuel(itemStack) || isBucket(itemStack);
     }
 
     public int getMaxStackSize(ItemStack itemStack) {

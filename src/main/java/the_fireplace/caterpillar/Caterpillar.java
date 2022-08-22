@@ -5,6 +5,10 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.common.MinecraftForge;
@@ -15,6 +19,9 @@ import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import the_fireplace.caterpillar.common.block.DrillHeadBlock;
+import the_fireplace.caterpillar.common.block.entity.DrillHeadBlockEntity;
+import the_fireplace.caterpillar.common.block.util.DrillHeadPart;
 import the_fireplace.caterpillar.common.container.CaterpillarContainer;
 import the_fireplace.caterpillar.config.ConfigHolder;
 import the_fireplace.caterpillar.core.init.BlockInit;
@@ -24,6 +31,9 @@ import the_fireplace.caterpillar.core.init.BlockEntityInit;
 import the_fireplace.caterpillar.client.screen.util.ScreenTabs;
 
 import java.util.HashMap;
+
+import static net.minecraft.world.level.block.HorizontalDirectionalBlock.FACING;
+import static the_fireplace.caterpillar.common.block.DrillHeadBlock.PART;
 
 @Mod(Caterpillar.MOD_ID)
 @Mod.EventBusSubscriber(modid = Caterpillar.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
@@ -39,7 +49,7 @@ public class Caterpillar
 		}
 	};
 
-	private HashMap<BlockPos, CaterpillarContainer> mainContainers;
+	private HashMap<BlockPos, CaterpillarContainer> caterpillarContainers;
 	private CaterpillarContainer selectedCaterpillar;
 
 	public static Caterpillar instance;
@@ -62,20 +72,20 @@ public class Caterpillar
 	}
 
 	public void removeCaterpillar(BlockPos pos) {
-		Caterpillar.instance.mainContainers.remove(pos);
+		Caterpillar.instance.caterpillarContainers.remove(pos);
 		this.removeSelectedCaterpillar();
 	}
 
 	public boolean doesCaterpillarExist(BlockPos pos) {
-		return this.mainContainers.containsKey(pos);
+		return this.caterpillarContainers.containsKey(pos);
 	}
 
 	public void addCaterpillar(BlockPos pos, CaterpillarContainer data) {
-		this.mainContainers.put(pos, data);
+		this.caterpillarContainers.put(pos, data);
 	}
 
-	public CaterpillarContainer getCaterpillar(BlockPos pos) {
-		return this.mainContainers.get(pos);
+	public CaterpillarContainer getContainerCaterpillar(BlockPos pos) {
+		return this.caterpillarContainers.get(pos);
 	}
 
 	public CaterpillarContainer getSelectedCaterpillar() {
@@ -86,11 +96,29 @@ public class Caterpillar
 		this.selectedCaterpillar = selectedCaterpillar;
 	}
 
-	public NonNullList<ItemStack> getInventory(CaterpillarContainer caterpillar, ScreenTabs selectedTab) {
-		if (caterpillar == null) {
-			return NonNullList.withSize(CaterpillarContainer.MAX_SIZE, ItemStack.EMPTY);
+	public static BlockPos getCaterpillarPos(Level level, BlockPos pos, Direction direction) {
+		BlockState state = level.getBlockState(pos);
+
+		if (
+				(state.getBlock() != BlockInit.DRILL_HEAD.get()) &&
+				(state.getBlock() != BlockInit.DECORATION.get()) &&
+				(state.getBlock() != BlockInit.REINFORCEMENT.get()) &&
+				(state.getBlock() != BlockInit.INCINERATOR.get()) &&
+				(state.getBlock() != BlockInit.COLLECTOR.get()) &&
+				(state.getBlock() != BlockInit.STORAGE.get()) &&
+				(state.getBlock() != BlockInit.DRILL_BASE.get())
+		) {
+			return null;
 		}
 
+		if ((state.getBlock() instanceof DrillHeadBlock) && state.getValue(PART).equals(DrillHeadPart.BASE)) {
+			return pos;
+		}
+
+		return getCaterpillarPos(level, pos.relative(direction.getOpposite()), direction);
+	}
+
+	public NonNullList<ItemStack> getInventory(CaterpillarContainer caterpillar, ScreenTabs selectedTab) {
 		switch (selectedTab.value) {
 			case 1:
 				return caterpillar.decoration.getItems();
@@ -99,7 +127,7 @@ public class Caterpillar
 			case 3:
 				return caterpillar.incinerator.getItems();
 			default:
-				return caterpillar.inventory;
+				return caterpillar.drillHead.getItems();
 		}
 	}
 

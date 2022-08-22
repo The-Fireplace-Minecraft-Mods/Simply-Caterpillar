@@ -18,6 +18,7 @@ public class ClientModEvents {
 
     @SubscribeEvent
     public static void clientSetup(FMLClientSetupEvent event) {
+        MenuScreens.register(ContainerInit.CATERPILLAR.get(), CaterpillarScreen::new);
         MenuScreens.register(ContainerInit.DRILL_HEAD.get(), DrillHeadScreen::new);
         MenuScreens.register(ContainerInit.INCINERATOR.get(), IncineratorScreen::new);
         MenuScreens.register(ContainerInit.STORAGE.get(), StorageScreen::new);

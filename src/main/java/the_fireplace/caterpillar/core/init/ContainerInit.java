@@ -12,6 +12,8 @@ public class ContainerInit {
     public static final DeferredRegister<MenuType<?>> CONTAINERS = DeferredRegister.create(ForgeRegistries.MENU_TYPES, Caterpillar.MOD_ID);
 
     // Containers
+    public static final RegistryObject<MenuType<CaterpillarContainer>> CATERPILLAR = CONTAINERS.register("caterpillar", () -> new MenuType<>(CaterpillarContainer::new));
+
     public static final RegistryObject<MenuType<DrillHeadContainer>> DRILL_HEAD = CONTAINERS.register("drill_head", () -> new MenuType<>(DrillHeadContainer::new));
 
     public static final RegistryObject<MenuType<IncineratorContainer>> INCINERATOR = CONTAINERS.register("incinerator", () -> new MenuType<>(IncineratorContainer::new));
