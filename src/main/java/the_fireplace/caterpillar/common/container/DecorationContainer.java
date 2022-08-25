@@ -22,9 +22,11 @@ public class DecorationContainer extends AbstractContainerMenu {
 
     public static final int SLOT_SIZE = 8;
 
+    final int slotSizePlus2 = 18, startX = 8, startY = 84, hotbarY = 142, decorationX = 62, decorationY = 17;
+
     // Client Constructor
     public DecorationContainer(int id, Inventory playerInventory) {
-        this(id, playerInventory, new ItemStackHandler(SLOT_SIZE), BlockPos.ZERO, new SimpleContainerData(1));
+        this(id, playerInventory, new ItemStackHandler(SLOT_SIZE), BlockPos.ZERO, new SimpleContainerData(2));
     }
 
     // Server Constructor
@@ -32,9 +34,17 @@ public class DecorationContainer extends AbstractContainerMenu {
         super(ContainerInit.DECORATION.get(), id);
         this.containerAccess = ContainerLevelAccess.create(playerInventory.player.level, pos);
         this.data = data;
-        this.slotId = 0;
+        /*this.data.blockEntity.setPlacementMap(new ArrayList<>());
+        for(int i = 0; i < ((DecorationContainerData)this.data).blockEntity.PLACEMENT_MAX_SLOTS; i++) {
+            this.data.blockEntity.getPlacementMap().add(new ItemStack[SLOT_SIZE]);
+        }
 
-        final int slotSizePlus2 = 18, startX = 8, startY = 84, hotbarY = 142, decorationX = 62, decorationY = 17;
+        for (int i = 0; i < ((DecorationContainerData)this.data).blockEntity.getPlacementMap().size(); i++) {
+            for (int j = 0; j < ((DecorationContainerData)this.data).blockEntity.getPlacementMap().get(i).length; j++) {
+                this.data.blockEntity.getPlacementMap().get(i)[j] = ItemStack.EMPTY;
+            }
+        }
+         */
 
         // Decoration slots
         for(int row = 0; row < 3; row++) {
@@ -58,6 +68,17 @@ public class DecorationContainer extends AbstractContainerMenu {
         }
 
         addDataSlots(data);
+
+        this.scrollTo(0.0F);
+    }
+
+    @Override
+    public void clicked(int slotId, int mouseSide, ClickType clickType, Player player) {
+        if (slotId < SLOT_SIZE && clickType == ClickType.PICKUP) {
+            //this.data.blockEntity.getPlacementMap().get(this.data.get(0))[slotId] = this.getCarried();
+        }
+
+        super.clicked(slotId, mouseSide, clickType, player);
     }
 
     @Override
@@ -89,7 +110,24 @@ public class DecorationContainer extends AbstractContainerMenu {
         return stillValid(containerAccess, player, BlockInit.DECORATION.get());
     }
 
-    public static MenuConstructor getServerContainer(DecorationBlockEntity decoration, BlockPos pos) {
-        return (id, playerInventory, player) -> new DecorationContainer(id, playerInventory, decoration.inventory, pos, new DecorationContainerData(decoration, 1));
+    public void scrollTo(float scrollOffs) {
+        int i = 9;
+        int j = (int)((double)(scrollOffs * (float)i) + 0.5D);
+        if (j < 0) {
+            j = 0;
+        }
+        System.out.println("Scroll to " + j);
+        this.data.set(0, j);
+
+        slotId = 0;
+        for(int row = 0; row < 3; row++) {
+            for(int column = 0; column < 3; column++) {
+                if (row != 1 || column != 1) {
+                    //getSlot(slotId).set(this.data.blockEntity.getPlacementMap().get(this.data.get(0))[slotId]);
+                    getSlot(slotId).setChanged();
+                    slotId++;
+                }
+            }
+        }
     }
 }

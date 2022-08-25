@@ -10,8 +10,6 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntityTicker;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -88,18 +86,13 @@ public class CollectorBlock extends HorizontalDirectionalBlock implements Entity
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         BlockPos blockPos = context.getClickedPos();
         Level level = context.getLevel();
+        Direction direction = context.getHorizontalDirection();
 
         if (blockPos.getY() < level.getMaxBuildHeight() - 1 && level.getBlockState(blockPos.above()).canBeReplaced(context)) {
-            return defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite()).setValue(HALF, DoubleBlockHalf.LOWER);
+            return defaultBlockState().setValue(FACING, direction.getOpposite()).setValue(HALF, DoubleBlockHalf.LOWER);
         }
 
         return null;
-    }
-
-    @Nullable
-    @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
-        return level.isClientSide ? null : (level0, pos0, state0, blockEntity) -> ((CollectorBlockEntity) blockEntity).tick(level0, pos0, state0, blockEntity);
     }
 
     @Override

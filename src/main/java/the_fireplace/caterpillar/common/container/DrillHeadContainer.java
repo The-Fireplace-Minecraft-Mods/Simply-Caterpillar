@@ -12,7 +12,6 @@ import org.jetbrains.annotations.NotNull;
 import the_fireplace.caterpillar.Caterpillar;
 import the_fireplace.caterpillar.common.block.entity.DrillHeadBlockEntity;
 import the_fireplace.caterpillar.common.container.syncdata.DrillHeadContainerData;
-import the_fireplace.caterpillar.common.container.util.CaterpillarBurnerSlot;
 import the_fireplace.caterpillar.core.init.BlockInit;
 import the_fireplace.caterpillar.core.init.ContainerInit;
 
@@ -29,6 +28,7 @@ public class DrillHeadContainer extends AbstractContainerMenu {
     // Client Constructor
     public DrillHeadContainer(int id, Inventory playerInventory) {
         this(id, playerInventory, new ItemStackHandler(CONTAINER_SIZE), BlockPos.ZERO, new SimpleContainerData(2));
+        System.out.println("Constructing CLIENT DrillHeadContainer: " + id);
     }
 
     // Server Constructor
@@ -37,6 +37,8 @@ public class DrillHeadContainer extends AbstractContainerMenu {
         this.containerAccess = ContainerLevelAccess.create(playerInventory.player.level, pos);
         this.data = data;
         this.slotId = 0;
+
+        System.out.println("Constructing SERVER DrillHeadContainer: " + id);
 
         final int slotSizePlus2 = 18, startX = 8, startY = 84, hotbarY = 142, consumptionX = 8, gatheredX = 116, drillHeadY = 17;
 
@@ -48,7 +50,7 @@ public class DrillHeadContainer extends AbstractContainerMenu {
         }
 
         // Drill_head burner slot
-        addSlot(new CaterpillarBurnerSlot(this, slots, slotId++, 80, 53));
+        // addSlot(new CaterpillarBurnerSlot(this, slots, slotId++, 80, 53));
 
 
         // Drill_head Gathered slots

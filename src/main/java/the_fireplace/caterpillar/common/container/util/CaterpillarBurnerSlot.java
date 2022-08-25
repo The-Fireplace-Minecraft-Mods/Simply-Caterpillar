@@ -18,7 +18,7 @@ public class CaterpillarBurnerSlot extends SlotItemHandler {
 
     @Override
     public boolean mayPlace(ItemStack itemStack) {
-        return this.container.drillHead.isFuel(itemStack) || isBucket(itemStack);
+        return DrillHeadContainer.isFuel(itemStack) || isBucket(itemStack);
     }
 
     public int getMaxStackSize(ItemStack itemStack) {

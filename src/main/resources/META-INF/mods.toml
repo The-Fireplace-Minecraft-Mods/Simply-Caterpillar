@@ -5,10 +5,10 @@ issueTrackerURL="https://github.com/The-Fireplace/Simply-Caterpillar/issues"
 
 [[mods]] #mandatory
 modId="simplycaterpillar"
-version="1.19-1-0"
+version="${file.jarVersion}"
 displayName="Simply Caterpillar"
-#updateJSONURL="http://myurl.me/"
-displayURL="https://www.curseforge.com/minecraft/mc-mods/simply-caterpillar"
+#updateJSONURL=""
+displayURL="https://github.com/The-Fireplace/Simply-Caterpillar/"
 logoFile="simplycaterpillar.png"
 credits="Daniel Appleby for the original Caterpillar mod"
 authors="The_Fireplace, Daniel-Mendes"

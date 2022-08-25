@@ -6,6 +6,7 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -21,6 +22,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import the_fireplace.caterpillar.common.block.DrillHeadBlock;
 import the_fireplace.caterpillar.common.block.entity.DrillHeadBlockEntity;
+import the_fireplace.caterpillar.common.block.entity.util.CaterpillarBlocksUtil;
 import the_fireplace.caterpillar.common.block.util.DrillHeadPart;
 import the_fireplace.caterpillar.common.container.CaterpillarContainer;
 import the_fireplace.caterpillar.config.ConfigHolder;
@@ -94,41 +96,6 @@ public class Caterpillar
 
 	public void setSelectedCaterpillar(CaterpillarContainer selectedCaterpillar) {
 		this.selectedCaterpillar = selectedCaterpillar;
-	}
-
-	public static BlockPos getCaterpillarPos(Level level, BlockPos pos, Direction direction) {
-		BlockState state = level.getBlockState(pos);
-
-		if (
-				(state.getBlock() != BlockInit.DRILL_HEAD.get()) &&
-				(state.getBlock() != BlockInit.DECORATION.get()) &&
-				(state.getBlock() != BlockInit.REINFORCEMENT.get()) &&
-				(state.getBlock() != BlockInit.INCINERATOR.get()) &&
-				(state.getBlock() != BlockInit.COLLECTOR.get()) &&
-				(state.getBlock() != BlockInit.STORAGE.get()) &&
-				(state.getBlock() != BlockInit.DRILL_BASE.get())
-		) {
-			return null;
-		}
-
-		if ((state.getBlock() instanceof DrillHeadBlock) && state.getValue(PART).equals(DrillHeadPart.BASE)) {
-			return pos;
-		}
-
-		return getCaterpillarPos(level, pos.relative(direction.getOpposite()), direction);
-	}
-
-	public NonNullList<ItemStack> getInventory(CaterpillarContainer caterpillar, ScreenTabs selectedTab) {
-		switch (selectedTab.value) {
-			case 1:
-				return caterpillar.decoration.getItems();
-			case 2:
-				return caterpillar.reinforcement.getItems();
-			case 3:
-				return caterpillar.incinerator.getItems();
-			default:
-				return caterpillar.drillHead.getItems();
-		}
 	}
 
 	public void removeSelectedCaterpillar() {

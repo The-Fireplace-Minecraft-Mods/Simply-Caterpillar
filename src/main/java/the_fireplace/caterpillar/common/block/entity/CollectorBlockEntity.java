@@ -23,21 +23,8 @@ import static the_fireplace.caterpillar.common.block.CollectorBlock.HALF;
 
 public class CollectorBlockEntity extends BlockEntity {
 
-    public int ticks = 0;
-
     public CollectorBlockEntity(BlockPos pos, BlockState state) {
         super(BlockEntityInit.COLLECTOR.get(), pos, state);
-    }
-
-    public void tick(Level level, BlockPos pos, BlockState state, BlockEntity blockEntity) {
-        if (blockEntity instanceof CollectorBlockEntity) {
-            if (((CollectorBlockEntity) blockEntity).ticks != 0 && ((CollectorBlockEntity) blockEntity).ticks % 60 == 0) {
-                move(level, pos, state);
-                suckInItems(level, pos);
-            }
-            ((CollectorBlockEntity) blockEntity).ticks++;
-        }
-
     }
 
     public void move(Level level, BlockPos pos, BlockState state) {
@@ -50,6 +37,8 @@ public class CollectorBlockEntity extends BlockEntity {
         level.destroyBlock(pos.above(), false);
 
         level.playSound(null, pos, SoundEvents.PISTON_EXTEND, SoundSource.BLOCKS, 1.0F, 1.0F);
+
+        suckInItems(level, pos);
     }
 
     public void suckInItems(Level level, BlockPos pos) {

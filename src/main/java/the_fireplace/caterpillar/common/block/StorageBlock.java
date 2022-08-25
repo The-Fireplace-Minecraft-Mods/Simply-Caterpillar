@@ -95,10 +95,10 @@ public class StorageBlock extends HorizontalDirectionalBlock implements EntityBl
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         BlockPos blockPos = context.getClickedPos();
         Level level = context.getLevel();
-        Direction direction = context.getNearestLookingDirection();
+        Direction direction = context.getHorizontalDirection();
 
         if (blockPos.getY() < level.getMaxBuildHeight() - 1 && level.getBlockState(blockPos.relative(direction.getClockWise())).canBeReplaced(context) && level.getBlockState(blockPos.relative(direction.getCounterClockWise())).canBeReplaced(context)) {
-            return defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite()).setValue(PART, StoragePart.BASE);
+            return defaultBlockState().setValue(FACING, direction.getOpposite()).setValue(PART, StoragePart.BASE);
         }
 
         return null;

@@ -2,6 +2,7 @@ package the_fireplace.caterpillar.common.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
@@ -27,6 +28,9 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 import the_fireplace.caterpillar.Caterpillar;
 import the_fireplace.caterpillar.common.block.entity.DecorationBlockEntity;
+import the_fireplace.caterpillar.common.block.entity.DrillHeadBlockEntity;
+import the_fireplace.caterpillar.common.block.entity.util.CaterpillarBlocksUtil;
+import the_fireplace.caterpillar.common.container.CaterpillarContainer;
 import the_fireplace.caterpillar.common.container.DecorationContainer;
 import the_fireplace.caterpillar.common.block.util.DecorationPart;
 
@@ -93,7 +97,7 @@ public class DecorationBlock extends HorizontalDirectionalBlock implements Entit
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         BlockPos blockPos = context.getClickedPos();
         Level level = context.getLevel();
-        Direction direction = context.getNearestLookingDirection();
+        Direction direction = context.getHorizontalDirection();
 
         if (blockPos.getY() < level.getMaxBuildHeight() - 1 && level.getBlockState(blockPos.relative(direction.getClockWise())).canBeReplaced(context) && level.getBlockState(blockPos.relative(direction.getCounterClockWise())).canBeReplaced(context)) {
             return defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite()).setValue(PART, DecorationPart.BASE);
@@ -146,10 +150,16 @@ public class DecorationBlock extends HorizontalDirectionalBlock implements Entit
         if (blockEntity instanceof DecorationBlockEntity) {
             BlockState state = level.getBlockState(pos);
             BlockPos basePos = getBasePos(state, pos);
-            BlockEntity baseBlockEntity = level.getBlockEntity(basePos);
+            Direction direction = state.getValue(FACING);
+            BlockPos caterpillarPos = CaterpillarBlocksUtil.getCaterpillarPos(level, basePos, direction);
 
-            MenuProvider container = new SimpleMenuProvider(DecorationContainer.getServerContainer((DecorationBlockEntity) baseBlockEntity, basePos), DecorationBlockEntity.TITLE);
-            player.openMenu(container);
+            if (caterpillarPos != null) {
+                BlockEntity caterpillarBlockEntity = level.getBlockEntity(caterpillarPos);
+                MenuProvider container = new SimpleMenuProvider(CaterpillarContainer.getServerContainer((DrillHeadBlockEntity) caterpillarBlockEntity, caterpillarPos), Component.empty());
+                player.openMenu(container);
+            } else {
+                player.displayClientMessage(Component.translatable("block.simplycaterpillar.drill_head.not_found"), true);
+            }
         }
     }
 

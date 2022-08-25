@@ -2,6 +2,7 @@ package the_fireplace.caterpillar.common.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
@@ -26,7 +27,11 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 import the_fireplace.caterpillar.Caterpillar;
+import the_fireplace.caterpillar.common.block.entity.DecorationBlockEntity;
+import the_fireplace.caterpillar.common.block.entity.DrillHeadBlockEntity;
 import the_fireplace.caterpillar.common.block.entity.ReinforcementBlockEntity;
+import the_fireplace.caterpillar.common.block.entity.util.CaterpillarBlocksUtil;
+import the_fireplace.caterpillar.common.container.CaterpillarContainer;
 import the_fireplace.caterpillar.common.container.ReinforcementContainer;
 import the_fireplace.caterpillar.common.block.util.ReinforcementPart;
 
@@ -113,10 +118,10 @@ public class ReinforcementBlock extends HorizontalDirectionalBlock implements En
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         BlockPos blockPos = context.getClickedPos();
         Level level = context.getLevel();
-        Direction direction = context.getNearestLookingDirection();
+        Direction direction = context.getHorizontalDirection();
 
         if (blockPos.getY() < level.getMaxBuildHeight() - 1 && level.getBlockState(blockPos.above().relative(direction.getClockWise())).canBeReplaced(context) && level.getBlockState(blockPos.above().relative(direction.getCounterClockWise())).canBeReplaced(context) && level.getBlockState(blockPos.above()).canBeReplaced(context) && level.getBlockState(blockPos.above(2)).canBeReplaced(context)) {
-            return defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite()).setValue(PART, ReinforcementPart.BOTTOM);
+            return defaultBlockState().setValue(FACING, direction.getOpposite()).setValue(PART, ReinforcementPart.BOTTOM);
         }
 
         return null;
@@ -159,10 +164,16 @@ public class ReinforcementBlock extends HorizontalDirectionalBlock implements En
         if (blockEntity instanceof ReinforcementBlockEntity) {
             BlockState state = level.getBlockState(pos);
             BlockPos basePos = getBasePos(state, pos);
-            BlockEntity baseBlockEntity = level.getBlockEntity(basePos);
+            Direction direction = state.getValue(FACING);
+            BlockPos caterpillarPos = CaterpillarBlocksUtil.getCaterpillarPos(level, basePos, direction);
 
-            MenuProvider container = new SimpleMenuProvider(ReinforcementContainer.getServerContainer((ReinforcementBlockEntity) baseBlockEntity, basePos), ReinforcementBlockEntity.TITLE);
-            player.openMenu(container);
+            if (caterpillarPos != null) {
+                BlockEntity caterpillarBlockEntity = level.getBlockEntity(caterpillarPos);
+                MenuProvider container = new SimpleMenuProvider(CaterpillarContainer.getServerContainer((DrillHeadBlockEntity) caterpillarBlockEntity, caterpillarPos), Component.empty());
+                player.openMenu(container);
+            } else {
+                player.displayClientMessage(Component.translatable("block.simplycaterpillar.drill_head.not_found"), true);
+            }
         }
     }
 

@@ -6,7 +6,7 @@ import the_fireplace.caterpillar.common.block.entity.DecorationBlockEntity;
 
 public class DecorationContainerData extends SimpleContainerData {
 
-    private final DecorationBlockEntity blockEntity;
+    public DecorationBlockEntity blockEntity;
 
     public DecorationContainerData(DecorationBlockEntity blockEntity, int amount) {
         super(amount);
@@ -16,7 +16,7 @@ public class DecorationContainerData extends SimpleContainerData {
     @Override
     public int get(int key) {
         return switch (key) {
-            case 0 -> this.blockEntity.getItemInSlot(0).getCount();
+            case 0 -> this.blockEntity.getSelectedMap();
             default -> throw new UnsupportedOperationException("There is no value corresponding to key: '" + key + "' in: '" + blockEntity + "'");
         };
     }
@@ -24,22 +24,8 @@ public class DecorationContainerData extends SimpleContainerData {
     @Override
     public void set(int key, int value) {
         switch (key) {
-            case 0:
-                ItemStack stack = this.blockEntity.getItemInSlot(0);
-
-                if (value > 0 && value < stack.getMaxStackSize()) {
-                    stack.setCount(value);
-                } else if (value <= 0) {
-                    stack = ItemStack.EMPTY;
-                    this.blockEntity.inventory.setStackInSlot(0, ItemStack.EMPTY);
-                } else if (value > stack.getMaxStackSize()) {
-                    stack.setCount(stack.getMaxStackSize());
-                }
-
-                this.blockEntity.inventory.setStackInSlot(0, stack);
-                break;
-            default:
-                throw new UnsupportedOperationException("There is no value corresponding to key: '" + key + "' in: '" + blockEntity + "'");
+            case 0 -> this.blockEntity.setSelectedMap(value);
+            default -> throw new UnsupportedOperationException("There is no value corresponding to key: '" + key + "' in: '" + blockEntity + "'");
         }
     }
 }

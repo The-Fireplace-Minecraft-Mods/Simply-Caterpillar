@@ -2,10 +2,12 @@ package the_fireplace.caterpillar.common.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.*;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
@@ -30,9 +32,13 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import the_fireplace.caterpillar.Caterpillar;
+import the_fireplace.caterpillar.common.block.entity.DecorationBlockEntity;
 import the_fireplace.caterpillar.common.block.entity.DrillHeadBlockEntity;
+import the_fireplace.caterpillar.common.container.CaterpillarContainer;
 import the_fireplace.caterpillar.common.container.DrillHeadContainer;
 import the_fireplace.caterpillar.common.block.util.DrillHeadPart;
+import the_fireplace.caterpillar.common.container.syncdata.CaterpillarContainerData;
+import the_fireplace.caterpillar.common.container.syncdata.DrillHeadContainerData;
 
 import java.util.EnumMap;
 import java.util.Map;
@@ -94,10 +100,10 @@ public class DrillHeadBlock extends HorizontalDirectionalBlock implements Entity
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         BlockPos blockPos = context.getClickedPos();
         Level level = context.getLevel();
-        Direction direction = context.getNearestLookingDirection();
+        Direction direction = context.getHorizontalDirection();
 
         if (blockPos.getY() < level.getMaxBuildHeight() - 1 && level.getBlockState(blockPos.relative(direction.getClockWise())).canBeReplaced(context) && level.getBlockState(blockPos.relative(direction.getCounterClockWise())).canBeReplaced(context) && level.getBlockState(blockPos.above().relative(direction.getClockWise())).canBeReplaced(context) && level.getBlockState(blockPos.above().relative(direction.getCounterClockWise())).canBeReplaced(context) && level.getBlockState(blockPos.above()).canBeReplaced(context) && level.getBlockState(blockPos.above(2)).canBeReplaced(context) && level.getBlockState(blockPos.above(2).relative(direction.getClockWise())).canBeReplaced(context) && level.getBlockState(blockPos.above(2).relative(direction.getCounterClockWise())).canBeReplaced(context)) {
-            return defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite()).setValue(PART, DrillHeadPart.BLADE_BOTTOM);
+            return defaultBlockState().setValue(FACING, direction.getOpposite()).setValue(PART, DrillHeadPart.BLADE_BOTTOM);
         }
 
         return null;
@@ -232,10 +238,11 @@ public class DrillHeadBlock extends HorizontalDirectionalBlock implements Entity
         if (blockEntity instanceof DrillHeadBlockEntity) {
             BlockState state = level.getBlockState(pos);
             BlockPos basePos = getBasePos(state, pos);
-            BlockEntity baseBlockEntity = level.getBlockEntity(basePos);
+            BlockEntity drillHeadBlockEntity = level.getBlockEntity(basePos);
 
-            MenuProvider container = new SimpleMenuProvider(DrillHeadContainer.getServerContainer((DrillHeadBlockEntity) baseBlockEntity, basePos), DrillHeadBlockEntity.TITLE);
+            MenuProvider container = new SimpleMenuProvider(CaterpillarContainer.getServerContainer((DrillHeadBlockEntity) drillHeadBlockEntity, basePos), Component.empty());
             player.openMenu(container);
+
         }
     }
 

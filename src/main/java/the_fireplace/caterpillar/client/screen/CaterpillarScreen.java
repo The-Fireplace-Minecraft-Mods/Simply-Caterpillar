@@ -21,20 +21,15 @@ import the_fireplace.caterpillar.core.init.ItemInit;
 import java.util.List;
 
 public class CaterpillarScreen extends AbstractContainerScreen<CaterpillarContainer> {
-
-    private CaterpillarContainer container;
-
     private float scrollOffs;
 
     public CaterpillarScreen(CaterpillarContainer container, Inventory playerInventory, Component title) {
         super(container, playerInventory, title);
-        this.container = container;
         this.imageWidth = 176;
-        this.imageHeight = this.container.getSelectedTab() == ScreenTabs.REINFORCEMENT ? 189 : 166;
+        this.imageHeight = this.menu.getSelectedTab() == ScreenTabs.REINFORCEMENT ? 189 : 166;
         this.leftPos = 0;
         this.topPos = 0;
     }
-
 
     @Override
     public void render(PoseStack stack, int mouseX, int mouseY, float partialTicks) {
@@ -46,11 +41,11 @@ public class CaterpillarScreen extends AbstractContainerScreen<CaterpillarContai
 
     @Override
     protected void renderLabels(PoseStack stack, int mouseX, int mouseY) {
-        Component title = this.container.getSelectedTab().name;
+        Component title = this.menu.getSelectedTab().name;
         this.titleLabelX = (this.imageWidth - this.font.width(title)) / 2;
         this.titleLabelY = 6;
 
-        switch (this.container.getSelectedTab()) {
+        switch (this.menu.getSelectedTab()) {
             case DRILL_HEAD:
                 int consumptionX = 112, consumptionY = 6, gatheredX = 11, gatheredY = 6;
                 this.titleLabelY = -10;
@@ -86,10 +81,10 @@ public class CaterpillarScreen extends AbstractContainerScreen<CaterpillarContai
         renderBackground(stack);
         bindTexture();
 
-        this.imageHeight = this.container.getSelectedTab() == ScreenTabs.REINFORCEMENT ? 189 : 166;
+        this.imageHeight = this.menu.getSelectedTab() == ScreenTabs.REINFORCEMENT ? 189 : 166;
         blit(stack, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
 
-        if(this.container.getSelectedTab() == ScreenTabs.DECORATION) {
+        if(this.menu.getSelectedTab() == ScreenTabs.DECORATION) {
             renderScrollBar(stack);
         }
     }
@@ -112,59 +107,79 @@ public class CaterpillarScreen extends AbstractContainerScreen<CaterpillarContai
         // itemRenderer.renderGuiItem(new ItemStack(BlockInit.DECORATION.get().asItem()), this.imageWidth - 50, this.topPos + 56);
 
         for (ScreenTabs tab: ScreenTabs.values()) {
-            String tabName = tab.name.getString();
+            // TODO: checkShowTab doesn't work
+            //  if (checkShowTab(tab)) {
+            if (true) {
+                String tabName = tab.name.getString();
 
-            if (tabName.length() > 5) {
-                tabName = tabName.substring(0, 3) + "...";
+                if (tabName.length() > 5) {
+                    tabName = tabName.substring(0, 3) + "...";
+                }
+
+                if (this.menu.getSelectedTab().equals(tab)) {
+                    this.addRenderableWidget(new ImageButton(this.leftPos - 28, this.topPos + 3 + tab.value*20, 31, 20, 176 , 58 + 20, 0, ScreenTabs.DRILL_HEAD.resourceLocation, (onPress) -> {
+                        this.menu.setSelectedTab(tab);
+                    }));
+
+                    this.font.draw(stack, tabName, this.leftPos - 22, this.topPos + tab.value*20 + 9, ChatFormatting.BLACK.getColor());
+                } else {
+                    this.addRenderableWidget(new ImageButton(this.leftPos - 31, this.topPos + tab.value*20 + 3 , 31, 20, 176 , 58, 0, ScreenTabs.DRILL_HEAD.resourceLocation, (onPress) -> {
+                        this.menu.setSelectedTab(tab);
+                    }));
+
+                    this.font.draw(stack, tabName, this.leftPos - 25, this.topPos + tab.value*20 + 9, ChatFormatting.GRAY.getColor());
+                }
+
+                if(mouseX >= this.leftPos - 31 && mouseY >= this.topPos + tab.value*20 + 3 && mouseX <= this.leftPos && mouseY <= this.topPos + tab.value*20 + 3 + 20) {
+                    this.renderTooltip(stack, tab.name, this.leftPos - 15, this.topPos + tab.value*20 + 21);
+                }
             }
+        }
+    }
 
-            if (this.container.getSelectedTab().equals(tab)) {
-                this.addRenderableWidget(new ImageButton(this.leftPos - 28, this.topPos + 3 + tab.value*20, 31, 20, 176 , 58 + 20, 0, ScreenTabs.DRILL_HEAD.resourceLocation, (onPress) -> {
-                    this.container.setSelectedTab(tab);
-                }));
-
-                this.font.draw(stack, tabName, this.leftPos - 22, this.topPos + tab.value*20 + 9, ChatFormatting.BLACK.getColor());
-            } else {
-                this.addRenderableWidget(new ImageButton(this.leftPos - 31, this.topPos + tab.value*20 + 3 , 31, 20, 176 , 58, 0, ScreenTabs.DRILL_HEAD.resourceLocation, (onPress) -> {
-                    this.container.setSelectedTab(tab);
-                }));
-
-                this.font.draw(stack, tabName, this.leftPos - 25, this.topPos + tab.value*20 + 9, ChatFormatting.GRAY.getColor());
-            }
-
-            if(mouseX >= this.leftPos - 31 && mouseY >= this.topPos + tab.value*20 + 3 && mouseX <= this.leftPos && mouseY <= this.topPos + tab.value*20 + 3 + 20) {
-               this.renderTooltip(stack, tab.name, this.leftPos - 15, this.topPos + tab.value*20 + 21);
-            }
+    private boolean checkShowTab(ScreenTabs tab) {
+        switch (tab) {
+            case DRILL_HEAD:
+                System.out.println("DRILL HEAD: " + this.menu.drillHead);
+                return this.menu.drillHead != null;
+            case DECORATION:
+                return this.menu.decoration != null;
+            case INCINERATOR:
+                return this.menu.incinerator != null;
+            case REINFORCEMENT:
+                return this.menu.reinforcement != null;
+            default:
+                return false;
         }
     }
 
     private void renderSlots() {
-        switch (this.container.getSelectedTab()) {
+        switch (this.menu.getSelectedTab()) {
             case DECORATION:
-                this.container.placeSlotsDecoration();
+                this.menu.placeSlotsDecoration();
                 break;
             case INCINERATOR:
-                this.container.placeSlotsIncinerator();
+                this.menu.placeSlotsIncinerator();
                 break;
             case REINFORCEMENT:
-                this.container.placeSlotsReinforcement();
+                this.menu.placeSlotsReinforcement();
                 break;
             case DRILL_HEAD:
             default:
-                this.container.placeSlotsDrillHead();
+                this.menu.placeSlotsDrillHead();
                 break;
         }
 
-        this.container.placeSlotsInventory();
+        this.menu.placeSlotsInventory();
     }
 
     @Override
     public boolean mouseScrolled(double p_94686_, double p_94687_, double p_94688_) {
-        if (this.container.getSelectedTab() == ScreenTabs.DECORATION) {
+        if (this.menu.getSelectedTab() == ScreenTabs.DECORATION) {
             int i = 9;
             float f = (float)(p_94688_ / (double)i);
             this.scrollOffs = Mth.clamp(this.scrollOffs - f, 0.0F, 1.0F);
-            this.container.decoration.scrollTo(this.scrollOffs);
+            // this.container.decoration.scrollTo(this.scrollOffs);
             return true;
         }
 
@@ -174,6 +189,6 @@ public class CaterpillarScreen extends AbstractContainerScreen<CaterpillarContai
     private void bindTexture() {
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-        RenderSystem.setShaderTexture(0, this.container.getSelectedTab().resourceLocation);
+        RenderSystem.setShaderTexture(0, this.menu.getSelectedTab().resourceLocation);
     }
 }

@@ -1,8 +1,9 @@
 {
   "block.simplycaterpillar.drill_head": "Drill Head",
   "block.simplycaterpillar.drill_head.noFuel" : "You need to add a fuel source to start the drill.",
-  "block.simplycaterpillar.drill_head.powered" : "Drill is turning off.",
+  "block.simplycaterpillar.drill_head.powered_off" : "Drill is turning off.",
   "block.simplycaterpillar.drill_head.powered_on" : "Drill is turning on.",
+  "block.simplycaterpillar.drill_head.not_found" : "Please, connect the block to the drill head.",
   "block.simplycaterpillar.reinforcement": "Reinforcement Builder",
   "block.simplycaterpillar.decoration": "Decoration Placer",
   "block.simplycaterpillar.collector": "Item Collector",
@@ -19,7 +20,6 @@
   "container.simplycaterpillar.reinforcement": "Reinforcement",
   "container.simplycaterpillar.incinerator": "Incinerator",
   "container.simplycaterpillar.storage": "Storage",
-  "container.simplycaterpillar.reinforcement": "Reinforcement",
 
   "simplycaterpillar.config.drill_head": "Does this show the drill head tutorial ?",
   "simplycaterpillar.config.coal": "Does this show the coal tutorial ?",

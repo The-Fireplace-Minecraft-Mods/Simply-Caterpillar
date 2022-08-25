@@ -4,6 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.item.ItemStack;
@@ -15,6 +16,7 @@ import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.ForgeHooks;
 import the_fireplace.caterpillar.Caterpillar;
+import the_fireplace.caterpillar.common.block.entity.util.CaterpillarBlocksUtil;
 import the_fireplace.caterpillar.common.block.entity.util.InventoryBlockEntity;
 import the_fireplace.caterpillar.core.init.BlockEntityInit;
 import the_fireplace.caterpillar.common.block.util.DrillHeadPart;
@@ -52,51 +54,54 @@ public class DrillHeadBlockEntity extends InventoryBlockEntity implements BlockE
     }
 
     public void tick(Level level, BlockPos pos, BlockState state, DrillHeadBlockEntity blockEntity) {
-        if (state.getValue(PART).equals(DrillHeadPart.BASE)) {
-            boolean flag = blockEntity.isLit();
-            boolean flag1 = false;
-            ItemStack stack = blockEntity.getItemInSlot(SLOT_FUEL);
-            boolean burnSlotIsEmpty = stack.isEmpty();
+        if (!state.getValue(PART).equals(DrillHeadPart.BASE)) {
+            return;
+        }
 
-            if (state.getValue(POWERED) && blockEntity.isLit()) {
-                --blockEntity.litTime;
+        boolean flag = blockEntity.isLit();
+        boolean flag1 = false;
+        ItemStack stack = blockEntity.getItemInSlot(SLOT_FUEL);
+        boolean burnSlotIsEmpty = stack.isEmpty();
 
-                if (super.timer != 0 && super.timer % MOVEMENT_TICK == 0) {
-                    if (state.getValue(POWERED)) {
-                        this.drill(level, pos, state);
-                        if (state.getValue(POWERED)) {
-                            this.move(level, pos, state);
-                        }
-                    }
-                }
-            }
-
-            if (state.getValue(POWERED) && blockEntity.isLit() || !burnSlotIsEmpty) {
-                if(!blockEntity.isLit()) {
-                    blockEntity.litTime = blockEntity.getBurnDuration(blockEntity.getItemInSlot(SLOT_FUEL));
-                    blockEntity.litDuration = blockEntity.litTime;
-
-                    if (!burnSlotIsEmpty) {
-                        stack.shrink(1);
-                    }
-                }
-            } else {
-                if (state.getValue(POWERED) && !blockEntity.isLit() && burnSlotIsEmpty) {
-                    setPowerOff(level, state, pos);
-                }
-            }
-
-            if (flag != blockEntity.isLit()) {
-                flag1 = true;
-                state.setValue(POWERED, Boolean.valueOf(blockEntity.isLit()));
-                level.setBlock(pos, state, 3);
-            }
-
-            if (flag1) {
-                setChanged(level, pos, state);
-            }
-
+        if (state.getValue(POWERED) && blockEntity.isLit()) {
+            --blockEntity.litTime;
             super.tick();
+
+            if (super.timer != 0 && super.timer % MOVEMENT_TICK == 0) {
+                if (state.getValue(POWERED)) {
+                    this.drill(level, pos, state);
+                    if (state.getValue(POWERED)) {
+                        this.move(level, pos, state);
+                        Direction direction = state.getValue(FACING);
+                        CaterpillarBlocksUtil.moveNextBlock(level, pos, direction);
+                    }
+                }
+            }
+        }
+
+        if (state.getValue(POWERED) && blockEntity.isLit() || !burnSlotIsEmpty) {
+            if(!blockEntity.isLit()) {
+                blockEntity.litTime = blockEntity.getBurnDuration(blockEntity.getItemInSlot(SLOT_FUEL));
+                blockEntity.litDuration = blockEntity.litTime;
+
+                if (!burnSlotIsEmpty) {
+                    stack.shrink(1);
+                }
+            }
+        } else {
+            if (state.getValue(POWERED) && !blockEntity.isLit() && burnSlotIsEmpty) {
+                setPowerOff(level, state, pos);
+            }
+        }
+
+        if (flag != blockEntity.isLit()) {
+            flag1 = true;
+            state.setValue(POWERED, Boolean.valueOf(blockEntity.isLit()));
+            level.setBlock(pos, state, 3);
+        }
+
+        if (flag1) {
+            setChanged(level, pos, state);
         }
     }
 
@@ -172,17 +177,6 @@ public class DrillHeadBlockEntity extends InventoryBlockEntity implements BlockE
                 if (level.getBlockState(destroyPos).getBlock() == Blocks.BEDROCK) {
                    setPowerOff(level, state, pos);
                 } else if (level.getBlockState(destroyPos).getBlock() != Blocks.AIR) {
-                    /*
-                    double d0 = (double)pos.getX() + 0.5D;
-                    double d1 = (double)pos.getY();
-                    double d2 = (double)pos.getZ() + 0.5D;
-                    //double d4 = RandomSource.nextDouble() * 0.6D - 0.3D;
-                    double d5 = direction$axis == Direction.Axis.X ? (double)direction.getStepX() * 0.52D : ;
-                    //double d6 = RandomSource.nextDouble() * 6.0D / 16.0D;
-                    double d7 = direction$axis == Direction.Axis.Z ? (double)direction.getStepZ() * 0.52D : d4;
-
-                    level.addParticle(ParticleTypes.SMOKE, d0, d1, d2, 0.0D, 0.0D, 0.0D);
-                     */
                     level.destroyBlock(destroyPos, true);
                 }
             }

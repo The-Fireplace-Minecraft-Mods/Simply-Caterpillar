@@ -2,6 +2,7 @@ package the_fireplace.caterpillar.client.screen;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -20,6 +21,8 @@ public class DecorationScreen extends AbstractContainerScreen<DecorationContaine
     protected Font font;
 
     private float scrollOffs;
+
+    private boolean scrolling;
 
     public DecorationScreen(DecorationContainer container, Inventory playerInventory, Component title) {
         super(container, playerInventory, title);
@@ -54,6 +57,26 @@ public class DecorationScreen extends AbstractContainerScreen<DecorationContaine
         int j = this.topPos + 17;
         int k = j + 54;
         blit(stack, i, j + (int)((float)(k - j - 17) * this.scrollOffs), 176, 0, 12, 15);
+
+
+        int m = 9;
+        int n = (int)((double)(scrollOffs * (float)m) + 0.5D);
+        this.font.draw(stack, "" + n, this.leftPos + 31, this.topPos + 39, 0x404040);
+    }
+
+    @Override
+    public boolean mouseClicked(double p_97748_, double p_97749_, int p_97750_) {
+        return super.mouseClicked(p_97748_, p_97749_, p_97750_);
+    }
+
+    @Override
+    public boolean mouseReleased(double p_97812_, double p_97813_, int p_97814_) {
+        return super.mouseReleased(p_97812_, p_97813_, p_97814_);
+    }
+
+    @Override
+    public boolean mouseDragged(double p_97752_, double p_97753_, int p_97754_, double p_97755_, double p_97756_) {
+        return super.mouseDragged(p_97752_, p_97753_, p_97754_, p_97755_, p_97756_);
     }
 
     @Override
@@ -61,6 +84,7 @@ public class DecorationScreen extends AbstractContainerScreen<DecorationContaine
         int i = 9;
         float f = (float)(p_94688_ / (double)i);
         this.scrollOffs = Mth.clamp(this.scrollOffs - f, 0.0F, 1.0F);
+        this.menu.scrollTo(this.scrollOffs);
         return true;
     }
 

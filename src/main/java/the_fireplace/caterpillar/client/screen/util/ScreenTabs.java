@@ -2,20 +2,17 @@ package the_fireplace.caterpillar.client.screen.util;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import the_fireplace.caterpillar.client.screen.DecorationScreen;
-import the_fireplace.caterpillar.client.screen.DrillHeadScreen;
-import the_fireplace.caterpillar.client.screen.IncineratorScreen;
-import the_fireplace.caterpillar.client.screen.ReinforcementScreen;
+import the_fireplace.caterpillar.Caterpillar;
 import the_fireplace.caterpillar.common.block.entity.DecorationBlockEntity;
 import the_fireplace.caterpillar.common.block.entity.DrillHeadBlockEntity;
 import the_fireplace.caterpillar.common.block.entity.IncineratorBlockEntity;
 import the_fireplace.caterpillar.common.block.entity.ReinforcementBlockEntity;
 
 public enum ScreenTabs {
-    MAIN(0, DrillHeadBlockEntity.TITLE, false, DrillHeadScreen.TEXTURE),
-    DECORATION(1, DecorationBlockEntity.TITLE, true, DecorationScreen.TEXTURE),
-    REINFORCEMENT(2, ReinforcementBlockEntity.TITLE, true, ReinforcementScreen.TEXTURE),
-    INCINERATOR(3, IncineratorBlockEntity.TITLE, true, IncineratorScreen.TEXTURE);
+    DRILL_HEAD(0, DrillHeadBlockEntity.TITLE, false, new ResourceLocation(Caterpillar.MOD_ID, "textures/gui/caterpillar.png")),
+    DECORATION(1, DecorationBlockEntity.TITLE, true, new ResourceLocation(Caterpillar.MOD_ID, "textures/gui/decoration.png")),
+    REINFORCEMENT(2, ReinforcementBlockEntity.TITLE, true, new ResourceLocation(Caterpillar.MOD_ID, "textures/gui/reinforcement.png")),
+    INCINERATOR(3, IncineratorBlockEntity.TITLE, true, new ResourceLocation(Caterpillar.MOD_ID, "textures/gui/incinerator.png"));
 
     public final int value;
 

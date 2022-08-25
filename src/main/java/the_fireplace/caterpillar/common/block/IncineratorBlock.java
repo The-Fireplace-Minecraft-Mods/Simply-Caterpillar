@@ -2,6 +2,7 @@ package the_fireplace.caterpillar.common.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
@@ -25,8 +26,8 @@ import org.jetbrains.annotations.Nullable;
 import the_fireplace.caterpillar.Caterpillar;
 import the_fireplace.caterpillar.common.block.entity.DrillHeadBlockEntity;
 import the_fireplace.caterpillar.common.block.entity.IncineratorBlockEntity;
-import the_fireplace.caterpillar.common.container.DrillHeadContainer;
-import the_fireplace.caterpillar.common.container.IncineratorContainer;
+import the_fireplace.caterpillar.common.block.entity.util.CaterpillarBlocksUtil;
+import the_fireplace.caterpillar.common.container.CaterpillarContainer;
 
 import java.util.EnumMap;
 import java.util.Map;
@@ -63,7 +64,9 @@ public class IncineratorBlock extends HorizontalDirectionalBlock implements Enti
 
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
-        return defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
+        Direction direction = context.getHorizontalDirection();
+
+        return defaultBlockState().setValue(FACING, direction.getOpposite());
     }
 
     @Override
@@ -79,8 +82,17 @@ public class IncineratorBlock extends HorizontalDirectionalBlock implements Enti
     protected void openContainer(Level level, BlockPos pos, Player player) {
         BlockEntity blockEntity = level.getBlockEntity(pos);
         if (blockEntity instanceof IncineratorBlockEntity) {
-            MenuProvider container = new SimpleMenuProvider(IncineratorContainer.getServerContainer((IncineratorBlockEntity) blockEntity, pos), IncineratorBlockEntity.TITLE);
-            player.openMenu(container);
+            BlockState state = level.getBlockState(pos);
+            Direction direction = state.getValue(FACING);
+            BlockPos caterpillarPos = CaterpillarBlocksUtil.getCaterpillarPos(level, pos, direction);
+
+            if (caterpillarPos != null) {
+                BlockEntity caterpillarBlockEntity = level.getBlockEntity(caterpillarPos);
+                MenuProvider container = new SimpleMenuProvider(CaterpillarContainer.getServerContainer((DrillHeadBlockEntity) caterpillarBlockEntity, caterpillarPos), Component.empty());
+                player.openMenu(container);
+            } else {
+                player.displayClientMessage(Component.translatable("block.simplycaterpillar.drill_head.not_found"), true);
+            }
         }
     }
 
