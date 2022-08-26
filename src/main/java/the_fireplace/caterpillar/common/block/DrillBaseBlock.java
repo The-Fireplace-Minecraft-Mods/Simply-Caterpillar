@@ -6,21 +6,26 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import org.jetbrains.annotations.Nullable;
 import the_fireplace.caterpillar.Caterpillar;
+import the_fireplace.caterpillar.common.block.entity.DrillBaseBlockEntity;
+import the_fireplace.caterpillar.common.block.entity.DrillHeadBlockEntity;
 
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-public class DrillBaseBlock extends HorizontalDirectionalBlock {
+public class DrillBaseBlock extends HorizontalDirectionalBlock implements EntityBlock {
 
     private static final Map<Direction, VoxelShape> SHAPES = new EnumMap<>(Direction.class);
     private static final Optional<VoxelShape> SHAPE = Stream.of(
@@ -57,5 +62,11 @@ public class DrillBaseBlock extends HorizontalDirectionalBlock {
     protected void runCalculation(VoxelShape shape) {
         for (Direction direction : Direction.values())
             SHAPES.put(direction, Caterpillar.calculateShapes(direction, shape));
+    }
+
+    @Nullable
+    @Override
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+        return new DrillBaseBlockEntity(pos, state);
     }
 }

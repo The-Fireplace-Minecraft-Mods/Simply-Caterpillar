@@ -27,30 +27,30 @@ public class CollectorBlockEntity extends BlockEntity {
         super(BlockEntityInit.COLLECTOR.get(), pos, state);
     }
 
-    public void move(Level level, BlockPos pos, BlockState state) {
-        BlockPos nextPos = pos.relative(state.getValue(FACING).getOpposite());
+    public void move() {
+        BlockPos nextPos = this.getBlockPos().relative(this.getBlockState().getValue(FACING).getOpposite());
 
-        level.setBlock(nextPos, state, 35);
-        level.setBlock(nextPos.above(), state.setValue(HALF, DoubleBlockHalf.UPPER), 35);
+        this.getLevel().setBlock(nextPos, this.getBlockState(), 35);
+        this.getLevel().setBlock(nextPos.below(), this.getBlockState().setValue(HALF, DoubleBlockHalf.LOWER), 35);
 
-        level.destroyBlock(pos, false);
-        level.destroyBlock(pos.above(), false);
+        this.getLevel().destroyBlock(this.getBlockPos(), false);
+        this.getLevel().destroyBlock(this.getBlockPos().below(), false);
 
-        level.playSound(null, pos, SoundEvents.PISTON_EXTEND, SoundSource.BLOCKS, 1.0F, 1.0F);
+        this.getLevel().playSound(null, this.getBlockPos(), SoundEvents.PISTON_EXTEND, SoundSource.BLOCKS, 1.0F, 1.0F);
 
-        suckInItems(level, pos);
+        suckInItems();
     }
 
-    public void suckInItems(Level level, BlockPos pos) {
+    public void suckInItems() {
         List<ItemEntity> entities = new ArrayList<>();
 
-        for(ItemEntity itemEntity : getItemsAround(level, pos)) {
+        for(ItemEntity itemEntity : getItemsAround()) {
             entities.add(itemEntity);
             itemEntity.kill();
         }
     }
 
-    public List<ItemEntity> getItemsAround(Level level, BlockPos pos) {
-        return level.getEntitiesOfClass(ItemEntity.class, new AABB(pos).inflate(1)).stream().toList();
+    public List<ItemEntity> getItemsAround() {
+        return this.getLevel().getEntitiesOfClass(ItemEntity.class, new AABB(this.getBlockPos()).inflate(1)).stream().toList();
     }
 }

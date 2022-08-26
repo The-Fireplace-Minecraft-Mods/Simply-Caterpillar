@@ -31,7 +31,6 @@ import the_fireplace.caterpillar.common.block.entity.DecorationBlockEntity;
 import the_fireplace.caterpillar.common.block.entity.DrillHeadBlockEntity;
 import the_fireplace.caterpillar.common.block.entity.util.CaterpillarBlocksUtil;
 import the_fireplace.caterpillar.common.container.CaterpillarContainer;
-import the_fireplace.caterpillar.common.container.DecorationContainer;
 import the_fireplace.caterpillar.common.block.util.DecorationPart;
 
 import java.util.EnumMap;
