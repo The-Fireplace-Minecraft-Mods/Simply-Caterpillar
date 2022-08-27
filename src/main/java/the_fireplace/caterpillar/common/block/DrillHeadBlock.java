@@ -2,19 +2,14 @@ package the_fireplace.caterpillar.common.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.network.chat.Component;
-import net.minecraft.world.*;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.EntityBlock;
-import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -24,31 +19,22 @@ import net.minecraft.world.level.block.state.properties.AttachFace;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
-import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import the_fireplace.caterpillar.Caterpillar;
-import the_fireplace.caterpillar.common.block.entity.DecorationBlockEntity;
 import the_fireplace.caterpillar.common.block.entity.DrillHeadBlockEntity;
-import the_fireplace.caterpillar.common.container.CaterpillarContainer;
-import the_fireplace.caterpillar.common.container.DrillHeadContainer;
+import the_fireplace.caterpillar.common.block.util.AbstractCaterpillarBlock;
 import the_fireplace.caterpillar.common.block.util.DrillHeadPart;
-import the_fireplace.caterpillar.common.container.syncdata.CaterpillarContainerData;
-import the_fireplace.caterpillar.common.container.syncdata.DrillHeadContainerData;
+import the_fireplace.caterpillar.core.init.BlockInit;
 
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import static net.minecraft.world.level.block.FaceAttachedHorizontalDirectionalBlock.FACE;
-import static the_fireplace.caterpillar.core.init.BlockInit.DRILL_HEAD_LEVER;
-
-public class DrillHeadBlock extends HorizontalDirectionalBlock implements EntityBlock {
+public class DrillHeadBlock extends AbstractCaterpillarBlock {
 
     // If lever is on, then drill head is powered.
     public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
@@ -75,24 +61,24 @@ public class DrillHeadBlock extends HorizontalDirectionalBlock implements Entity
 
     public DrillHeadBlock(Properties properties) {
         super(properties);
-        registerDefaultState(defaultBlockState().setValue(FACING, Direction.NORTH).setValue(PART, DrillHeadPart.BLADE_BOTTOM).setValue(POWERED, Boolean.valueOf(false)));
-        runCalculation(SHAPES_BLADES, SHAPE_BLADES.get());
-        runCalculation(SHAPES_BASE, SHAPE_BASE.get());
+        super.registerDefaultState(defaultBlockState().setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_BOTTOM).setValue(DrillHeadBlock.POWERED, Boolean.valueOf(false)));
+        super.runCalculation(DrillHeadBlock.SHAPES_BLADES, DrillHeadBlock.SHAPE_BLADES.get());
+        super.runCalculation(DrillHeadBlock.SHAPES_BASE, DrillHeadBlock.SHAPE_BASE.get());
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
-        builder.add(FACING, PART, POWERED);
+        builder.add(DrillHeadBlock.PART, DrillHeadBlock.POWERED);
     }
 
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-        switch (state.getValue(PART)) {
+        switch (state.getValue(DrillHeadBlock.PART)) {
             case BASE:
-                return SHAPES_BASE.get(state.getValue(FACING));
+                return DrillHeadBlock.SHAPES_BASE.get(state.getValue(FACING));
             default:
-                return SHAPES_BLADES.get(state.getValue(FACING));
+                return DrillHeadBlock.SHAPES_BLADES.get(state.getValue(FACING));
         }
     }
 
@@ -102,8 +88,18 @@ public class DrillHeadBlock extends HorizontalDirectionalBlock implements Entity
         Level level = context.getLevel();
         Direction direction = context.getHorizontalDirection();
 
-        if (blockPos.getY() < level.getMaxBuildHeight() - 1 && level.getBlockState(blockPos.relative(direction.getClockWise())).canBeReplaced(context) && level.getBlockState(blockPos.relative(direction.getCounterClockWise())).canBeReplaced(context) && level.getBlockState(blockPos.above().relative(direction.getClockWise())).canBeReplaced(context) && level.getBlockState(blockPos.above().relative(direction.getCounterClockWise())).canBeReplaced(context) && level.getBlockState(blockPos.above()).canBeReplaced(context) && level.getBlockState(blockPos.above(2)).canBeReplaced(context) && level.getBlockState(blockPos.above(2).relative(direction.getClockWise())).canBeReplaced(context) && level.getBlockState(blockPos.above(2).relative(direction.getCounterClockWise())).canBeReplaced(context)) {
-            return defaultBlockState().setValue(FACING, direction.getOpposite()).setValue(PART, DrillHeadPart.BLADE_BOTTOM);
+        if (
+                blockPos.getY() < level.getMaxBuildHeight() - 1 &&
+                level.getBlockState(blockPos.relative(direction.getClockWise())).canBeReplaced(context) &&
+                level.getBlockState(blockPos.relative(direction.getCounterClockWise())).canBeReplaced(context) &&
+                level.getBlockState(blockPos.above().relative(direction.getClockWise())).canBeReplaced(context) &&
+                level.getBlockState(blockPos.above().relative(direction.getCounterClockWise())).canBeReplaced(context) &&
+                level.getBlockState(blockPos.above()).canBeReplaced(context) &&
+                level.getBlockState(blockPos.above(2)).canBeReplaced(context) &&
+                level.getBlockState(blockPos.above(2).relative(direction.getClockWise())).canBeReplaced(context) &&
+                level.getBlockState(blockPos.above(2).relative(direction.getCounterClockWise())).canBeReplaced(context)
+        ) {
+            return defaultBlockState().setValue(super.FACING, direction.getOpposite()).setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_BOTTOM);
         }
 
         return null;
@@ -112,13 +108,13 @@ public class DrillHeadBlock extends HorizontalDirectionalBlock implements Entity
     @Override
     public void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, BlockPos neighbor, boolean p_60514_) {
         if (level.getBlockState(neighbor).getBlock() instanceof DrillHeadLeverBlock) {
-            Direction direction = level.getBlockState(neighbor).getValue(FACING);
+            Direction direction = level.getBlockState(neighbor).getValue(super.FACING);
 
             if (neighbor.relative(direction.getOpposite()).equals(pos)) {
                 boolean flag = level.hasNeighborSignal(pos);
 
-                if (!this.defaultBlockState().is(block) && flag != level.getBlockState(pos).getValue(POWERED)) {
-                    level.setBlock(pos, state.setValue(POWERED, Boolean.valueOf(flag)), 2);
+                if (!this.defaultBlockState().is(block) && flag != level.getBlockState(pos).getValue(DrillHeadBlock.POWERED)) {
+                    level.setBlock(pos, state.setValue(DrillHeadBlock.POWERED, Boolean.valueOf(flag)), 2);
                 }
             }
         }
@@ -128,16 +124,6 @@ public class DrillHeadBlock extends HorizontalDirectionalBlock implements Entity
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
         return level.isClientSide ? null : (level0, pos0, state0, blockEntity) -> ((DrillHeadBlockEntity) blockEntity).tick(level0, pos0, state0, (DrillHeadBlockEntity) blockEntity);
-    }
-
-    @Override
-    public @NotNull InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-        if (level.isClientSide) {
-            return InteractionResult.SUCCESS;
-        } else {
-            this.openContainer(level, pos, player);
-            return InteractionResult.CONSUME;
-        }
     }
 
     @Override
@@ -156,9 +142,9 @@ public class DrillHeadBlock extends HorizontalDirectionalBlock implements Entity
     }
 
     private void destroyStructure(Level level, BlockPos pos, BlockState state, Player player) {
-        Direction direction = state.getValue(FACING);
+        Direction direction = state.getValue(super.FACING);
 
-        level.destroyBlock(pos, player.isCreative() ? false : true);
+        level.destroyBlock(pos, !player.isCreative());
         level.destroyBlock(pos.relative(direction.getCounterClockWise()), false);
         level.destroyBlock(pos.relative(direction.getClockWise()), false);
         level.destroyBlock(pos.above(), false);
@@ -170,16 +156,16 @@ public class DrillHeadBlock extends HorizontalDirectionalBlock implements Entity
     }
 
     private void buildStructure(Level level, BlockPos pos, BlockState state) {
-        Direction direction = state.getValue(FACING);
+        Direction direction = state.getValue(super.FACING);
 
-        level.setBlock(pos.relative(direction.getCounterClockWise()), state.setValue(PART, DrillHeadPart.BLADE_LEFT_BOTTOM), 3);
-        level.setBlock(pos.relative(direction.getClockWise()), state.setValue(PART, DrillHeadPart.BLADE_RIGHT_BOTTOM), 3);
-        level.setBlock(pos.above().relative(direction.getCounterClockWise()), state.setValue(PART, DrillHeadPart.BLADE_LEFT), 3);
-        level.setBlock(pos.above(2), state.setValue(PART, DrillHeadPart.BLADE_TOP), 3);
-        level.setBlock(pos.above(2).relative(direction.getCounterClockWise()), state.setValue(PART, DrillHeadPart.BLADE_LEFT_TOP), 3);
-        level.setBlock(pos.above(2).relative(direction.getClockWise()), state.setValue(PART, DrillHeadPart.BLADE_RIGHT_TOP), 3);
-        level.setBlock(pos.above(), state.setValue(PART, DrillHeadPart.BASE), 3);
-        level.setBlock(pos.above().relative(direction.getClockWise()), DRILL_HEAD_LEVER.get().defaultBlockState().setValue(FACING, direction.getClockWise()).setValue(FACE, AttachFace.WALL).setValue(POWERED, Boolean.valueOf(false)), 3);
+        level.setBlock(pos.relative(direction.getCounterClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_LEFT_BOTTOM), 3);
+        level.setBlock(pos.relative(direction.getClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_RIGHT_BOTTOM), 3);
+        level.setBlock(pos.above().relative(direction.getCounterClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_LEFT), 3);
+        level.setBlock(pos.above(2), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_TOP), 3);
+        level.setBlock(pos.above(2).relative(direction.getCounterClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_LEFT_TOP), 3);
+        level.setBlock(pos.above(2).relative(direction.getClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_RIGHT_TOP), 3);
+        level.setBlock(pos.above(), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BASE), 3);
+        level.setBlock(pos.above().relative(direction.getClockWise()), BlockInit.DRILL_HEAD_LEVER.get().defaultBlockState().setValue(super.FACING, direction.getClockWise()).setValue(DrillHeadLeverBlock.FACE, AttachFace.WALL).setValue(DrillHeadBlock.POWERED, Boolean.valueOf(false)), 3);
     }
 
     /*
@@ -198,12 +184,11 @@ public class DrillHeadBlock extends HorizontalDirectionalBlock implements Entity
         }
     }
 
-    private BlockPos getBasePos(BlockState state, BlockPos pos) {
-        Direction direction = state.getValue(FACING);
-        DrillHeadPart part = state.getValue(PART);
+    protected BlockPos getBasePos(BlockState state, BlockPos pos) {
+        Direction direction = state.getValue(super.FACING);
         BlockPos basePos;
 
-        switch (part) {
+        switch (state.getValue(PART)) {
             case BLADE_LEFT:
                 basePos = pos.relative(direction.getClockWise());
                 break;
@@ -231,24 +216,6 @@ public class DrillHeadBlock extends HorizontalDirectionalBlock implements Entity
         }
 
         return basePos;
-    }
-
-    protected void openContainer(Level level, BlockPos pos, Player player) {
-        BlockEntity blockEntity = level.getBlockEntity(pos);
-        if (blockEntity instanceof DrillHeadBlockEntity) {
-            BlockState state = level.getBlockState(pos);
-            BlockPos basePos = getBasePos(state, pos);
-            BlockEntity drillHeadBlockEntity = level.getBlockEntity(basePos);
-
-            MenuProvider container = new SimpleMenuProvider(CaterpillarContainer.getServerContainer((DrillHeadBlockEntity) drillHeadBlockEntity, basePos), Component.empty());
-            player.openMenu(container);
-
-        }
-    }
-
-    protected void runCalculation(Map<Direction, VoxelShape> shapes, VoxelShape shape) {
-        for (Direction direction : Direction.values())
-            shapes.put(direction, Caterpillar.calculateShapes(direction, shape));
     }
 
     @Nullable

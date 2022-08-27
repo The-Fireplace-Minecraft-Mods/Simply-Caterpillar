@@ -36,7 +36,7 @@ public class DrillHeadLeverBlock extends LeverBlock {
         level.destroyBlock(pos, false);
         level.destroyBlock(pos.above(), false);
         level.destroyBlock(pos.below(), false);
-        level.destroyBlock(pos.relative(direction.getOpposite()), player.isCreative() ? false : true);
+        level.destroyBlock(pos.relative(direction.getOpposite()), !player.isCreative());
         level.destroyBlock(pos.relative(direction.getOpposite(), 2), false);
         level.destroyBlock(pos.above().relative(direction.getOpposite()), false);
         level.destroyBlock(pos.above().relative(direction.getOpposite(), 2), false);
@@ -61,7 +61,7 @@ public class DrillHeadLeverBlock extends LeverBlock {
         } else {
             BlockState blockstate = this.pull(state, level, pos, player);
             float f = blockstate.getValue(POWERED) ? 0.6F : 0.5F;
-            level.playSound((Player)null, pos, SoundEvents.LEVER_CLICK, SoundSource.BLOCKS, 0.3F, f);
+            level.playSound(null, pos, SoundEvents.LEVER_CLICK, SoundSource.BLOCKS, 0.3F, f);
             level.gameEvent(player, blockstate.getValue(POWERED) ? GameEvent.BLOCK_ACTIVATE : GameEvent.BLOCK_DEACTIVATE, pos);
             return InteractionResult.CONSUME;
         }

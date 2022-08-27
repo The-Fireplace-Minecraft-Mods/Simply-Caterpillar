@@ -8,12 +8,11 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import the_fireplace.caterpillar.Caterpillar;
 import the_fireplace.caterpillar.common.block.DecorationBlock;
-import the_fireplace.caterpillar.common.block.entity.util.InventoryBlockEntity;
 import the_fireplace.caterpillar.common.block.util.DecorationPart;
-import the_fireplace.caterpillar.common.container.DecorationContainer;
 import the_fireplace.caterpillar.core.init.BlockEntityInit;
 
 import java.util.ArrayList;
@@ -21,20 +20,20 @@ import java.util.List;
 
 import static net.minecraft.world.level.block.HorizontalDirectionalBlock.FACING;
 
-public class DecorationBlockEntity extends InventoryBlockEntity {
+public class DecorationBlockEntity extends BlockEntity {
 
     protected List<ItemStack[]> placementMap;
 
     private int selectedMap;
 
-    public final int PLACEMENT_MAX_SLOTS = 10;
+    public static final int PLACEMENT_MAX_SLOTS = 10;
 
     public static final Component TITLE = Component.translatable(
             "container." + Caterpillar.MOD_ID + ".decoration"
     );
 
     public DecorationBlockEntity(BlockPos pos, BlockState state) {
-        super(BlockEntityInit.DECORATION.get(), pos, state, DecorationContainer.SLOT_SIZE);
+        super(BlockEntityInit.DECORATION.get(), pos, state);
     }
 
     public void move() {
@@ -115,9 +114,16 @@ public class DecorationBlockEntity extends InventoryBlockEntity {
             ListTag stackList = new ListTag();
             for (ItemStack stack : stacks) {
                 CompoundTag stackTag = new CompoundTag();
-                stackTag.putString("Id", stack.getDisplayName().getString());
+                stackTag.putString("Id", stack.getItem().getDescriptionId());
                 stackTag.putByte("Count", (byte) stack.getCount());
-                stackTag.putShort("Damage", (short) stack.getDamageValue());
+                if (stack.hasTag()) {
+                    stackTag.put("tag", stack.getTag());
+                }
+
+                CompoundTag cnbt = this.serializeCaps();
+                if (cnbt != null && !cnbt.isEmpty()) {
+                    stackTag.put("ForgeCaps", cnbt);
+                }
                 stackList.add(stackTag);
             }
             placementList.add(stackList);

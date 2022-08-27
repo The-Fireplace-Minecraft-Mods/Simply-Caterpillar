@@ -10,7 +10,7 @@ public enum StoragePart implements StringRepresentable {
 
     private final String name;
 
-    private StoragePart(String name) {
+    StoragePart(String name) {
         this.name = name;
     }
 

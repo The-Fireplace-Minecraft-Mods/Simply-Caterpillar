@@ -10,7 +10,7 @@ public enum DecorationPart implements StringRepresentable {
 
     private final String name;
 
-    private DecorationPart(String name) {
+    DecorationPart(String name) {
         this.name = name;
     }
 

@@ -2,11 +2,6 @@ package the_fireplace.caterpillar.common.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.network.chat.Component;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.MenuProvider;
-import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -14,25 +9,18 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
-import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
-import the_fireplace.caterpillar.Caterpillar;
-import the_fireplace.caterpillar.common.block.entity.DecorationBlockEntity;
-import the_fireplace.caterpillar.common.block.entity.DrillHeadBlockEntity;
 import the_fireplace.caterpillar.common.block.entity.ReinforcementBlockEntity;
-import the_fireplace.caterpillar.common.block.entity.util.CaterpillarBlocksUtil;
-import the_fireplace.caterpillar.common.container.CaterpillarContainer;
-import the_fireplace.caterpillar.common.container.ReinforcementContainer;
+import the_fireplace.caterpillar.common.block.util.AbstractCaterpillarBlock;
 import the_fireplace.caterpillar.common.block.util.ReinforcementPart;
 
 import java.util.EnumMap;
@@ -40,7 +28,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-public class ReinforcementBlock extends HorizontalDirectionalBlock implements EntityBlock {
+public class ReinforcementBlock extends AbstractCaterpillarBlock {
 
     public static final EnumProperty<ReinforcementPart> PART = EnumProperty.create("part", ReinforcementPart.class);
 
@@ -84,33 +72,33 @@ public class ReinforcementBlock extends HorizontalDirectionalBlock implements En
 
     public ReinforcementBlock(Properties properties) {
         super(properties);
-        registerDefaultState(defaultBlockState().setValue(FACING, Direction.NORTH).setValue(PART, ReinforcementPart.BOTTOM));
-        runCalculation(SHAPES_LEFT, SHAPE_LEFT.get());
-        runCalculation(SHAPES_BASE, SHAPE_BASE.get());
-        runCalculation(SHAPES_RIGHT, SHAPE_RIGHT.get());
-        runCalculation(SHAPES_TOP, SHAPE_TOP.get());
-        runCalculation(SHAPES_BOTTOM, SHAPE_BOTTOM.get());
+        super.registerDefaultState(super.defaultBlockState().setValue(ReinforcementBlock.PART, ReinforcementPart.BOTTOM));
+        super.runCalculation(ReinforcementBlock.SHAPES_LEFT, ReinforcementBlock.SHAPE_LEFT.get());
+        super.runCalculation(ReinforcementBlock.SHAPES_BASE, ReinforcementBlock.SHAPE_BASE.get());
+        super.runCalculation(ReinforcementBlock.SHAPES_RIGHT, ReinforcementBlock.SHAPE_RIGHT.get());
+        super.runCalculation(ReinforcementBlock.SHAPES_TOP, ReinforcementBlock.SHAPE_TOP.get());
+        super.runCalculation(ReinforcementBlock.SHAPES_BOTTOM, ReinforcementBlock.SHAPE_BOTTOM.get());
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
-        builder.add(FACING, PART);
+        builder.add(ReinforcementBlock.PART);
     }
 
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-        switch (state.getValue(PART)) {
+        switch (state.getValue(ReinforcementBlock.PART)) {
             case LEFT:
-                return SHAPES_LEFT.get(state.getValue(FACING));
+                return ReinforcementBlock.SHAPES_LEFT.get(state.getValue(FACING));
             case RIGHT:
-                return SHAPES_RIGHT.get(state.getValue(FACING));
+                return ReinforcementBlock.SHAPES_RIGHT.get(state.getValue(FACING));
             case TOP:
-                return SHAPES_TOP.get(state.getValue(FACING));
+                return ReinforcementBlock.SHAPES_TOP.get(state.getValue(FACING));
             case BOTTOM:
-                return SHAPES_BOTTOM.get(state.getValue(FACING));
+                return ReinforcementBlock.SHAPES_BOTTOM.get(state.getValue(FACING));
             default:
-                return SHAPES_BASE.get(state.getValue(FACING));
+                return ReinforcementBlock.SHAPES_BASE.get(state.getValue(FACING));
         }
     }
 
@@ -120,21 +108,17 @@ public class ReinforcementBlock extends HorizontalDirectionalBlock implements En
         Level level = context.getLevel();
         Direction direction = context.getHorizontalDirection();
 
-        if (blockPos.getY() < level.getMaxBuildHeight() - 1 && level.getBlockState(blockPos.above().relative(direction.getClockWise())).canBeReplaced(context) && level.getBlockState(blockPos.above().relative(direction.getCounterClockWise())).canBeReplaced(context) && level.getBlockState(blockPos.above()).canBeReplaced(context) && level.getBlockState(blockPos.above(2)).canBeReplaced(context)) {
-            return defaultBlockState().setValue(FACING, direction.getOpposite()).setValue(PART, ReinforcementPart.BOTTOM);
+        if (
+            blockPos.getY() < level.getMaxBuildHeight() - 1 &&
+            level.getBlockState(blockPos.above().relative(direction.getClockWise())).canBeReplaced(context) &&
+            level.getBlockState(blockPos.above().relative(direction.getCounterClockWise())).canBeReplaced(context) &&
+            level.getBlockState(blockPos.above()).canBeReplaced(context) &&
+            level.getBlockState(blockPos.above(2)).canBeReplaced(context)
+        ){
+            return defaultBlockState().setValue(FACING, direction.getOpposite()).setValue(ReinforcementBlock.PART, ReinforcementPart.BOTTOM);
         }
 
         return null;
-    }
-
-    @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-        if (level.isClientSide) {
-            return InteractionResult.SUCCESS;
-        } else {
-            this.openContainer(level, pos, player);
-            return InteractionResult.CONSUME;
-        }
     }
 
     @Override
@@ -142,9 +126,9 @@ public class ReinforcementBlock extends HorizontalDirectionalBlock implements En
         Direction direction = blockState.getValue(FACING);
 
         level.setBlock(blockPos.above().relative(direction.getCounterClockWise()), blockState.setValue(PART, ReinforcementPart.LEFT), 3);
-        level.setBlock(blockPos.above().relative(direction.getClockWise()), blockState.setValue(PART, ReinforcementPart.RIGHT), 3);
-        level.setBlock(blockPos.above(), blockState.setValue(PART, ReinforcementPart.BASE), 3);
-        level.setBlock(blockPos.above(2), blockState.setValue(PART, ReinforcementPart.TOP), 3);
+        level.setBlock(blockPos.above().relative(direction.getClockWise()), blockState.setValue(ReinforcementBlock.PART, ReinforcementPart.RIGHT), 3);
+        level.setBlock(blockPos.above(), blockState.setValue(ReinforcementBlock.PART, ReinforcementPart.BASE), 3);
+        level.setBlock(blockPos.above(2), blockState.setValue(ReinforcementBlock.PART, ReinforcementPart.TOP), 3);
     }
 
     @Override
@@ -152,34 +136,16 @@ public class ReinforcementBlock extends HorizontalDirectionalBlock implements En
         Direction direction = state.getValue(FACING);
         BlockPos basePos = getBasePos(state, pos);
 
-        level.destroyBlock(basePos, player.isCreative() ? false : true);
+        level.destroyBlock(basePos, !player.isCreative());
         level.destroyBlock(basePos.relative(direction.getCounterClockWise()), false);
         level.destroyBlock(basePos.relative(direction.getClockWise()), false);
         level.destroyBlock(basePos.above(), false);
         level.destroyBlock(basePos.below(), false);
     }
 
-    protected void openContainer(Level level, BlockPos pos, Player player) {
-        BlockEntity blockEntity = level.getBlockEntity(pos);
-        if (blockEntity instanceof ReinforcementBlockEntity) {
-            BlockState state = level.getBlockState(pos);
-            BlockPos basePos = getBasePos(state, pos);
-            Direction direction = state.getValue(FACING);
-            BlockPos caterpillarPos = CaterpillarBlocksUtil.getCaterpillarPos(level, basePos, direction);
-
-            if (caterpillarPos != null) {
-                BlockEntity caterpillarBlockEntity = level.getBlockEntity(caterpillarPos);
-                MenuProvider container = new SimpleMenuProvider(CaterpillarContainer.getServerContainer((DrillHeadBlockEntity) caterpillarBlockEntity, caterpillarPos), Component.empty());
-                player.openMenu(container);
-            } else {
-                player.displayClientMessage(Component.translatable("block.simplycaterpillar.drill_head.not_found"), true);
-            }
-        }
-    }
-
-    private BlockPos getBasePos(BlockState state, BlockPos pos) {
+    protected BlockPos getBasePos(BlockState state, BlockPos pos) {
         Direction direction = state.getValue(FACING);
-        ReinforcementPart part = state.getValue(PART);
+        ReinforcementPart part = state.getValue(ReinforcementBlock.PART);
         BlockPos basePos;
 
         switch (part) {
@@ -201,11 +167,6 @@ public class ReinforcementBlock extends HorizontalDirectionalBlock implements En
         }
 
         return basePos;
-    }
-
-    protected void runCalculation(Map<Direction, VoxelShape> shapes, VoxelShape shape) {
-        for (Direction direction : Direction.values())
-            shapes.put(direction, Caterpillar.calculateShapes(direction, shape));
     }
 
     @Nullable

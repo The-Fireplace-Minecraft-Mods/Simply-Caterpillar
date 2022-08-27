@@ -5,9 +5,8 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import the_fireplace.caterpillar.common.block.DrillBaseBlock;
 import the_fireplace.caterpillar.core.init.BlockEntityInit;
-
-import static net.minecraft.world.level.block.HorizontalDirectionalBlock.FACING;
 
 public class DrillBaseBlockEntity extends BlockEntity {
     public DrillBaseBlockEntity(BlockPos pos, BlockState state) {
@@ -15,7 +14,7 @@ public class DrillBaseBlockEntity extends BlockEntity {
     }
 
     public void move() {
-        BlockPos nextPos = this.getBlockPos().relative(this.getBlockState().getValue(FACING).getOpposite());
+        BlockPos nextPos = this.getBlockPos().relative(this.getBlockState().getValue(DrillBaseBlock.FACING).getOpposite());
 
         this.getLevel().setBlock(nextPos, this.getBlockState(), 35);
         this.getLevel().destroyBlock(this.getBlockPos(), false);

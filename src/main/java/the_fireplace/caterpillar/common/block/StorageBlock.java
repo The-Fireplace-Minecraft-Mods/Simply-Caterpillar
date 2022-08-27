@@ -2,10 +2,6 @@ package the_fireplace.caterpillar.common.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.MenuProvider;
-import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -13,21 +9,18 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
-import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
-import the_fireplace.caterpillar.Caterpillar;
 import the_fireplace.caterpillar.common.block.entity.StorageBlockEntity;
-import the_fireplace.caterpillar.common.container.StorageContainer;
+import the_fireplace.caterpillar.common.block.util.AbstractCaterpillarBlock;
 import the_fireplace.caterpillar.common.block.util.StoragePart;
 
 import java.util.EnumMap;
@@ -35,7 +28,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-public class StorageBlock extends HorizontalDirectionalBlock implements EntityBlock {
+public class StorageBlock extends AbstractCaterpillarBlock {
 
     public static final EnumProperty<StoragePart> PART = EnumProperty.create("part", StoragePart.class);
 
@@ -67,27 +60,27 @@ public class StorageBlock extends HorizontalDirectionalBlock implements EntityBl
 
     public StorageBlock(Properties properties) {
         super(properties);
-        registerDefaultState(defaultBlockState().setValue(FACING, Direction.NORTH).setValue(PART, StoragePart.BASE));
-        runCalculation(SHAPES_LEFT, SHAPE_LEFT.get());
-        runCalculation(SHAPES_BASE, SHAPE_BASE.get());
-        runCalculation(SHAPES_RIGHT, SHAPE_RIGHT.get());
+        super.registerDefaultState(super.defaultBlockState().setValue(StorageBlock.PART, StoragePart.BASE));
+        super.runCalculation(StorageBlock.SHAPES_LEFT, StorageBlock.SHAPE_LEFT.get());
+        super.runCalculation(StorageBlock.SHAPES_BASE, StorageBlock.SHAPE_BASE.get());
+        super.runCalculation(StorageBlock.SHAPES_RIGHT, StorageBlock.SHAPE_RIGHT.get());
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
-        builder.add(FACING, PART);
+        builder.add(StorageBlock.PART);
     }
 
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-        switch (state.getValue(PART)) {
+        switch (state.getValue(StorageBlock.PART)) {
             case LEFT:
-                return SHAPES_LEFT.get(state.getValue(FACING));
+                return StorageBlock.SHAPES_LEFT.get(state.getValue(FACING));
             case RIGHT:
-                return SHAPES_RIGHT.get(state.getValue(FACING));
+                return StorageBlock.SHAPES_RIGHT.get(state.getValue(FACING));
             default:
-                return SHAPES_BASE.get(state.getValue(FACING));
+                return StorageBlock.SHAPES_BASE.get(state.getValue(FACING));
         }
     }
 
@@ -97,37 +90,30 @@ public class StorageBlock extends HorizontalDirectionalBlock implements EntityBl
         Level level = context.getLevel();
         Direction direction = context.getHorizontalDirection();
 
-        if (blockPos.getY() < level.getMaxBuildHeight() - 1 && level.getBlockState(blockPos.relative(direction.getClockWise())).canBeReplaced(context) && level.getBlockState(blockPos.relative(direction.getCounterClockWise())).canBeReplaced(context)) {
-            return defaultBlockState().setValue(FACING, direction.getOpposite()).setValue(PART, StoragePart.BASE);
+        if (
+            blockPos.getY() < level.getMaxBuildHeight() - 1 &&
+            level.getBlockState(blockPos.relative(direction.getClockWise())).canBeReplaced(context) &&
+            level.getBlockState(blockPos.relative(direction.getCounterClockWise())).canBeReplaced(context)
+        ) {
+            return defaultBlockState().setValue(FACING, direction.getOpposite()).setValue(StorageBlock.PART, StoragePart.BASE);
         }
 
         return null;
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-        if (level.isClientSide) {
-            return InteractionResult.SUCCESS;
-        } else {
-            this.openContainer(level, pos, player);
-            return InteractionResult.CONSUME;
-        }
-    }
-
-    @Override
     public void setPlacedBy(Level level, BlockPos blockPos, BlockState blockState, @Nullable LivingEntity livingEntity, ItemStack stack) {
         Direction direction = blockState.getValue(FACING);
 
-        level.setBlock(blockPos.relative(direction.getCounterClockWise()), blockState.setValue(PART, StoragePart.LEFT), 3);
-        level.setBlock(blockPos.relative(direction.getClockWise()), blockState.setValue(PART, StoragePart.RIGHT), 3);
+        level.setBlock(blockPos.relative(direction.getCounterClockWise()), blockState.setValue(StorageBlock.PART, StoragePart.LEFT), 3);
+        level.setBlock(blockPos.relative(direction.getClockWise()), blockState.setValue(StorageBlock.PART, StoragePart.RIGHT), 3);
     }
 
     @Override
     public void playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
         Direction direction = state.getValue(FACING);
-        StoragePart part = state.getValue(PART);
 
-        switch (part) {
+        switch (state.getValue(StorageBlock.PART)) {
             case LEFT:
                 level.destroyBlock(pos.relative(direction.getClockWise()), false);
                 level.destroyBlock(pos.relative(direction.getClockWise(), 2), false);
@@ -143,23 +129,10 @@ public class StorageBlock extends HorizontalDirectionalBlock implements EntityBl
         }
     }
 
-    protected void openContainer(Level level, BlockPos pos, Player player) {
-        BlockEntity blockEntity = level.getBlockEntity(pos);
-        if (blockEntity instanceof StorageBlockEntity) {
-            BlockState state = level.getBlockState(pos);
-            BlockPos basePos = getBasePos(state, pos);
-            BlockEntity baseBlockEntity = level.getBlockEntity(basePos);
-
-            MenuProvider container = new SimpleMenuProvider(StorageContainer.getServerContainer((StorageBlockEntity) baseBlockEntity, basePos), StorageBlockEntity.TITLE);
-            player.openMenu(container);
-        }
-    }
-
     protected BlockPos getBasePos(BlockState state, BlockPos pos) {
         Direction direction = state.getValue(FACING);
-        StoragePart part = state.getValue(PART);
 
-        switch (part) {
+        switch (state.getValue(StorageBlock.PART)) {
             case LEFT:
                 return pos.relative(direction.getClockWise());
             case RIGHT:
@@ -167,11 +140,6 @@ public class StorageBlock extends HorizontalDirectionalBlock implements EntityBl
             default:
                 return pos;
         }
-    }
-
-    protected void runCalculation(Map<Direction, VoxelShape> shapes, VoxelShape shape) {
-        for (Direction direction : Direction.values())
-            shapes.put(direction, Caterpillar.calculateShapes(direction, shape));
     }
 
     @Nullable

@@ -12,7 +12,7 @@ public enum ReinforcementPart implements StringRepresentable {
 
     private final String name;
 
-    private ReinforcementPart(String name) {
+    ReinforcementPart(String name) {
         this.name = name;
     }
 
