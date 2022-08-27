@@ -1,6 +1,5 @@
 package the_fireplace.caterpillar.client.screen;
 
-import com.google.common.collect.Lists;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.ChatFormatting;
@@ -8,19 +7,17 @@ import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.inventory.SimpleContainerData;
 import the_fireplace.caterpillar.client.screen.util.ScreenTabs;
 import the_fireplace.caterpillar.common.block.entity.DrillHeadBlockEntity;
 import the_fireplace.caterpillar.common.container.CaterpillarContainer;
-import the_fireplace.caterpillar.core.init.BlockInit;
-import the_fireplace.caterpillar.core.init.ItemInit;
-
-import java.util.List;
+import the_fireplace.caterpillar.common.container.DrillHeadContainer;
+import the_fireplace.caterpillar.common.container.syncdata.CaterpillarContainerData;
 
 public class CaterpillarScreen extends AbstractContainerScreen<CaterpillarContainer> {
+
     private float scrollOffs;
 
     public CaterpillarScreen(CaterpillarContainer container, Inventory playerInventory, Component title) {
@@ -156,17 +153,16 @@ public class CaterpillarScreen extends AbstractContainerScreen<CaterpillarContai
     private void renderSlots() {
         switch (this.menu.getSelectedTab()) {
             case DECORATION:
-                this.menu.placeSlotsDecoration();
+                // this.menu.placeSlotsDecoration();
                 break;
             case INCINERATOR:
-                this.menu.placeSlotsIncinerator();
+                // this.menu.placeSlotsIncinerator();
                 break;
             case REINFORCEMENT:
-                this.menu.placeSlotsReinforcement();
+                // this.menu.placeSlotsReinforcement();
                 break;
-            case DRILL_HEAD:
             default:
-                this.menu.placeSlotsDrillHead();
+                // this.menu.placeSlotsDrillHead();
                 break;
         }
 

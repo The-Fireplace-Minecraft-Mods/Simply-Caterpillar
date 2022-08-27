@@ -123,7 +123,7 @@ public class DrillHeadBlock extends AbstractCaterpillarBlock {
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
-        return level.isClientSide ? null : (level0, pos0, state0, blockEntity) -> ((DrillHeadBlockEntity) blockEntity).tick(level0, pos0, state0, (DrillHeadBlockEntity) blockEntity);
+        return level.isClientSide ? null : (level0, pos0, state0, blockEntity) -> ((DrillHeadBlockEntity) blockEntity).tick();
     }
 
     @Override

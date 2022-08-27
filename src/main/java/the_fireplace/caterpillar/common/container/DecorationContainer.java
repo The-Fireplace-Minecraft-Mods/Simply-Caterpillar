@@ -8,8 +8,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.SlotItemHandler;
-import the_fireplace.caterpillar.common.block.entity.DecorationBlockEntity;
-import the_fireplace.caterpillar.common.container.syncdata.DecorationContainerData;
 import the_fireplace.caterpillar.core.init.BlockInit;
 import the_fireplace.caterpillar.core.init.ContainerInit;
 
