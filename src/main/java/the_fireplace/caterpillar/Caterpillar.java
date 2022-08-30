@@ -42,7 +42,7 @@ public class Caterpillar
 		BlockInit.BLOCKS.register(bus);
 		BlockEntityInit.BLOCK_ENTITIES.register(bus);
 		ItemInit.ITEMS.register(bus);
-		ContainerInit.CONTAINERS.register(bus);
+		ContainerInit.MENU_TYPES.register(bus);
 
 		MinecraftForge.EVENT_BUS.register(this);
 	}

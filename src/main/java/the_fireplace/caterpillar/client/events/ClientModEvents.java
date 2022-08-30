@@ -1,4 +1,4 @@
-package the_fireplace.caterpillar.client.event;
+package the_fireplace.caterpillar.client.events;
 
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraftforge.api.distmarker.Dist;

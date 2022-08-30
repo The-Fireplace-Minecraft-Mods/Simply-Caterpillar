@@ -1,4 +1,4 @@
-package the_fireplace.caterpillar.client.event;
+package the_fireplace.caterpillar.client.events;
 
 import net.minecraftforge.fml.common.Mod;
 import the_fireplace.caterpillar.Caterpillar;
