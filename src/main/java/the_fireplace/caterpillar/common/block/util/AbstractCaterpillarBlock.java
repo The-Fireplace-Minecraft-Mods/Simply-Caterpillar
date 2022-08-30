@@ -24,6 +24,7 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.Nullable;
+import the_fireplace.caterpillar.client.screen.util.ScreenTabs;
 import the_fireplace.caterpillar.common.container.CaterpillarContainer;
 
 import java.util.EnumMap;
@@ -67,6 +68,8 @@ public abstract class AbstractCaterpillarBlock extends HorizontalDirectionalBloc
             BlockPos caterpillarPos = CaterpillarBlocksUtil.getCaterpillarPos(level, basePos, direction);
 
             if (caterpillarPos != null) {
+                ScreenTabs selectedTab = ScreenTabs.getScreenTabFromBlock(state.getBlock());
+                CaterpillarContainer.setSelectedTab(selectedTab);
                 MenuProvider container = new SimpleMenuProvider(CaterpillarContainer.getServerContainer(caterpillarPos), Component.empty());
                 NetworkHooks.openScreen((ServerPlayer) player, container, pos);
             } else {

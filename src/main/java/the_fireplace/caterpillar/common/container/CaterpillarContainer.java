@@ -14,6 +14,7 @@ import net.minecraftforge.items.SlotItemHandler;
 import the_fireplace.caterpillar.client.screen.util.ScreenTabs;
 import the_fireplace.caterpillar.common.block.entity.*;
 import the_fireplace.caterpillar.common.block.util.CaterpillarBlocksUtil;
+import the_fireplace.caterpillar.common.container.slot.CaterpillarBurnerSlot;
 import the_fireplace.caterpillar.common.container.syncdata.CaterpillarContainerData;
 import the_fireplace.caterpillar.core.init.ContainerInit;
 
@@ -23,24 +24,23 @@ public class CaterpillarContainer extends AbstractContainerMenu {
 
     public final ContainerData data;
 
-    public DrillHeadBlockEntity drillHead;
+    private static DrillHeadBlockEntity drillHead;
 
-    public DecorationBlockEntity decoration;
+    private static DecorationBlockEntity decoration;
 
-    public ReinforcementBlockEntity reinforcement;
+    private static ReinforcementBlockEntity reinforcement;
 
-    public IncineratorBlockEntity incinerator;
+    private static IncineratorBlockEntity incinerator;
 
-    private StorageBlockEntity storage;
+    private static StorageBlockEntity storage;
 
-    private ScreenTabs selectedTab;
+    private static ScreenTabs selectedTab;
 
     public static final int SIZE = 19;
 
     protected int slotId;
 
     private final Inventory playerInventory;
-
 
     final int slotSizePlus2 = 18;
 
@@ -54,20 +54,20 @@ public class CaterpillarContainer extends AbstractContainerMenu {
         super(ContainerInit.CATERPILLAR.get(), id);
         this.containerAccess = ContainerLevelAccess.create(playerInventory.player.level, pos);
         this.data = data;
-        this.selectedTab = ScreenTabs.DRILL_HEAD;
-        this.slotId = 0;
         this.playerInventory = playerInventory;
 
-        this.drillHead = null;
-        this.decoration = null;
-        this.reinforcement = null;
-        this.incinerator = null;
-        this.storage = null;
+        if (!pos.equals(BlockPos.ZERO)) {
+            this.clearCaterpillarBlocks();
+            this.detectCaterpillarBlocks(playerInventory.player.level, pos);
+        }
 
-        this.detectCaterpillarBlocks(playerInventory.player.level, pos);
+        this.renderSlots();
+
+        addDataSlots(data);
     }
 
     private void detectCaterpillarBlocks(Level level, BlockPos pos) {
+
         BlockState blockState = level.getBlockState(pos);
 
         if (!CaterpillarBlocksUtil.isCaterpillarBlock(blockState.getBlock())) {
@@ -77,23 +77,23 @@ public class CaterpillarContainer extends AbstractContainerMenu {
         BlockEntity blockEntity = level.getBlockEntity(pos);
 
         if (blockEntity instanceof DrillHeadBlockEntity drillHeadBlockEntity) {
-            this.drillHead = drillHeadBlockEntity;
+            CaterpillarContainer.drillHead = drillHeadBlockEntity;
         }
 
-        if (blockEntity instanceof DecorationBlockEntity) {
-            this.decoration = (DecorationBlockEntity) level.getBlockEntity(pos);
+        if (blockEntity instanceof DecorationBlockEntity decorationBlockEntity) {
+            CaterpillarContainer.decoration = decorationBlockEntity;
         }
 
-        if (blockEntity instanceof ReinforcementBlockEntity) {
-            this.reinforcement = (ReinforcementBlockEntity) level.getBlockEntity(pos);
+        if (blockEntity instanceof ReinforcementBlockEntity reinforcementBlockEntity) {
+            CaterpillarContainer.reinforcement = reinforcementBlockEntity;
         }
 
-        if (blockEntity instanceof IncineratorBlockEntity) {
-            this.incinerator = (IncineratorBlockEntity) level.getBlockEntity(pos);
+        if (blockEntity instanceof IncineratorBlockEntity incineratorBlockEntity) {
+            CaterpillarContainer.incinerator = incineratorBlockEntity;
         }
 
-        if (blockEntity instanceof StorageBlockEntity) {
-            this.storage = (StorageBlockEntity) level.getBlockEntity(pos);
+        if (blockEntity instanceof StorageBlockEntity storageBlockEntity) {
+            CaterpillarContainer.storage = storageBlockEntity;
         }
 
         Direction direction = blockEntity.getBlockState().getValue(HorizontalDirectionalBlock.FACING);
@@ -101,38 +101,89 @@ public class CaterpillarContainer extends AbstractContainerMenu {
         detectCaterpillarBlocks(level, pos.relative(direction));
     }
 
-    public boolean hasDrillHead() {
-        return this.drillHead != null;
+    private void clearCaterpillarBlocks() {
+        CaterpillarContainer.drillHead = null;
+        CaterpillarContainer.decoration = null;
+        CaterpillarContainer.reinforcement = null;
+        CaterpillarContainer.incinerator = null;
+        CaterpillarContainer.storage = null;
+    }
+
+    public static DrillHeadBlockEntity getDrillHead() {
+        return CaterpillarContainer.drillHead;
+    }
+
+    public static DecorationBlockEntity getDecoration() {
+        return CaterpillarContainer.decoration;
+    }
+
+    public static ReinforcementBlockEntity getReinforcement() {
+        return CaterpillarContainer.reinforcement;
+    }
+
+    public static IncineratorBlockEntity getIncinerator() {
+        return CaterpillarContainer.incinerator;
+    }
+
+    public static StorageBlockEntity getStorage() {
+        return CaterpillarContainer.storage;
+    }
+
+    public static ScreenTabs getSelectedTab() {
+        return CaterpillarContainer.selectedTab;
+    }
+
+    public static void setSelectedTab(ScreenTabs selectedTab) {
+        CaterpillarContainer.selectedTab = selectedTab;
+    }
+
+    public void renderSlots() {
+        System.out.println("Render slots");
+
+        this.slots.clear();
+        this.slotId = 0;
+
+        switch (this.getSelectedTab()) {
+            case DECORATION:
+                // this.menu.placeSlotsDecoration();
+                break;
+            case INCINERATOR:
+                this.placeSlotsIncinerator();
+                break;
+            case REINFORCEMENT:
+                this.placeSlotsReinforcement();
+                break;
+            default:
+                this.placeSlotsDrillHead();
+                break;
+        }
+
+        this.placeSlotsInventory();
     }
 
     public void placeSlotsDrillHead() {
-        this.slots.clear();
-        slotId = 0;
-
         final int consumptionX = 8, gatheredX = 116, drillHeadY = 17;
 
         // Drill_head Consumption slots
         for(int row = 0; row < 3; row++) {
             for(int column = 0; column < 3; column++) {
-                addSlot(new SlotItemHandler(this.drillHead.inventory, slotId++, consumptionX + column * slotSizePlus2, drillHeadY + row * slotSizePlus2));
+                addSlot(new SlotItemHandler(this.getDrillHead().inventory, slotId++, consumptionX + column * slotSizePlus2, drillHeadY + row * slotSizePlus2));
             }
         }
 
         // Drill_head burner slot
-        // addSlot(new CaterpillarBurnerSlot(this, this.drillHead.inventory, slotId++, 80, 53));
+        addSlot(new CaterpillarBurnerSlot(this.getDrillHead().inventory, slotId++, 80, 53));
 
 
         // Drill_head Gathered slots
         for(int row = 0; row < 3; row++) {
             for(int column = 0; column < 3; column++) {
-                addSlot(new SlotItemHandler(this.drillHead.inventory, slotId++, gatheredX + column * slotSizePlus2, drillHeadY + row * slotSizePlus2));
+                addSlot(new SlotItemHandler(this.getDrillHead().inventory, slotId++, gatheredX + column * slotSizePlus2, drillHeadY + row * slotSizePlus2));
             }
         }
     }
 
     public void placeSlotsDecoration() {
-        this.slots.clear();
-
         final int decorationX = 62, decorationY = 17;
         /*
         for(int row = 0; row < 3; row++) {
@@ -149,48 +200,44 @@ public class CaterpillarContainer extends AbstractContainerMenu {
     }
 
     public void placeSlotsIncinerator() {
-        this.slots.clear();
-        slotId = 0;
         final int incineratorX = 62, incineratorY = 17;
 
         // Incinerator slots
         for(int row = 0; row < 3; row++) {
             for(int column = 0; column < 3; column++) {
-                addSlot(new SlotItemHandler(this.incinerator.inventory, slotId, incineratorX + column * slotSizePlus2, incineratorY + row * slotSizePlus2));
-                getSlot(slotId).set(incinerator.getItemInSlot(slotId));
+                addSlot(new SlotItemHandler(this.getIncinerator().inventory, slotId++, incineratorX + column * slotSizePlus2, incineratorY + row * slotSizePlus2));
             }
         }
     }
 
     public void placeSlotsReinforcement() {
-        this.slots.clear();
-        slotId = 0;
         final int reinforcementX = 44, reinforcementY = 4;
 
         // Reinforcement top slots
         for(int column = 0; column < 5; column++) {
-            addSlot(new SlotItemHandler(this.reinforcement.inventory, slotId++, reinforcementX + column * slotSizePlus2, reinforcementY));
+            addSlot(new SlotItemHandler(this.getReinforcement().inventory, slotId++, reinforcementX + column * slotSizePlus2, reinforcementY));
         }
 
         // Reinforcement sides slots
         for(int row  = 0; row < 3; row++) {
             for (int column = 0; column < 2; column++) {
                 if (column == 0) { // LEFT side
-                    addSlot(new SlotItemHandler(this.reinforcement.inventory, slotId++, reinforcementX, reinforcementY + (1 + row) * slotSizePlus2));
+                    addSlot(new SlotItemHandler(this.getReinforcement().inventory, slotId++, reinforcementX, reinforcementY + (1 + row) * slotSizePlus2));
                 } else { // RIGHT side
-                    addSlot(new SlotItemHandler(this.reinforcement.inventory, slotId++, reinforcementX + 4 * slotSizePlus2, reinforcementY + (1 + row) * slotSizePlus2));
+                    addSlot(new SlotItemHandler(this.getReinforcement().inventory, slotId++, reinforcementX + 4 * slotSizePlus2, reinforcementY + (1 + row) * slotSizePlus2));
                 }
             }
         }
 
         // Reinforcement bottom slots
         for(int column = 0; column < 5; column++) {
-            addSlot(new SlotItemHandler(this.reinforcement.inventory, slotId++, reinforcementX + column * slotSizePlus2, reinforcementY + 4 * 18));
+            addSlot(new SlotItemHandler(this.getReinforcement().inventory, slotId++, reinforcementX + column * slotSizePlus2, reinforcementY + 4 * 18));
         }
     }
 
     public void placeSlotsInventory() {
         int startX = 8, startY = 84, hotbarY = 142;
+
         if (this.getSelectedTab() == ScreenTabs.REINFORCEMENT) {
             startY = 107;
             hotbarY = 165;
@@ -244,13 +291,5 @@ public class CaterpillarContainer extends AbstractContainerMenu {
 
     public static MenuConstructor getServerContainer(BlockPos drillHeadBlockPos) {
         return (id, playerInventory, player) -> new CaterpillarContainer(id, playerInventory, drillHeadBlockPos, new CaterpillarContainerData(2));
-    }
-
-    public ScreenTabs getSelectedTab() {
-        return selectedTab;
-    }
-
-    public void setSelectedTab(ScreenTabs selectedTab) {
-        this.selectedTab = selectedTab;
     }
 }

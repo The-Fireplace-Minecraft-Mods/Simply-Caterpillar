@@ -1,4 +1,4 @@
-package the_fireplace.caterpillar.common.container.util;
+package the_fireplace.caterpillar.common.container.slot;
 
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -9,11 +9,8 @@ import the_fireplace.caterpillar.common.container.DrillHeadContainer;
 
 public class CaterpillarBurnerSlot extends SlotItemHandler {
 
-    private final CaterpillarContainer container;
-
-    public CaterpillarBurnerSlot(CaterpillarContainer container, IItemHandler slots, int index, int xPosition, int yPosition) {
+    public CaterpillarBurnerSlot(IItemHandler slots, int index, int xPosition, int yPosition) {
         super(slots, index, xPosition, yPosition);
-        this.container = container;
     }
 
     @Override
