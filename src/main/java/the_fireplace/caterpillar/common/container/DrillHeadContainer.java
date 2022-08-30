@@ -9,10 +9,8 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.SlotItemHandler;
 import org.jetbrains.annotations.NotNull;
-import the_fireplace.caterpillar.Caterpillar;
 import the_fireplace.caterpillar.common.block.entity.DrillHeadBlockEntity;
 import the_fireplace.caterpillar.common.container.syncdata.DrillHeadContainerData;
-import the_fireplace.caterpillar.common.container.util.CaterpillarBurnerSlot;
 import the_fireplace.caterpillar.core.init.BlockInit;
 import the_fireplace.caterpillar.core.init.ContainerInit;
 
@@ -82,7 +80,6 @@ public class DrillHeadContainer extends AbstractContainerMenu {
             final ItemStack item = slot.getItem();
             itemStack = item.copy();
             if (isFuel(item)) {
-                Caterpillar.LOGGER.debug("DrillHeadItem is fuel" + item);
                 if (!moveItemStackTo(item, 9, this.slots.size(), false))
                     return ItemStack.EMPTY;
             } else if (index < CONTAINER_SIZE) {
