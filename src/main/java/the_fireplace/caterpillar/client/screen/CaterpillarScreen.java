@@ -17,8 +17,10 @@ public class CaterpillarScreen extends AbstractContainerScreen<CaterpillarContai
 
     private float scrollOffs;
 
+    private boolean scrolling;
+
     public CaterpillarScreen(CaterpillarContainer container, Inventory playerInventory, Component title) {
-        super(container, playerInventory, title);
+        super(CaterpillarContainer.getCurrentContainer(), playerInventory, title);
         this.imageWidth = 176;
         this.imageHeight = this.menu.getSelectedTab() == ScreenTabs.REINFORCEMENT ? 189 : 166;
         this.leftPos = 0;
@@ -113,14 +115,12 @@ public class CaterpillarScreen extends AbstractContainerScreen<CaterpillarContai
                 if (this.menu.getSelectedTab().equals(tab)) {
                     this.addRenderableWidget(new ImageButton(this.leftPos - 28, this.topPos + 3 + increment*20, 31, 20, 176 , 58 + 20, 0, ScreenTabs.DRILL_HEAD.resourceLocation, (onPress) -> {
                         this.menu.setSelectedTab(tab);
-                        this.menu.renderSlots();
                     }));
 
                     this.font.draw(stack, tabName, this.leftPos - 22, this.topPos + increment*20 + 9, ChatFormatting.BLACK.getColor());
                 } else {
                     this.addRenderableWidget(new ImageButton(this.leftPos - 31, this.topPos + increment*20 + 3 , 31, 20, 176 , 58, 0, ScreenTabs.DRILL_HEAD.resourceLocation, (onPress) -> {
                         this.menu.setSelectedTab(tab);
-                        this.menu.renderSlots();
                     }));
 
                     this.font.draw(stack, tabName, this.leftPos - 25, this.topPos + increment*20 + 9, ChatFormatting.GRAY.getColor());
@@ -151,12 +151,63 @@ public class CaterpillarScreen extends AbstractContainerScreen<CaterpillarContai
     }
 
     @Override
-    public boolean mouseScrolled(double p_94686_, double p_94687_, double p_94688_) {
+    public boolean mouseReleased(double mouseX, double mouseY, int mouseSide) {
+        if (this.menu.getSelectedTab() == ScreenTabs.DECORATION) {
+            if (mouseSide == 0) {
+                this.scrolling = false;
+                return true;
+            }
+        }
+
+        return super.mouseReleased(mouseX, mouseY, mouseSide);
+    }
+
+    @Override
+    public boolean mouseClicked(double mouseX, double mouseY, int mouseSide) {
+        if (this.menu.getSelectedTab() == ScreenTabs.DECORATION) {
+            if (mouseSide == 0) {
+                if (this.insideScrollBar(mouseX, mouseY)) {
+                    this.scrolling = true;
+                    return true;
+                }
+            }
+        }
+
+        return super.mouseClicked(mouseX, mouseY, mouseSide);
+    }
+
+    private boolean insideScrollBar(double mouseX, double mouseY) {
+        int i = this.leftPos + 156;
+        int j = this.topPos + 17;
+        int k = j + 54;
+        return mouseX >= (double)i && mouseY >= (double)j && mouseX < (double)i + 12 && mouseY < (double)k;
+    }
+
+    @Override
+    public boolean mouseDragged(double mouseX, double mouseY, int mouseSide, double p_97755_, double p_97756_) {
+        if (this.menu.getSelectedTab() == ScreenTabs.DECORATION) {
+            if (this.scrolling) {
+                int i = this.topPos + 17;
+                int j = i + 54;
+                this.scrollOffs = ((float)mouseY - (float)i - 7.5F) / ((float)(j - i) - 15.0F);
+                this.scrollOffs = Mth.clamp(this.scrollOffs, 0.0F, 1.0F);
+                // this.menu.scrollTo(this.scrollOffs);
+                return true;
+            }
+
+            return super.mouseDragged(mouseX, mouseY, mouseSide, p_97755_, p_97756_);
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean mouseScrolled(double mouseX, double mouseY, double mouseWheelDirection) {
         if (this.menu.getSelectedTab() == ScreenTabs.DECORATION) {
             int i = 9;
-            float f = (float)(p_94688_ / (double)i);
+            float f = (float)(mouseWheelDirection / (double)i);
             this.scrollOffs = Mth.clamp(this.scrollOffs - f, 0.0F, 1.0F);
-            // this.container.decoration.scrollTo(this.scrollOffs);
+            // this.menu.decoration.scrollTo(this.scrollOffs);
             return true;
         }
 
