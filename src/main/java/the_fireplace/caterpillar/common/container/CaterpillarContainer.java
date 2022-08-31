@@ -15,7 +15,6 @@ import the_fireplace.caterpillar.client.screen.util.ScreenTabs;
 import the_fireplace.caterpillar.common.block.entity.*;
 import the_fireplace.caterpillar.common.block.util.CaterpillarBlocksUtil;
 import the_fireplace.caterpillar.common.container.slot.CaterpillarBurnerSlot;
-import the_fireplace.caterpillar.common.container.syncdata.CaterpillarContainerData;
 import the_fireplace.caterpillar.core.init.ContainerInit;
 
 public class CaterpillarContainer extends AbstractContainerMenu {
@@ -48,14 +47,13 @@ public class CaterpillarContainer extends AbstractContainerMenu {
 
     // Client Constructor
     public CaterpillarContainer(int id, Inventory playerInventory) {
-        this(id, playerInventory, BlockPos.ZERO, new SimpleContainerData(2));
+        this(id, playerInventory, BlockPos.ZERO);
     }
 
     // Server Constructor
-    public CaterpillarContainer(int id, Inventory playerInventory, BlockPos pos, ContainerData data) {
+    public CaterpillarContainer(int id, Inventory playerInventory, BlockPos pos) {
         super(ContainerInit.CATERPILLAR.get(), id);
         this.containerAccess = ContainerLevelAccess.create(playerInventory.player.level, pos);
-        this.data = data;
         this.playerInventory = playerInventory;
 
         if (!pos.equals(BlockPos.ZERO)) {
@@ -63,8 +61,6 @@ public class CaterpillarContainer extends AbstractContainerMenu {
             this.clearCaterpillarBlocks();
             this.detectCaterpillarBlocks(playerInventory.player.level, pos);
         }
-
-        addDataSlots(data);
     }
 
     private void detectCaterpillarBlocks(Level level, BlockPos pos) {
@@ -302,6 +298,6 @@ public class CaterpillarContainer extends AbstractContainerMenu {
     }
 
     public static MenuConstructor getServerContainer(BlockPos drillHeadBlockPos) {
-        return (id, playerInventory, player) -> new CaterpillarContainer(id, playerInventory, drillHeadBlockPos, new CaterpillarContainerData(2));
+        return (id, playerInventory, player) -> new CaterpillarContainer(id, playerInventory, drillHeadBlockPos);
     }
 }
