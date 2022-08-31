@@ -40,7 +40,7 @@ public class Caterpillar
 
 		// Register Deferred Registers
 		BlockInit.BLOCKS.register(bus);
-		BlockEntityInit.BLOCK_ENTITIES.register(bus);
+		BlockEntityInit.BLOCK_ENTITY_TYPES.register(bus);
 		ItemInit.ITEMS.register(bus);
 		ContainerInit.MENU_TYPES.register(bus);
 
