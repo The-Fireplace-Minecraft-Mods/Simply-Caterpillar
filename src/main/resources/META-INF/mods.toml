@@ -5,7 +5,7 @@ issueTrackerURL="https://github.com/The-Fireplace/Simply-Caterpillar/issues"
 
 [[mods]] #mandatory
 modId="simplycaterpillar"
-version="${file.jarVersion}"
+version="1.19-1.0-DEV"
 displayName="Simply Caterpillar"
 #updateJSONURL=""
 displayURL="https://github.com/The-Fireplace/Simply-Caterpillar/"
