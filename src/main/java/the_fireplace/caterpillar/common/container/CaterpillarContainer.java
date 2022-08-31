@@ -20,29 +20,31 @@ import the_fireplace.caterpillar.core.init.ContainerInit;
 
 public class CaterpillarContainer extends AbstractContainerMenu {
 
-    private final ContainerLevelAccess containerAccess;
+    private ContainerLevelAccess containerAccess;
 
-    public final ContainerData data;
+    public ContainerData data;
 
-    private static DrillHeadBlockEntity drillHead;
+    private static CaterpillarContainer currentContainer;
 
-    private static DecorationBlockEntity decoration;
+    private DrillHeadBlockEntity drillHead;
 
-    private static ReinforcementBlockEntity reinforcement;
+    private DecorationBlockEntity decoration;
 
-    private static IncineratorBlockEntity incinerator;
+    private ReinforcementBlockEntity reinforcement;
 
-    private static StorageBlockEntity storage;
+    private IncineratorBlockEntity incinerator;
 
-    private static ScreenTabs selectedTab;
+    private StorageBlockEntity storage;
+
+    private ScreenTabs selectedTab;
 
     public static final int SIZE = 19;
 
     protected int slotId;
 
-    private final Inventory playerInventory;
+    private Inventory playerInventory;
 
-    final int slotSizePlus2 = 18;
+    static final int SLOT_SIZE_PLUS_2 = 18;
 
     // Client Constructor
     public CaterpillarContainer(int id, Inventory playerInventory) {
@@ -57,11 +59,10 @@ public class CaterpillarContainer extends AbstractContainerMenu {
         this.playerInventory = playerInventory;
 
         if (!pos.equals(BlockPos.ZERO)) {
+            CaterpillarContainer.currentContainer = this;
             this.clearCaterpillarBlocks();
             this.detectCaterpillarBlocks(playerInventory.player.level, pos);
         }
-
-        this.renderSlots();
 
         addDataSlots(data);
     }
@@ -77,23 +78,23 @@ public class CaterpillarContainer extends AbstractContainerMenu {
         BlockEntity blockEntity = level.getBlockEntity(pos);
 
         if (blockEntity instanceof DrillHeadBlockEntity drillHeadBlockEntity) {
-            CaterpillarContainer.drillHead = drillHeadBlockEntity;
+            this.drillHead = drillHeadBlockEntity;
         }
 
         if (blockEntity instanceof DecorationBlockEntity decorationBlockEntity) {
-            CaterpillarContainer.decoration = decorationBlockEntity;
+            this.decoration = decorationBlockEntity;
         }
 
         if (blockEntity instanceof ReinforcementBlockEntity reinforcementBlockEntity) {
-            CaterpillarContainer.reinforcement = reinforcementBlockEntity;
+            this.reinforcement = reinforcementBlockEntity;
         }
 
         if (blockEntity instanceof IncineratorBlockEntity incineratorBlockEntity) {
-            CaterpillarContainer.incinerator = incineratorBlockEntity;
+            this.incinerator = incineratorBlockEntity;
         }
 
         if (blockEntity instanceof StorageBlockEntity storageBlockEntity) {
-            CaterpillarContainer.storage = storageBlockEntity;
+            this.storage = storageBlockEntity;
         }
 
         Direction direction = blockEntity.getBlockState().getValue(HorizontalDirectionalBlock.FACING);
@@ -102,50 +103,57 @@ public class CaterpillarContainer extends AbstractContainerMenu {
     }
 
     private void clearCaterpillarBlocks() {
-        CaterpillarContainer.drillHead = null;
-        CaterpillarContainer.decoration = null;
-        CaterpillarContainer.reinforcement = null;
-        CaterpillarContainer.incinerator = null;
-        CaterpillarContainer.storage = null;
+        this.drillHead = null;
+        this.decoration = null;
+        this.reinforcement = null;
+        this.incinerator = null;
+        this.storage = null;
     }
 
-    public static DrillHeadBlockEntity getDrillHead() {
-        return CaterpillarContainer.drillHead;
+    public DrillHeadBlockEntity getDrillHead() {
+        return this.drillHead;
     }
 
-    public static DecorationBlockEntity getDecoration() {
-        return CaterpillarContainer.decoration;
+    public DecorationBlockEntity getDecoration() {
+        return this.decoration;
     }
 
-    public static ReinforcementBlockEntity getReinforcement() {
-        return CaterpillarContainer.reinforcement;
+    public ReinforcementBlockEntity getReinforcement() {
+        return this.reinforcement;
     }
 
-    public static IncineratorBlockEntity getIncinerator() {
-        return CaterpillarContainer.incinerator;
+    public IncineratorBlockEntity getIncinerator() {
+        return this.incinerator;
     }
 
-    public static StorageBlockEntity getStorage() {
-        return CaterpillarContainer.storage;
+    public StorageBlockEntity getStorage() {
+        return this.storage;
     }
 
-    public static ScreenTabs getSelectedTab() {
-        return CaterpillarContainer.selectedTab;
+    public ScreenTabs getSelectedTab() {
+        return this.selectedTab;
     }
 
-    public static void setSelectedTab(ScreenTabs selectedTab) {
-        CaterpillarContainer.selectedTab = selectedTab;
+    public void setSelectedTab(ScreenTabs selectedTab) {
+        this.selectedTab = selectedTab;
+        this.renderSlots();
+    }
+
+    public static CaterpillarContainer getCurrentContainer() {
+        return CaterpillarContainer.currentContainer;
     }
 
     public void renderSlots() {
         System.out.println("Render slots");
 
+        // Remove slots
         this.slots.clear();
+
         this.slotId = 0;
 
         switch (this.getSelectedTab()) {
             case DECORATION:
-                // this.menu.placeSlotsDecoration();
+                // this.placeSlotsDecoration();
                 break;
             case INCINERATOR:
                 this.placeSlotsIncinerator();
@@ -167,7 +175,7 @@ public class CaterpillarContainer extends AbstractContainerMenu {
         // Drill_head Consumption slots
         for(int row = 0; row < 3; row++) {
             for(int column = 0; column < 3; column++) {
-                addSlot(new SlotItemHandler(this.getDrillHead().inventory, slotId++, consumptionX + column * slotSizePlus2, drillHeadY + row * slotSizePlus2));
+                addSlot(new SlotItemHandler(this.getDrillHead().inventory, slotId++, consumptionX + column * SLOT_SIZE_PLUS_2, drillHeadY + row * SLOT_SIZE_PLUS_2));
             }
         }
 
@@ -178,7 +186,7 @@ public class CaterpillarContainer extends AbstractContainerMenu {
         // Drill_head Gathered slots
         for(int row = 0; row < 3; row++) {
             for(int column = 0; column < 3; column++) {
-                addSlot(new SlotItemHandler(this.getDrillHead().inventory, slotId++, gatheredX + column * slotSizePlus2, drillHeadY + row * slotSizePlus2));
+                addSlot(new SlotItemHandler(this.getDrillHead().inventory, slotId++, gatheredX + column * SLOT_SIZE_PLUS_2, drillHeadY + row * SLOT_SIZE_PLUS_2));
             }
         }
     }
@@ -205,7 +213,7 @@ public class CaterpillarContainer extends AbstractContainerMenu {
         // Incinerator slots
         for(int row = 0; row < 3; row++) {
             for(int column = 0; column < 3; column++) {
-                addSlot(new SlotItemHandler(this.getIncinerator().inventory, slotId++, incineratorX + column * slotSizePlus2, incineratorY + row * slotSizePlus2));
+                addSlot(new SlotItemHandler(this.getIncinerator().inventory, slotId++, incineratorX + column * SLOT_SIZE_PLUS_2, incineratorY + row * SLOT_SIZE_PLUS_2));
             }
         }
     }
@@ -215,23 +223,23 @@ public class CaterpillarContainer extends AbstractContainerMenu {
 
         // Reinforcement top slots
         for(int column = 0; column < 5; column++) {
-            addSlot(new SlotItemHandler(this.getReinforcement().inventory, slotId++, reinforcementX + column * slotSizePlus2, reinforcementY));
+            addSlot(new SlotItemHandler(this.getReinforcement().inventory, slotId++, reinforcementX + column * SLOT_SIZE_PLUS_2, reinforcementY));
         }
 
         // Reinforcement sides slots
         for(int row  = 0; row < 3; row++) {
             for (int column = 0; column < 2; column++) {
                 if (column == 0) { // LEFT side
-                    addSlot(new SlotItemHandler(this.getReinforcement().inventory, slotId++, reinforcementX, reinforcementY + (1 + row) * slotSizePlus2));
+                    addSlot(new SlotItemHandler(this.getReinforcement().inventory, slotId++, reinforcementX, reinforcementY + (1 + row) * SLOT_SIZE_PLUS_2));
                 } else { // RIGHT side
-                    addSlot(new SlotItemHandler(this.getReinforcement().inventory, slotId++, reinforcementX + 4 * slotSizePlus2, reinforcementY + (1 + row) * slotSizePlus2));
+                    addSlot(new SlotItemHandler(this.getReinforcement().inventory, slotId++, reinforcementX + 4 * SLOT_SIZE_PLUS_2, reinforcementY + (1 + row) * SLOT_SIZE_PLUS_2));
                 }
             }
         }
 
         // Reinforcement bottom slots
         for(int column = 0; column < 5; column++) {
-            addSlot(new SlotItemHandler(this.getReinforcement().inventory, slotId++, reinforcementX + column * slotSizePlus2, reinforcementY + 4 * 18));
+            addSlot(new SlotItemHandler(this.getReinforcement().inventory, slotId++, reinforcementX + column * SLOT_SIZE_PLUS_2, reinforcementY + 4 * 18));
         }
     }
 
@@ -246,13 +254,13 @@ public class CaterpillarContainer extends AbstractContainerMenu {
         // Player Inventory slots
         for(int row = 0; row < 3; row++) {
             for(int column = 0; column < 9; column++) {
-                addSlot(new Slot(this.playerInventory, column + row * 9 + 9, startX + column * slotSizePlus2, startY + row * slotSizePlus2));
+                addSlot(new Slot(this.playerInventory, column + row * 9 + 9, startX + column * SLOT_SIZE_PLUS_2, startY + row * SLOT_SIZE_PLUS_2));
             }
         }
 
         // Player Hotbar slots
         for(int column = 0; column < 9; column++) {
-            addSlot(new Slot(this.playerInventory, column, startX + column * slotSizePlus2, hotbarY));
+            addSlot(new Slot(this.playerInventory, column, startX + column * SLOT_SIZE_PLUS_2, hotbarY));
         }
     }
 
@@ -264,7 +272,7 @@ public class CaterpillarContainer extends AbstractContainerMenu {
         if (slot.hasItem()) {
             final ItemStack item = slot.getItem();
             retStack = item.copy();
-            if (this.getSelectedTab() == ScreenTabs.DRILL_HEAD && DrillHeadContainer.isFuel(item)) {
+            if (this.getSelectedTab() == ScreenTabs.DRILL_HEAD && this.isFuel(item)) {
                 if (!moveItemStackTo(item, 9, this.slots.size(), false))
                     return ItemStack.EMPTY;
             }
@@ -282,6 +290,10 @@ public class CaterpillarContainer extends AbstractContainerMenu {
         }
 
         return retStack;
+    }
+
+    public static boolean isFuel(ItemStack itemStack) {
+        return net.minecraftforge.common.ForgeHooks.getBurnTime(itemStack, null) > 0;
     }
 
     @Override

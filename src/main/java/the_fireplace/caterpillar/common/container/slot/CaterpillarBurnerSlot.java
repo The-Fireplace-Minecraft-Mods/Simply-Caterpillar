@@ -5,7 +5,6 @@ import net.minecraft.world.item.Items;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 import the_fireplace.caterpillar.common.container.CaterpillarContainer;
-import the_fireplace.caterpillar.common.container.DrillHeadContainer;
 
 public class CaterpillarBurnerSlot extends SlotItemHandler {
 
@@ -15,7 +14,7 @@ public class CaterpillarBurnerSlot extends SlotItemHandler {
 
     @Override
     public boolean mayPlace(ItemStack itemStack) {
-        return DrillHeadContainer.isFuel(itemStack) || isBucket(itemStack);
+        return CaterpillarContainer.isFuel(itemStack) || isBucket(itemStack);
     }
 
     public int getMaxStackSize(ItemStack itemStack) {
