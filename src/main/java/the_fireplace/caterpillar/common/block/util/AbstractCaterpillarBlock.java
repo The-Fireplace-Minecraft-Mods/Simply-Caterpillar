@@ -68,10 +68,11 @@ public abstract class AbstractCaterpillarBlock extends HorizontalDirectionalBloc
             BlockPos caterpillarPos = CaterpillarBlocksUtil.getCaterpillarPos(level, basePos, direction);
 
             if (caterpillarPos != null) {
-                ScreenTabs selectedTab = ScreenTabs.getScreenTabFromBlock(state.getBlock());
-                CaterpillarContainer.setSelectedTab(selectedTab);
                 MenuProvider container = new SimpleMenuProvider(CaterpillarContainer.getServerContainer(caterpillarPos), Component.empty());
                 NetworkHooks.openScreen((ServerPlayer) player, container, pos);
+
+                ScreenTabs selectedTab = ScreenTabs.getScreenTabFromBlock(state.getBlock());
+                CaterpillarContainer.getCurrentContainer().setSelectedTab(selectedTab);
             } else {
                 player.displayClientMessage(Component.translatable("block.simplycaterpillar.drill_head.not_found"), true);
             }

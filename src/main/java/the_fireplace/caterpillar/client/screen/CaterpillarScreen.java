@@ -99,7 +99,7 @@ public class CaterpillarScreen extends AbstractContainerScreen<CaterpillarContai
     private void renderTabButtons(PoseStack stack, int mouseX, int mouseY) {
         clearWidgets();
 
-        int increment = 0;
+        int incrementTabPos = 0;
 
         // TODO: Display items instead of tab names
         // itemRenderer.renderGuiItem(new ItemStack(BlockInit.DECORATION.get().asItem()), this.imageWidth - 50, this.topPos + 56);
@@ -113,24 +113,24 @@ public class CaterpillarScreen extends AbstractContainerScreen<CaterpillarContai
                 }
 
                 if (this.menu.getSelectedTab().equals(tab)) {
-                    this.addRenderableWidget(new ImageButton(this.leftPos - 28, this.topPos + 3 + increment*20, 31, 20, 176 , 58 + 20, 0, ScreenTabs.DRILL_HEAD.resourceLocation, (onPress) -> {
+                    this.addRenderableWidget(new ImageButton(this.leftPos - 28, this.topPos + 3 + incrementTabPos*20, 31, 20, 176 , 58 + 20, 0, ScreenTabs.DRILL_HEAD.resourceLocation, (onPress) -> {
                         this.menu.setSelectedTab(tab);
                     }));
 
-                    this.font.draw(stack, tabName, this.leftPos - 22, this.topPos + increment*20 + 9, ChatFormatting.BLACK.getColor());
+                    this.font.draw(stack, tabName, this.leftPos - 22, this.topPos + incrementTabPos*20 + 9, ChatFormatting.BLACK.getColor());
                 } else {
-                    this.addRenderableWidget(new ImageButton(this.leftPos - 31, this.topPos + increment*20 + 3 , 31, 20, 176 , 58, 0, ScreenTabs.DRILL_HEAD.resourceLocation, (onPress) -> {
+                    this.addRenderableWidget(new ImageButton(this.leftPos - 31, this.topPos + incrementTabPos*20 + 3 , 31, 20, 176 , 58, 0, ScreenTabs.DRILL_HEAD.resourceLocation, (onPress) -> {
                         this.menu.setSelectedTab(tab);
                     }));
 
-                    this.font.draw(stack, tabName, this.leftPos - 25, this.topPos + increment*20 + 9, ChatFormatting.GRAY.getColor());
+                    this.font.draw(stack, tabName, this.leftPos - 25, this.topPos + incrementTabPos*20 + 9, ChatFormatting.GRAY.getColor());
                 }
 
-                if(mouseX >= this.leftPos - 31 && mouseY >= this.topPos + increment*20 + 3 && mouseX <= this.leftPos && mouseY <= this.topPos + increment*20 + 3 + 20) {
-                    this.renderTooltip(stack, tab.name, this.leftPos - 15, this.topPos + increment*20 + 21);
+                if(mouseX >= this.leftPos - 31 && mouseY >= this.topPos + incrementTabPos*20 + 3 && mouseX <= this.leftPos && mouseY <= this.topPos + incrementTabPos*20 + 3 + 20) {
+                    this.renderTooltip(stack, tab.name, this.leftPos - 15, this.topPos + incrementTabPos*20 + 21);
                 }
 
-                increment++;
+                incrementTabPos++;
             }
         }
     }
