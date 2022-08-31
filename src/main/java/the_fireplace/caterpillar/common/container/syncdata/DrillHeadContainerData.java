@@ -27,6 +27,7 @@ public class DrillHeadContainerData extends SimpleContainerData {
         switch (key) {
             case 0 -> this.blockEntity.setLitTime(value);
             case 1 -> this.blockEntity.setLitDuration(value);
+            default -> throw new UnsupportedOperationException("There is no value corresponding to key: '" + key + "' in: '" + blockEntity + "'");
         }
     }
 }

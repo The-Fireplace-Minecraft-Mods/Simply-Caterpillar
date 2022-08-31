@@ -63,7 +63,7 @@ public class DecorationBlockEntity extends BlockEntity {
     }
 
     public List<ItemStack[]> getPlacementMap() {
-        return placementMap;
+        return this.placementMap;
     }
 
     public void setPlacementMap(List<ItemStack[]> placementMap) {
@@ -83,10 +83,10 @@ public class DecorationBlockEntity extends BlockEntity {
         } else {
             this.placementMap.clear();
         }
-
+        /*
         ListTag placementList = tag.getList("PlacementMap", Tag.TAG_LIST);
 
-        /*
+
         for (int i = 0; i < placementList.size(); i++) {
             CompoundTag placementTag = placementList.getCompound(i);
             for (int j = 0; j < placementTag.size(); j++) {

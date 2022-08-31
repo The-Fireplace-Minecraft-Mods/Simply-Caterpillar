@@ -13,14 +13,4 @@ public class ContainerInit {
 
     // Containers
     public static final RegistryObject<MenuType<CaterpillarContainer>> CATERPILLAR = MENU_TYPES.register("caterpillar", () -> new MenuType<>(CaterpillarContainer::new));
-
-    public static final RegistryObject<MenuType<DrillHeadContainer>> DRILL_HEAD = MENU_TYPES.register("drill_head", () -> new MenuType<>(DrillHeadContainer::new));
-
-    // public static final RegistryObject<MenuType<IncineratorContainer>> INCINERATOR = CONTAINERS.register("incinerator", () -> new MenuType<>(IncineratorContainer::new));
-
-    public static final RegistryObject<MenuType<StorageContainer>> STORAGE = MENU_TYPES.register("storage", () -> new MenuType<>(StorageContainer::new));
-
-    public static final RegistryObject<MenuType<DecorationContainer>> DECORATION = MENU_TYPES.register("decoration", () -> new MenuType<>(DecorationContainer::new));
-
-    public static final RegistryObject<MenuType<ReinforcementContainer>> REINFORCEMENT = MENU_TYPES.register("reinforcement", () -> new MenuType<>(ReinforcementContainer::new));
 }

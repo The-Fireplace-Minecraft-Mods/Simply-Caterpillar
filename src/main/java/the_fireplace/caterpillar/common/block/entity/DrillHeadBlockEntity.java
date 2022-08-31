@@ -41,31 +41,19 @@ public class DrillHeadBlockEntity extends AbstractCaterpillarBlockEntity impleme
     public static final int MOVEMENT_TICK = 60;
 
     public static final int CONTAINER_SIZE = 19;
+
     private int litTime;
 
     private int litDuration;
 
     public DrillHeadBlockEntity(BlockPos pos, BlockState state) {
-        super(BlockEntityInit.DRILL_HEAD.get(), pos, state, CONTAINER_SIZE);
+        super(BlockEntityInit.DRILL_HEAD.get(), pos, state, DrillHeadBlockEntity.CONTAINER_SIZE);
     }
 
     public void tick(Level level, BlockPos pos, BlockState state, DrillHeadBlockEntity blockEntity) {
         if (!state.getValue(DrillHeadBlock.PART).equals(DrillHeadPart.BASE)) {
             return;
         }
-
-        // TODO: Only for testing purposes
-        /*
-        if (super.timer != 0 && super.timer % MOVEMENT_TICK == 0) {
-            this.drill(level, pos, state);
-            this.move(level, pos, state);
-
-            Direction direction = state.getValue(FACING);
-            CaterpillarBlocksUtil.moveNextBlock(level, pos, direction);
-        }
-
-        super.tick();
-        */
 
         boolean isLit = blockEntity.isLit();
         boolean needsUpdate = false;
@@ -121,8 +109,6 @@ public class DrillHeadBlockEntity extends AbstractCaterpillarBlockEntity impleme
         BlockPos nextBasePos = this.getBlockPos().relative(this.getBlockState().getValue(DrillHeadBlock.FACING).getOpposite());
         BlockEntity blockEntity = this.getLevel().getBlockEntity(basePos);
 
-
-
         if (blockEntity instanceof DrillHeadBlockEntity drillHeadBlockEntity) {
             CompoundTag oldTag = drillHeadBlockEntity.saveWithFullMetadata();
             oldTag.remove("x");
@@ -130,13 +116,13 @@ public class DrillHeadBlockEntity extends AbstractCaterpillarBlockEntity impleme
             oldTag.remove("z");
 
             this.getLevel().setBlock(nextBasePos, this.getBlockState(), 35);
-            BlockEntity newBlockEntity =  this.getLevel().getBlockEntity(nextBasePos);
+            BlockEntity nextBlockEntity =  this.getLevel().getBlockEntity(nextBasePos);
 
-            if (newBlockEntity instanceof DrillHeadBlockEntity newDrillHeadBlockEntity) {
-                newDrillHeadBlockEntity.load(oldTag);
-                newDrillHeadBlockEntity.setLitTime(drillHeadBlockEntity.getLitTime());
-                newDrillHeadBlockEntity.setLitDuration(drillHeadBlockEntity.getLitDuration());
-                newDrillHeadBlockEntity.setChanged();
+            if (nextBlockEntity instanceof DrillHeadBlockEntity nextDrillHeadBlockEntity) {
+                nextDrillHeadBlockEntity.load(oldTag);
+                nextDrillHeadBlockEntity.setLitTime(drillHeadBlockEntity.getLitTime());
+                nextDrillHeadBlockEntity.setLitDuration(drillHeadBlockEntity.getLitDuration());
+                nextDrillHeadBlockEntity.setChanged();
             }
         }
 
@@ -166,14 +152,11 @@ public class DrillHeadBlockEntity extends AbstractCaterpillarBlockEntity impleme
         Drill a 3x3 zone of blocks
      */
     private void drill() {
-        BlockPos destroyPos = this.getBlockPos();
+        BlockPos destroyPos;
         Direction direction = this.getBlockState().getValue(DrillHeadBlock.FACING);
         for (int i = -1; i < 2; i++) {
             for (int j = -1; j < 2; j++) {
                 switch (direction.getOpposite()) {
-                    case NORTH:
-                        destroyPos = this.getBlockPos().offset(j, i, -1);
-                        break;
                     case EAST:
                         destroyPos = this.getBlockPos().offset(1, i, j);
                         break;
@@ -182,6 +165,10 @@ public class DrillHeadBlockEntity extends AbstractCaterpillarBlockEntity impleme
                         break;
                     case SOUTH:
                         destroyPos = this.getBlockPos().offset(j, i, 1);
+                        break;
+                    case NORTH:
+                    default:
+                        destroyPos = this.getBlockPos().offset(j, i, -1);
                         break;
                 }
 

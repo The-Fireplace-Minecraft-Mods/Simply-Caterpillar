@@ -7,13 +7,14 @@ import net.minecraft.world.level.block.state.BlockState;
 import the_fireplace.caterpillar.common.block.StorageBlock;
 import the_fireplace.caterpillar.common.block.entity.util.AbstractCaterpillarBlockEntity;
 import the_fireplace.caterpillar.common.block.util.StoragePart;
-import the_fireplace.caterpillar.common.container.StorageContainer;
 import the_fireplace.caterpillar.core.init.BlockEntityInit;
 
 public class StorageBlockEntity extends AbstractCaterpillarBlockEntity {
 
+    public static final int CONTAINER_SIZE = 12;
+
     public StorageBlockEntity(BlockPos pos, BlockState state) {
-        super(BlockEntityInit.STORAGE.get(), pos, state, StorageContainer.SLOT_SIZE);
+        super(BlockEntityInit.STORAGE.get(), pos, state, StorageBlockEntity.CONTAINER_SIZE);
     }
 
     public void move() {

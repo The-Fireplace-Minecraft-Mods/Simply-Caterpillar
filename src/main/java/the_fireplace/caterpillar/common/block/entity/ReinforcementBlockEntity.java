@@ -9,7 +9,6 @@ import the_fireplace.caterpillar.Caterpillar;
 import the_fireplace.caterpillar.common.block.ReinforcementBlock;
 import the_fireplace.caterpillar.common.block.entity.util.AbstractCaterpillarBlockEntity;
 import the_fireplace.caterpillar.common.block.util.ReinforcementPart;
-import the_fireplace.caterpillar.common.container.ReinforcementContainer;
 import the_fireplace.caterpillar.core.init.BlockEntityInit;
 
 public class ReinforcementBlockEntity extends AbstractCaterpillarBlockEntity {
@@ -18,8 +17,10 @@ public class ReinforcementBlockEntity extends AbstractCaterpillarBlockEntity {
             "container." + Caterpillar.MOD_ID + ".reinforcement"
     );
 
+    public static final int CONTAINER_SIZE = 16;
+
     public ReinforcementBlockEntity(BlockPos pos, BlockState state) {
-        super(BlockEntityInit.REINFORCEMENT.get(), pos, state, ReinforcementContainer.SLOT_SIZE);
+        super(BlockEntityInit.REINFORCEMENT.get(), pos, state, ReinforcementBlockEntity.CONTAINER_SIZE);
     }
 
     public void move() {
