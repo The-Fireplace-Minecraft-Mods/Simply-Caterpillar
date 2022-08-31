@@ -1,8 +1,8 @@
 {
     "variants": {
-        "facing=north": { "model": "simplycaterpillar:block/incinerator" },
-        "facing=south": { "model": "simplycaterpillar:block/incinerator", "y": 180 },
-        "facing=west":  { "model": "simplycaterpillar:block/incinerator", "y": 270 },
-        "facing=east":  { "model": "simplycaterpillar:block/incinerator", "y": 90 }
+        "facing=north": { "model": "simplycaterpillar:block/incinerator/incinerator" },
+        "facing=south": { "model": "simplycaterpillar:block/incinerator/incinerator", "y": 180 },
+        "facing=west":  { "model": "simplycaterpillar:block/incinerator/incinerator", "y": 270 },
+        "facing=east":  { "model": "simplycaterpillar:block/incinerator/incinerator", "y": 90 }
     }
 }

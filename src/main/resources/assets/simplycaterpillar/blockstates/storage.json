@@ -1,18 +1,18 @@
 {
     "variants": {
-        "facing=north,part=left": { "model": "simplycaterpillar:block/storage_left" },
-        "facing=south,part=left": { "model": "simplycaterpillar:block/storage_left", "y": 180 },
-        "facing=west,part=left":  { "model": "simplycaterpillar:block/storage_left", "y": 270 },
-        "facing=east,part=left":  { "model": "simplycaterpillar:block/storage_left", "y": 90 },
+        "facing=north,part=left": { "model": "simplycaterpillar:block/storage/storage_left" },
+        "facing=south,part=left": { "model": "simplycaterpillar:block/storage/storage_left", "y": 180 },
+        "facing=west,part=left":  { "model": "simplycaterpillar:block/storage/storage_left", "y": 270 },
+        "facing=east,part=left":  { "model": "simplycaterpillar:block/storage/storage_left", "y": 90 },
 
-        "facing=north,part=base": { "model": "simplycaterpillar:block/drill_base" },
-        "facing=south,part=base": { "model": "simplycaterpillar:block/drill_base", "y": 180 },
-        "facing=west,part=base":  { "model": "simplycaterpillar:block/drill_base", "y": 270 },
-        "facing=east,part=base":  { "model": "simplycaterpillar:block/drill_base", "y": 90 },
+        "facing=north,part=base": { "model": "simplycaterpillar:block/drill_base/drill_base" },
+        "facing=south,part=base": { "model": "simplycaterpillar:block/drill_base/drill_base", "y": 180 },
+        "facing=west,part=base":  { "model": "simplycaterpillar:block/drill_base/drill_base", "y": 270 },
+        "facing=east,part=base":  { "model": "simplycaterpillar:block/drill_base/drill_base", "y": 90 },
 
-        "facing=north,part=right": { "model": "simplycaterpillar:block/storage_right" },
-        "facing=south,part=right": { "model": "simplycaterpillar:block/storage_right", "y": 180 },
-        "facing=west,part=right":  { "model": "simplycaterpillar:block/storage_right", "y": 270 },
-        "facing=east,part=right":  { "model": "simplycaterpillar:block/storage_right", "y": 90 }
+        "facing=north,part=right": { "model": "simplycaterpillar:block/storage/storage_right" },
+        "facing=south,part=right": { "model": "simplycaterpillar:block/storage/storage_right", "y": 180 },
+        "facing=west,part=right":  { "model": "simplycaterpillar:block/storage/storage_right", "y": 270 },
+        "facing=east,part=right":  { "model": "simplycaterpillar:block/storage/storage_right", "y": 90 }
     }
 }

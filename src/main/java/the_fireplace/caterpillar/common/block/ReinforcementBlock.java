@@ -129,6 +129,8 @@ public class ReinforcementBlock extends AbstractCaterpillarBlock {
         level.setBlock(blockPos.above().relative(direction.getClockWise()), blockState.setValue(ReinforcementBlock.PART, ReinforcementPart.RIGHT), 3);
         level.setBlock(blockPos.above(), blockState.setValue(ReinforcementBlock.PART, ReinforcementPart.BASE), 3);
         level.setBlock(blockPos.above(2), blockState.setValue(ReinforcementBlock.PART, ReinforcementPart.TOP), 3);
+
+        super.setPlacedBy(level, blockPos, blockState, livingEntity, stack);
     }
 
     @Override
@@ -141,6 +143,8 @@ public class ReinforcementBlock extends AbstractCaterpillarBlock {
         level.destroyBlock(basePos.relative(direction.getClockWise()), false);
         level.destroyBlock(basePos.above(), false);
         level.destroyBlock(basePos.below(), false);
+
+        super.playerWillDestroy(level, pos, state, player);
     }
 
     protected BlockPos getBasePos(BlockState state, BlockPos pos) {

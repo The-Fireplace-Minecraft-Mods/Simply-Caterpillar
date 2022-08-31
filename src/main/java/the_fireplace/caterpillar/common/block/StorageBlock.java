@@ -107,6 +107,8 @@ public class StorageBlock extends AbstractCaterpillarBlock {
 
         level.setBlock(blockPos.relative(direction.getCounterClockWise()), blockState.setValue(StorageBlock.PART, StoragePart.LEFT), 3);
         level.setBlock(blockPos.relative(direction.getClockWise()), blockState.setValue(StorageBlock.PART, StoragePart.RIGHT), 3);
+
+        super.setPlacedBy(level, blockPos, blockState, livingEntity, stack);
     }
 
     @Override
@@ -127,6 +129,8 @@ public class StorageBlock extends AbstractCaterpillarBlock {
                 level.destroyBlock(pos.relative(direction.getClockWise()), false);
                 break;
         }
+
+        super.playerWillDestroy(level, pos, state, player);
     }
 
     protected BlockPos getBasePos(BlockState state, BlockPos pos) {

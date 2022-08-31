@@ -123,12 +123,14 @@ public class DrillHeadBlock extends AbstractCaterpillarBlock {
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
-        return level.isClientSide ? null : (level0, pos0, state0, blockEntity) -> ((DrillHeadBlockEntity) blockEntity).tick();
+        return level.isClientSide ? null : (level0, pos0, state0, blockEntity) -> ((DrillHeadBlockEntity) blockEntity).tick(level0, pos0, state0, (DrillHeadBlockEntity) blockEntity);
     }
 
     @Override
     public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity livingEntity, ItemStack stack) {
         buildStructure(level, pos, state);
+
+        super.setPlacedBy(level, pos, state, livingEntity, stack);
     }
 
     @Override

@@ -9,7 +9,6 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -101,6 +100,8 @@ public class DecorationBlock extends AbstractCaterpillarBlock {
 
         level.setBlock(blockPos.relative(direction.getCounterClockWise()), blockState.setValue(DecorationBlock.PART, DecorationPart.LEFT), 3);
         level.setBlock(blockPos.relative(direction.getClockWise()), blockState.setValue(DecorationBlock.PART, DecorationPart.RIGHT), 3);
+
+        super.setPlacedBy(level, blockPos, blockState, livingEntity, stack);
     }
 
     @Override
@@ -121,6 +122,8 @@ public class DecorationBlock extends AbstractCaterpillarBlock {
                 level.destroyBlock(pos.relative(direction.getClockWise()), false);
                 break;
         }
+
+        super.playerWillDestroy(level, pos, state, player);
     }
 
     protected BlockPos getBasePos(BlockState state, BlockPos pos) {
