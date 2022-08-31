@@ -21,10 +21,10 @@ public class CaterpillarScreen extends AbstractContainerScreen<CaterpillarContai
 
     public CaterpillarScreen(CaterpillarContainer container, Inventory playerInventory, Component title) {
         super(CaterpillarContainer.getCurrentContainer(), playerInventory, title);
-        this.imageWidth = 176;
-        this.imageHeight = this.menu.getSelectedTab() == ScreenTabs.REINFORCEMENT ? 189 : 166;
-        this.leftPos = 0;
-        this.topPos = 0;
+        super.imageWidth = 176;
+        super.imageHeight = isReinforcementTab() ? 189 : 166;
+        super.leftPos = 0;
+        super.topPos = 0;
     }
 
     @Override
@@ -37,36 +37,26 @@ public class CaterpillarScreen extends AbstractContainerScreen<CaterpillarContai
     @Override
     protected void renderLabels(PoseStack stack, int mouseX, int mouseY) {
         Component title = this.menu.getSelectedTab().name;
-        this.titleLabelX = (this.imageWidth - this.font.width(title)) / 2;
-        this.titleLabelY = 6;
+        super.titleLabelX = (this.imageWidth - this.font.width(title)) / 2;
+        super.titleLabelY = isReinforcementTab() || isDrillHeadTab() ? -10 : 6;
+        super.inventoryLabelY = super.imageHeight - 94;
+        int titleLabelColor = isReinforcementTab() || isDrillHeadTab() ? 0xFFFFFF : 0x404040;
 
         switch (this.menu.getSelectedTab()) {
-            case DRILL_HEAD:
-                int consumptionX = 112, consumptionY = 6, gatheredX = 11, gatheredY = 6;
-                this.titleLabelY = -10;
-
-                this.font.draw(stack, DrillHeadBlockEntity.GATHERED, gatheredX, gatheredY, 0x404040);
-                this.font.draw(stack, title, titleLabelX, titleLabelY, 0xFFFFFF);
-                this.font.draw(stack, DrillHeadBlockEntity.CONSUMPTION, consumptionX, consumptionY, 0x404040);
-                this.font.draw(stack, this.playerInventoryTitle, this.inventoryLabelX, this.inventoryLabelY, 0x404040);
-                break;
             case DECORATION:
-                this.font.draw(stack, title, this.titleLabelX, this.titleLabelY, 0x404040);
-                this.font.draw(stack, this.playerInventoryTitle, this.inventoryLabelX, this.inventoryLabelY, 0x404040);
-                break;
             case INCINERATOR:
-                this.font.draw(stack, title, this.titleLabelX, this.titleLabelY, 0x404040);
-                this.font.draw(stack, this.playerInventoryTitle, (float)this.inventoryLabelX, (float)this.inventoryLabelY, 0x404040);
-                break;
             case REINFORCEMENT:
-                this.titleLabelY = -10;
-
-                this.font.draw(stack, title, titleLabelX, titleLabelY, 0xFFFFFF);
+                this.font.draw(stack, title, super.titleLabelX, super.titleLabelY, titleLabelColor);
+                this.font.draw(stack, super.playerInventoryTitle, super.inventoryLabelX, super.inventoryLabelY, 0x404040);
                 break;
-            default:
-                this.titleLabelY = -10;
+            case DRILL_HEAD:
+                int consumptionX = 4, consumptionY = 6, gatheredX = 119, gatheredY = 6;
 
-                this.font.draw(stack, ScreenTabs.DRILL_HEAD.name, titleLabelX, titleLabelY, 0xFFFFFF);
+                this.font.draw(stack, DrillHeadBlockEntity.CONSUMPTION, consumptionX, consumptionY, 0x404040);
+                this.font.draw(stack, DrillHeadBlockEntity.GATHERED, gatheredX, gatheredY, 0x404040);
+            default:
+                this.font.draw(stack, title, super.titleLabelX, super.titleLabelY, titleLabelColor);
+                this.font.draw(stack, super.playerInventoryTitle, super.inventoryLabelX, super.inventoryLabelY, 0x404040);
                 break;
         }
     }
@@ -76,10 +66,10 @@ public class CaterpillarScreen extends AbstractContainerScreen<CaterpillarContai
         renderBackground(stack);
         bindTexture();
 
-        this.imageHeight = this.menu.getSelectedTab() == ScreenTabs.REINFORCEMENT ? 189 : 166;
-        blit(stack, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
+        super.imageHeight = isReinforcementTab() ? 189 : 166;
+        blit(stack, super.leftPos, super.topPos, 0, 0, super.imageWidth, super.imageHeight);
 
-        if(this.menu.getSelectedTab() == ScreenTabs.DECORATION) {
+        if(isDecorationTab()) {
             renderScrollBar(stack);
         }
     }
@@ -89,7 +79,6 @@ public class CaterpillarScreen extends AbstractContainerScreen<CaterpillarContai
         int j = this.topPos + 17;
         int k = j + 54;
         blit(stack, i, j + (int)((float)(k - j - 17) * this.scrollOffs), 176, 0, 12, 15);
-
 
         int m = 9;
         int n = (int)((double)(scrollOffs * (float)m) + 0.5D);
@@ -148,6 +137,18 @@ public class CaterpillarScreen extends AbstractContainerScreen<CaterpillarContai
             default:
                 return false;
         }
+    }
+
+    private boolean isReinforcementTab() {
+        return this.menu.getSelectedTab() == ScreenTabs.REINFORCEMENT;
+    }
+
+    private boolean isDrillHeadTab() {
+        return this.menu.getSelectedTab() == ScreenTabs.DRILL_HEAD;
+    }
+
+    private boolean isDecorationTab() {
+        return this.menu.getSelectedTab() == ScreenTabs.DECORATION;
     }
 
     @Override

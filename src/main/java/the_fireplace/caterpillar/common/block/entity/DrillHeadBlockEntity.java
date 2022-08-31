@@ -192,9 +192,9 @@ public class DrillHeadBlockEntity extends AbstractCaterpillarBlockEntity impleme
     }
 
     public boolean addItemToInventory(ItemStack stack) {
-        int gatheredSlotId = SLOT_FUEL + 1;
+        int gatheredSlotIdStart = SLOT_FUEL + 1;
 
-        for (int i = gatheredSlotId; i < this.inventory.getSlots(); i++) {
+        for (int i = gatheredSlotIdStart; i < this.inventory.getSlots(); i++) {
             if (this.inventory.getStackInSlot(i).isEmpty()) {
                 this.inventory.setStackInSlot(i, stack);
                 this.requiresUpdate = true;
