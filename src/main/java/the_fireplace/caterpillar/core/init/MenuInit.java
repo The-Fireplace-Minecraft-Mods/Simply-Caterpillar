@@ -5,12 +5,12 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import the_fireplace.caterpillar.Caterpillar;
-import the_fireplace.caterpillar.common.container.*;
+import the_fireplace.caterpillar.common.menu.*;
 
-public class ContainerInit {
+public class MenuInit {
 
     public static final DeferredRegister<MenuType<?>> MENU_TYPES = DeferredRegister.create(ForgeRegistries.MENU_TYPES, Caterpillar.MOD_ID);
 
     // Containers
-    public static final RegistryObject<MenuType<CaterpillarContainer>> CATERPILLAR = MENU_TYPES.register("caterpillar", () -> new MenuType<>(CaterpillarContainer::new));
+    public static final RegistryObject<MenuType<CaterpillarMenu>> CATERPILLAR = MENU_TYPES.register("caterpillar", () -> new MenuType<>(CaterpillarMenu::new));
 }

@@ -25,7 +25,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.Nullable;
 import the_fireplace.caterpillar.client.screen.util.ScreenTabs;
-import the_fireplace.caterpillar.common.container.CaterpillarContainer;
+import the_fireplace.caterpillar.common.menu.CaterpillarMenu;
 
 import java.util.EnumMap;
 import java.util.Map;
@@ -36,18 +36,18 @@ public abstract class AbstractCaterpillarBlock extends HorizontalDirectionalBloc
 
     protected AbstractCaterpillarBlock(Properties properties) {
         super(properties);
-        registerDefaultState(defaultBlockState().setValue(super.FACING, Direction.NORTH));
+        registerDefaultState(defaultBlockState().setValue(FACING, Direction.NORTH));
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
-        builder.add(super.FACING);
+        builder.add(FACING);
     }
 
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-        return AbstractCaterpillarBlock.SHAPES.get(state.getValue(super.FACING));
+        return AbstractCaterpillarBlock.SHAPES.get(state.getValue(FACING));
     }
 
     @Nullable
@@ -55,7 +55,7 @@ public abstract class AbstractCaterpillarBlock extends HorizontalDirectionalBloc
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         Direction direction = context.getHorizontalDirection();
 
-        return defaultBlockState().setValue(super.FACING, direction.getOpposite());
+        return defaultBlockState().setValue(FACING, direction.getOpposite());
     }
 
     @Override
@@ -63,16 +63,16 @@ public abstract class AbstractCaterpillarBlock extends HorizontalDirectionalBloc
         if (level.isClientSide) {
             return InteractionResult.SUCCESS;
         } else {
-            Direction direction = state.getValue(super.FACING);
+            Direction direction = state.getValue(FACING);
             BlockPos basePos = getBasePos(state, pos);
             BlockPos caterpillarPos = CaterpillarBlocksUtil.getCaterpillarPos(level, basePos, direction);
 
             if (caterpillarPos != null) {
-                MenuProvider container = new SimpleMenuProvider(CaterpillarContainer.getServerContainer(caterpillarPos), Component.empty());
+                MenuProvider container = new SimpleMenuProvider(CaterpillarMenu.getServerContainer(caterpillarPos), Component.empty());
                 NetworkHooks.openScreen((ServerPlayer) player, container, pos);
 
                 ScreenTabs selectedTab = ScreenTabs.getScreenTabFromBlock(state.getBlock());
-                CaterpillarContainer.getCurrentContainer().setSelectedTab(selectedTab);
+                CaterpillarMenu.getServerContainer().setSelectedTab(selectedTab);
             } else {
                 player.displayClientMessage(Component.translatable("block.simplycaterpillar.drill_head.not_found"), true);
             }

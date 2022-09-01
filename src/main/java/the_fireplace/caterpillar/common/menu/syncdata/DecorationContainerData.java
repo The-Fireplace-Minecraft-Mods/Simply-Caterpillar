@@ -1,14 +1,13 @@
-package the_fireplace.caterpillar.common.container.syncdata;
+package the_fireplace.caterpillar.common.menu.syncdata;
 
 import net.minecraft.world.inventory.SimpleContainerData;
-import net.minecraft.world.item.ItemStack;
-import the_fireplace.caterpillar.common.block.entity.DrillHeadBlockEntity;
+import the_fireplace.caterpillar.common.block.entity.DecorationBlockEntity;
 
-public class DrillHeadContainerData extends SimpleContainerData {
+public class DecorationContainerData extends SimpleContainerData {
 
-    private final DrillHeadBlockEntity blockEntity;
+    public DecorationBlockEntity blockEntity;
 
-    public DrillHeadContainerData(DrillHeadBlockEntity blockEntity, int amount) {
+    public DecorationContainerData(DecorationBlockEntity blockEntity, int amount) {
         super(amount);
         this.blockEntity = blockEntity;
     }
@@ -16,8 +15,7 @@ public class DrillHeadContainerData extends SimpleContainerData {
     @Override
     public int get(int key) {
         return switch (key) {
-            case 0 -> this.blockEntity.getLitTime();
-            case 1 -> this.blockEntity.getLitDuration();
+            case 0 -> this.blockEntity.getSelectedMap();
             default -> throw new UnsupportedOperationException("There is no value corresponding to key: '" + key + "' in: '" + blockEntity + "'");
         };
     }
@@ -25,8 +23,7 @@ public class DrillHeadContainerData extends SimpleContainerData {
     @Override
     public void set(int key, int value) {
         switch (key) {
-            case 0 -> this.blockEntity.setLitTime(value);
-            case 1 -> this.blockEntity.setLitDuration(value);
+            case 0 -> this.blockEntity.setSelectedMap(value);
             default -> throw new UnsupportedOperationException("There is no value corresponding to key: '" + key + "' in: '" + blockEntity + "'");
         }
     }

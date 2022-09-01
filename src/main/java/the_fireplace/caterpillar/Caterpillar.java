@@ -12,7 +12,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import the_fireplace.caterpillar.config.ConfigHolder;
 import the_fireplace.caterpillar.core.init.BlockInit;
-import the_fireplace.caterpillar.core.init.ContainerInit;
+import the_fireplace.caterpillar.core.init.MenuInit;
 import the_fireplace.caterpillar.core.init.ItemInit;
 import the_fireplace.caterpillar.core.init.BlockEntityInit;
 
@@ -42,7 +42,7 @@ public class Caterpillar
 		BlockInit.BLOCKS.register(bus);
 		BlockEntityInit.BLOCK_ENTITY_TYPES.register(bus);
 		ItemInit.ITEMS.register(bus);
-		ContainerInit.MENU_TYPES.register(bus);
+		MenuInit.MENU_TYPES.register(bus);
 
 		MinecraftForge.EVENT_BUS.register(this);
 	}

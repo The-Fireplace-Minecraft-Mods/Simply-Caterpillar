@@ -11,14 +11,14 @@ import the_fireplace.caterpillar.Caterpillar;
 import the_fireplace.caterpillar.client.screen.*;
 import the_fireplace.caterpillar.config.ConfigHelper;
 import the_fireplace.caterpillar.config.ConfigHolder;
-import the_fireplace.caterpillar.core.init.ContainerInit;
+import the_fireplace.caterpillar.core.init.MenuInit;
 
 @Mod.EventBusSubscriber(modid = Caterpillar.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value =  Dist.CLIENT)
 public class ClientModEvents {
 
     @SubscribeEvent
     public static void clientSetup(FMLClientSetupEvent event) {
-        MenuScreens.register(ContainerInit.CATERPILLAR.get(), CaterpillarScreen::new);
+        MenuScreens.register(MenuInit.CATERPILLAR.get(), CaterpillarScreen::new);
     }
 
     /**
