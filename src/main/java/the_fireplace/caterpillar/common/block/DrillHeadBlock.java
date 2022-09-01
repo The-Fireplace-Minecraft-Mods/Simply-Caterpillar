@@ -99,7 +99,7 @@ public class DrillHeadBlock extends AbstractCaterpillarBlock {
                 level.getBlockState(blockPos.above(2).relative(direction.getClockWise())).canBeReplaced(context) &&
                 level.getBlockState(blockPos.above(2).relative(direction.getCounterClockWise())).canBeReplaced(context)
         ) {
-            return defaultBlockState().setValue(super.FACING, direction.getOpposite()).setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_BOTTOM);
+            return defaultBlockState().setValue(FACING, direction.getOpposite()).setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_BOTTOM);
         }
 
         return null;
@@ -108,7 +108,7 @@ public class DrillHeadBlock extends AbstractCaterpillarBlock {
     @Override
     public void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, BlockPos neighbor, boolean p_60514_) {
         if (level.getBlockState(neighbor).getBlock() instanceof DrillHeadLeverBlock) {
-            Direction direction = level.getBlockState(neighbor).getValue(super.FACING);
+            Direction direction = level.getBlockState(neighbor).getValue(FACING);
 
             if (neighbor.relative(direction.getOpposite()).equals(pos)) {
                 boolean flag = level.hasNeighborSignal(pos);
@@ -144,7 +144,7 @@ public class DrillHeadBlock extends AbstractCaterpillarBlock {
     }
 
     private void destroyStructure(Level level, BlockPos pos, BlockState state, Player player) {
-        Direction direction = state.getValue(super.FACING);
+        Direction direction = state.getValue(FACING);
 
         level.destroyBlock(pos, !player.isCreative());
         level.destroyBlock(pos.relative(direction.getCounterClockWise()), false);
@@ -158,7 +158,7 @@ public class DrillHeadBlock extends AbstractCaterpillarBlock {
     }
 
     private void buildStructure(Level level, BlockPos pos, BlockState state) {
-        Direction direction = state.getValue(super.FACING);
+        Direction direction = state.getValue(FACING);
 
         level.setBlock(pos.relative(direction.getCounterClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_LEFT_BOTTOM), 3);
         level.setBlock(pos.relative(direction.getClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_RIGHT_BOTTOM), 3);
@@ -167,7 +167,7 @@ public class DrillHeadBlock extends AbstractCaterpillarBlock {
         level.setBlock(pos.above(2).relative(direction.getCounterClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_LEFT_TOP), 3);
         level.setBlock(pos.above(2).relative(direction.getClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_RIGHT_TOP), 3);
         level.setBlock(pos.above(), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BASE), 3);
-        level.setBlock(pos.above().relative(direction.getClockWise()), BlockInit.DRILL_HEAD_LEVER.get().defaultBlockState().setValue(super.FACING, direction.getClockWise()).setValue(DrillHeadLeverBlock.FACE, AttachFace.WALL).setValue(DrillHeadBlock.POWERED, Boolean.valueOf(false)), 3);
+        level.setBlock(pos.above().relative(direction.getClockWise()), BlockInit.DRILL_HEAD_LEVER.get().defaultBlockState().setValue(FACING, direction.getClockWise()).setValue(DrillHeadLeverBlock.FACE, AttachFace.WALL).setValue(DrillHeadBlock.POWERED, Boolean.valueOf(false)), 3);
     }
 
     /*
@@ -187,7 +187,7 @@ public class DrillHeadBlock extends AbstractCaterpillarBlock {
     }
 
     protected BlockPos getBasePos(BlockState state, BlockPos pos) {
-        Direction direction = state.getValue(super.FACING);
+        Direction direction = state.getValue(FACING);
         BlockPos basePos;
 
         switch (state.getValue(PART)) {

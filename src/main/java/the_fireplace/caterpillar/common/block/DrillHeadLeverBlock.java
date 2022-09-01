@@ -20,7 +20,7 @@ import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.BlockHitResult;
 import the_fireplace.caterpillar.common.block.entity.DrillHeadBlockEntity;
 
-import static the_fireplace.caterpillar.common.block.entity.DrillHeadBlockEntity.SLOT_FUEL;
+import static net.minecraft.world.inventory.AbstractFurnaceMenu.FUEL_SLOT;
 
 public class DrillHeadLeverBlock extends LeverBlock {
 
@@ -70,7 +70,7 @@ public class DrillHeadLeverBlock extends LeverBlock {
     public BlockState pull(BlockState state, Level level, BlockPos pos, Player player) {
         BlockEntity blockEntity = level.getBlockEntity(pos.relative(getConnectedDirection(state).getOpposite()));
         if (blockEntity instanceof DrillHeadBlockEntity drillHeadBlockEntity) {
-            boolean burnSlotIsEmpty = drillHeadBlockEntity.getItemInSlot(SLOT_FUEL).isEmpty();
+            boolean burnSlotIsEmpty = drillHeadBlockEntity.getItemInSlot(FUEL_SLOT).isEmpty();
             if (drillHeadBlockEntity.isLit() || !burnSlotIsEmpty) {
                 state = state.cycle(POWERED);
                 level.setBlock(pos, state, 3);

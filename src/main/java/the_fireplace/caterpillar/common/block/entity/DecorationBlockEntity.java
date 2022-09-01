@@ -109,7 +109,7 @@ public class DecorationBlockEntity extends BlockEntity {
 
     private void savePlacementMap(CompoundTag tag) {
         ListTag placementList = new ListTag();
-        for (int i = 0; i < this.PLACEMENT_MAX_SLOTS; i++) {
+        for (int i = 0; i < PLACEMENT_MAX_SLOTS; i++) {
             ItemStack[] stacks = this.placementMap.get(i);
             ListTag stackList = new ListTag();
             for (ItemStack stack : stacks) {

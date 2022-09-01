@@ -35,19 +35,26 @@ public class DrillHeadBlockEntity extends AbstractCaterpillarBlockEntity impleme
             "container." + Caterpillar.MOD_ID + ".drill_head.consumption"
     );
 
-    public static final int SLOT_FUEL = 9;
+    private static final int CONSUMPTION_SLOT_START = 0;
+
+    private static final int CONSUMPTION_SLOT_END = 8;
+
+    private static final int FUEl_SLOT = 9;
+
+    private static final int GATHERED_SLOT_START = 10;
+
+    private static final int GATHERED_SLOT_END = 18;
+    public static final int CONTAINER_SIZE = 19;
 
     // 60 ticks equals 3 seconds
     public static final int MOVEMENT_TICK = 60;
-
-    public static final int CONTAINER_SIZE = 19;
 
     private int litTime;
 
     private int litDuration;
 
     public DrillHeadBlockEntity(BlockPos pos, BlockState state) {
-        super(BlockEntityInit.DRILL_HEAD.get(), pos, state, DrillHeadBlockEntity.CONTAINER_SIZE);
+        super(BlockEntityInit.DRILL_HEAD.get(), pos, state, CONTAINER_SIZE);
     }
 
     public void tick(Level level, BlockPos pos, BlockState state, DrillHeadBlockEntity blockEntity) {
@@ -57,7 +64,7 @@ public class DrillHeadBlockEntity extends AbstractCaterpillarBlockEntity impleme
 
         boolean isLit = blockEntity.isLit();
         boolean needsUpdate = false;
-        ItemStack stack = blockEntity.getItemInSlot(DrillHeadBlockEntity.SLOT_FUEL);
+        ItemStack stack = blockEntity.getItemInSlot(DrillHeadBlockEntity.FUEl_SLOT);
         boolean burnSlotIsEmpty = stack.isEmpty();
 
         if (state.getValue(DrillHeadBlock.POWERED) && blockEntity.isLit()) {
@@ -78,7 +85,7 @@ public class DrillHeadBlockEntity extends AbstractCaterpillarBlockEntity impleme
 
         if (state.getValue(DrillHeadBlock.POWERED) && blockEntity.isLit() || !burnSlotIsEmpty) {
             if(!blockEntity.isLit()) {
-                blockEntity.litTime = blockEntity.getBurnDuration(blockEntity.getItemInSlot(DrillHeadBlockEntity.SLOT_FUEL));
+                blockEntity.litTime = blockEntity.getBurnDuration(blockEntity.getItemInSlot(DrillHeadBlockEntity.FUEl_SLOT));
                 blockEntity.litDuration = blockEntity.litTime;
 
                 if (!burnSlotIsEmpty) {
@@ -190,24 +197,20 @@ public class DrillHeadBlockEntity extends AbstractCaterpillarBlockEntity impleme
         level.setBlock(pos.relative(direction.getClockWise()), level.getBlockState(pos.relative(direction.getClockWise())).setValue(DrillHeadBlock.POWERED, Boolean.valueOf(false)), 2);
         level.playSound(null, pos, SoundEvents.LEVER_CLICK, SoundSource.BLOCKS, 0.3F, 0.5F);
     }
-
     public boolean addItemToInventory(ItemStack stack) {
-        int gatheredSlotIdStart = SLOT_FUEL + 1;
-
-        for (int i = gatheredSlotIdStart; i < this.inventory.getSlots(); i++) {
-            if (this.inventory.getStackInSlot(i).isEmpty()) {
-                this.inventory.setStackInSlot(i, stack);
+        for (int i = GATHERED_SLOT_START; i < GATHERED_SLOT_END; i++) {
+            if (this.getItemInSlot(i).isEmpty()) {
+                this.insertItem(i, stack);
                 this.requiresUpdate = true;
                 return true;
-            } else if (this.inventory.getStackInSlot(i).getCount() + stack.getCount() <= this.inventory.getStackInSlot(i).getMaxStackSize()) {
-                this.inventory.insertItem(i, stack, false);
+            } else if (this.getItemInSlot(i).getCount() + stack.getCount() <= this.getItemInSlot(i).getMaxStackSize()) {
+                this.insertItem(i, stack);
                 this.requiresUpdate = true;
                 return true;
             }
         }
         return false;
     }
-
     protected int getBurnDuration(ItemStack stack) {
         if (stack.isEmpty()) {
             return 0;
