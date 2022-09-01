@@ -1,11 +1,11 @@
 modLoader="javafml"
-loaderVersion="[41,)"
+loaderVersion="[43,)"
 license="GNU LGPLv3"
 issueTrackerURL="https://github.com/The-Fireplace/Simply-Caterpillar/issues"
 
 [[mods]] #mandatory
 modId="simplycaterpillar"
-version="1.19-1.0-DEV"
+version="1.19.2-1.0-DEV"
 displayName="Simply Caterpillar"
 #updateJSONURL=""
 displayURL="https://github.com/The-Fireplace/Simply-Caterpillar/"
@@ -17,7 +17,7 @@ description="Adds a caterpillar drill to Minecraft."
 [[dependencies.simplycaterpillar]]
     modId="forge"
     mandatory=true
-    versionRange="[41,)"
+    versionRange="[43,)"
     ordering="NONE"
     side="BOTH"
 
