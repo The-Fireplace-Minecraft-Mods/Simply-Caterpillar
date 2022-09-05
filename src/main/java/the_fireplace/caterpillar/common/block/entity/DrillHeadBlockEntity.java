@@ -132,29 +132,29 @@ public class DrillHeadBlockEntity extends AbstractCaterpillarBlockEntity {
                 nextDrillHeadBlockEntity.setLitDuration(drillHeadBlockEntity.getLitDuration());
                 nextDrillHeadBlockEntity.setPower(drillHeadBlockEntity.isPowered());
                 nextDrillHeadBlockEntity.setChanged();
+
+                this.getLevel().setBlock(nextBasePos.relative(direction.getCounterClockWise()), nextDrillHeadBlockEntity.getBlockState().setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_LEFT), 35);
+                this.getLevel().setBlock(nextBasePos.below(), nextDrillHeadBlockEntity.getBlockState().setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_BOTTOM), 35);
+                this.getLevel().setBlock(nextBasePos.below().relative(direction.getClockWise()), nextDrillHeadBlockEntity.getBlockState().setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_RIGHT_BOTTOM), 35);
+                this.getLevel().setBlock(nextBasePos.below().relative(direction.getCounterClockWise()), nextDrillHeadBlockEntity.getBlockState().setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_LEFT_BOTTOM), 35);
+                this.getLevel().setBlock(nextBasePos.above(), nextDrillHeadBlockEntity.getBlockState().setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_TOP), 35);
+                this.getLevel().setBlock(nextBasePos.above().relative(direction.getClockWise()), nextDrillHeadBlockEntity.getBlockState().setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_RIGHT_TOP), 35);
+                this.getLevel().setBlock(nextBasePos.above().relative(direction.getCounterClockWise()), nextDrillHeadBlockEntity.getBlockState().setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_LEFT_TOP), 35);
+                this.getLevel().setBlock(nextBasePos.relative(direction.getClockWise()), nextDrillHeadBlockEntity.getLevel().getBlockState(basePos.relative(direction.getClockWise())), 35);
+
+                this.getLevel().destroyBlock(basePos, false);
+                this.getLevel().destroyBlock(basePos.relative(direction.getCounterClockWise()), false);
+                this.getLevel().destroyBlock(basePos.relative(direction.getClockWise()), false);
+                this.getLevel().destroyBlock(basePos.above(), false);
+                this.getLevel().destroyBlock(basePos.below(), false);
+                this.getLevel().destroyBlock(basePos.above().relative(direction.getCounterClockWise()), false);
+                this.getLevel().destroyBlock(basePos.above().relative(direction.getClockWise()), false);
+                this.getLevel().destroyBlock(basePos.below().relative(direction.getCounterClockWise()), false);
+                this.getLevel().destroyBlock(basePos.below().relative(direction.getClockWise()), false);
+
+                this.getLevel().playSound(null, basePos, SoundEvents.PISTON_EXTEND, SoundSource.BLOCKS, 1.0F, 1.0F);
             }
         }
-
-        this.getLevel().setBlock(nextBasePos.relative(direction.getCounterClockWise()), this.getBlockState().setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_LEFT), 35);
-        this.getLevel().setBlock(nextBasePos.below(), this.getBlockState().setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_BOTTOM), 35);
-        this.getLevel().setBlock(nextBasePos.below().relative(direction.getClockWise()), this.getBlockState().setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_RIGHT_BOTTOM), 35);
-        this.getLevel().setBlock(nextBasePos.below().relative(direction.getCounterClockWise()), this.getBlockState().setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_LEFT_BOTTOM), 35);
-        this.getLevel().setBlock(nextBasePos.above(), this.getBlockState().setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_TOP), 35);
-        this.getLevel().setBlock(nextBasePos.above().relative(direction.getClockWise()), this.getBlockState().setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_RIGHT_TOP), 35);
-        this.getLevel().setBlock(nextBasePos.above().relative(direction.getCounterClockWise()), this.getBlockState().setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_LEFT_TOP), 35);
-        this.getLevel().setBlock(nextBasePos.relative(direction.getClockWise()), this.getLevel().getBlockState(basePos.relative(direction.getClockWise())), 35);
-
-        this.getLevel().destroyBlock(basePos, false);
-        this.getLevel().destroyBlock(basePos.relative(direction.getCounterClockWise()), false);
-        this.getLevel().destroyBlock(basePos.relative(direction.getClockWise()), false);
-        this.getLevel().destroyBlock(basePos.above(), false);
-        this.getLevel().destroyBlock(basePos.below(), false);
-        this.getLevel().destroyBlock(basePos.above().relative(direction.getCounterClockWise()), false);
-        this.getLevel().destroyBlock(basePos.above().relative(direction.getClockWise()), false);
-        this.getLevel().destroyBlock(basePos.below().relative(direction.getCounterClockWise()), false);
-        this.getLevel().destroyBlock(basePos.below().relative(direction.getClockWise()), false);
-
-        this.getLevel().playSound(null, basePos, SoundEvents.PISTON_EXTEND, SoundSource.BLOCKS, 1.0F, 1.0F);
     }
 
     /*
@@ -220,7 +220,6 @@ public class DrillHeadBlockEntity extends AbstractCaterpillarBlockEntity {
     }
 
     public boolean setPower(boolean power) {
-        System.out.println("ContainerData: " + this);
         if (power == true && isFuelSlotEmpty()) {
             return false;
         }

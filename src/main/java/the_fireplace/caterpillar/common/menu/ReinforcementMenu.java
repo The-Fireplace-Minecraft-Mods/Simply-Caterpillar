@@ -6,6 +6,7 @@ import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
+import the_fireplace.caterpillar.common.block.entity.ReinforcementBlockEntity;
 import the_fireplace.caterpillar.core.init.MenuInit;
 
 public class ReinforcementMenu extends AbstractCaterpillarMenu {
@@ -26,7 +27,7 @@ public class ReinforcementMenu extends AbstractCaterpillarMenu {
         super(MenuInit.REINFORCEMENT.get(), id, playerInventory, extraData, 0);
     }
 
-    public ReinforcementMenu(int id, Inventory playerInventory, BlockEntity blockEntity, ContainerData data) {
+    public ReinforcementMenu(int id, Inventory playerInventory, ReinforcementBlockEntity blockEntity, ContainerData data) {
         super(MenuInit.REINFORCEMENT.get(), id, playerInventory, blockEntity, data);
     }
 

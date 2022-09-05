@@ -8,6 +8,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 import the_fireplace.caterpillar.Caterpillar;
@@ -27,7 +28,7 @@ public class DecorationBlockEntity extends AbstractCaterpillarBlockEntity {
 
     public static final int PLACEMENT_MAX_SLOTS = 10;
 
-    public static final int INVENTORY_SIZE = 100;
+    public static final int INVENTORY_SIZE = 90;
 
     private int selectedMap;
 
@@ -38,9 +39,19 @@ public class DecorationBlockEntity extends AbstractCaterpillarBlockEntity {
     public void move() {
         BlockPos nextPos = this.getBlockPos().relative(this.getBlockState().getValue(FACING).getOpposite());
 
+        CompoundTag oldTag = this.saveWithFullMetadata();
+        oldTag.remove("x");
+        oldTag.remove("y");
+        oldTag.remove("z");
+
         this.getLevel().setBlock(nextPos, this.getBlockState(), 35);
-        this.getLevel().setBlock(nextPos.relative(this.getBlockState().getValue(FACING).getCounterClockWise()), this.getBlockState().setValue(DecorationBlock.PART, DecorationPart.LEFT), 35);
-        this.getLevel().setBlock(nextPos.relative(this.getBlockState().getValue(FACING).getClockWise()), this.getBlockState().setValue(DecorationBlock.PART, DecorationPart.RIGHT), 35);
+
+        BlockEntity nextBlockEntity = this.getLevel().getBlockEntity(nextPos);
+        nextBlockEntity.load(oldTag);
+        nextBlockEntity.setChanged();
+
+        this.getLevel().setBlock(nextPos.relative(nextBlockEntity.getBlockState().getValue(FACING).getCounterClockWise()), this.getBlockState().setValue(DecorationBlock.PART, DecorationPart.LEFT), 35);
+        this.getLevel().setBlock(nextPos.relative(nextBlockEntity.getBlockState().getValue(FACING).getClockWise()), this.getBlockState().setValue(DecorationBlock.PART, DecorationPart.RIGHT), 35);
 
         this.getLevel().destroyBlock(this.getBlockPos(), false);
         this.getLevel().destroyBlock(this.getBlockPos().relative(this.getBlockState().getValue(FACING).getCounterClockWise()), false);
@@ -54,7 +65,7 @@ public class DecorationBlockEntity extends AbstractCaterpillarBlockEntity {
     }
 
     public void setSelectedMap(int selectedMap) {
-        if (selectedMap < 0 || selectedMap >= INVENTORY_SIZE / PLACEMENT_MAX_SLOTS) {
+        if (selectedMap < 0 || selectedMap > (INVENTORY_SIZE / PLACEMENT_MAX_SLOTS) + 1) {
             this.selectedMap = 0;
         } else {
             this.selectedMap = selectedMap;

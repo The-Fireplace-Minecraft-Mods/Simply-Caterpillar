@@ -162,9 +162,9 @@
 			"scale": [0.4, 0.4, 0.4]
 		},
 		"firstperson_righthand": {
-			"rotation": [0, 17, 0],
-			"translation": [-1.25, -5.5, 0],
-			"scale": [0.4, 0.4, 0.4]
+			"rotation": [-180, 12.5, -180],
+			"translation": [-2, 0.25, 1.25],
+			"scale": [0.3, 0.3, 0.3]
 		},
 		"firstperson_lefthand": {
 			"scale": [0.4, 0.4, 0.4]

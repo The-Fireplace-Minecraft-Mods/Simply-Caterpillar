@@ -21,7 +21,7 @@ public class ClientModEvents {
 
     @SubscribeEvent
     public static void clientSetup(FMLClientSetupEvent event) {
-        // MenuScreens.register(MenuInit.DECORATION.get(), DecorationScreen::new);
+        MenuScreens.register(MenuInit.DECORATION.get(), DecorationScreen::new);
         MenuScreens.register(MenuInit.DRILL_HEAD.get(), DrillHeadScreen::new);
         MenuScreens.register(MenuInit.INCINERATOR.get(), IncineratorScreen::new);
         MenuScreens.register(MenuInit.REINFORCEMENT.get(), ReinforcementScreen::new);

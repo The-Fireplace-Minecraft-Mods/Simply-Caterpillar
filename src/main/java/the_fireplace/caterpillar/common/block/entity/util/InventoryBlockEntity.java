@@ -17,6 +17,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -25,10 +26,10 @@ public class InventoryBlockEntity extends BlockEntity {
 
     public final int size;
     protected int timer;
-    protected boolean requiresUpdate;
+    public boolean requiresUpdate;
 
     private final ItemStackHandler inventory;
-    private final LazyOptional<IItemHandler> handler;
+    private final LazyOptional<IItemHandlerModifiable> handler;
 
     public InventoryBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state, int size) {
         super(type, pos, state);
@@ -146,6 +147,12 @@ public class InventoryBlockEntity extends BlockEntity {
             public @NotNull ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
                 InventoryBlockEntity.this.update();
                 return super.insertItem(slot, stack, simulate);
+            }
+
+            @Override
+            public void setStackInSlot(int slot, @NotNull ItemStack stack) {
+                InventoryBlockEntity.this.update();
+                super.setStackInSlot(slot, stack);
             }
         };
     }

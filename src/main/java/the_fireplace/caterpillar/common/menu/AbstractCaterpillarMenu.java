@@ -23,7 +23,7 @@ public abstract class AbstractCaterpillarMenu extends AbstractContainerMenu {
 
     private final Level level;
 
-    private AbstractCaterpillarBlockEntity blockEntity;
+    protected AbstractCaterpillarBlockEntity blockEntity;
 
     public static final int SLOT_SIZE_PLUS_2 = 18;
 
@@ -36,13 +36,13 @@ public abstract class AbstractCaterpillarMenu extends AbstractContainerMenu {
     private final int HOTBAR_SLOT_Y_START = 142;
 
     public AbstractCaterpillarMenu(MenuType<?> menuType, int id, Inventory playerInventory, FriendlyByteBuf extraData, int containerDataSize) {
-        this(menuType, id, playerInventory, playerInventory.player.level.getBlockEntity(extraData.readBlockPos()), new SimpleContainerData(containerDataSize));
+        this(menuType, id, playerInventory, (AbstractCaterpillarBlockEntity) playerInventory.player.level.getBlockEntity(extraData.readBlockPos()), new SimpleContainerData(containerDataSize));
     }
 
-    public AbstractCaterpillarMenu(MenuType<?> menuType, int id, Inventory playerInventory, BlockEntity blockEntity, ContainerData data) {
+    public <T> AbstractCaterpillarMenu(MenuType<?> menuType, int id, Inventory playerInventory, AbstractCaterpillarBlockEntity blockEntity, ContainerData data) {
         super(menuType, id);
         this.level = playerInventory.player.level;
-        this.blockEntity = (AbstractCaterpillarBlockEntity) blockEntity;
+        this.blockEntity = blockEntity;
         BE_INVENTORY_SLOT_COUNT = this.blockEntity.size;
         this.access = ContainerLevelAccess.create(this.level, blockEntity.getBlockPos());
         this.data = data;
@@ -116,7 +116,7 @@ public abstract class AbstractCaterpillarMenu extends AbstractContainerMenu {
     }
 
     protected void addPlayerHotbar(Inventory playerInventory) {
-        this.addPlayerInventory(playerInventory, HOTBAR_SLOT_X_START, HOTBAR_SLOT_Y_START);
+        this.addPlayerHotbar(playerInventory, HOTBAR_SLOT_X_START, HOTBAR_SLOT_Y_START);
     }
 
     protected void addPlayerHotbar(Inventory playerInventory, int hotbarX, int hotbarY) {

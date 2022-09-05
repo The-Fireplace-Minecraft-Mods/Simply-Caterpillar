@@ -1,16 +1,13 @@
 package the_fireplace.caterpillar.client.screen;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
 import the_fireplace.caterpillar.client.screen.util.ScreenTabs;
 import the_fireplace.caterpillar.common.menu.DecorationMenu;
-import the_fireplace.caterpillar.common.menu.AbstractCaterpillarMenu;
 
-public class DecorationScreen extends AbstractCaterpillarScreen<AbstractCaterpillarMenu> {
+public class DecorationScreen extends AbstractCaterpillarScreen<DecorationMenu> {
 
     private float scrollOffs;
 
@@ -21,6 +18,8 @@ public class DecorationScreen extends AbstractCaterpillarScreen<AbstractCaterpil
 
     public DecorationScreen(DecorationMenu menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title, ScreenTabs.DECORATION);
+
+        this.scrollOffs = this.menu.getSelectedMap()  / 9.0F;
     }
 
     @Override
@@ -53,6 +52,8 @@ public class DecorationScreen extends AbstractCaterpillarScreen<AbstractCaterpil
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        super.mouseClicked(mouseX, mouseY, button);
+
         if (button == 0) {
             if (this.insideScrollBar(mouseX, mouseY)) {
                 this.scrolling = true;
@@ -60,7 +61,7 @@ public class DecorationScreen extends AbstractCaterpillarScreen<AbstractCaterpil
             }
         }
 
-        return super.mouseClicked(mouseX, mouseY, button);
+        return true;
     }
 
     private boolean insideScrollBar(double mouseX, double mouseY) {
@@ -77,7 +78,7 @@ public class DecorationScreen extends AbstractCaterpillarScreen<AbstractCaterpil
             int j = i + SCROLLER_HEIGHT;
             this.scrollOffs = ((float)mouseY - (float)i - 7.5F) / ((float)(j - i) - 15.0F);
             this.scrollOffs = Mth.clamp(this.scrollOffs, 0.0F, 1.0F);
-            // this.menu.scrollTo(this.scrollOffs);
+            this.menu.scrollTo(this.scrollOffs);
             return true;
         }
 
@@ -89,7 +90,7 @@ public class DecorationScreen extends AbstractCaterpillarScreen<AbstractCaterpil
         int i = 9;
         float f = (float)(delta / (double)i);
         this.scrollOffs = Mth.clamp(this.scrollOffs - f, 0.0F, 1.0F);
-        // this.menu.decoration.scrollTo(this.scrollOffs);
+        this.menu.scrollTo(this.scrollOffs);
         return true;
     }
 }

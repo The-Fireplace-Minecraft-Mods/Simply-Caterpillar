@@ -20,7 +20,6 @@ public class IncineratorMenu extends AbstractCaterpillarMenu {
 
     public IncineratorMenu(int id, Inventory playerInventory, IncineratorBlockEntity blockEntity, ContainerData data) {
         super(MenuInit.INCINERATOR.get(), id, playerInventory, blockEntity, data);
-        checkContainerSize(playerInventory, blockEntity.size);
     }
 
     @Override

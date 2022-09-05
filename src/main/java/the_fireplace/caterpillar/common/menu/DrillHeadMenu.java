@@ -14,8 +14,6 @@ import the_fireplace.caterpillar.common.menu.slot.CaterpillarFuelSlot;
 import the_fireplace.caterpillar.common.menu.util.CaterpillarMenuUtil;
 import the_fireplace.caterpillar.core.init.MenuInit;
 
-import static the_fireplace.caterpillar.common.menu.util.CaterpillarMenuUtil.isFuel;
-
 public class DrillHeadMenu extends AbstractCaterpillarMenu {
 
     private static final int CONSUMPTION_SLOT_X_START = 8;
@@ -34,7 +32,7 @@ public class DrillHeadMenu extends AbstractCaterpillarMenu {
         super(MenuInit.DRILL_HEAD.get(), id, playerInventory, extraData, 4);
     }
 
-    public DrillHeadMenu(int id, Inventory playerInventory, BlockEntity entity, ContainerData data) {
+    public DrillHeadMenu(int id, Inventory playerInventory, DrillHeadBlockEntity entity, ContainerData data) {
         super(MenuInit.DRILL_HEAD.get(), id, playerInventory, entity, data);
     }
 
