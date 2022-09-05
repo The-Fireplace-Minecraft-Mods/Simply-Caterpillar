@@ -1,4 +1,4 @@
-package the_fireplace.caterpillar.common.block.util;
+package the_fireplace.caterpillar.common.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -6,43 +6,36 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.MenuProvider;
-import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.EntityBlock;
-import net.minecraft.world.level.block.HorizontalDirectionalBlock;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.Nullable;
-import the_fireplace.caterpillar.client.screen.util.ScreenTabs;
-import the_fireplace.caterpillar.common.menu.CaterpillarMenu;
+import the_fireplace.caterpillar.common.block.entity.DrillHeadBlockEntity;
+import the_fireplace.caterpillar.common.block.util.CaterpillarBlocksUtil;
 
 import java.util.EnumMap;
 import java.util.Map;
 
-public abstract class AbstractCaterpillarBlock extends HorizontalDirectionalBlock implements EntityBlock {
+public abstract class AbstractCaterpillarBlock extends BaseEntityBlock {
+    public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 
     protected static final Map<Direction, VoxelShape> SHAPES = new EnumMap<>(Direction.class);
 
     protected AbstractCaterpillarBlock(Properties properties) {
         super(properties);
         registerDefaultState(defaultBlockState().setValue(FACING, Direction.NORTH));
-    }
-
-    @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        super.createBlockStateDefinition(builder);
-        builder.add(FACING);
     }
 
     @Override
@@ -59,20 +52,40 @@ public abstract class AbstractCaterpillarBlock extends HorizontalDirectionalBloc
     }
 
     @Override
+    public BlockState rotate(BlockState state, Rotation rotation) {
+        return state.setValue(FACING, rotation.rotate(state.getValue(FACING)));
+    }
+
+    @Override
+    public BlockState mirror(BlockState state, Mirror mirror) {
+        return state.rotate(mirror.getRotation(state.getValue(FACING)));
+    }
+
+    @Override
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+        super.createBlockStateDefinition(builder);
+        builder.add(FACING);
+    }
+
+    @Override
+    public RenderShape getRenderShape(BlockState state) {
+        return RenderShape.MODEL;
+    }
+
+    @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         if (level.isClientSide) {
             return InteractionResult.SUCCESS;
         } else {
             Direction direction = state.getValue(FACING);
             BlockPos basePos = getBasePos(state, pos);
-            BlockPos caterpillarPos = CaterpillarBlocksUtil.getCaterpillarPos(level, basePos, direction);
+            BlockPos drillHeadPos = CaterpillarBlocksUtil.getDrillHeadPos(level, basePos, direction);
 
-            if (caterpillarPos != null) {
-                MenuProvider container = new SimpleMenuProvider(CaterpillarMenu.getServerContainer(caterpillarPos), Component.empty());
-                NetworkHooks.openScreen((ServerPlayer) player, container, pos);
-
-                ScreenTabs selectedTab = ScreenTabs.getScreenTabFromBlock(state.getBlock());
-                CaterpillarMenu.getServerContainer().setSelectedTab(selectedTab);
+            if (drillHeadPos != null) {
+                BlockEntity blockEntity = level.getBlockEntity(drillHeadPos);
+                if (blockEntity instanceof DrillHeadBlockEntity drillHeadBlockEntity) {
+                    NetworkHooks.openScreen((ServerPlayer) player, drillHeadBlockEntity, drillHeadPos);
+                }
             } else {
                 player.displayClientMessage(Component.translatable("block.simplycaterpillar.drill_head.not_found"), true);
             }
@@ -81,7 +94,9 @@ public abstract class AbstractCaterpillarBlock extends HorizontalDirectionalBloc
         }
     }
 
-    protected abstract BlockPos getBasePos(BlockState state, BlockPos pos);
+    protected BlockPos getBasePos(BlockState state, BlockPos pos) {
+        return pos;
+    }
 
     protected void runCalculation(Map<Direction, VoxelShape> shapes, VoxelShape shape) {
         for (Direction direction : Direction.values())

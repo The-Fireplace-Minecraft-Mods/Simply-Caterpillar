@@ -7,6 +7,8 @@ import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.world.Containers;
+import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -14,6 +16,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -25,13 +28,14 @@ public class InventoryBlockEntity extends BlockEntity {
     protected boolean requiresUpdate;
 
     private final ItemStackHandler inventory;
-    protected LazyOptional<ItemStackHandler> handler;
+    private final LazyOptional<IItemHandler> handler;
 
     public InventoryBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state, int size) {
         super(type, pos, state);
 
         this.size = size;
         this.timer = 0;
+
         this.inventory = createInventory();
         this.handler = LazyOptional.of(() -> this.inventory);
     }
@@ -72,14 +76,6 @@ public class InventoryBlockEntity extends BlockEntity {
     @Override
     public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
         return cap == ForgeCapabilities.ITEM_HANDLER ? this.handler.cast() : super.getCapability(cap, side);
-    }
-
-    public LazyOptional<ItemStackHandler> getHandler() {
-        return this.handler;
-    }
-
-    public ItemStackHandler getInventory() {
-        return this.inventory;
     }
 
     @Nullable
@@ -123,8 +119,23 @@ public class InventoryBlockEntity extends BlockEntity {
         this.handler.invalidate();
     }
 
-    private ItemStackHandler createInventory() {
+    public void drops() {
+        SimpleContainer inventory = new SimpleContainer(this.inventory.getSlots());
+
+        for (int i = 0; i < this.inventory.getSlots(); i++) {
+            inventory.setItem(i, this.inventory.getStackInSlot(i));
+        }
+
+        Containers.dropContents(this.level, this.worldPosition, inventory);
+    }
+
+    protected ItemStackHandler createInventory() {
         return new ItemStackHandler(this.size) {
+            @Override
+            protected void onContentsChanged(int slot) {
+                setChanged();
+            }
+
             @Override
             public @NotNull ItemStack extractItem(int slot, int amount, boolean simulate) {
                 InventoryBlockEntity.this.update();

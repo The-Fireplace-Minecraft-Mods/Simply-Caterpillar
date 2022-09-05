@@ -5,7 +5,7 @@ import the_fireplace.caterpillar.common.block.entity.DrillHeadBlockEntity;
 
 public class DrillHeadContainerData extends SimpleContainerData {
 
-    private final DrillHeadBlockEntity blockEntity;
+    private DrillHeadBlockEntity blockEntity;
 
     public DrillHeadContainerData(DrillHeadBlockEntity blockEntity, int amount) {
         super(amount);
@@ -13,20 +13,23 @@ public class DrillHeadContainerData extends SimpleContainerData {
     }
 
     @Override
-    public int get(int key) {
-        return switch (key) {
+    public int get(int index) {
+        return switch (index) {
             case 0 -> this.blockEntity.getLitTime();
             case 1 -> this.blockEntity.getLitDuration();
-            default -> throw new UnsupportedOperationException("There is no value corresponding to key: '" + key + "' in: '" + blockEntity + "'");
+            case 2 -> this.blockEntity.isPowered() == true ? 1 : 0;
+            case 3 -> this.blockEntity.isFuelSlotEmpty() == true ? 1 : 0;
+            default -> throw new UnsupportedOperationException("There is no value corresponding to key: '" + index + "' in: '" + blockEntity + "'");
         };
     }
 
     @Override
-    public void set(int key, int value) {
-        switch (key) {
+    public void set(int index, int value) {
+        switch (index) {
             case 0 -> this.blockEntity.setLitTime(value);
             case 1 -> this.blockEntity.setLitDuration(value);
-            default -> throw new UnsupportedOperationException("There is no value corresponding to key: '" + key + "' in: '" + blockEntity + "'");
+            case 2 -> this.blockEntity.setPower(value == 1);
+            default -> throw new UnsupportedOperationException("There is no value corresponding to key: '" + index + "' in: '" + blockEntity + "'");
         }
     }
 }

@@ -5,9 +5,7 @@
 		"side": "simplycaterpillar:block/drill_head/rock_side",
 		"change": "simplycaterpillar:block/drill_head/blades/none_blades",
 		"front": "simplycaterpillar:block/drill_head/blades/blades",
-		"rod": "simplycaterpillar:block/pieces/wood_piece",
-		"lever_base": "block/cobblestone",
-		"lever": "block/lever"
+		"rod": "simplycaterpillar:block/pieces/wood_piece"
 	},
 	"elements": [
 		{
@@ -47,19 +45,6 @@
 			}
 		},
 		{
-			"from": [16, 4, 4.45],
-			"to": [19, 12, 10.45],
-			"rotation": {"angle": 0, "axis": "x", "origin": [11, 10, 0]},
-			"faces": {
-				"north": {"uv": [4, 0, 12, 3], "rotation": 90, "texture": "#lever_base"},
-				"east": {"uv": [5, 4, 11, 12], "rotation": 180, "texture": "#lever_base", "cullface": "down"},
-				"south": {"uv": [4, 0, 12, 3], "rotation": 270, "texture": "#lever_base"},
-				"west": {"uv": [5, 4, 11, 12], "texture": "#lever_base"},
-				"up": {"uv": [5, 0, 11, 3], "rotation": 270, "texture": "#lever_base"},
-				"down": {"uv": [5, 0, 11, 3], "rotation": 270, "texture": "#lever_base"}
-			}
-		},
-		{
 			"from": [6, 6, -15],
 			"to": [10, 10, 0],
 			"faces": {
@@ -69,18 +54,6 @@
 				"west": {"uv": [0, 0, 15, 4], "texture": "#rod"},
 				"up": {"uv": [0, 0, 15, 4], "rotation": 90, "texture": "#rod"},
 				"down": {"uv": [0, 0, 15, 4], "rotation": 90, "texture": "#rod"}
-			}
-		},
-		{
-			"from": [19, 7, 6.45],
-			"to": [21, 17, 8.45],
-			"rotation": {"angle": -45, "axis": "z", "origin": [19, 11, 8]},
-			"faces": {
-				"north": {"uv": [7, 6, 9, 16], "texture": "#lever"},
-				"east": {"uv": [7, 6, 9, 16], "texture": "#lever"},
-				"south": {"uv": [7, 6, 9, 16], "texture": "#lever"},
-				"west": {"uv": [7, 6, 9, 16], "texture": "#lever"},
-				"up": {"uv": [7, 6, 9, 8], "rotation": 270, "texture": "#lever"}
 			}
 		},
 		{
@@ -265,7 +238,7 @@
 			"name": "VoxelShapes",
 			"origin": [0, 0, 0],
 			"color": 0,
-			"children": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]
+			"children": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21]
 		}
 	]
 }

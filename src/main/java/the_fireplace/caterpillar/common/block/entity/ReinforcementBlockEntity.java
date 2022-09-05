@@ -4,11 +4,16 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.Nullable;
 import the_fireplace.caterpillar.Caterpillar;
 import the_fireplace.caterpillar.common.block.ReinforcementBlock;
-import the_fireplace.caterpillar.common.block.entity.util.AbstractCaterpillarBlockEntity;
 import the_fireplace.caterpillar.common.block.util.ReinforcementPart;
+import the_fireplace.caterpillar.common.menu.ReinforcementMenu;
 import the_fireplace.caterpillar.core.init.BlockEntityInit;
 
 public class ReinforcementBlockEntity extends AbstractCaterpillarBlockEntity {
@@ -39,5 +44,16 @@ public class ReinforcementBlockEntity extends AbstractCaterpillarBlockEntity {
         this.getLevel().destroyBlock(this.getBlockPos().below(), false);
 
         this.getLevel().playSound(null, this.getBlockPos(), SoundEvents.PISTON_EXTEND, SoundSource.BLOCKS, 1.0F, 1.0F);
+    }
+
+    @Override
+    public Component getDisplayName() {
+        return TITLE;
+    }
+
+    @Nullable
+    @Override
+    public AbstractContainerMenu createMenu(int id, Inventory playerInventory, Player player) {
+        return new ReinforcementMenu(id, playerInventory, this, new SimpleContainerData(0));
     }
 }

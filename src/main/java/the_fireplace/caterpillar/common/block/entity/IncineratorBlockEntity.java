@@ -5,11 +5,16 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.Nullable;
 import the_fireplace.caterpillar.Caterpillar;
 import the_fireplace.caterpillar.common.block.IncineratorBlock;
-import the_fireplace.caterpillar.common.block.entity.util.AbstractCaterpillarBlockEntity;
+import the_fireplace.caterpillar.common.menu.IncineratorMenu;
 import the_fireplace.caterpillar.core.init.BlockEntityInit;
 
 public class IncineratorBlockEntity extends AbstractCaterpillarBlockEntity {
@@ -18,10 +23,10 @@ public class IncineratorBlockEntity extends AbstractCaterpillarBlockEntity {
             "container." + Caterpillar.MOD_ID + ".incinerator"
     );
 
-    public static final int CONTAINER_SIZE = 9;
+    public static final int INVENTORY_SIZE = 9;
 
     public IncineratorBlockEntity(BlockPos pos, BlockState state) {
-        super(BlockEntityInit.INCINERATOR.get(), pos, state, IncineratorBlockEntity.CONTAINER_SIZE);
+        super(BlockEntityInit.INCINERATOR.get(), pos, state, INVENTORY_SIZE);
     }
 
     public void move() {
@@ -48,5 +53,16 @@ public class IncineratorBlockEntity extends AbstractCaterpillarBlockEntity {
     // TODO: Implement incineration
     private void incinerate() {
 
+    }
+
+    @Override
+    public Component getDisplayName() {
+        return TITLE;
+    }
+
+    @Nullable
+    @Override
+    public AbstractContainerMenu createMenu(int id, Inventory playerInventory, Player player) {
+        return new IncineratorMenu(id, playerInventory, this, new SimpleContainerData(0));
     }
 }

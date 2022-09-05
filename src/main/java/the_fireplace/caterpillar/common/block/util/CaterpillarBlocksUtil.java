@@ -5,14 +5,16 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraft.world.phys.shapes.Shapes;
-import net.minecraft.world.phys.shapes.VoxelShape;
+import org.jetbrains.annotations.Nullable;
 import the_fireplace.caterpillar.common.block.DrillHeadBlock;
-import the_fireplace.caterpillar.common.block.entity.*;
+import the_fireplace.caterpillar.common.block.entity.AbstractCaterpillarBlockEntity;
 import the_fireplace.caterpillar.core.init.BlockInit;
+
+import java.util.List;
 
 import static the_fireplace.caterpillar.common.block.DrillHeadBlock.PART;
 
@@ -26,28 +28,9 @@ public class CaterpillarBlocksUtil {
         if (isCaterpillarBlock(nextBlock)) {
             BlockEntity nextBlockEntity = level.getBlockEntity(nextBlockPos);
 
-            if (nextBlockEntity instanceof DrillBaseBlockEntity drillBaseBlockEntity) {
-                drillBaseBlockEntity.move();
-            }
-
-            if (nextBlockEntity instanceof CollectorBlockEntity collectorBlockEntity) {
-                collectorBlockEntity.move();
-            }
-
-            if (nextBlockEntity instanceof IncineratorBlockEntity incineratorBlockEntity) {
-                incineratorBlockEntity.move();
-            }
-
-            if (nextBlockEntity instanceof StorageBlockEntity storageBlockEntity) {
-                storageBlockEntity.move();
-            }
-
-            if (nextBlockEntity instanceof ReinforcementBlockEntity reinforcementBlockEntity) {
-                reinforcementBlockEntity.move();
-            }
-
-            if (nextBlockEntity instanceof DecorationBlockEntity decorationBlockEntity) {
-                decorationBlockEntity.move();
+            if (nextBlockEntity instanceof AbstractCaterpillarBlockEntity) {
+                AbstractCaterpillarBlockEntity caterpillarBlockEntity = (AbstractCaterpillarBlockEntity) nextBlockEntity;
+                caterpillarBlockEntity.move();
             }
 
             moveNextBlock(level, nextBlockPos, direction);
@@ -66,7 +49,7 @@ public class CaterpillarBlocksUtil {
                 (block == BlockInit.DRILL_BASE.get());
     }
 
-    public static BlockPos getCaterpillarPos(Level level, BlockPos pos, Direction direction) {
+    public static BlockPos getDrillHeadPos(Level level, BlockPos pos, Direction direction) {
         BlockState state = level.getBlockState(pos);
 
         if (!CaterpillarBlocksUtil.isCaterpillarBlock(state.getBlock())) {
@@ -77,7 +60,7 @@ public class CaterpillarBlocksUtil {
             return pos;
         }
 
-        return getCaterpillarPos(level, pos.relative(direction.getOpposite()), direction);
+        return getDrillHeadPos(level, pos.relative(direction.getOpposite()), direction);
     }
 
     public static boolean canBreakBlock(Block block) {
@@ -88,17 +71,31 @@ public class CaterpillarBlocksUtil {
                 !block.equals(Fluids.FLOWING_LAVA);
     }
 
-    public static VoxelShape calculateShapes(Direction to, VoxelShape shape) {
-        final VoxelShape[] buffer = { shape, Shapes.empty() };
+     public static List<AbstractCaterpillarBlockEntity> getConnectedCaterpillarBlockEntities(Level level, BlockPos pos, @Nullable List<AbstractCaterpillarBlockEntity> caterpillarBlockEntities) {
+         System.out.println("stage 2");
 
-        final int times = (to.get2DDataValue() - Direction.NORTH.get2DDataValue() + 4) % 4;
-        for (int i = 0; i < times; i++) {
-            buffer[0].forAllBoxes((minX, minY, minZ, maxX, maxY,
-                                   maxZ) -> buffer[1] = Shapes.or(buffer[1], Shapes.create(1 - maxZ, minY, minX, 1 - minZ, maxY, maxX)));
-            buffer[0] = buffer[1];
-            buffer[1] = Shapes.empty();
+         List<AbstractCaterpillarBlockEntity> listCaterpillarBlockEntities = caterpillarBlockEntities;
+
+        BlockState blockState = level.getBlockState(pos);
+
+        if (!isCaterpillarBlock(blockState.getBlock())) {
+            System.out.println("finish");
+            return caterpillarBlockEntities;
+        } else {
+            System.out.println("continue");
+
+            BlockEntity blockEntity = level.getBlockEntity(pos);
+
+            if (blockEntity instanceof AbstractCaterpillarBlockEntity caterpillarBlockEntity) {
+                System.out.println("stage 3");
+                caterpillarBlockEntities.add(caterpillarBlockEntity);
+            }
+
+            Direction direction = blockEntity.getBlockState().getValue(HorizontalDirectionalBlock.FACING);
+
+            listCaterpillarBlockEntities = getConnectedCaterpillarBlockEntities(level, pos.relative(direction), caterpillarBlockEntities);
         }
 
-        return buffer[0];
-    }
+         return listCaterpillarBlockEntities;
+     }
 }

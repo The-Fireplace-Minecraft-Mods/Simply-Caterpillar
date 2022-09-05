@@ -21,7 +21,6 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 import the_fireplace.caterpillar.common.block.entity.CollectorBlockEntity;
-import the_fireplace.caterpillar.common.block.util.AbstractCaterpillarBlock;
 
 import java.util.EnumMap;
 import java.util.Map;

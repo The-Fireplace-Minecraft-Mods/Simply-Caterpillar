@@ -30,6 +30,11 @@
         "facing=west,part=blade_left_bottom":  { "model": "simplycaterpillar:block/drill_head/drill_head_blade_left_bottom", "y": 270 },
         "facing=east,part=blade_left_bottom":  { "model": "simplycaterpillar:block/drill_head/drill_head_blade_left_bottom", "y": 90 },
 
+        "facing=north,part=blade_right": { "model": "simplycaterpillar:block/drill_head/drill_head_blade_right" },
+        "facing=south,part=blade_right": { "model": "simplycaterpillar:block/drill_head/drill_head_blade_right", "y": 180 },
+        "facing=west,part=blade_right":  { "model": "simplycaterpillar:block/drill_head/drill_head_blade_right", "y": 270 },
+        "facing=east,part=blade_right":  { "model": "simplycaterpillar:block/drill_head/drill_head_blade_right", "y": 90 },
+
         "facing=north,part=blade_right_top": { "model": "simplycaterpillar:block/drill_head/drill_head_blade_right_top" },
         "facing=south,part=blade_right_top": { "model": "simplycaterpillar:block/drill_head/drill_head_blade_right_top", "y": 180 },
         "facing=west,part=blade_right_top":  { "model": "simplycaterpillar:block/drill_head/drill_head_blade_right_top", "y": 270 },

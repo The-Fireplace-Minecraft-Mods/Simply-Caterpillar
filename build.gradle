@@ -13,7 +13,7 @@ java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 println "Java: ${System.getProperty 'java.version'}, JVM: ${System.getProperty 'java.vm.version'} (${System.getProperty 'java.vendor'}), Arch: ${System.getProperty 'os.arch'}"
 minecraft {
-    mappings channel: modParchmentMappingsChannel, version: modParchmentMappingsVersion
+    mappings channel: modMappingsChannel, version: modMappingsVersion
 
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 
@@ -37,7 +37,7 @@ minecraft {
 
             property 'forge.logging.console.level', 'debug'
 
-            property 'forge.enabledGameTestNamespaces', 'examplemod'
+            property 'forge.enabledGameTestNamespaces', archivesBaseName
 
             mods {
                 simplycaterpillar {
@@ -49,7 +49,7 @@ minecraft {
         gameTestServer {
             workingDirectory project.file('run')
 
-            property 'forge.enabledGameTestNamespaces', 'examplemod'
+            property 'forge.enabledGameTestNamespaces', archivesBaseName
 
             mods {
                 simplycaterpillar {
@@ -89,7 +89,8 @@ jar {
                 "Specification-Vendor": modGroup,
                 "Specification-Version"   : "1",
                 "Implementation-Title"    : project.name,
-                "Implementation-Version"  : modMinecraftVersion + "-" + modVersion,
+                "Implementation-Version"  : project.jar.archiveVersion,
+                // "Implementation-Version"  : modMinecraftVersion + "-" + modVersion,
                 "Implementation-Vendor"   : modGroup,
                 "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
                 "Signing-Fingerprint"     : project.hasProperty('signSHA1') ? project.findProperty('signSHA1') : "unsigned"

@@ -9,7 +9,6 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 import the_fireplace.caterpillar.common.block.entity.DrillBaseBlockEntity;
-import the_fireplace.caterpillar.common.block.util.AbstractCaterpillarBlock;
 
 import java.util.Optional;
 import java.util.stream.Stream;

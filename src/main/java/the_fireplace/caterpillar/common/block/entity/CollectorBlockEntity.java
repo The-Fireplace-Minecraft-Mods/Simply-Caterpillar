@@ -35,7 +35,7 @@ public class CollectorBlockEntity extends BlockEntity {
     }
 
     public void suckInItems(BlockPos nextPos) {
-        BlockPos drillHeadPos = CaterpillarBlocksUtil.getCaterpillarPos(this.getLevel(), nextPos, this.getBlockState().getValue(CollectorBlock.FACING));
+        BlockPos drillHeadPos = CaterpillarBlocksUtil.getDrillHeadPos(this.getLevel(), nextPos, this.getBlockState().getValue(CollectorBlock.FACING));
         DrillHeadBlockEntity drillHeadBlockEntity = (DrillHeadBlockEntity) this.getLevel().getBlockEntity(drillHeadPos);
 
         for(ItemEntity itemEntity : getItemsAround()) {

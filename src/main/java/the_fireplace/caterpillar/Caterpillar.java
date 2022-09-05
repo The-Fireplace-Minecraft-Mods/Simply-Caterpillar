@@ -26,7 +26,7 @@ public class Caterpillar
 	public static final CreativeModeTab CATERPILLAR_CREATIVE_MODE_TAB = new CreativeModeTab(Caterpillar.MOD_ID) {
 		@Override
 		public ItemStack makeIcon() {
-			return ItemInit.ITEMS.getEntries().stream().findFirst().get().get().getDefaultInstance();
+			return BlockInit.DRILL_HEAD.get().asItem().getDefaultInstance();
 		}
 	};
 

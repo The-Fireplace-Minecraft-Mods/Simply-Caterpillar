@@ -2,48 +2,37 @@ package the_fireplace.caterpillar.client.screen.util;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.block.Block;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import the_fireplace.caterpillar.Caterpillar;
-import the_fireplace.caterpillar.common.block.entity.DecorationBlockEntity;
-import the_fireplace.caterpillar.common.block.entity.DrillHeadBlockEntity;
-import the_fireplace.caterpillar.common.block.entity.IncineratorBlockEntity;
-import the_fireplace.caterpillar.common.block.entity.ReinforcementBlockEntity;
+import the_fireplace.caterpillar.common.block.entity.*;
 import the_fireplace.caterpillar.core.init.BlockInit;
+import the_fireplace.caterpillar.core.init.ItemInit;
 
 public enum ScreenTabs {
-    DRILL_HEAD(0, DrillHeadBlockEntity.TITLE, false, new ResourceLocation(Caterpillar.MOD_ID, "textures/gui/caterpillar.png")),
-    DECORATION(1, DecorationBlockEntity.TITLE, true, new ResourceLocation(Caterpillar.MOD_ID, "textures/gui/decoration.png")),
-    REINFORCEMENT(2, ReinforcementBlockEntity.TITLE, true, new ResourceLocation(Caterpillar.MOD_ID, "textures/gui/reinforcement.png")),
-    INCINERATOR(3, IncineratorBlockEntity.TITLE, true, new ResourceLocation(Caterpillar.MOD_ID, "textures/gui/incinerator.png"));
+    DRILL_HEAD(0, DrillHeadBlockEntity.TITLE, new ResourceLocation(Caterpillar.MOD_ID, "textures/gui/caterpillar.png"), 176, 166, BlockInit.DRILL_HEAD.get().asItem().getDefaultInstance()),
+    DECORATION(1, DecorationBlockEntity.TITLE, new ResourceLocation(Caterpillar.MOD_ID, "textures/gui/decoration.png"), 176, 166, BlockInit.DECORATION.get().asItem().getDefaultInstance()),
+    REINFORCEMENT(2, ReinforcementBlockEntity.TITLE, new ResourceLocation(Caterpillar.MOD_ID, "textures/gui/reinforcement.png"), 176, 189, BlockInit.REINFORCEMENT.get().asItem().getDefaultInstance()),
+    INCINERATOR(3, IncineratorBlockEntity.TITLE, new ResourceLocation(Caterpillar.MOD_ID, "textures/gui/incinerator.png"), 176, 166, BlockInit.INCINERATOR.get().asItem().getDefaultInstance());
 
-    public final int value;
+    public final int INDEX;
 
-    public final Component name;
+    public final Component TITLE;
 
-    public final boolean isCrafting;
+    public final ResourceLocation TEXTURE;
 
-    public final ResourceLocation resourceLocation;
+    public final int IMAGE_WIDTH;
 
-    ScreenTabs(int value, Component name, boolean isCrafting, ResourceLocation resourceLocation) {
-        this.value = value;
-        this.name = name;
-        this.isCrafting = isCrafting;
-        this.resourceLocation = resourceLocation;
-    }
+    public final int IMAGE_HEIGHT;
 
-    public static ScreenTabs getScreenTabFromBlock(Block block) {
-        if (block == BlockInit.DECORATION.get()) {
-            return DECORATION;
-        }
+    public final ItemStack ITEM;
 
-        if (block == BlockInit.REINFORCEMENT.get()) {
-            return REINFORCEMENT;
-        }
-
-        if (block == BlockInit.INCINERATOR.get()) {
-            return INCINERATOR;
-        }
-
-        return DRILL_HEAD;
+    ScreenTabs(int index, Component title, ResourceLocation texture, int imageWidth, int imageHeight, ItemStack item) {
+        this.INDEX = index;
+        this.TITLE = title;
+        this.TEXTURE = texture;
+        this.IMAGE_WIDTH = imageWidth;
+        this.IMAGE_HEIGHT = imageHeight;
+        this.ITEM = item;
     }
 }

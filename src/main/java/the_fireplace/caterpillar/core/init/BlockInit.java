@@ -27,15 +27,10 @@ public class BlockInit {
 
     public static final RegistryObject<DrillHeadBlock> DRILL_HEAD = register(
             "drill_head",
-            () -> new DrillHeadBlock(BlockBehaviour.Properties.of(Material.STONE).strength(1.5F, 6.0F).sound(SoundType.STONE).requiresCorrectToolForDrops()),
+            () -> new DrillHeadBlock(BlockBehaviour.Properties.of(Material.STONE).noOcclusion().strength(1.5F, 6.0F).sound(SoundType.STONE).requiresCorrectToolForDrops()),
             new Item.Properties().tab(Caterpillar.CATERPILLAR_CREATIVE_MODE_TAB)
     );
 
-    public static final RegistryObject<DrillHeadLeverBlock> DRILL_HEAD_LEVER = register(
-            "drill_head_lever",
-            () -> new DrillHeadLeverBlock(BlockBehaviour.Properties.of(Material.STONE).strength(1.5F, 6.0F).sound(SoundType.STONE).requiresCorrectToolForDrops()),
-            new Item.Properties()
-    );
     public static final RegistryObject<ReinforcementBlock> REINFORCEMENT = register(
             "reinforcement",
             () -> new ReinforcementBlock(BlockBehaviour.Properties.of(Material.STONE).strength(1.5F, 6.0F).sound(SoundType.STONE).requiresCorrectToolForDrops()),

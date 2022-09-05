@@ -6,32 +6,39 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.ForgeHooks;
+import net.minecraftforge.items.ItemStackHandler;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import the_fireplace.caterpillar.Caterpillar;
 import the_fireplace.caterpillar.common.block.DrillHeadBlock;
-import the_fireplace.caterpillar.common.block.entity.util.AbstractCaterpillarBlockEntity;
 import the_fireplace.caterpillar.common.block.util.CaterpillarBlocksUtil;
+import the_fireplace.caterpillar.common.menu.DrillHeadMenu;
+import the_fireplace.caterpillar.common.menu.syncdata.DrillHeadContainerData;
+import the_fireplace.caterpillar.common.menu.util.CaterpillarMenuUtil;
 import the_fireplace.caterpillar.core.init.BlockEntityInit;
 import the_fireplace.caterpillar.common.block.util.DrillHeadPart;
 
-public class DrillHeadBlockEntity extends AbstractCaterpillarBlockEntity implements BlockEntityTicker<DrillHeadBlockEntity> {
+public class DrillHeadBlockEntity extends AbstractCaterpillarBlockEntity {
 
     public static final Component TITLE = Component.translatable(
             "container." + Caterpillar.MOD_ID + ".drill_head"
     );
 
-    public static final Component GATHERED = Component.translatable(
+    public static final Component GATHERED_TITLE = Component.translatable(
             "container." + Caterpillar.MOD_ID + ".drill_head.gathered"
     );
 
-    public static final Component CONSUMPTION = Component.translatable(
+    public static final Component CONSUMPTION_TITLE = Component.translatable(
             "container." + Caterpillar.MOD_ID + ".drill_head.consumption"
     );
 
@@ -39,12 +46,12 @@ public class DrillHeadBlockEntity extends AbstractCaterpillarBlockEntity impleme
 
     private static final int CONSUMPTION_SLOT_END = 8;
 
-    private static final int FUEl_SLOT = 9;
+    public static final int FUEl_SLOT = 9;
 
     private static final int GATHERED_SLOT_START = 10;
 
     private static final int GATHERED_SLOT_END = 18;
-    public static final int CONTAINER_SIZE = 19;
+    public static final int INVENTORY_SIZE = 19;
 
     // 60 ticks equals 3 seconds
     public static final int MOVEMENT_TICK = 60;
@@ -53,29 +60,33 @@ public class DrillHeadBlockEntity extends AbstractCaterpillarBlockEntity impleme
 
     private int litDuration;
 
+    private boolean powered;
+
     public DrillHeadBlockEntity(BlockPos pos, BlockState state) {
-        super(BlockEntityInit.DRILL_HEAD.get(), pos, state, CONTAINER_SIZE);
+        super(BlockEntityInit.DRILL_HEAD.get(), pos, state, INVENTORY_SIZE);
     }
 
-    public void tick(Level level, BlockPos pos, BlockState state, DrillHeadBlockEntity blockEntity) {
+    public static void tick(Level level, BlockPos pos, BlockState state, DrillHeadBlockEntity blockEntity) {
+        if (level.isClientSide()) {
+            return;
+        }
+
         if (!state.getValue(DrillHeadBlock.PART).equals(DrillHeadPart.BASE)) {
             return;
         }
 
-        boolean isLit = blockEntity.isLit();
-        boolean needsUpdate = false;
         ItemStack stack = blockEntity.getItemInSlot(DrillHeadBlockEntity.FUEl_SLOT);
         boolean burnSlotIsEmpty = stack.isEmpty();
 
-        if (state.getValue(DrillHeadBlock.POWERED) && blockEntity.isLit()) {
+        if (blockEntity.isPowered() && blockEntity.isLit()) {
             --blockEntity.litTime;
-            super.tick();
+            blockEntity.tick();
 
-            if (super.timer != 0 && super.timer % MOVEMENT_TICK == 0) {
-                if (state.getValue(DrillHeadBlock.POWERED)) {
-                    this.drill();
-                    if (state.getValue(DrillHeadBlock.POWERED)) {
-                        this.move();
+            if (blockEntity.timer != 0 && blockEntity.timer % MOVEMENT_TICK == 0) {
+                if (blockEntity.isPowered()) {
+                    blockEntity.drill();
+                    if (blockEntity.isPowered()) {
+                        blockEntity.move();
                         Direction direction = state.getValue(DrillHeadBlock.FACING);
                         CaterpillarBlocksUtil.moveNextBlock(level, pos, direction);
                     }
@@ -83,8 +94,8 @@ public class DrillHeadBlockEntity extends AbstractCaterpillarBlockEntity impleme
             }
         }
 
-        if (state.getValue(DrillHeadBlock.POWERED) && blockEntity.isLit() || !burnSlotIsEmpty) {
-            if(!blockEntity.isLit()) {
+        if (blockEntity.isPowered() && blockEntity.isLit() || !burnSlotIsEmpty) {
+            if(blockEntity.isPowered() && !blockEntity.isLit()) {
                 blockEntity.litTime = blockEntity.getBurnDuration(blockEntity.getItemInSlot(DrillHeadBlockEntity.FUEl_SLOT));
                 blockEntity.litDuration = blockEntity.litTime;
 
@@ -93,19 +104,9 @@ public class DrillHeadBlockEntity extends AbstractCaterpillarBlockEntity impleme
                 }
             }
         } else {
-            if (state.getValue(DrillHeadBlock.POWERED) && !blockEntity.isLit() && burnSlotIsEmpty) {
-                setPowerOff(level, state, pos);
+            if (blockEntity.isPowered() && !blockEntity.isLit() && burnSlotIsEmpty) {
+                blockEntity.setPowerOff();
             }
-        }
-
-        if (isLit != blockEntity.isLit()) {
-            needsUpdate = true;
-            state.setValue(DrillHeadBlock.POWERED, Boolean.valueOf(blockEntity.isLit()));
-            level.setBlock(pos, state, 3);
-        }
-
-        if (needsUpdate) {
-            setChanged(level, pos, state);
         }
     }
 
@@ -129,6 +130,7 @@ public class DrillHeadBlockEntity extends AbstractCaterpillarBlockEntity impleme
                 nextDrillHeadBlockEntity.load(oldTag);
                 nextDrillHeadBlockEntity.setLitTime(drillHeadBlockEntity.getLitTime());
                 nextDrillHeadBlockEntity.setLitDuration(drillHeadBlockEntity.getLitDuration());
+                nextDrillHeadBlockEntity.setPower(drillHeadBlockEntity.isPowered());
                 nextDrillHeadBlockEntity.setChanged();
             }
         }
@@ -182,7 +184,7 @@ public class DrillHeadBlockEntity extends AbstractCaterpillarBlockEntity impleme
                 BlockState blockState = this.getLevel().getBlockState(destroyPos);
 
                 if (blockState.getBlock() == Blocks.BEDROCK) {
-                   setPowerOff(this.getLevel(), this.getBlockState(), this.getBlockPos());
+                   setPowerOff();
                 } else if (CaterpillarBlocksUtil.canBreakBlock(blockState.getBlock())) {
                     this.getLevel().destroyBlock(destroyPos, true);
                 }
@@ -190,13 +192,6 @@ public class DrillHeadBlockEntity extends AbstractCaterpillarBlockEntity impleme
         }
     }
 
-    private void setPowerOff(Level level, BlockState state, BlockPos pos) {
-        Direction direction = state.getValue(DrillHeadBlock.FACING);
-
-        level.setBlock(pos, state.setValue(DrillHeadBlock.POWERED, Boolean.valueOf(false)), 2);
-        level.setBlock(pos.relative(direction.getClockWise()), level.getBlockState(pos.relative(direction.getClockWise())).setValue(DrillHeadBlock.POWERED, Boolean.valueOf(false)), 2);
-        level.playSound(null, pos, SoundEvents.LEVER_CLICK, SoundSource.BLOCKS, 0.3F, 0.5F);
-    }
     public boolean addItemToInventory(ItemStack stack) {
         for (int i = GATHERED_SLOT_START; i < GATHERED_SLOT_END; i++) {
             if (this.getItemInSlot(i).isEmpty()) {
@@ -211,12 +206,44 @@ public class DrillHeadBlockEntity extends AbstractCaterpillarBlockEntity impleme
         }
         return false;
     }
+
+    public boolean isFuelSlotEmpty() {
+        return this.getItemInSlot(FUEl_SLOT).isEmpty();
+    }
+
     protected int getBurnDuration(ItemStack stack) {
         if (stack.isEmpty()) {
             return 0;
         } else {
             return ForgeHooks.getBurnTime(stack, RecipeType.SMELTING);
         }
+    }
+
+    public boolean setPower(boolean power) {
+        System.out.println("ContainerData: " + this);
+        if (power == true && isFuelSlotEmpty()) {
+            return false;
+        }
+
+        this.powered = power;
+        return true;
+    }
+
+    public boolean setPowerOn() {
+        if (!isFuelSlotEmpty()) {
+            this.powered = true;
+            return true;
+        }
+
+        return false;
+    }
+
+    public void setPowerOff() {
+        this.powered = false;
+    }
+
+    public boolean isPowered() {
+        return this.powered;
     }
 
     public boolean isLit() {
@@ -240,15 +267,50 @@ public class DrillHeadBlockEntity extends AbstractCaterpillarBlockEntity impleme
     }
 
     @Override
+    protected ItemStackHandler createInventory() {
+        return new ItemStackHandler(this.size) {
+            @Override
+            public boolean isItemValid(int slot, @NotNull ItemStack stack) {
+                if (slot == FUEl_SLOT) {
+                    return CaterpillarMenuUtil.isFuel(stack);
+                }
+
+                if (slot >= CONSUMPTION_SLOT_START && slot <= CONSUMPTION_SLOT_END) {
+                    return true;
+                }
+
+                if (slot >= GATHERED_SLOT_START && slot <= GATHERED_SLOT_END) {
+                    return false;
+                }
+
+                return super.isItemValid(slot, stack);
+            }
+        };
+    }
+
+    @Override
     public void load(CompoundTag tag) {
         super.load(tag);
         this.litTime = tag.getInt("BurnTime");
-        this.litDuration = this.getBurnDuration(this.getItemInSlot(1));
+        this.litDuration = this.getBurnDuration(this.getItemInSlot(FUEl_SLOT));
+        this.powered = tag.getBoolean("Powered");
     }
 
     @Override
     protected void saveAdditional(CompoundTag tag) {
         super.saveAdditional(tag);
         tag.putInt("BurnTime", this.litTime);
+        tag.putBoolean("Powered", this.powered);
+    }
+
+    @Override
+    public Component getDisplayName() {
+        return TITLE;
+    }
+
+    @Nullable
+    @Override
+    public AbstractContainerMenu createMenu(int id, Inventory playerInventory, Player player) {
+        return new DrillHeadMenu(id, playerInventory, this, new DrillHeadContainerData(this, 4));
     }
 }

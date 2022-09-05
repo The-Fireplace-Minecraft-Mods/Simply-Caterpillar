@@ -1,6 +1,6 @@
 {
   "block.simplycaterpillar.drill_head": "Drill Head",
-  "block.simplycaterpillar.drill_head.noFuel" : "You need to add a fuel source to start the drill.",
+  "block.simplycaterpillar.drill_head.noFuel" : "You need to add a fuel source to power on.",
   "block.simplycaterpillar.drill_head.powered_off" : "Drill is turning off.",
   "block.simplycaterpillar.drill_head.powered_on" : "Drill is turning on.",
   "block.simplycaterpillar.drill_head.not_found" : "Please, connect the block to the drill head.",

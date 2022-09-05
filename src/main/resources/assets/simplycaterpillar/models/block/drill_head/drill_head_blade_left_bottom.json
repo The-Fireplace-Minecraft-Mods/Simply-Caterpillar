@@ -20,7 +20,7 @@
 			"to": [16, 16, 16],
 			"faces": {
 				"north": {"uv": [10.66667, 10.66667, 16, 16], "texture": "#none_blades"},
-				"south": {"uv": [0, 0, 0, 0], "texture": "#none_blades", "tintindex": 0}
+				"south": {"uv": [0, 10.66667, 5.33333, 16], "texture": "#none_blades", "tintindex": 0}
 			}
 		}
 	],

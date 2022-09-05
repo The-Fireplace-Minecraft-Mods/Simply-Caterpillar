@@ -70,8 +70,8 @@
 	"gui_light": "front",
 	"display": {
 		"thirdperson_righthand": {
-			"rotation": [40, 0, 0],
-			"translation": [0, 0.25, 0],
+			"rotation": [-118.93, -24.91, 0],
+			"translation": [-2.25, 3.75, -0.5],
 			"scale": [0.3, 0.3, 0.3]
 		},
 		"thirdperson_lefthand": {
