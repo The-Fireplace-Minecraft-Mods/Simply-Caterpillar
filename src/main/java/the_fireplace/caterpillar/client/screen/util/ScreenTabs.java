@@ -2,12 +2,10 @@ package the_fireplace.caterpillar.client.screen.util;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import the_fireplace.caterpillar.Caterpillar;
 import the_fireplace.caterpillar.common.block.entity.*;
 import the_fireplace.caterpillar.core.init.BlockInit;
-import the_fireplace.caterpillar.core.init.ItemInit;
 
 public enum ScreenTabs {
     DRILL_HEAD(0, DrillHeadBlockEntity.TITLE, new ResourceLocation(Caterpillar.MOD_ID, "textures/gui/caterpillar.png"), 176, 166, BlockInit.DRILL_HEAD.get().asItem().getDefaultInstance()),

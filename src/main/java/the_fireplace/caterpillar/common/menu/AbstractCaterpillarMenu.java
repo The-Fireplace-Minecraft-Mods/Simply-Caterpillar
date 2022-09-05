@@ -1,6 +1,5 @@
 package the_fireplace.caterpillar.common.menu;
 
-import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -8,13 +7,11 @@ import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.items.IItemHandler;
 import the_fireplace.caterpillar.common.block.entity.AbstractCaterpillarBlockEntity;
 import the_fireplace.caterpillar.common.block.util.CaterpillarBlocksUtil;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -29,6 +26,14 @@ public abstract class AbstractCaterpillarMenu extends AbstractContainerMenu {
     private AbstractCaterpillarBlockEntity blockEntity;
 
     public static final int SLOT_SIZE_PLUS_2 = 18;
+
+    private final int INVENTORY_SLOT_X_START = 8;
+
+    private final int INVENTORY_SLOT_Y_START = 84;
+
+    private final int HOTBAR_SLOT_X_START = 8;
+
+    private final int HOTBAR_SLOT_Y_START = 142;
 
     public AbstractCaterpillarMenu(MenuType<?> menuType, int id, Inventory playerInventory, FriendlyByteBuf extraData, int containerDataSize) {
         this(menuType, id, playerInventory, playerInventory.player.level.getBlockEntity(extraData.readBlockPos()), new SimpleContainerData(containerDataSize));
@@ -98,9 +103,11 @@ public abstract class AbstractCaterpillarMenu extends AbstractContainerMenu {
         return copyOfSourceStack;
     }
 
-    private void addPlayerInventory(Inventory playerInventory) {
-        int inventoryX = 8, inventoryY = 84;
+    protected void addPlayerInventory(Inventory playerInventory) {
+        this.addPlayerInventory(playerInventory, INVENTORY_SLOT_X_START, INVENTORY_SLOT_Y_START);
+    }
 
+    protected void addPlayerInventory(Inventory playerInventory, int inventoryX, int inventoryY) {
         for(int row = 0; row < 3; row++) {
             for(int column = 0; column < 9; column++) {
                 super.addSlot(new Slot(playerInventory, column + row * 9 + 9, inventoryX + column * SLOT_SIZE_PLUS_2, inventoryY + row * SLOT_SIZE_PLUS_2));
@@ -108,9 +115,11 @@ public abstract class AbstractCaterpillarMenu extends AbstractContainerMenu {
         }
     }
 
-    private void addPlayerHotbar(Inventory playerInventory) {
-        int hotbarX = 8, hotbarY = 142;
+    protected void addPlayerHotbar(Inventory playerInventory) {
+        this.addPlayerInventory(playerInventory, HOTBAR_SLOT_X_START, HOTBAR_SLOT_Y_START);
+    }
 
+    protected void addPlayerHotbar(Inventory playerInventory, int hotbarX, int hotbarY) {
         for(int column = 0; column < 9; column++) {
             super.addSlot(new Slot(playerInventory, column, hotbarX + column * SLOT_SIZE_PLUS_2, hotbarY));
         }

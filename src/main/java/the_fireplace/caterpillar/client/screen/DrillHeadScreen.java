@@ -2,7 +2,6 @@ package the_fireplace.caterpillar.client.screen;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;

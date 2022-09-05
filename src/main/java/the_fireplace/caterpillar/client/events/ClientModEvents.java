@@ -24,7 +24,7 @@ public class ClientModEvents {
         // MenuScreens.register(MenuInit.DECORATION.get(), DecorationScreen::new);
         MenuScreens.register(MenuInit.DRILL_HEAD.get(), DrillHeadScreen::new);
         MenuScreens.register(MenuInit.INCINERATOR.get(), IncineratorScreen::new);
-        // MenuScreens.register(MenuInit.REINFORCEMENT.get(), ReinforcementScreen::new);
+        MenuScreens.register(MenuInit.REINFORCEMENT.get(), ReinforcementScreen::new);
     }
 
     /**
