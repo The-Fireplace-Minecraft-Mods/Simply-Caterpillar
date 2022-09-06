@@ -53,9 +53,9 @@ public class DecorationBlockEntity extends AbstractCaterpillarBlockEntity {
         this.getLevel().setBlock(nextPos.relative(nextBlockEntity.getBlockState().getValue(FACING).getCounterClockWise()), this.getBlockState().setValue(DecorationBlock.PART, DecorationPart.LEFT), 35);
         this.getLevel().setBlock(nextPos.relative(nextBlockEntity.getBlockState().getValue(FACING).getClockWise()), this.getBlockState().setValue(DecorationBlock.PART, DecorationPart.RIGHT), 35);
 
-        this.getLevel().destroyBlock(this.getBlockPos(), false);
-        this.getLevel().destroyBlock(this.getBlockPos().relative(this.getBlockState().getValue(FACING).getCounterClockWise()), false);
-        this.getLevel().destroyBlock(this.getBlockPos().relative(this.getBlockState().getValue(FACING).getClockWise()), false);
+        this.getLevel().removeBlock(this.getBlockPos(), false);
+        this.getLevel().removeBlock(this.getBlockPos().relative(this.getBlockState().getValue(FACING).getCounterClockWise()), false);
+        this.getLevel().removeBlock(this.getBlockPos().relative(this.getBlockState().getValue(FACING).getClockWise()), false);
 
         this.getLevel().playSound(null, this.getBlockPos(), SoundEvents.PISTON_EXTEND, SoundSource.BLOCKS, 1.0F, 1.0F);
     }

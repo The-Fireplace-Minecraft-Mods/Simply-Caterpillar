@@ -33,8 +33,8 @@ public class CollectorBlockEntity extends AbstractCaterpillarBlockEntity {
         this.getLevel().setBlock(nextPos, this.getBlockState(), 35);
         this.getLevel().setBlock(nextPos.below(), this.getBlockState().setValue(CollectorBlock.HALF, DoubleBlockHalf.LOWER), 35);
 
-        this.getLevel().destroyBlock(this.getBlockPos(), false);
-        this.getLevel().destroyBlock(this.getBlockPos().below(), false);
+        this.getLevel().removeBlock(this.getBlockPos(), false);
+        this.getLevel().removeBlock(this.getBlockPos().below(), false);
 
         this.getLevel().playSound(null, this.getBlockPos(), SoundEvents.PISTON_EXTEND, SoundSource.BLOCKS, 1.0F, 1.0F);
 

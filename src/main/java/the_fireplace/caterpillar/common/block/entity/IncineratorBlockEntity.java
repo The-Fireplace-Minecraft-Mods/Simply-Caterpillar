@@ -43,7 +43,7 @@ public class IncineratorBlockEntity extends AbstractCaterpillarBlockEntity {
         nextBlockEntity.load(oldTag);
         nextBlockEntity.setChanged();
 
-        this.getLevel().destroyBlock(this.getBlockPos(), false);
+        this.getLevel().removeBlock(this.getBlockPos(), false);
 
         this.getLevel().playSound(null, this.getBlockPos(), SoundEvents.PISTON_EXTEND, SoundSource.BLOCKS, 1.0F, 1.0F);
 

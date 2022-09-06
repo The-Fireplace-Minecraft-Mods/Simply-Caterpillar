@@ -24,9 +24,9 @@ public class StorageBlockEntity extends AbstractCaterpillarBlockEntity {
         this.getLevel().setBlock(nextPos.relative(this.getBlockState().getValue(StorageBlock.FACING).getCounterClockWise()), this.getBlockState().setValue(StorageBlock.PART, StoragePart.LEFT), 3);
         this.getLevel().setBlock(nextPos.relative(this.getBlockState().getValue(StorageBlock.FACING).getClockWise()), this.getBlockState().setValue(StorageBlock.PART, StoragePart.RIGHT), 3);
 
-        this.getLevel().destroyBlock(this.getBlockPos(), false);
-        this.getLevel().destroyBlock(this.getBlockPos().relative(this.getBlockState().getValue(StorageBlock.FACING).getCounterClockWise()), false);
-        this.getLevel().destroyBlock(this.getBlockPos().relative(this.getBlockState().getValue(StorageBlock.FACING).getClockWise()), false);
+        this.getLevel().removeBlock(this.getBlockPos(), false);
+        this.getLevel().removeBlock(this.getBlockPos().relative(this.getBlockState().getValue(StorageBlock.FACING).getCounterClockWise()), false);
+        this.getLevel().removeBlock(this.getBlockPos().relative(this.getBlockState().getValue(StorageBlock.FACING).getClockWise()), false);
 
         this.getLevel().playSound(null, this.getBlockPos(), SoundEvents.PISTON_EXTEND, SoundSource.BLOCKS, 1.0F, 1.0F);
     }

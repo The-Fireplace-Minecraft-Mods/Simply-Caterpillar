@@ -49,11 +49,11 @@ public class ReinforcementBlockEntity extends AbstractCaterpillarBlockEntity {
         this.getLevel().setBlock(nextPos.above(), nextBlockEntity.getBlockState().setValue(ReinforcementBlock.PART, ReinforcementPart.TOP), 35);
         this.getLevel().setBlock(nextPos.below(), nextBlockEntity.getBlockState().setValue(ReinforcementBlock.PART, ReinforcementPart.BOTTOM), 35);
 
-        this.getLevel().destroyBlock(this.getBlockPos(),false);
-        this.getLevel().destroyBlock(this.getBlockPos().relative(this.getBlockState().getValue(ReinforcementBlock.FACING).getCounterClockWise()), false);
-        this.getLevel().destroyBlock(this.getBlockPos().relative(this.getBlockState().getValue(ReinforcementBlock.FACING).getClockWise()), false);
-        this.getLevel().destroyBlock(this.getBlockPos().above(), false);
-        this.getLevel().destroyBlock(this.getBlockPos().below(), false);
+        this.getLevel().removeBlock(this.getBlockPos(),false);
+        this.getLevel().removeBlock(this.getBlockPos().relative(this.getBlockState().getValue(ReinforcementBlock.FACING).getCounterClockWise()), false);
+        this.getLevel().removeBlock(this.getBlockPos().relative(this.getBlockState().getValue(ReinforcementBlock.FACING).getClockWise()), false);
+        this.getLevel().removeBlock(this.getBlockPos().above(), false);
+        this.getLevel().removeBlock(this.getBlockPos().below(), false);
 
         this.getLevel().playSound(null, this.getBlockPos(), SoundEvents.PISTON_EXTEND, SoundSource.BLOCKS, 1.0F, 1.0F);
 
