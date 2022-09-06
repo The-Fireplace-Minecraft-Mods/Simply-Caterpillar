@@ -18,6 +18,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
+import the_fireplace.caterpillar.common.block.entity.AbstractCaterpillarBlockEntity;
 import the_fireplace.caterpillar.common.block.entity.StorageBlockEntity;
 import the_fireplace.caterpillar.common.block.util.StoragePart;
 
@@ -27,7 +28,6 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 public class StorageBlock extends AbstractCaterpillarBlock {
-
     public static final EnumProperty<StoragePart> PART = EnumProperty.create("part", StoragePart.class);
 
     private static final Map<Direction, VoxelShape> SHAPES_LEFT = new EnumMap<>(Direction.class);
