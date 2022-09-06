@@ -46,11 +46,6 @@ public abstract class AbstractCaterpillarScreen<T extends AbstractCaterpillarMen
     }
 
     @Override
-    protected void init() {
-        super.init();
-    }
-
-    @Override
     protected void renderBg(PoseStack stack, float partialTick, int mouseX, int mouseY) {
         super.renderBackground(stack);
         this.bindTexture();

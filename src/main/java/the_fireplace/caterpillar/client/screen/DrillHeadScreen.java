@@ -9,6 +9,8 @@ import net.minecraft.world.entity.player.Inventory;
 import the_fireplace.caterpillar.client.screen.util.ScreenTabs;
 import the_fireplace.caterpillar.common.block.entity.DrillHeadBlockEntity;
 import the_fireplace.caterpillar.common.menu.DrillHeadMenu;
+import the_fireplace.caterpillar.core.network.PacketHandler;
+import the_fireplace.caterpillar.core.network.packet.client.DrillHeadPowerSyncC2SPacket;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +21,12 @@ public class DrillHeadScreen extends AbstractCaterpillarScreen<DrillHeadMenu> {
 
     private static final int POWER_BG_HEIGHT = 18;
 
+    private static final int BURN_SLOT_BG_X = 81;
+
+    private static final int BURN_SLOT_BG_Y = 36 + 12;
+
+    private static final int BURN_SLOT_BG_WIDTH = 14;
+
     public DrillHeadScreen(DrillHeadMenu menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title, ScreenTabs.DRILL_HEAD);
     }
@@ -28,6 +36,16 @@ public class DrillHeadScreen extends AbstractCaterpillarScreen<DrillHeadMenu> {
         super.render(stack, mouseX, mouseY, partialTicks);
 
         this.renderTooltipPowerButton(stack, mouseX, mouseY);
+    }
+
+    @Override
+    protected void renderBg(PoseStack stack, float partialTick, int mouseX, int mouseY) {
+        super.renderBg(stack, partialTick, mouseX, mouseY);
+
+        if (this.isPowered()) {
+            int litProgress = this.getLitProgress();
+            blit(stack, super.leftPos + BURN_SLOT_BG_X, super.topPos + BURN_SLOT_BG_Y - litProgress, ScreenTabs.DRILL_HEAD.IMAGE_WIDTH, 12 - litProgress, BURN_SLOT_BG_WIDTH, litProgress + 1);
+        }
     }
 
     @Override
@@ -47,7 +65,7 @@ public class DrillHeadScreen extends AbstractCaterpillarScreen<DrillHeadMenu> {
     }
 
     private void renderBgPowerButton() {
-            if (this.isPowered()) {
+        if (this.isPowered()) {
             this.addRenderableWidget(new ImageButton(super.leftPos + (super.imageWidth - SLOT_SIZE) / 2, super.topPos + 16, POWER_BG_WIDTH, POWER_BG_HEIGHT, 176 + POWER_BG_WIDTH, 15, 0, ScreenTabs.DRILL_HEAD.TEXTURE, (onPress) -> {
                 this.setPowerOff();
                 rebuildWidgets();
@@ -84,19 +102,54 @@ public class DrillHeadScreen extends AbstractCaterpillarScreen<DrillHeadMenu> {
         }
     }
 
-    private boolean isPowered() {
-        return this.menu.data.get(2) == 1;
+    private boolean isFuelSlotEmpty() {
+        if (this.menu.blockEntity instanceof DrillHeadBlockEntity drillHeadBlockEntity) {
+            return drillHeadBlockEntity.isFuelSlotEmpty();
+        }
+
+        return true;
     }
 
-    private void setPowerOff() {
-        this.menu.data.set(2, 0);
+    public int getLitProgress() {
+        if (this.menu.blockEntity instanceof DrillHeadBlockEntity drillHeadBlockEntity) {
+            int i = drillHeadBlockEntity.getLitDuration();
+            if (i == 0) {
+                i = 200;
+            }
+
+            return drillHeadBlockEntity.getLitTime() * 13 / i;
+        }
+
+        return 200;
+    }
+
+    private boolean isLit() {
+        if (this.menu.blockEntity instanceof DrillHeadBlockEntity drillHeadBlockEntity) {
+            return drillHeadBlockEntity.isLit();
+        }
+
+        return false;
+    }
+
+    private boolean isPowered() {
+        if (this.menu.blockEntity instanceof DrillHeadBlockEntity drillHeadBlockEntity) {
+            return drillHeadBlockEntity.isPowered();
+        }
+
+        return false;
     }
 
     private void setPowerOn() {
-        this.menu.data.set(2, 1);
+        if (this.menu.blockEntity instanceof DrillHeadBlockEntity drillHeadBlockEntity) {
+            drillHeadBlockEntity.setPowerOn();
+            PacketHandler.sendToServer(new DrillHeadPowerSyncC2SPacket(true, this.menu.blockEntity.getBlockPos()));
+        }
     }
 
-    private boolean isFuelSlotEmpty() {
-        return this.menu.data.get(3) == 1;
+    private void setPowerOff() {
+        if (this.menu.blockEntity instanceof DrillHeadBlockEntity drillHeadBlockEntity) {
+            drillHeadBlockEntity.setPowerOff();
+            PacketHandler.sendToServer(new DrillHeadPowerSyncC2SPacket(false, this.menu.blockEntity.getBlockPos()));
+        }
     }
 }

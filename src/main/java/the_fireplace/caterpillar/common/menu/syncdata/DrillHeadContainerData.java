@@ -1,6 +1,7 @@
 package the_fireplace.caterpillar.common.menu.syncdata;
 
 import net.minecraft.world.inventory.SimpleContainerData;
+import org.jetbrains.annotations.Nullable;
 import the_fireplace.caterpillar.common.block.entity.DrillHeadBlockEntity;
 
 public class DrillHeadContainerData extends SimpleContainerData {
@@ -28,7 +29,8 @@ public class DrillHeadContainerData extends SimpleContainerData {
         switch (index) {
             case 0 -> this.blockEntity.setLitTime(value);
             case 1 -> this.blockEntity.setLitDuration(value);
-            case 2 -> this.blockEntity.setPower(value == 1);
+            case 2 -> this.blockEntity.setPowerOn();
+            case 3 -> this.blockEntity.setPowerOff();
             default -> throw new UnsupportedOperationException("There is no value corresponding to key: '" + index + "' in: '" + blockEntity + "'");
         }
     }

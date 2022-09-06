@@ -11,6 +11,8 @@ import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.items.IItemHandler;
 import the_fireplace.caterpillar.common.block.entity.AbstractCaterpillarBlockEntity;
 import the_fireplace.caterpillar.common.block.util.CaterpillarBlocksUtil;
+import the_fireplace.caterpillar.common.menu.syncdata.DecorationContainerData;
+import the_fireplace.caterpillar.common.menu.syncdata.DrillHeadContainerData;
 
 import java.util.Collections;
 import java.util.List;
@@ -23,7 +25,7 @@ public abstract class AbstractCaterpillarMenu extends AbstractContainerMenu {
 
     private final Level level;
 
-    protected AbstractCaterpillarBlockEntity blockEntity;
+    public final AbstractCaterpillarBlockEntity blockEntity;
 
     public static final int SLOT_SIZE_PLUS_2 = 18;
 

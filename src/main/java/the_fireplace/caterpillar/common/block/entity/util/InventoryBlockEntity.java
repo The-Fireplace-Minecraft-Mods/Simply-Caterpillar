@@ -16,6 +16,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemStackHandler;
@@ -29,7 +30,7 @@ public class InventoryBlockEntity extends BlockEntity {
     public boolean requiresUpdate;
 
     private final ItemStackHandler inventory;
-    private final LazyOptional<IItemHandlerModifiable> handler;
+    private final LazyOptional<IItemHandler> handler;
 
     public InventoryBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state, int size) {
         super(type, pos, state);
@@ -76,7 +77,10 @@ public class InventoryBlockEntity extends BlockEntity {
 
     @Override
     public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-        return cap == ForgeCapabilities.ITEM_HANDLER ? this.handler.cast() : super.getCapability(cap, side);
+        if (cap == ForgeCapabilities.ITEM_HANDLER) {
+            return this.handler.cast();
+        }
+        return super.getCapability(cap, side);
     }
 
     @Nullable
@@ -134,6 +138,7 @@ public class InventoryBlockEntity extends BlockEntity {
         return new ItemStackHandler(this.size) {
             @Override
             protected void onContentsChanged(int slot) {
+                super.onContentsChanged(slot);
                 setChanged();
             }
 

@@ -7,6 +7,7 @@ import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -15,6 +16,7 @@ import the_fireplace.caterpillar.core.init.BlockInit;
 import the_fireplace.caterpillar.core.init.MenuInit;
 import the_fireplace.caterpillar.core.init.ItemInit;
 import the_fireplace.caterpillar.core.init.BlockEntityInit;
+import the_fireplace.caterpillar.core.network.PacketHandler;
 
 @Mod(Caterpillar.MOD_ID)
 @Mod.EventBusSubscriber(modid = Caterpillar.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
@@ -44,6 +46,14 @@ public class Caterpillar
 		ItemInit.ITEMS.register(bus);
 		MenuInit.MENU_TYPES.register(bus);
 
+		bus.addListener(this::commonSetup);
+
 		MinecraftForge.EVENT_BUS.register(this);
+	}
+
+	private void commonSetup(FMLCommonSetupEvent event) {
+		event.enqueueWork(() -> {
+			PacketHandler.register();
+		});
 	}
 }

@@ -3,16 +3,17 @@ package the_fireplace.caterpillar.common.menu;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 import the_fireplace.caterpillar.common.block.entity.DrillHeadBlockEntity;
 import the_fireplace.caterpillar.common.menu.slot.CaterpillarFuelSlot;
+import the_fireplace.caterpillar.common.menu.syncdata.DrillHeadContainerData;
 import the_fireplace.caterpillar.common.menu.util.CaterpillarMenuUtil;
 import the_fireplace.caterpillar.core.init.MenuInit;
+import the_fireplace.caterpillar.core.network.PacketHandler;
+import the_fireplace.caterpillar.core.network.packet.client.DrillHeadPowerSyncC2SPacket;
 
 public class DrillHeadMenu extends AbstractCaterpillarMenu {
 
@@ -32,7 +33,7 @@ public class DrillHeadMenu extends AbstractCaterpillarMenu {
         super(MenuInit.DRILL_HEAD.get(), id, playerInventory, extraData, 4);
     }
 
-    public DrillHeadMenu(int id, Inventory playerInventory, DrillHeadBlockEntity entity, ContainerData data) {
+    public DrillHeadMenu(int id, Inventory playerInventory, DrillHeadBlockEntity entity, DrillHeadContainerData data) {
         super(MenuInit.DRILL_HEAD.get(), id, playerInventory, entity, data);
     }
 
@@ -82,5 +83,21 @@ public class DrillHeadMenu extends AbstractCaterpillarMenu {
         }
 
         return copyOfSourceStack;
+    }
+
+    public boolean setPower(boolean power) {
+        if (this.blockEntity instanceof DrillHeadBlockEntity drillHeadBlockEntity) {
+            return drillHeadBlockEntity.setPower(power);
+        }
+
+        return false;
+    }
+
+    public boolean isLit() {
+        if (this.blockEntity instanceof DrillHeadBlockEntity drillHeadBlockEntity) {
+            return drillHeadBlockEntity.isLit();
+        }
+
+        return false;
     }
 }
