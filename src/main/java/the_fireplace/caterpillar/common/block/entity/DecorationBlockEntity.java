@@ -58,6 +58,13 @@ public class DecorationBlockEntity extends AbstractCaterpillarBlockEntity {
         this.getLevel().removeBlock(this.getBlockPos().relative(this.getBlockState().getValue(FACING).getClockWise()), false);
 
         this.getLevel().playSound(null, this.getBlockPos(), SoundEvents.PISTON_EXTEND, SoundSource.BLOCKS, 1.0F, 1.0F);
+
+        this.decorate();
+    }
+
+    // TODO: Implement decoration
+    private void decorate() {
+
     }
 
     public int getSelectedMap() {

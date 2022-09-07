@@ -79,12 +79,12 @@ public abstract class AbstractCaterpillarBlock extends BaseEntityBlock {
         } else {
             Direction direction = state.getValue(FACING);
             BlockPos basePos = getBasePos(state, pos);
-            BlockPos drillHeadPos = CaterpillarBlocksUtil.getDrillHeadPos(level, basePos, direction);
+            BlockPos caterpillarHeadPos = CaterpillarBlocksUtil.getCaterpillarHeadPos(level, basePos, direction);
 
-            if (drillHeadPos != null) {
-                BlockEntity blockEntity = level.getBlockEntity(drillHeadPos);
+            if (caterpillarHeadPos != null) {
+                BlockEntity blockEntity = level.getBlockEntity(caterpillarHeadPos);
                 if (blockEntity instanceof DrillHeadBlockEntity drillHeadBlockEntity) {
-                    NetworkHooks.openScreen((ServerPlayer) player, drillHeadBlockEntity, drillHeadPos);
+                    NetworkHooks.openScreen((ServerPlayer) player, drillHeadBlockEntity, caterpillarHeadPos);
                 }
             } else {
                 player.displayClientMessage(Component.translatable("block.simplycaterpillar.drill_head.not_found"), true);
@@ -94,7 +94,7 @@ public abstract class AbstractCaterpillarBlock extends BaseEntityBlock {
         }
     }
 
-    protected BlockPos getBasePos(BlockState state, BlockPos pos) {
+    public BlockPos getBasePos(BlockState state, BlockPos pos) {
         return pos;
     }
 

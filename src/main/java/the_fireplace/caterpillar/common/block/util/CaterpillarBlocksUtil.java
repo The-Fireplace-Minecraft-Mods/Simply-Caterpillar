@@ -49,18 +49,14 @@ public class CaterpillarBlocksUtil {
                 (block == BlockInit.DRILL_BASE.get());
     }
 
-    public static BlockPos getDrillHeadPos(Level level, BlockPos pos, Direction direction) {
+    public static BlockPos getCaterpillarHeadPos(Level level, BlockPos pos, Direction direction) {
         BlockState state = level.getBlockState(pos);
 
         if (!CaterpillarBlocksUtil.isCaterpillarBlock(state.getBlock())) {
-            return null;
+            return pos.relative(direction);
         }
 
-        if ((state.getBlock() instanceof DrillHeadBlock) && state.getValue(PART).equals(DrillHeadPart.BASE)) {
-            return pos;
-        }
-
-        return getDrillHeadPos(level, pos.relative(direction.getOpposite()), direction);
+        return getCaterpillarHeadPos(level, pos.relative(direction.getOpposite()), direction);
     }
 
     public static boolean canBreakBlock(Block block) {
@@ -71,31 +67,17 @@ public class CaterpillarBlocksUtil {
                 !block.equals(Fluids.FLOWING_LAVA);
     }
 
-     public static List<AbstractCaterpillarBlockEntity> getConnectedCaterpillarBlockEntities(Level level, BlockPos pos, @Nullable List<AbstractCaterpillarBlockEntity> caterpillarBlockEntities) {
-         System.out.println("stage 2");
-
-         List<AbstractCaterpillarBlockEntity> listCaterpillarBlockEntities = caterpillarBlockEntities;
-
+    public static List<AbstractCaterpillarBlockEntity> getConnectedCaterpillarBlockEntities(Level level, BlockPos pos, @Nullable List<AbstractCaterpillarBlockEntity> caterpillarBlockEntities) {
         BlockState blockState = level.getBlockState(pos);
 
         if (!isCaterpillarBlock(blockState.getBlock())) {
-            System.out.println("finish");
             return caterpillarBlockEntities;
-        } else {
-            System.out.println("continue");
-
-            BlockEntity blockEntity = level.getBlockEntity(pos);
-
-            if (blockEntity instanceof AbstractCaterpillarBlockEntity caterpillarBlockEntity) {
-                System.out.println("stage 3");
-                caterpillarBlockEntities.add(caterpillarBlockEntity);
-            }
-
-            Direction direction = blockEntity.getBlockState().getValue(HorizontalDirectionalBlock.FACING);
-
-            listCaterpillarBlockEntities = getConnectedCaterpillarBlockEntities(level, pos.relative(direction), caterpillarBlockEntities);
         }
 
-         return listCaterpillarBlockEntities;
+        AbstractCaterpillarBlockEntity blockEntity = (AbstractCaterpillarBlockEntity) level.getBlockEntity(pos);
+        caterpillarBlockEntities.add(blockEntity);
+
+        Direction direction = blockEntity.getBlockState().getValue(HorizontalDirectionalBlock.FACING);
+        return getConnectedCaterpillarBlockEntities(level, pos.relative(direction), caterpillarBlockEntities);
      }
 }

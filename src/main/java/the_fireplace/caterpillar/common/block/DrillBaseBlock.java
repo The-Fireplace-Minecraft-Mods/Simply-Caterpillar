@@ -28,7 +28,7 @@ public class DrillBaseBlock extends AbstractCaterpillarBlock {
     }
 
     @Override
-    protected BlockPos getBasePos(BlockState state, BlockPos pos) {
+    public BlockPos getBasePos(BlockState state, BlockPos pos) {
         return pos;
     }
 

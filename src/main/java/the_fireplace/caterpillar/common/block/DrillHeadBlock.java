@@ -145,7 +145,7 @@ public class DrillHeadBlock extends AbstractCaterpillarBlock {
         level.setBlock(pos.above(), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BASE), 3);
     }
 
-    protected BlockPos getBasePos(BlockState state, BlockPos pos) {
+    public BlockPos getBasePos(BlockState state, BlockPos pos) {
         Direction direction = state.getValue(FACING);
         BlockPos basePos;
 

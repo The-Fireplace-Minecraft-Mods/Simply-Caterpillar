@@ -168,7 +168,7 @@ public class ReinforcementBlock extends AbstractCaterpillarBlock {
         super.playerWillDestroy(level, pos, state, player);
     }
 
-    protected BlockPos getBasePos(BlockState state, BlockPos pos) {
+    public BlockPos getBasePos(BlockState state, BlockPos pos) {
         Direction direction = state.getValue(FACING);
         ReinforcementPart part = state.getValue(ReinforcementBlock.PART);
         BlockPos basePos;

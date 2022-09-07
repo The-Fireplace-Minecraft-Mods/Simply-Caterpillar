@@ -131,7 +131,7 @@ public class StorageBlock extends AbstractCaterpillarBlock {
         super.playerWillDestroy(level, pos, state, player);
     }
 
-    protected BlockPos getBasePos(BlockState state, BlockPos pos) {
+    public BlockPos getBasePos(BlockState state, BlockPos pos) {
         Direction direction = state.getValue(FACING);
 
         switch (state.getValue(StorageBlock.PART)) {

@@ -17,7 +17,7 @@ public class DrillBaseBlockEntity extends BlockEntity {
         BlockPos nextPos = this.getBlockPos().relative(this.getBlockState().getValue(DrillBaseBlock.FACING).getOpposite());
 
         this.getLevel().setBlock(nextPos, this.getBlockState(), 35);
-        this.getLevel().destroyBlock(this.getBlockPos(), false);
+        this.getLevel().removeBlock(this.getBlockPos(), false);
 
         this.getLevel().playSound(null, this.getBlockPos(), SoundEvents.PISTON_EXTEND, SoundSource.BLOCKS, 1.0F, 1.0F);
     }

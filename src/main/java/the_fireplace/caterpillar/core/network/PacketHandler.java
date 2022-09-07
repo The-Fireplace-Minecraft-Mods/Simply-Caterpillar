@@ -38,13 +38,13 @@ public final class PacketHandler {
                 .consumerMainThread(DrillHeadPowerSyncC2SPacket::handle)
                 .add();
 
-        /*
+
         CHANNEL.messageBuilder(CaterpillarSetSelectedTabC2SPacket.class, index++, NetworkDirection.PLAY_TO_SERVER)
                 .decoder(CaterpillarSetSelectedTabC2SPacket::new)
                 .encoder(CaterpillarSetSelectedTabC2SPacket::toBytes)
                 .consumerMainThread(CaterpillarSetSelectedTabC2SPacket::handle)
                 .add();
-         */
+
     }
 
     public static <MSG> void sendToServer(MSG message) {

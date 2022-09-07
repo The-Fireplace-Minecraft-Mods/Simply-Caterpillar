@@ -106,7 +106,7 @@ public class CollectorBlock extends AbstractCaterpillarBlock {
     }
 
     @Override
-    protected BlockPos getBasePos(BlockState state, BlockPos pos) {
+    public BlockPos getBasePos(BlockState state, BlockPos pos) {
         switch (state.getValue(CollectorBlock.HALF)) {
             case LOWER:
                 return pos.above();
