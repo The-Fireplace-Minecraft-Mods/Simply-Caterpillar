@@ -5,7 +5,10 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
 import the_fireplace.caterpillar.client.screen.util.ScreenTabs;
+import the_fireplace.caterpillar.common.block.entity.DecorationBlockEntity;
 import the_fireplace.caterpillar.common.menu.DecorationMenu;
+import the_fireplace.caterpillar.core.network.PacketHandler;
+import the_fireplace.caterpillar.core.network.packet.client.DecorationSyncSelectedMapC2SPacket;
 
 public class DecorationScreen extends AbstractCaterpillarScreen<DecorationMenu> {
 
@@ -19,7 +22,7 @@ public class DecorationScreen extends AbstractCaterpillarScreen<DecorationMenu> 
     public DecorationScreen(DecorationMenu menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title, ScreenTabs.DECORATION);
 
-        this.scrollOffs = this.menu.getSelectedMap()  / 9.0F;
+        this.scrollOffs = this.getSelectedMap()  / 9.0F;
     }
 
     @Override
@@ -78,7 +81,8 @@ public class DecorationScreen extends AbstractCaterpillarScreen<DecorationMenu> 
             int j = i + SCROLLER_HEIGHT;
             this.scrollOffs = ((float)mouseY - (float)i - 7.5F) / ((float)(j - i) - 15.0F);
             this.scrollOffs = Mth.clamp(this.scrollOffs, 0.0F, 1.0F);
-            this.menu.scrollTo(this.scrollOffs);
+            this.scrollTo(this.scrollOffs);
+
             return true;
         }
 
@@ -90,7 +94,28 @@ public class DecorationScreen extends AbstractCaterpillarScreen<DecorationMenu> 
         int i = 9;
         float f = (float)(delta / (double)i);
         this.scrollOffs = Mth.clamp(this.scrollOffs - f, 0.0F, 1.0F);
-        this.menu.scrollTo(this.scrollOffs);
+        this.scrollTo(this.scrollOffs);
         return true;
+    }
+
+    private void scrollTo(float scrollOffs) {
+        if (this.menu.blockEntity instanceof DecorationBlockEntity decorationBlockEntity) {
+            int i = 9;
+            int j = (int)((double)(scrollOffs * (float)i) + 0.5D);
+            if (j < 0) {
+                j = 0;
+            }
+
+            decorationBlockEntity.setSelectedMap(j);
+            decorationBlockEntity.setChanged();
+            PacketHandler.sendToServer(new DecorationSyncSelectedMapC2SPacket(decorationBlockEntity.getSelectedMap(), this.menu.blockEntity.getBlockPos()));
+        }
+    }
+
+    private int getSelectedMap() {
+        if (this.menu.blockEntity instanceof DecorationBlockEntity decorationBlockEntity) {
+            return decorationBlockEntity.getSelectedMap();
+        }
+        return 0;
     }
 }

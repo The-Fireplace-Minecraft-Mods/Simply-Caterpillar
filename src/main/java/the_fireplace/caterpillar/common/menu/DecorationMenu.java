@@ -14,6 +14,8 @@ import org.jetbrains.annotations.NotNull;
 import the_fireplace.caterpillar.common.block.entity.DecorationBlockEntity;
 import the_fireplace.caterpillar.common.menu.syncdata.DecorationContainerData;
 import the_fireplace.caterpillar.core.init.MenuInit;
+import the_fireplace.caterpillar.core.network.PacketHandler;
+import the_fireplace.caterpillar.core.network.packet.client.DecorationSyncSelectedMapC2SPacket;
 
 public class DecorationMenu extends AbstractCaterpillarMenu {
 
@@ -64,32 +66,7 @@ public class DecorationMenu extends AbstractCaterpillarMenu {
         Placement 9 -> 81 - 89
      */
     public void scrollTo(float scrollOffs) {
-        int i = 9;
-        int j = (int)((double)(scrollOffs * (float)i) + 0.5D);
-        if (j < 0) {
-            j = 0;
-        }
 
-        if (this.blockEntity instanceof DecorationBlockEntity decorationBlockEntity) {
-            decorationBlockEntity.setSelectedMap(j);
-
-            int finalJ = j;
-            this.blockEntity.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(handler -> {
-                for(int row = 0; row < 3; row++) {
-                    for(int column = 0; column < 3; column++) {
-                        if (row != 1 || column != 1) {
-                            int placementSlotId = column + row * 3 + (finalJ * 9);
-                            ItemStack placementStack = handler.getStackInSlot(placementSlotId);
-                            Slot decorationSlot = super.getSlot(column + row * 3);
-                            decorationSlot.set(placementStack);
-                            this.broadcastChanges();
-                            System.out.println("placementSlotId: " + placementSlotId);
-                            this.blockEntity.requiresUpdate = true;
-                        }
-                    }
-                }
-            });
-        }
     }
 
     @Override
@@ -97,7 +74,7 @@ public class DecorationMenu extends AbstractCaterpillarMenu {
         super.clicked(pSlotId, pButton, pClickType, pPlayer);
     }
 
-    public int getSelectedMap() {
+    private int getSelectedMap() {
         if (this.blockEntity instanceof DecorationBlockEntity decorationBlockEntity) {
             return decorationBlockEntity.getSelectedMap();
         }

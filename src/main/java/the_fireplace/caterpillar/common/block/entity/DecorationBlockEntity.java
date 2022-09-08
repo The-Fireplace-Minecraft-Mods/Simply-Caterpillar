@@ -17,6 +17,8 @@ import the_fireplace.caterpillar.common.block.util.DecorationPart;
 import the_fireplace.caterpillar.common.menu.DecorationMenu;
 import the_fireplace.caterpillar.common.menu.syncdata.DecorationContainerData;
 import the_fireplace.caterpillar.core.init.BlockEntityInit;
+import the_fireplace.caterpillar.core.network.PacketHandler;
+import the_fireplace.caterpillar.core.network.packet.server.DecorationSyncSelectedMapS2CPacket;
 
 import static net.minecraft.world.level.block.HorizontalDirectionalBlock.FACING;
 
@@ -30,6 +32,18 @@ public class DecorationBlockEntity extends AbstractCaterpillarBlockEntity {
 
     public static final int INVENTORY_SIZE = 90;
 
+    /*
+            Placement 0 -> 0 - 8
+            Placement 1 -> 9 - 17
+            Placement 2 -> 18 - 26
+            Placement 3 -> 27 - 35
+            Placement 4 -> 36 - 44
+            Placement 5 -> 45 - 53
+            Placement 6 -> 54 - 62
+            Placement 7 -> 63 - 71
+            Placement 8 -> 72 - 80
+            Placement 9 -> 81 - 89
+         */
     private int selectedMap;
 
     public DecorationBlockEntity(BlockPos pos, BlockState state) {
@@ -68,7 +82,7 @@ public class DecorationBlockEntity extends AbstractCaterpillarBlockEntity {
     }
 
     public int getSelectedMap() {
-        return selectedMap;
+        return this.selectedMap;
     }
 
     public void setSelectedMap(int selectedMap) {
@@ -77,6 +91,7 @@ public class DecorationBlockEntity extends AbstractCaterpillarBlockEntity {
         } else {
             this.selectedMap = selectedMap;
         }
+        this.setChanged();
     }
 
     @Override
@@ -99,6 +114,7 @@ public class DecorationBlockEntity extends AbstractCaterpillarBlockEntity {
     @Nullable
     @Override
     public AbstractContainerMenu createMenu(int id, Inventory playerInventory, Player player) {
+        PacketHandler.sendToClients(new DecorationSyncSelectedMapS2CPacket(this.getSelectedMap(), this.getBlockPos()));
         return new DecorationMenu(id, playerInventory, this, new DecorationContainerData(this, DecorationContainerData.SIZE));
     }
 }

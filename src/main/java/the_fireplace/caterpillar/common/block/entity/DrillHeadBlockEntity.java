@@ -28,8 +28,8 @@ import the_fireplace.caterpillar.common.menu.util.CaterpillarMenuUtil;
 import the_fireplace.caterpillar.core.init.BlockEntityInit;
 import the_fireplace.caterpillar.common.block.util.DrillHeadPart;
 import the_fireplace.caterpillar.core.network.PacketHandler;
-import the_fireplace.caterpillar.core.network.packet.server.DrillHeadLitSyncS2CPacket;
-import the_fireplace.caterpillar.core.network.packet.server.DrillHeadPowerSyncS2CPacket;
+import the_fireplace.caterpillar.core.network.packet.server.DrillHeadSyncLitS2CPacket;
+import the_fireplace.caterpillar.core.network.packet.server.DrillHeadSyncPowerS2CPacket;
 
 public class DrillHeadBlockEntity extends AbstractCaterpillarBlockEntity {
 
@@ -83,7 +83,7 @@ public class DrillHeadBlockEntity extends AbstractCaterpillarBlockEntity {
         if (blockEntity.isPowered() && blockEntity.isLit()) {
             --blockEntity.litTime;
             blockEntity.tick();
-            PacketHandler.sendToClients(new DrillHeadLitSyncS2CPacket(blockEntity.litTime, blockEntity.litDuration, blockEntity.getBlockPos()));
+            PacketHandler.sendToClients(new DrillHeadSyncLitS2CPacket(blockEntity.litTime, blockEntity.litDuration, blockEntity.getBlockPos()));
 
             if (blockEntity.timer != 0 && blockEntity.timer % MOVEMENT_TICK == 0) {
                 blockEntity.drill();
@@ -115,7 +115,7 @@ public class DrillHeadBlockEntity extends AbstractCaterpillarBlockEntity {
 
         if (blockEntity.isPowered() && !blockEntity.isLit() && fuelSlotIsEmpty) {
             blockEntity.setPowerOff();
-            PacketHandler.sendToClients(new DrillHeadPowerSyncS2CPacket(false, blockEntity.getBlockPos()));
+            PacketHandler.sendToClients(new DrillHeadSyncPowerS2CPacket(false, blockEntity.getBlockPos()));
 
             needsUpdate = true;
         }
@@ -193,7 +193,7 @@ public class DrillHeadBlockEntity extends AbstractCaterpillarBlockEntity {
 
                 if (blockState.getBlock() == Blocks.BEDROCK) {
                     setPowerOff();
-                    PacketHandler.sendToClients(new DrillHeadPowerSyncS2CPacket(false, this.getBlockPos()));
+                    PacketHandler.sendToClients(new DrillHeadSyncPowerS2CPacket(false, this.getBlockPos()));
                 } else if (CaterpillarBlocksUtil.canBreakBlock(blockState.getBlock())) {
                     this.getLevel().destroyBlock(destroyPos, true);
                 }
@@ -334,8 +334,8 @@ public class DrillHeadBlockEntity extends AbstractCaterpillarBlockEntity {
     @Nullable
     @Override
     public AbstractContainerMenu createMenu(int id, Inventory playerInventory, Player player) {
-        PacketHandler.sendToClients(new DrillHeadPowerSyncS2CPacket(this.isPowered(), this.getBlockPos()));
-        PacketHandler.sendToClients(new DrillHeadLitSyncS2CPacket(this.getLitTime(), this.getLitDuration(), this.getBlockPos()));
+        PacketHandler.sendToClients(new DrillHeadSyncPowerS2CPacket(this.isPowered(), this.getBlockPos()));
+        PacketHandler.sendToClients(new DrillHeadSyncLitS2CPacket(this.getLitTime(), this.getLitDuration(), this.getBlockPos()));
         return new DrillHeadMenu(id, playerInventory, this, new DrillHeadContainerData(this, DrillHeadContainerData.SIZE));
     }
 }

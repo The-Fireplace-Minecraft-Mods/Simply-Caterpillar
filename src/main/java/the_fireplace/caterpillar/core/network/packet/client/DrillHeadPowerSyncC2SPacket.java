@@ -8,7 +8,7 @@ import net.minecraftforge.network.NetworkEvent;
 import the_fireplace.caterpillar.common.block.entity.DrillHeadBlockEntity;
 import the_fireplace.caterpillar.common.menu.DrillHeadMenu;
 import the_fireplace.caterpillar.core.network.PacketHandler;
-import the_fireplace.caterpillar.core.network.packet.server.DrillHeadPowerSyncS2CPacket;
+import the_fireplace.caterpillar.core.network.packet.server.DrillHeadSyncPowerS2CPacket;
 
 import java.util.function.Supplier;
 
@@ -44,7 +44,7 @@ public class DrillHeadPowerSyncC2SPacket {
                 drillHeadBlockEntity.setChanged();
 
                 if(player.containerMenu instanceof DrillHeadMenu menu && menu.blockEntity.getBlockPos().equals(pos)) {
-                    PacketHandler.sendToClients(new DrillHeadPowerSyncS2CPacket(drillHeadBlockEntity.isPowered(), drillHeadBlockEntity.getBlockPos()));
+                    PacketHandler.sendToClients(new DrillHeadSyncPowerS2CPacket(drillHeadBlockEntity.isPowered(), drillHeadBlockEntity.getBlockPos()));
                 }
             }
         });

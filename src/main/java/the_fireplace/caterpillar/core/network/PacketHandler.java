@@ -10,8 +10,9 @@ import the_fireplace.caterpillar.Caterpillar;
 import the_fireplace.caterpillar.core.network.packet.client.CaterpillarSetSelectedTabC2SPacket;
 import the_fireplace.caterpillar.core.network.packet.client.DecorationSyncSelectedMapC2SPacket;
 import the_fireplace.caterpillar.core.network.packet.client.DrillHeadPowerSyncC2SPacket;
-import the_fireplace.caterpillar.core.network.packet.server.DrillHeadLitSyncS2CPacket;
-import the_fireplace.caterpillar.core.network.packet.server.DrillHeadPowerSyncS2CPacket;
+import the_fireplace.caterpillar.core.network.packet.server.DecorationSyncSelectedMapS2CPacket;
+import the_fireplace.caterpillar.core.network.packet.server.DrillHeadSyncLitS2CPacket;
+import the_fireplace.caterpillar.core.network.packet.server.DrillHeadSyncPowerS2CPacket;
 
 public final class PacketHandler {
 
@@ -28,10 +29,10 @@ public final class PacketHandler {
         int index = 0;
         Caterpillar.LOGGER.info("Registered {} packets!", index);
 
-        CHANNEL.messageBuilder(DrillHeadPowerSyncS2CPacket.class, index++, NetworkDirection.PLAY_TO_CLIENT)
-                .decoder(DrillHeadPowerSyncS2CPacket::new)
-                .encoder(DrillHeadPowerSyncS2CPacket::toBytes)
-                .consumerMainThread(DrillHeadPowerSyncS2CPacket::handle)
+        CHANNEL.messageBuilder(DrillHeadSyncPowerS2CPacket.class, index++, NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(DrillHeadSyncPowerS2CPacket::new)
+                .encoder(DrillHeadSyncPowerS2CPacket::toBytes)
+                .consumerMainThread(DrillHeadSyncPowerS2CPacket::handle)
                 .add();
 
         CHANNEL.messageBuilder(DrillHeadPowerSyncC2SPacket.class, index++, NetworkDirection.PLAY_TO_SERVER)
@@ -40,10 +41,10 @@ public final class PacketHandler {
                 .consumerMainThread(DrillHeadPowerSyncC2SPacket::handle)
                 .add();
 
-        CHANNEL.messageBuilder(DrillHeadLitSyncS2CPacket.class, index++, NetworkDirection.PLAY_TO_CLIENT)
-                .decoder(DrillHeadLitSyncS2CPacket::new)
-                .encoder(DrillHeadLitSyncS2CPacket::toBytes)
-                .consumerMainThread(DrillHeadLitSyncS2CPacket::handle)
+        CHANNEL.messageBuilder(DrillHeadSyncLitS2CPacket.class, index++, NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(DrillHeadSyncLitS2CPacket::new)
+                .encoder(DrillHeadSyncLitS2CPacket::toBytes)
+                .consumerMainThread(DrillHeadSyncLitS2CPacket::handle)
                 .add();
 
         CHANNEL.messageBuilder(CaterpillarSetSelectedTabC2SPacket.class, index++, NetworkDirection.PLAY_TO_SERVER)
@@ -56,6 +57,12 @@ public final class PacketHandler {
                 .decoder(DecorationSyncSelectedMapC2SPacket::new)
                 .encoder(DecorationSyncSelectedMapC2SPacket::toBytes)
                 .consumerMainThread(DecorationSyncSelectedMapC2SPacket::handle)
+                .add();
+
+        CHANNEL.messageBuilder(DecorationSyncSelectedMapS2CPacket.class, index++, NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(DecorationSyncSelectedMapS2CPacket::new)
+                .encoder(DecorationSyncSelectedMapS2CPacket::toBytes)
+                .consumerMainThread(DecorationSyncSelectedMapS2CPacket::handle)
                 .add();
     }
 

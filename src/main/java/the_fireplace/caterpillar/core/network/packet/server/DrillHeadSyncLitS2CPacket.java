@@ -10,7 +10,7 @@ import the_fireplace.caterpillar.common.block.entity.DrillHeadBlockEntity;
 import java.util.function.Supplier;
 
 
-public class DrillHeadLitSyncS2CPacket {
+public class DrillHeadSyncLitS2CPacket {
 
     private final int litTime;
 
@@ -18,13 +18,13 @@ public class DrillHeadLitSyncS2CPacket {
 
     private final BlockPos pos;
 
-    public DrillHeadLitSyncS2CPacket(int litTime, int litDuration, BlockPos pos) {
+    public DrillHeadSyncLitS2CPacket(int litTime, int litDuration, BlockPos pos) {
         this.litTime = litTime;
         this.litDuration = litDuration;
         this.pos = pos;
     }
 
-    public DrillHeadLitSyncS2CPacket(FriendlyByteBuf buf) {
+    public DrillHeadSyncLitS2CPacket(FriendlyByteBuf buf) {
         this.litTime = buf.readInt();
         this.litDuration = buf.readInt();
         this.pos = buf.readBlockPos();

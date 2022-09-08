@@ -9,18 +9,18 @@ import the_fireplace.caterpillar.common.block.entity.DrillHeadBlockEntity;
 
 import java.util.function.Supplier;
 
-public class DrillHeadPowerSyncS2CPacket {
+public class DrillHeadSyncPowerS2CPacket {
 
     private final boolean powered;
 
     private final BlockPos pos;
 
-    public DrillHeadPowerSyncS2CPacket(boolean powered, BlockPos pos) {
+    public DrillHeadSyncPowerS2CPacket(boolean powered, BlockPos pos) {
         this.powered = powered;
         this.pos = pos;
     }
 
-    public DrillHeadPowerSyncS2CPacket(FriendlyByteBuf buf) {
+    public DrillHeadSyncPowerS2CPacket(FriendlyByteBuf buf) {
         this.powered = buf.readBoolean();
         this.pos = buf.readBlockPos();
     }
