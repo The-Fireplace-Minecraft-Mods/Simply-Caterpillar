@@ -8,15 +8,11 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Fluids;
 import org.jetbrains.annotations.Nullable;
-import the_fireplace.caterpillar.common.block.DrillHeadBlock;
 import the_fireplace.caterpillar.common.block.entity.AbstractCaterpillarBlockEntity;
 import the_fireplace.caterpillar.core.init.BlockInit;
 
 import java.util.List;
-
-import static the_fireplace.caterpillar.common.block.DrillHeadBlock.PART;
 
 public class CaterpillarBlocksUtil {
 
@@ -28,15 +24,13 @@ public class CaterpillarBlocksUtil {
         if (isCaterpillarBlock(nextBlock)) {
             BlockEntity nextBlockEntity = level.getBlockEntity(nextBlockPos);
 
-            if (nextBlockEntity instanceof AbstractCaterpillarBlockEntity) {
-                AbstractCaterpillarBlockEntity caterpillarBlockEntity = (AbstractCaterpillarBlockEntity) nextBlockEntity;
+            if (nextBlockEntity instanceof AbstractCaterpillarBlockEntity caterpillarBlockEntity) {
                 caterpillarBlockEntity.move();
             }
 
             moveNextBlock(level, nextBlockPos, direction);
         }
 
-        return;
     }
 
     public static boolean isCaterpillarBlock(Block block) {
@@ -62,9 +56,7 @@ public class CaterpillarBlocksUtil {
     public static boolean canBreakBlock(Block block) {
         return !block.equals(Blocks.AIR) &&
                 !block.equals(Blocks.WATER) &&
-                !block.equals(Blocks.LAVA) &&
-                !block.equals(Fluids.FLOWING_WATER) &&
-                !block.equals(Fluids.FLOWING_LAVA);
+                !block.equals(Blocks.LAVA);
     }
 
     public static List<AbstractCaterpillarBlockEntity> getConnectedCaterpillarBlockEntities(Level level, BlockPos pos, @Nullable List<AbstractCaterpillarBlockEntity> caterpillarBlockEntities) {
@@ -75,8 +67,10 @@ public class CaterpillarBlocksUtil {
         }
 
         AbstractCaterpillarBlockEntity blockEntity = (AbstractCaterpillarBlockEntity) level.getBlockEntity(pos);
+        assert caterpillarBlockEntities != null;
         caterpillarBlockEntities.add(blockEntity);
 
+        assert blockEntity != null;
         Direction direction = blockEntity.getBlockState().getValue(HorizontalDirectionalBlock.FACING);
         return getConnectedCaterpillarBlockEntities(level, pos.relative(direction), caterpillarBlockEntities);
      }

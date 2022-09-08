@@ -16,6 +16,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.Nullable;
 import the_fireplace.caterpillar.common.block.entity.IncineratorBlockEntity;
+import the_fireplace.caterpillar.core.init.BlockEntityInit;
 
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -54,6 +55,6 @@ public class IncineratorBlock extends AbstractCaterpillarBlock {
     @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return new IncineratorBlockEntity(pos, state);
+        return BlockEntityInit.INCINERATOR.get().create(pos, state);
     }
 }

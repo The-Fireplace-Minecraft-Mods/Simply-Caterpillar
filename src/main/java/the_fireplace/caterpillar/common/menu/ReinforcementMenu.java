@@ -3,7 +3,6 @@ package the_fireplace.caterpillar.common.menu;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.ContainerData;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 import the_fireplace.caterpillar.common.block.entity.ReinforcementBlockEntity;
@@ -15,14 +14,6 @@ public class ReinforcementMenu extends AbstractCaterpillarMenu {
 
     private static final int REINFORCEMENT_SLOT_Y_START = 4;
 
-    private final int INVENTORY_SLOT_X_START = 8;
-
-    private final int INVENTORY_SLOT_Y_START = 107;
-
-    private final int HOTBAR_SLOT_X_START = 8;
-
-    private final int HOTBAR_SLOT_Y_START = 165;
-
     public ReinforcementMenu(int id, Inventory playerInventory, FriendlyByteBuf extraData) {
         super(MenuInit.REINFORCEMENT.get(), id, playerInventory, extraData, 0);
     }
@@ -33,11 +24,15 @@ public class ReinforcementMenu extends AbstractCaterpillarMenu {
 
     @Override
     protected void addPlayerInventory(Inventory playerInventory) {
+        int INVENTORY_SLOT_X_START = 8;
+        int INVENTORY_SLOT_Y_START = 107;
         super.addPlayerInventory(playerInventory, INVENTORY_SLOT_X_START, INVENTORY_SLOT_Y_START);
     }
 
     @Override
     protected void addPlayerHotbar(Inventory playerInventory) {
+        int HOTBAR_SLOT_X_START = 8;
+        int HOTBAR_SLOT_Y_START = 165;
         super.addPlayerHotbar(playerInventory, HOTBAR_SLOT_X_START, HOTBAR_SLOT_Y_START);
     }
 

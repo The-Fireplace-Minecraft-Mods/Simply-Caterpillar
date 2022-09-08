@@ -9,24 +9,30 @@ import the_fireplace.caterpillar.common.block.entity.DrillHeadBlockEntity;
 
 import java.util.function.Supplier;
 
-public class DrillHeadPowerSyncS2CPacket {
 
-    private final boolean powered;
+public class DrillHeadLitSyncS2CPacket {
+
+    private final int litTime;
+
+    private final int litDuration;
 
     private final BlockPos pos;
 
-    public DrillHeadPowerSyncS2CPacket(boolean powered, BlockPos pos) {
-        this.powered = powered;
+    public DrillHeadLitSyncS2CPacket(int litTime, int litDuration, BlockPos pos) {
+        this.litTime = litTime;
+        this.litDuration = litDuration;
         this.pos = pos;
     }
 
-    public DrillHeadPowerSyncS2CPacket(FriendlyByteBuf buf) {
-        this.powered = buf.readBoolean();
+    public DrillHeadLitSyncS2CPacket(FriendlyByteBuf buf) {
+        this.litTime = buf.readInt();
+        this.litDuration = buf.readInt();
         this.pos = buf.readBlockPos();
     }
 
     public void toBytes(FriendlyByteBuf buf) {
-        buf.writeBoolean(powered);
+        buf.writeInt(litTime);
+        buf.writeInt(litDuration);
         buf.writeBlockPos(pos);
     }
 
@@ -36,10 +42,12 @@ public class DrillHeadPowerSyncS2CPacket {
             ClientLevel level = Minecraft.getInstance().level;
 
             if(level.getBlockEntity(pos) instanceof DrillHeadBlockEntity blockEntity) {
-                blockEntity.setPower(powered);
+                blockEntity.setLitTime(litTime);
+                blockEntity.setLitDuration(litDuration);
                 blockEntity.setChanged();
             }
         });
         context.setPacketHandled(true);
     }
 }
+

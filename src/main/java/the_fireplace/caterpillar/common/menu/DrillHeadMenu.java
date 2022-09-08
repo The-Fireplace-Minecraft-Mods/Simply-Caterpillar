@@ -12,8 +12,6 @@ import the_fireplace.caterpillar.common.menu.slot.CaterpillarFuelSlot;
 import the_fireplace.caterpillar.common.menu.syncdata.DrillHeadContainerData;
 import the_fireplace.caterpillar.common.menu.util.CaterpillarMenuUtil;
 import the_fireplace.caterpillar.core.init.MenuInit;
-import the_fireplace.caterpillar.core.network.PacketHandler;
-import the_fireplace.caterpillar.core.network.packet.client.DrillHeadPowerSyncC2SPacket;
 
 public class DrillHeadMenu extends AbstractCaterpillarMenu {
 
@@ -30,7 +28,7 @@ public class DrillHeadMenu extends AbstractCaterpillarMenu {
     private static final int FUEL_SLOT_Y = 53;
 
     public DrillHeadMenu(int id, Inventory playerInventory, FriendlyByteBuf extraData) {
-        super(MenuInit.DRILL_HEAD.get(), id, playerInventory, extraData, 4);
+        super(MenuInit.DRILL_HEAD.get(), id, playerInventory, extraData, DrillHeadContainerData.SIZE);
     }
 
     public DrillHeadMenu(int id, Inventory playerInventory, DrillHeadBlockEntity entity, DrillHeadContainerData data) {
@@ -84,20 +82,4 @@ public class DrillHeadMenu extends AbstractCaterpillarMenu {
 
         return copyOfSourceStack;
     }
-
-    public boolean setPower(boolean power) {
-        if (this.blockEntity instanceof DrillHeadBlockEntity drillHeadBlockEntity) {
-            return drillHeadBlockEntity.setPower(power);
-        }
-
-        return false;
-    }
-
-    public boolean isLit() {
-        if (this.blockEntity instanceof DrillHeadBlockEntity drillHeadBlockEntity) {
-            return drillHeadBlockEntity.isLit();
-        }
-
-        return false;
-    }
-}
+ }

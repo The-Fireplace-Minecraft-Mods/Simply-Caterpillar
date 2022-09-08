@@ -99,6 +99,6 @@ public class DecorationBlockEntity extends AbstractCaterpillarBlockEntity {
     @Nullable
     @Override
     public AbstractContainerMenu createMenu(int id, Inventory playerInventory, Player player) {
-        return new DecorationMenu(id, playerInventory, this, new DecorationContainerData(this, 1));
+        return new DecorationMenu(id, playerInventory, this, new DecorationContainerData(this, DecorationContainerData.SIZE));
     }
 }

@@ -19,6 +19,7 @@ import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import the_fireplace.caterpillar.common.block.entity.DrillHeadBlockEntity;
 import the_fireplace.caterpillar.common.block.util.DrillHeadPart;
@@ -66,12 +67,10 @@ public class DrillHeadBlock extends AbstractCaterpillarBlock {
 
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-        switch (state.getValue(DrillHeadBlock.PART)) {
-            case BASE:
-                return DrillHeadBlock.SHAPES_BASE.get(state.getValue(FACING));
-            default:
-                return DrillHeadBlock.SHAPES_BLADES.get(state.getValue(FACING));
+        if (state.getValue(DrillHeadBlock.PART) == DrillHeadPart.BASE) {
+            return DrillHeadBlock.SHAPES_BASE.get(state.getValue(FACING));
         }
+        return DrillHeadBlock.SHAPES_BLADES.get(state.getValue(FACING));
     }
 
     @Override
@@ -99,19 +98,19 @@ public class DrillHeadBlock extends AbstractCaterpillarBlock {
 
     @Nullable
     @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(@NotNull Level level, @NotNull BlockState state, @NotNull BlockEntityType<T> type) {
         return createTickerHelper(type, BlockEntityInit.DRILL_HEAD.get(), DrillHeadBlockEntity::tick);
     }
 
     @Override
-    public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity livingEntity, ItemStack stack) {
+    public void setPlacedBy(@NotNull Level level, @NotNull BlockPos pos, @NotNull BlockState state, @Nullable LivingEntity livingEntity, @NotNull ItemStack stack) {
         buildStructure(level, pos, state);
 
         super.setPlacedBy(level, pos, state, livingEntity, stack);
     }
 
     @Override
-    public void playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
+    public void playerWillDestroy(@NotNull Level level, @NotNull BlockPos pos, @NotNull BlockState state, @NotNull Player player) {
         BlockPos basePos = getBasePos(state, pos);
         destroyStructure(level, basePos, state, player);
 
@@ -147,41 +146,22 @@ public class DrillHeadBlock extends AbstractCaterpillarBlock {
 
     public BlockPos getBasePos(BlockState state, BlockPos pos) {
         Direction direction = state.getValue(FACING);
-        BlockPos basePos;
 
-        switch (state.getValue(PART)) {
-            case BLADE_LEFT:
-                basePos = pos.relative(direction.getClockWise());
-                break;
-            case BLADE_TOP:
-                basePos = pos.below();
-                break;
-            case BLADE_BOTTOM:
-                basePos = pos.above();
-                break;
-            case BLADE_LEFT_TOP:
-                basePos = pos.below().relative(direction.getClockWise());
-                break;
-            case BLADE_LEFT_BOTTOM:
-                basePos = pos.above().relative(direction.getClockWise());
-                break;
-            case BLADE_RIGHT_TOP:
-                basePos = pos.below().relative(direction.getCounterClockWise());
-                break;
-            case BLADE_RIGHT_BOTTOM:
-                basePos = pos.above().relative(direction.getCounterClockWise());
-                break;
-            default:
-                basePos = pos;
-                break;
-        }
-
-        return basePos;
+        return switch (state.getValue(PART)) {
+            case BLADE_LEFT -> pos.relative(direction.getClockWise());
+            case BLADE_TOP -> pos.below();
+            case BLADE_BOTTOM -> pos.above();
+            case BLADE_LEFT_TOP -> pos.below().relative(direction.getClockWise());
+            case BLADE_LEFT_BOTTOM -> pos.above().relative(direction.getClockWise());
+            case BLADE_RIGHT_TOP -> pos.below().relative(direction.getCounterClockWise());
+            case BLADE_RIGHT_BOTTOM -> pos.above().relative(direction.getCounterClockWise());
+            default -> pos;
+        };
     }
 
     @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return new DrillHeadBlockEntity(pos, state);
+        return BlockEntityInit.DRILL_HEAD.get().create(pos, state);
     }
 }

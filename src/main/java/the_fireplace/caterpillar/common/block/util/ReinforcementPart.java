@@ -1,6 +1,7 @@
 package the_fireplace.caterpillar.common.block.util;
 
 import net.minecraft.util.StringRepresentable;
+import org.jetbrains.annotations.NotNull;
 
 public enum ReinforcementPart implements StringRepresentable {
 
@@ -20,7 +21,7 @@ public enum ReinforcementPart implements StringRepresentable {
         return this.name;
     }
 
-    public String getSerializedName() {
+    public @NotNull String getSerializedName() {
         return this.name;
     }
 }

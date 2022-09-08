@@ -22,10 +22,11 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.network.NetworkHooks;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import the_fireplace.caterpillar.common.block.entity.IncineratorBlockEntity;
 import the_fireplace.caterpillar.common.block.entity.ReinforcementBlockEntity;
 import the_fireplace.caterpillar.common.block.util.ReinforcementPart;
+import the_fireplace.caterpillar.core.init.BlockEntityInit;
 
 import java.util.EnumMap;
 import java.util.Map;
@@ -109,18 +110,13 @@ public class ReinforcementBlock extends AbstractCaterpillarBlock {
 
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-        switch (state.getValue(ReinforcementBlock.PART)) {
-            case LEFT:
-                return ReinforcementBlock.SHAPES_LEFT.get(state.getValue(FACING));
-            case RIGHT:
-                return ReinforcementBlock.SHAPES_RIGHT.get(state.getValue(FACING));
-            case TOP:
-                return ReinforcementBlock.SHAPES_TOP.get(state.getValue(FACING));
-            case BOTTOM:
-                return ReinforcementBlock.SHAPES_BOTTOM.get(state.getValue(FACING));
-            default:
-                return ReinforcementBlock.SHAPES_BASE.get(state.getValue(FACING));
-        }
+        return switch (state.getValue(ReinforcementBlock.PART)) {
+            case LEFT -> ReinforcementBlock.SHAPES_LEFT.get(state.getValue(FACING));
+            case RIGHT -> ReinforcementBlock.SHAPES_RIGHT.get(state.getValue(FACING));
+            case TOP -> ReinforcementBlock.SHAPES_TOP.get(state.getValue(FACING));
+            case BOTTOM -> ReinforcementBlock.SHAPES_BOTTOM.get(state.getValue(FACING));
+            default -> ReinforcementBlock.SHAPES_BASE.get(state.getValue(FACING));
+        };
     }
 
     @Override
@@ -143,7 +139,7 @@ public class ReinforcementBlock extends AbstractCaterpillarBlock {
     }
 
     @Override
-    public void setPlacedBy(Level level, BlockPos blockPos, BlockState blockState, @Nullable LivingEntity livingEntity, ItemStack stack) {
+    public void setPlacedBy(Level level, BlockPos blockPos, BlockState blockState, @Nullable LivingEntity livingEntity, @NotNull ItemStack stack) {
         Direction direction = blockState.getValue(FACING);
 
         level.setBlock(blockPos.above().relative(direction.getCounterClockWise()), blockState.setValue(PART, ReinforcementPart.LEFT), 3);
@@ -155,7 +151,7 @@ public class ReinforcementBlock extends AbstractCaterpillarBlock {
     }
 
     @Override
-    public void playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
+    public void playerWillDestroy(Level level, @NotNull BlockPos pos, BlockState state, Player player) {
         Direction direction = state.getValue(FACING);
         BlockPos basePos = getBasePos(state, pos);
 
@@ -171,32 +167,19 @@ public class ReinforcementBlock extends AbstractCaterpillarBlock {
     public BlockPos getBasePos(BlockState state, BlockPos pos) {
         Direction direction = state.getValue(FACING);
         ReinforcementPart part = state.getValue(ReinforcementBlock.PART);
-        BlockPos basePos;
 
-        switch (part) {
-            case LEFT:
-                basePos = pos.relative(direction.getClockWise());
-                break;
-            case RIGHT:
-                basePos = pos.relative(direction.getCounterClockWise());
-                break;
-            case TOP:
-                basePos = pos.below();
-                break;
-            case BOTTOM:
-                basePos = pos.above();
-                break;
-            default:
-                basePos = pos;
-                break;
-        }
-
-        return basePos;
+        return switch (part) {
+            case LEFT -> pos.relative(direction.getClockWise());
+            case RIGHT -> pos.relative(direction.getCounterClockWise());
+            case TOP -> pos.below();
+            case BOTTOM -> pos.above();
+            default -> pos;
+        };
     }
 
     @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return new ReinforcementBlockEntity(pos, state);
+        return BlockEntityInit.REINFORCEMENT.get().create(pos, state);
     }
 }

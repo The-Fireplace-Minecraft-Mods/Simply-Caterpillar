@@ -19,8 +19,9 @@ import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import the_fireplace.caterpillar.common.block.entity.CollectorBlockEntity;
+import the_fireplace.caterpillar.core.init.BlockEntityInit;
 
 import java.util.EnumMap;
 import java.util.Map;
@@ -77,7 +78,7 @@ public class CollectorBlock extends AbstractCaterpillarBlock {
     }
 
     @Override
-    public void playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
+    public void playerWillDestroy(@NotNull Level level, @NotNull BlockPos pos, BlockState state, @NotNull Player player) {
         DoubleBlockHalf half = state.getValue(CollectorBlock.HALF);
 
         if (half == DoubleBlockHalf.UPPER) {
@@ -107,16 +108,14 @@ public class CollectorBlock extends AbstractCaterpillarBlock {
 
     @Override
     public BlockPos getBasePos(BlockState state, BlockPos pos) {
-        switch (state.getValue(CollectorBlock.HALF)) {
-            case LOWER:
-                return pos.above();
-            default:
-                return pos;
+        if (state.getValue(CollectorBlock.HALF) == DoubleBlockHalf.LOWER) {
+            return pos.above();
         }
+        return pos;
     }
 
     @Override
-    public void setPlacedBy(Level level, BlockPos blockPos, BlockState blockState, @Nullable LivingEntity livingEntity, ItemStack stack) {
+    public void setPlacedBy(Level level, BlockPos blockPos, BlockState blockState, @Nullable LivingEntity livingEntity, @NotNull ItemStack stack) {
         level.setBlock(blockPos.above(), blockState.setValue(CollectorBlock.HALF, DoubleBlockHalf.UPPER), 3);
 
         super.setPlacedBy(level, blockPos, blockState, livingEntity, stack);
@@ -130,6 +129,6 @@ public class CollectorBlock extends AbstractCaterpillarBlock {
     @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return new CollectorBlockEntity(pos, state);
+        return BlockEntityInit.COLLECTOR.get().create(pos, state);
     }
 }

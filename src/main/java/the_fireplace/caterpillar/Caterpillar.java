@@ -11,6 +11,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.NotNull;
 import the_fireplace.caterpillar.config.ConfigHolder;
 import the_fireplace.caterpillar.core.init.BlockInit;
 import the_fireplace.caterpillar.core.init.MenuInit;
@@ -27,7 +28,7 @@ public class Caterpillar
 
 	public static final CreativeModeTab CATERPILLAR_CREATIVE_MODE_TAB = new CreativeModeTab(Caterpillar.MOD_ID) {
 		@Override
-		public ItemStack makeIcon() {
+		public @NotNull ItemStack makeIcon() {
 			return BlockInit.DRILL_HEAD.get().asItem().getDefaultInstance();
 		}
 	};
@@ -52,8 +53,6 @@ public class Caterpillar
 	}
 
 	private void commonSetup(FMLCommonSetupEvent event) {
-		event.enqueueWork(() -> {
-			PacketHandler.register();
-		});
+		event.enqueueWork(PacketHandler::register);
 	}
 }

@@ -8,7 +8,7 @@ import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
-import the_fireplace.caterpillar.common.block.entity.DrillBaseBlockEntity;
+import the_fireplace.caterpillar.core.init.BlockEntityInit;
 
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -35,6 +35,6 @@ public class DrillBaseBlock extends AbstractCaterpillarBlock {
     @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return new DrillBaseBlockEntity(pos, state);
+        return BlockEntityInit.DRILL_BASE.get().create(pos, state);
     }
 }

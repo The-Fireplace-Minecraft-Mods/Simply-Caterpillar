@@ -21,6 +21,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.network.NetworkHooks;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import the_fireplace.caterpillar.common.block.entity.DrillHeadBlockEntity;
 import the_fireplace.caterpillar.common.block.util.CaterpillarBlocksUtil;
@@ -39,7 +40,7 @@ public abstract class AbstractCaterpillarBlock extends BaseEntityBlock {
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+    public @NotNull VoxelShape getShape(BlockState state, @NotNull BlockGetter level, @NotNull BlockPos pos, @NotNull CollisionContext context) {
         return AbstractCaterpillarBlock.SHAPES.get(state.getValue(FACING));
     }
 
@@ -52,28 +53,29 @@ public abstract class AbstractCaterpillarBlock extends BaseEntityBlock {
     }
 
     @Override
-    public BlockState rotate(BlockState state, Rotation rotation) {
+    public @NotNull BlockState rotate(BlockState state, Rotation rotation) {
         return state.setValue(FACING, rotation.rotate(state.getValue(FACING)));
     }
 
+
     @Override
-    public BlockState mirror(BlockState state, Mirror mirror) {
+    public @NotNull BlockState mirror(BlockState state, Mirror mirror) {
         return state.rotate(mirror.getRotation(state.getValue(FACING)));
     }
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateDefinition.@NotNull Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
         builder.add(FACING);
     }
 
     @Override
-    public RenderShape getRenderShape(BlockState state) {
+    public @NotNull RenderShape getRenderShape(@NotNull BlockState state) {
         return RenderShape.MODEL;
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+    public @NotNull InteractionResult use(@NotNull BlockState state, Level level, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult hit) {
         if (level.isClientSide) {
             return InteractionResult.SUCCESS;
         } else {
@@ -85,9 +87,9 @@ public abstract class AbstractCaterpillarBlock extends BaseEntityBlock {
                 BlockEntity blockEntity = level.getBlockEntity(caterpillarHeadPos);
                 if (blockEntity instanceof DrillHeadBlockEntity drillHeadBlockEntity) {
                     NetworkHooks.openScreen((ServerPlayer) player, drillHeadBlockEntity, caterpillarHeadPos);
+                } else {
+                    player.displayClientMessage(Component.translatable("block.simplycaterpillar.drill_head.not_found"), true);
                 }
-            } else {
-                player.displayClientMessage(Component.translatable("block.simplycaterpillar.drill_head.not_found"), true);
             }
 
             return InteractionResult.CONSUME;
@@ -119,5 +121,5 @@ public abstract class AbstractCaterpillarBlock extends BaseEntityBlock {
 
     @Nullable
     @Override
-    public abstract BlockEntity newBlockEntity(BlockPos pos, BlockState state);
+    public abstract BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state);
 }

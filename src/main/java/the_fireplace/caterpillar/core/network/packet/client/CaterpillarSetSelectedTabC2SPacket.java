@@ -1,33 +1,29 @@
 package the_fireplace.caterpillar.core.network.packet.client;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.network.NetworkEvent;
 import net.minecraftforge.network.NetworkHooks;
 import the_fireplace.caterpillar.client.screen.util.ScreenTabs;
 import the_fireplace.caterpillar.common.block.AbstractCaterpillarBlock;
 import the_fireplace.caterpillar.common.block.entity.AbstractCaterpillarBlockEntity;
-import the_fireplace.caterpillar.common.block.entity.DrillHeadBlockEntity;
 import the_fireplace.caterpillar.common.block.util.CaterpillarBlocksUtil;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.function.Supplier;
 
 import static the_fireplace.caterpillar.common.block.AbstractCaterpillarBlock.FACING;
 
 public class CaterpillarSetSelectedTabC2SPacket {
 
-    private ScreenTabs tab;
+    private final ScreenTabs tab;
 
-    private BlockPos pos;
+    private final BlockPos pos;
 
     public CaterpillarSetSelectedTabC2SPacket(ScreenTabs tab, BlockPos pos) {
         this.tab = tab;
@@ -48,6 +44,7 @@ public class CaterpillarSetSelectedTabC2SPacket {
         NetworkEvent.Context context = supplier.get();
         context.enqueueWork(() -> {
             ServerPlayer player = context.getSender();
+            assert player != null;
             ServerLevel level = player.getLevel();
 
             if(level.getBlockEntity(pos) instanceof AbstractCaterpillarBlockEntity currentBlockEntity) {

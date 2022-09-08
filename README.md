@@ -6,7 +6,7 @@
 [Issue Reporting](https://github.com/The-Fireplace/Simply-Caterpillar/issues)
 ------------------------------------------------------------------
 
-If you found a bug or even are experiencing a crash please report it so we can fix it. Please check at first if a bug report for the issue already
+If you found a bug or even are experiencing a crash please report it, so we can fix it. Please check at first if a bug report for the issue already
 [exists](https://github.com/The-Fireplace/Simply-Caterpillar/issues). If not just create a [new issue](https://github.com/The-Fireplace/Simply-Caterpillar/issues/new) and fill out the
 form.
 

@@ -5,7 +5,9 @@ import the_fireplace.caterpillar.common.block.entity.DecorationBlockEntity;
 
 public class DecorationContainerData extends SimpleContainerData {
 
-    public DecorationBlockEntity blockEntity;
+    public final DecorationBlockEntity blockEntity;
+
+    public static final int SIZE = 1;
 
     public DecorationContainerData(DecorationBlockEntity blockEntity, int amount) {
         super(amount);

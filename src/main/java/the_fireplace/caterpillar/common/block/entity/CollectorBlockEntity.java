@@ -1,18 +1,13 @@
 package the_fireplace.caterpillar.common.block.entity;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.phys.AABB;
-import org.jetbrains.annotations.Nullable;
 import the_fireplace.caterpillar.common.block.CollectorBlock;
 import the_fireplace.caterpillar.common.block.util.CaterpillarBlocksUtil;
 import the_fireplace.caterpillar.core.init.BlockEntityInit;

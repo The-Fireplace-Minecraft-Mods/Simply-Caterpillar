@@ -10,7 +10,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
+import org.jetbrains.annotations.NotNull;
 import the_fireplace.caterpillar.common.block.entity.DecorationBlockEntity;
+import the_fireplace.caterpillar.common.menu.syncdata.DecorationContainerData;
 import the_fireplace.caterpillar.core.init.MenuInit;
 
 public class DecorationMenu extends AbstractCaterpillarMenu {
@@ -20,7 +22,7 @@ public class DecorationMenu extends AbstractCaterpillarMenu {
     private static final int DECORATION_SLOT_Y_START = 17;
 
     public DecorationMenu(int id, Inventory playerInventory, FriendlyByteBuf extraData) {
-        super(MenuInit.DECORATION.get(), id, playerInventory, extraData, 1);
+        super(MenuInit.DECORATION.get(), id, playerInventory, extraData, DecorationContainerData.SIZE);
     }
 
     public DecorationMenu(int id, Inventory playerInventory, DecorationBlockEntity blockEntity, ContainerData data) {
@@ -45,9 +47,8 @@ public class DecorationMenu extends AbstractCaterpillarMenu {
         Slot sourceSlot = slots.get(index);
         if (sourceSlot == null || !sourceSlot.hasItem()) return ItemStack.EMPTY;
         ItemStack sourceStack = sourceSlot.getItem();
-        ItemStack copyOfSourceStack = sourceStack.copy();
 
-        return copyOfSourceStack;
+        return sourceStack.copy();
     }
 
     /*
@@ -92,7 +93,7 @@ public class DecorationMenu extends AbstractCaterpillarMenu {
     }
 
     @Override
-    public void clicked(int pSlotId, int pButton, ClickType pClickType, Player pPlayer) {
+    public void clicked(int pSlotId, int pButton, @NotNull ClickType pClickType, @NotNull Player pPlayer) {
         super.clicked(pSlotId, pButton, pClickType, pPlayer);
     }
 

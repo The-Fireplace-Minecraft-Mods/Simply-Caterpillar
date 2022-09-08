@@ -8,7 +8,9 @@ import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.network.simple.SimpleChannel;
 import the_fireplace.caterpillar.Caterpillar;
 import the_fireplace.caterpillar.core.network.packet.client.CaterpillarSetSelectedTabC2SPacket;
+import the_fireplace.caterpillar.core.network.packet.client.DecorationSyncSelectedMapC2SPacket;
 import the_fireplace.caterpillar.core.network.packet.client.DrillHeadPowerSyncC2SPacket;
+import the_fireplace.caterpillar.core.network.packet.server.DrillHeadLitSyncS2CPacket;
 import the_fireplace.caterpillar.core.network.packet.server.DrillHeadPowerSyncS2CPacket;
 
 public final class PacketHandler {
@@ -38,6 +40,11 @@ public final class PacketHandler {
                 .consumerMainThread(DrillHeadPowerSyncC2SPacket::handle)
                 .add();
 
+        CHANNEL.messageBuilder(DrillHeadLitSyncS2CPacket.class, index++, NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(DrillHeadLitSyncS2CPacket::new)
+                .encoder(DrillHeadLitSyncS2CPacket::toBytes)
+                .consumerMainThread(DrillHeadLitSyncS2CPacket::handle)
+                .add();
 
         CHANNEL.messageBuilder(CaterpillarSetSelectedTabC2SPacket.class, index++, NetworkDirection.PLAY_TO_SERVER)
                 .decoder(CaterpillarSetSelectedTabC2SPacket::new)
@@ -45,6 +52,11 @@ public final class PacketHandler {
                 .consumerMainThread(CaterpillarSetSelectedTabC2SPacket::handle)
                 .add();
 
+        CHANNEL.messageBuilder(DecorationSyncSelectedMapC2SPacket.class, index++, NetworkDirection.PLAY_TO_SERVER)
+                .decoder(DecorationSyncSelectedMapC2SPacket::new)
+                .encoder(DecorationSyncSelectedMapC2SPacket::toBytes)
+                .consumerMainThread(DecorationSyncSelectedMapC2SPacket::handle)
+                .add();
     }
 
     public static <MSG> void sendToServer(MSG message) {

@@ -2,16 +2,15 @@ package the_fireplace.caterpillar.client.screen;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import org.jetbrains.annotations.NotNull;
 import the_fireplace.caterpillar.client.screen.util.ScreenTabs;
 import the_fireplace.caterpillar.common.block.entity.*;
 import the_fireplace.caterpillar.common.block.util.CaterpillarBlocksUtil;
@@ -31,7 +30,7 @@ public abstract class AbstractCaterpillarScreen<T extends AbstractCaterpillarMen
 
     private final ScreenTabs SELECTED_TAB;
 
-    private List<AbstractCaterpillarBlockEntity> caterpillarBlockEntities;
+    private final List<AbstractCaterpillarBlockEntity> caterpillarBlockEntities;
 
     public AbstractCaterpillarScreen(T menu, Inventory playerInventory, Component title, ScreenTabs selectedTab) {
         super(menu, playerInventory, title);
@@ -48,51 +47,67 @@ public abstract class AbstractCaterpillarScreen<T extends AbstractCaterpillarMen
         super.init();
 
         super.titleLabelX = (super.imageWidth - super.font.width(title)) / 2;
+        this.renderTabButtons();
     }
 
     @Override
-    public void render(PoseStack stack, int mouseX, int mouseY, float partialTicks) {
-        super.render(stack, mouseX, mouseY, partialTicks);
+    public void render(@NotNull PoseStack stack, int mouseX, int mouseY, float partialTicks) {
+        this.renderBackground(stack);
 
+        super.render(stack, mouseX, mouseY, partialTicks);
         this.renderTooltip(stack, mouseX, mouseY);
         this.renderTooltipTabButtons(stack, mouseX, mouseY);
-        this.renderBgTabButtons();
+
+        this.renderTabItems();
     }
 
     @Override
-    protected void renderBg(PoseStack stack, float partialTick, int mouseX, int mouseY) {
-        super.renderBackground(stack);
+    protected void renderBg(@NotNull PoseStack stack, float partialTick, int mouseX, int mouseY) {
         this.bindTexture();
 
         blit(stack, super.leftPos, super.topPos, 0, 0, super.imageWidth, super.imageHeight);
     }
 
     @Override
-    protected void renderLabels(PoseStack stack, int mouseX, int mouseY) {
+    protected void renderLabels(@NotNull PoseStack stack, int mouseX, int mouseY) {
         this.font.draw(stack, this.SELECTED_TAB.TITLE, super.titleLabelX, super.titleLabelY, 0x404040);
         this.font.draw(stack, super.playerInventoryTitle, super.inventoryLabelX, super.inventoryLabelY, 0x404040);
     }
 
-    private void renderBgTabButtons() {
+    private void renderTabButtons() {
         int incrementTabPos = 0;
 
         for (ScreenTabs tab: ScreenTabs.values()) {
             if (tabShouldBeDisplayed(tab)) {
                 if (this.SELECTED_TAB.equals(tab)) {
-                    this.addRenderableWidget(new ImageButton(this.leftPos - 28, this.topPos + 3 + incrementTabPos*20, 31, 20, 176 , 58 + 20, 0, ScreenTabs.DRILL_HEAD.TEXTURE, (onPress) -> {
+                    this.addRenderableWidget(new ImageButton(super.leftPos - 28, super.topPos + 3 + incrementTabPos*20, 31, 20, 176 , 58 + 20, 0, ScreenTabs.DRILL_HEAD.TEXTURE, (onPress) -> {
 
                     }));
-                    this.renderFloatingItem(tab.ITEM,this.leftPos - 21, this.topPos + 5 + incrementTabPos*20);
                 } else {
-                    this.addRenderableWidget(new ImageButton(this.leftPos - 31, this.topPos + 3 + incrementTabPos*20, 31, 20, 176 , 58, 0, ScreenTabs.DRILL_HEAD.TEXTURE, (onPress) -> {
-                        PacketHandler.sendToServer(new CaterpillarSetSelectedTabC2SPacket(tab, this.menu.blockEntity.getBlockPos()));
-                    }));
-                    this.renderFloatingItem(tab.ITEM, this.leftPos - 23, this.topPos + 5 + incrementTabPos*20);
+                    this.addRenderableWidget(new ImageButton(super.leftPos - 31, super.topPos + 3 + incrementTabPos*20, 31, 20, 176 , 58, 0, ScreenTabs.DRILL_HEAD.TEXTURE, (onPress) -> PacketHandler.sendToServer(new CaterpillarSetSelectedTabC2SPacket(tab, this.menu.blockEntity.getBlockPos()))));
                 }
 
                 incrementTabPos++;
             }
         }
+    }
+
+    private void renderTabItems() {
+        int incrementTabPos = 0;
+
+        super.itemRenderer.blitOffset = 100.0F;
+        for (ScreenTabs tab: ScreenTabs.values()) {
+            if (tabShouldBeDisplayed(tab)) {
+                if (this.SELECTED_TAB.equals(tab)) {
+                    super.itemRenderer.renderAndDecorateItem(tab.ITEM,this.leftPos - 21, this.topPos + 5 + incrementTabPos*20);
+                } else {
+                    super.itemRenderer.renderAndDecorateItem(tab.ITEM, this.leftPos - 23, this.topPos + 5 + incrementTabPos*20);
+                }
+
+                incrementTabPos++;
+            }
+        }
+        super.itemRenderer.blitOffset = 0.0F;
     }
 
     private void renderTooltipTabButtons(PoseStack stack, int mouseX, int mouseY) {
@@ -109,8 +124,12 @@ public abstract class AbstractCaterpillarScreen<T extends AbstractCaterpillarMen
         }
     }
     private boolean tabShouldBeDisplayed(ScreenTabs tab) {
+        if (caterpillarBlockEntities.isEmpty()) {
+            return false;
+        }
+
         switch (tab) {
-            case DECORATION: {
+            case DECORATION -> {
                 for (AbstractCaterpillarBlockEntity entity : caterpillarBlockEntities) {
                     if (entity instanceof DecorationBlockEntity) {
                         return true;
@@ -118,7 +137,7 @@ public abstract class AbstractCaterpillarScreen<T extends AbstractCaterpillarMen
                 }
                 return false;
             }
-            case REINFORCEMENT: {
+            case REINFORCEMENT -> {
                 for (AbstractCaterpillarBlockEntity entity : caterpillarBlockEntities) {
                     if (entity instanceof ReinforcementBlockEntity) {
                         return true;
@@ -126,7 +145,7 @@ public abstract class AbstractCaterpillarScreen<T extends AbstractCaterpillarMen
                 }
                 return false;
             }
-            case INCINERATOR: {
+            case INCINERATOR -> {
                 for (AbstractCaterpillarBlockEntity entity : caterpillarBlockEntities) {
                     if (entity instanceof IncineratorBlockEntity) {
                         return true;
@@ -134,7 +153,7 @@ public abstract class AbstractCaterpillarScreen<T extends AbstractCaterpillarMen
                 }
                 return false;
             }
-            case DRILL_HEAD: {
+            case DRILL_HEAD -> {
                 for (AbstractCaterpillarBlockEntity entity : caterpillarBlockEntities) {
                     if (entity instanceof DrillHeadBlockEntity) {
                         return true;
@@ -142,27 +161,13 @@ public abstract class AbstractCaterpillarScreen<T extends AbstractCaterpillarMen
                 }
                 return false;
             }
-            default: {
+            default -> {
                 return false;
             }
         }
     }
 
-    private void renderFloatingItem(ItemStack pStack, int x, int y) {
-        PoseStack posestack = RenderSystem.getModelViewStack();
-        posestack.translate(0.0D, 0.0D, 32.0D);
-        RenderSystem.applyModelViewMatrix();
-        super.setBlitOffset(200);
-        super.itemRenderer.blitOffset = 200.0F;
-        var font = net.minecraftforge.client.extensions.common.IClientItemExtensions.of(pStack).getFont(pStack, net.minecraftforge.client.extensions.common.IClientItemExtensions.FontContext.ITEM_COUNT);
-        if (font == null) font = this.font;
-        super.itemRenderer.renderAndDecorateItem(pStack, x, y);
-        super.itemRenderer.renderGuiItemDecorations(font, pStack, x, y -  0);
-        super.setBlitOffset(0);
-        super.itemRenderer.blitOffset = 0.0F;
-    }
-
-    protected void bindTexture() {
+    private void bindTexture() {
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.setShaderTexture(0, SELECTED_TAB.TEXTURE);

@@ -17,10 +17,10 @@ import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import the_fireplace.caterpillar.common.block.entity.AbstractCaterpillarBlockEntity;
-import the_fireplace.caterpillar.common.block.entity.StorageBlockEntity;
 import the_fireplace.caterpillar.common.block.util.StoragePart;
+import the_fireplace.caterpillar.core.init.BlockEntityInit;
 
 import java.util.EnumMap;
 import java.util.Map;
@@ -72,14 +72,11 @@ public class StorageBlock extends AbstractCaterpillarBlock {
 
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-        switch (state.getValue(StorageBlock.PART)) {
-            case LEFT:
-                return StorageBlock.SHAPES_LEFT.get(state.getValue(FACING));
-            case RIGHT:
-                return StorageBlock.SHAPES_RIGHT.get(state.getValue(FACING));
-            default:
-                return StorageBlock.SHAPES_BASE.get(state.getValue(FACING));
-        }
+        return switch (state.getValue(StorageBlock.PART)) {
+            case LEFT -> StorageBlock.SHAPES_LEFT.get(state.getValue(FACING));
+            case RIGHT -> StorageBlock.SHAPES_RIGHT.get(state.getValue(FACING));
+            default -> StorageBlock.SHAPES_BASE.get(state.getValue(FACING));
+        };
     }
 
     @Override
@@ -100,7 +97,7 @@ public class StorageBlock extends AbstractCaterpillarBlock {
     }
 
     @Override
-    public void setPlacedBy(Level level, BlockPos blockPos, BlockState blockState, @Nullable LivingEntity livingEntity, ItemStack stack) {
+    public void setPlacedBy(Level level, BlockPos blockPos, BlockState blockState, @Nullable LivingEntity livingEntity, @NotNull ItemStack stack) {
         Direction direction = blockState.getValue(FACING);
 
         level.setBlock(blockPos.relative(direction.getCounterClockWise()), blockState.setValue(StorageBlock.PART, StoragePart.LEFT), 3);
@@ -110,22 +107,22 @@ public class StorageBlock extends AbstractCaterpillarBlock {
     }
 
     @Override
-    public void playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
+    public void playerWillDestroy(@NotNull Level level, @NotNull BlockPos pos, BlockState state, @NotNull Player player) {
         Direction direction = state.getValue(FACING);
 
         switch (state.getValue(StorageBlock.PART)) {
-            case LEFT:
+            case LEFT -> {
                 level.destroyBlock(pos.relative(direction.getClockWise()), false);
                 level.destroyBlock(pos.relative(direction.getClockWise(), 2), false);
-                break;
-            case RIGHT:
+            }
+            case RIGHT -> {
                 level.destroyBlock(pos.relative(direction.getCounterClockWise()), false);
                 level.destroyBlock(pos.relative(direction.getCounterClockWise(), 2), false);
-                break;
-            default:
+            }
+            default -> {
                 level.destroyBlock(pos.relative(direction.getCounterClockWise()), false);
                 level.destroyBlock(pos.relative(direction.getClockWise()), false);
-                break;
+            }
         }
 
         super.playerWillDestroy(level, pos, state, player);
@@ -134,19 +131,16 @@ public class StorageBlock extends AbstractCaterpillarBlock {
     public BlockPos getBasePos(BlockState state, BlockPos pos) {
         Direction direction = state.getValue(FACING);
 
-        switch (state.getValue(StorageBlock.PART)) {
-            case LEFT:
-                return pos.relative(direction.getClockWise());
-            case RIGHT:
-                return pos.relative(direction.getCounterClockWise());
-            default:
-                return pos;
-        }
+        return switch (state.getValue(StorageBlock.PART)) {
+            case LEFT -> pos.relative(direction.getClockWise());
+            case RIGHT -> pos.relative(direction.getCounterClockWise());
+            default -> pos;
+        };
     }
 
     @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return new StorageBlockEntity(pos, state);
+        return BlockEntityInit.STORAGE.get().create(pos, state);
     }
 }
