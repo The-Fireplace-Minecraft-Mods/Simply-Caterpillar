@@ -17,6 +17,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -27,8 +28,8 @@ public class InventoryBlockEntity extends BlockEntity {
     protected int timer;
     public boolean requiresUpdate;
 
-    private final ItemStackHandler inventory;
-    private final LazyOptional<IItemHandler> handler;
+    public final ItemStackHandler inventory;
+    public final LazyOptional<IItemHandlerModifiable> handler;
 
     public InventoryBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state, int size) {
         super(type, pos, state);
@@ -38,6 +39,12 @@ public class InventoryBlockEntity extends BlockEntity {
 
         this.inventory = createInventory();
         this.handler = LazyOptional.of(() -> this.inventory);
+    }
+
+    public void setStackInSlot(int slot, ItemStack stack) {
+        this.inventory.setStackInSlot(slot, stack);
+        this.requiresUpdate = true;
+        // this.handler.map(inventory -> inventory.setStackInSlot(slot, stack)).orElse(ItemStack.EMPTY);
     }
 
     public ItemStack extractItem(int slot) {
@@ -135,9 +142,10 @@ public class InventoryBlockEntity extends BlockEntity {
     protected ItemStackHandler createInventory() {
         return new ItemStackHandler(this.size) {
             @Override
-            protected void onContentsChanged(int slot) {
+            public void onContentsChanged(int slot) {
+                InventoryBlockEntity.this.update();
                 super.onContentsChanged(slot);
-                setChanged();
+
             }
 
             @Override
@@ -151,6 +159,7 @@ public class InventoryBlockEntity extends BlockEntity {
                 InventoryBlockEntity.this.update();
                 return super.insertItem(slot, stack, simulate);
             }
+
 
             @Override
             public void setStackInSlot(int slot, @NotNull ItemStack stack) {

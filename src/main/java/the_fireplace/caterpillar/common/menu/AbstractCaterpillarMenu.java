@@ -52,14 +52,14 @@ public abstract class AbstractCaterpillarMenu extends AbstractContainerMenu {
     //  0 - 8 = hotbar slots (which will map to the InventoryPlayer slot numbers 0 - 8)
     //  9 - 35 = player inventory slots (which map to the InventoryPlayer slot numbers 9 - 35)
     //  36 - 44 = BlockEntityInventory slots, which map to our BlockEntity slot numbers 0 - 8)
-    protected static final int HOTBAR_SLOT_COUNT = 9;
-    protected static final int PLAYER_INVENTORY_ROW_COUNT = 3;
-    protected static final int PLAYER_INVENTORY_COLUMN_COUNT = 9;
-    protected static final int PLAYER_INVENTORY_SLOT_COUNT = PLAYER_INVENTORY_COLUMN_COUNT * PLAYER_INVENTORY_ROW_COUNT;
-    protected static final int VANILLA_SLOT_COUNT = HOTBAR_SLOT_COUNT + PLAYER_INVENTORY_SLOT_COUNT;
-    protected static final int VANILLA_FIRST_SLOT_INDEX = 0;
-    protected static final int BE_INVENTORY_FIRST_SLOT_INDEX = VANILLA_FIRST_SLOT_INDEX + VANILLA_SLOT_COUNT;
-    protected final int BE_INVENTORY_SLOT_COUNT;
+    public static final int HOTBAR_SLOT_COUNT = 9;
+    public static final int PLAYER_INVENTORY_ROW_COUNT = 3;
+    public static final int PLAYER_INVENTORY_COLUMN_COUNT = 9;
+    public static final int PLAYER_INVENTORY_SLOT_COUNT = PLAYER_INVENTORY_COLUMN_COUNT * PLAYER_INVENTORY_ROW_COUNT;
+    public static final int VANILLA_SLOT_COUNT = HOTBAR_SLOT_COUNT + PLAYER_INVENTORY_SLOT_COUNT;
+    public static final int VANILLA_FIRST_SLOT_INDEX = 0;
+    public static final int BE_INVENTORY_FIRST_SLOT_INDEX = VANILLA_FIRST_SLOT_INDEX + VANILLA_SLOT_COUNT;
+    public final int BE_INVENTORY_SLOT_COUNT;
 
     @Override
     public @NotNull ItemStack quickMoveStack(@NotNull Player player, int index) {

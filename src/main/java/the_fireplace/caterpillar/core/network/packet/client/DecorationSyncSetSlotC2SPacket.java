@@ -4,31 +4,38 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.network.NetworkEvent;
 import the_fireplace.caterpillar.common.block.entity.DecorationBlockEntity;
 
 import java.util.function.Supplier;
 
+public class DecorationSyncSetSlotC2SPacket {
 
-public class DecorationSyncSelectedMapC2SPacket {
+    private final int placementSlotId;
 
-    private final int selectedMap;
+    private final ItemStack stack;
 
     private final BlockPos pos;
 
 
-    public DecorationSyncSelectedMapC2SPacket(int selectedMap, BlockPos pos) {
-        this.selectedMap = selectedMap;
+    public DecorationSyncSetSlotC2SPacket(int placementSlotId, ItemStack stack, BlockPos pos) {
+        this.placementSlotId = placementSlotId;
+        this.stack = stack;
         this.pos = pos;
     }
 
-    public DecorationSyncSelectedMapC2SPacket(FriendlyByteBuf buf) {
-        this.selectedMap = buf.readInt();
+    public DecorationSyncSetSlotC2SPacket(FriendlyByteBuf buf) {
+        this.placementSlotId = buf.readInt();
+        this.stack = buf.readItem();
         this.pos = buf.readBlockPos();
     }
 
     public void toBytes(FriendlyByteBuf buf) {
-        buf.writeInt(selectedMap);
+        buf.writeInt(placementSlotId);
+        buf.writeItemStack(stack, true);
         buf.writeBlockPos(pos);
     }
 
@@ -39,10 +46,14 @@ public class DecorationSyncSelectedMapC2SPacket {
             ServerLevel level = player.getLevel();
 
             if(level.getBlockEntity(pos) instanceof DecorationBlockEntity blockEntity) {
-                blockEntity.setSelectedMap(selectedMap);
+                blockEntity.setStackInSlot(placementSlotId, stack);
                 blockEntity.setChanged();
 
-                player.containerMenu.broadcastChanges();
+                blockEntity.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(handler -> {
+                    if (handler instanceof IItemHandlerModifiable handlerModifiable) {
+                        handlerModifiable.setStackInSlot(placementSlotId, stack);
+                    }
+                });
             }
         });
         context.setPacketHandled(true);

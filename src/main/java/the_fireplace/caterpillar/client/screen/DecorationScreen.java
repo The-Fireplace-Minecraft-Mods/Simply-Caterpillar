@@ -4,11 +4,17 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.ClickType;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 import the_fireplace.caterpillar.client.screen.util.ScreenTabs;
 import the_fireplace.caterpillar.common.block.entity.DecorationBlockEntity;
 import the_fireplace.caterpillar.common.menu.DecorationMenu;
 import the_fireplace.caterpillar.core.network.PacketHandler;
-import the_fireplace.caterpillar.core.network.packet.client.DecorationSyncSelectedMapC2SPacket;
+import the_fireplace.caterpillar.core.network.packet.client.DecorationSyncSetSlotC2SPacket;
+
+import static the_fireplace.caterpillar.common.menu.AbstractCaterpillarMenu.BE_INVENTORY_FIRST_SLOT_INDEX;
+import static the_fireplace.caterpillar.common.menu.AbstractCaterpillarMenu.VANILLA_FIRST_SLOT_INDEX;
 
 public class DecorationScreen extends AbstractCaterpillarScreen<DecorationMenu> {
 
@@ -22,7 +28,7 @@ public class DecorationScreen extends AbstractCaterpillarScreen<DecorationMenu> 
     public DecorationScreen(DecorationMenu menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title, ScreenTabs.DECORATION);
 
-        this.scrollOffs = this.getSelectedMap()  / 9.0F;
+        this.scrollOffs = this.menu.getSelectedMap() / 9.0F;
     }
 
     @Override
@@ -44,10 +50,48 @@ public class DecorationScreen extends AbstractCaterpillarScreen<DecorationMenu> 
     }
 
     @Override
+    protected void slotClicked(Slot slot, int slotId, int mouseButton, ClickType type) {
+        if (slotId >= VANILLA_FIRST_SLOT_INDEX && slotId < BE_INVENTORY_FIRST_SLOT_INDEX || slot == null) {
+            super.slotClicked(slot, slotId, mouseButton, type);
+            return;
+        }
+
+        int placementSlotId = slotId - BE_INVENTORY_FIRST_SLOT_INDEX;
+        ItemStack placementStack;
+        ItemStack carried = this.menu.getCarried().copy();
+
+        if (slotId >= BE_INVENTORY_FIRST_SLOT_INDEX && slotId <= BE_INVENTORY_FIRST_SLOT_INDEX + 3) {
+            placementSlotId = this.menu.getSelectedMap() * 9 + (slotId - BE_INVENTORY_FIRST_SLOT_INDEX);
+
+        } else if ((slotId + 1) >= BE_INVENTORY_FIRST_SLOT_INDEX + 3 && (slotId + 1) <= BE_INVENTORY_FIRST_SLOT_INDEX + 8) {
+            placementSlotId = this.menu.getSelectedMap() * 9 + ((slotId + 1) - BE_INVENTORY_FIRST_SLOT_INDEX);
+        }
+
+        if (carried.isEmpty()) {
+            placementStack = ItemStack.EMPTY;
+        } else {
+           placementStack = carried.copy();
+           placementStack.setCount(1);
+        }
+
+        slot.set(placementStack);
+        slot.setChanged();
+
+        this.menu.setCarried(carried);
+        this.menu.broadcastChanges();
+
+        if (this.menu.blockEntity instanceof DecorationBlockEntity decorationBlockEntity) {
+            decorationBlockEntity.setStackInSlot(placementSlotId, placementStack);
+            decorationBlockEntity.setChanged();
+        }
+
+        PacketHandler.sendToServer(new DecorationSyncSetSlotC2SPacket(placementSlotId, placementStack, this.menu.blockEntity.getBlockPos()));
+    }
+
+    @Override
     public boolean mouseReleased(double mouseX, double mouseY, int button) {
         if (button == 0) {
             this.scrolling = false;
-            return true;
         }
 
         return super.mouseReleased(mouseX, mouseY, button);
@@ -55,8 +99,6 @@ public class DecorationScreen extends AbstractCaterpillarScreen<DecorationMenu> 
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        super.mouseClicked(mouseX, mouseY, button);
-
         if (button == 0) {
             if (this.insideScrollBar(mouseX, mouseY)) {
                 this.scrolling = true;
@@ -64,7 +106,7 @@ public class DecorationScreen extends AbstractCaterpillarScreen<DecorationMenu> 
             }
         }
 
-        return true;
+        return super.mouseClicked(mouseX, mouseY, button);
     }
 
     private boolean insideScrollBar(double mouseX, double mouseY) {
@@ -81,8 +123,7 @@ public class DecorationScreen extends AbstractCaterpillarScreen<DecorationMenu> 
             int j = i + SCROLLER_HEIGHT;
             this.scrollOffs = ((float)mouseY - (float)i - 7.5F) / ((float)(j - i) - 15.0F);
             this.scrollOffs = Mth.clamp(this.scrollOffs, 0.0F, 1.0F);
-            this.scrollTo(this.scrollOffs);
-
+            this.menu.scrollTo(this.scrollOffs);
             return true;
         }
 
@@ -94,28 +135,7 @@ public class DecorationScreen extends AbstractCaterpillarScreen<DecorationMenu> 
         int i = 9;
         float f = (float)(delta / (double)i);
         this.scrollOffs = Mth.clamp(this.scrollOffs - f, 0.0F, 1.0F);
-        this.scrollTo(this.scrollOffs);
+        this.menu.scrollTo(this.scrollOffs);
         return true;
-    }
-
-    private void scrollTo(float scrollOffs) {
-        if (this.menu.blockEntity instanceof DecorationBlockEntity decorationBlockEntity) {
-            int i = 9;
-            int j = (int)((double)(scrollOffs * (float)i) + 0.5D);
-            if (j < 0) {
-                j = 0;
-            }
-
-            decorationBlockEntity.setSelectedMap(j);
-            decorationBlockEntity.setChanged();
-            PacketHandler.sendToServer(new DecorationSyncSelectedMapC2SPacket(decorationBlockEntity.getSelectedMap(), this.menu.blockEntity.getBlockPos()));
-        }
-    }
-
-    private int getSelectedMap() {
-        if (this.menu.blockEntity instanceof DecorationBlockEntity decorationBlockEntity) {
-            return decorationBlockEntity.getSelectedMap();
-        }
-        return 0;
     }
 }

@@ -9,6 +9,7 @@ import net.minecraftforge.network.simple.SimpleChannel;
 import the_fireplace.caterpillar.Caterpillar;
 import the_fireplace.caterpillar.core.network.packet.client.CaterpillarSetSelectedTabC2SPacket;
 import the_fireplace.caterpillar.core.network.packet.client.DecorationSyncSelectedMapC2SPacket;
+import the_fireplace.caterpillar.core.network.packet.client.DecorationSyncSetSlotC2SPacket;
 import the_fireplace.caterpillar.core.network.packet.client.DrillHeadPowerSyncC2SPacket;
 import the_fireplace.caterpillar.core.network.packet.server.DecorationSyncSelectedMapS2CPacket;
 import the_fireplace.caterpillar.core.network.packet.server.DrillHeadSyncLitS2CPacket;
@@ -63,6 +64,12 @@ public final class PacketHandler {
                 .decoder(DecorationSyncSelectedMapS2CPacket::new)
                 .encoder(DecorationSyncSelectedMapS2CPacket::toBytes)
                 .consumerMainThread(DecorationSyncSelectedMapS2CPacket::handle)
+                .add();
+
+        CHANNEL.messageBuilder(DecorationSyncSetSlotC2SPacket.class, index++, NetworkDirection.PLAY_TO_SERVER)
+                .decoder(DecorationSyncSetSlotC2SPacket::new)
+                .encoder(DecorationSyncSetSlotC2SPacket::toBytes)
+                .consumerMainThread(DecorationSyncSetSlotC2SPacket::handle)
                 .add();
     }
 
