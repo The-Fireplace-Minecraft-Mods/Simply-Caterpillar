@@ -5,14 +5,12 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.network.NetworkEvent;
 import the_fireplace.caterpillar.common.block.entity.DecorationBlockEntity;
 
 import java.util.function.Supplier;
 
-public class DecorationSyncSetSlotC2SPacket {
+public class DecorationSyncSlotC2SPacket {
 
     private final int placementSlotId;
 
@@ -21,13 +19,13 @@ public class DecorationSyncSetSlotC2SPacket {
     private final BlockPos pos;
 
 
-    public DecorationSyncSetSlotC2SPacket(int placementSlotId, ItemStack stack, BlockPos pos) {
+    public DecorationSyncSlotC2SPacket(int placementSlotId, ItemStack stack, BlockPos pos) {
         this.placementSlotId = placementSlotId;
         this.stack = stack;
         this.pos = pos;
     }
 
-    public DecorationSyncSetSlotC2SPacket(FriendlyByteBuf buf) {
+    public DecorationSyncSlotC2SPacket(FriendlyByteBuf buf) {
         this.placementSlotId = buf.readInt();
         this.stack = buf.readItem();
         this.pos = buf.readBlockPos();
@@ -45,15 +43,8 @@ public class DecorationSyncSetSlotC2SPacket {
             ServerPlayer player = context.getSender();
             ServerLevel level = player.getLevel();
 
-            if(level.getBlockEntity(pos) instanceof DecorationBlockEntity blockEntity) {
-                blockEntity.setStackInSlot(placementSlotId, stack);
-                blockEntity.setChanged();
-
-                blockEntity.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(handler -> {
-                    if (handler instanceof IItemHandlerModifiable handlerModifiable) {
-                        handlerModifiable.setStackInSlot(placementSlotId, stack);
-                    }
-                });
+            if(level.getBlockEntity(pos) instanceof DecorationBlockEntity decorationBlockEntity) {
+                decorationBlockEntity.getSelectedPlacementMap().setStackInSlot(placementSlotId, stack);
             }
         });
         context.setPacketHandled(true);

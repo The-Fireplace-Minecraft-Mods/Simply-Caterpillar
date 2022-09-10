@@ -16,7 +16,7 @@ import the_fireplace.caterpillar.common.block.entity.*;
 import the_fireplace.caterpillar.common.block.util.CaterpillarBlocksUtil;
 import the_fireplace.caterpillar.common.menu.AbstractCaterpillarMenu;
 import the_fireplace.caterpillar.core.network.PacketHandler;
-import the_fireplace.caterpillar.core.network.packet.client.CaterpillarSetSelectedTabC2SPacket;
+import the_fireplace.caterpillar.core.network.packet.client.CaterpillarSyncSelectedTabC2SPacket;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -84,7 +84,7 @@ public abstract class AbstractCaterpillarScreen<T extends AbstractCaterpillarMen
 
                     }));
                 } else {
-                    this.addRenderableWidget(new ImageButton(super.leftPos - 31, super.topPos + 3 + incrementTabPos*20, 31, 20, 176 , 58, 0, ScreenTabs.DRILL_HEAD.TEXTURE, (onPress) -> PacketHandler.sendToServer(new CaterpillarSetSelectedTabC2SPacket(tab, this.menu.blockEntity.getBlockPos()))));
+                    this.addRenderableWidget(new ImageButton(super.leftPos - 31, super.topPos + 3 + incrementTabPos*20, 31, 20, 176 , 58, 0, ScreenTabs.DRILL_HEAD.TEXTURE, (onPress) -> PacketHandler.sendToServer(new CaterpillarSyncSelectedTabC2SPacket(tab, this.menu.blockEntity.getBlockPos()))));
                 }
 
                 incrementTabPos++;

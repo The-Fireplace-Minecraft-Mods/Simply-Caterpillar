@@ -27,6 +27,16 @@ public abstract class AbstractCaterpillarMenu extends AbstractContainerMenu {
 
     public static final int SLOT_SIZE_PLUS_2 = 18;
 
+    public static final int HOTBAR_SLOT_COUNT = 9;
+    public static final int PLAYER_INVENTORY_ROW_COUNT = 3;
+    public static final int PLAYER_INVENTORY_COLUMN_COUNT = 9;
+    public static final int PLAYER_INVENTORY_SLOT_COUNT = PLAYER_INVENTORY_COLUMN_COUNT * PLAYER_INVENTORY_ROW_COUNT;
+    public static final int VANILLA_SLOT_COUNT = HOTBAR_SLOT_COUNT + PLAYER_INVENTORY_SLOT_COUNT;
+    public static final int VANILLA_FIRST_SLOT_INDEX = 0;
+    public static final int BE_INVENTORY_FIRST_SLOT_INDEX = VANILLA_FIRST_SLOT_INDEX + VANILLA_SLOT_COUNT;
+
+    public int BE_INVENTORY_SLOT_COUNT;
+
     public AbstractCaterpillarMenu(MenuType<?> menuType, int id, Inventory playerInventory, FriendlyByteBuf extraData, int containerDataSize) {
         this(menuType, id, playerInventory, (AbstractCaterpillarBlockEntity) playerInventory.player.level.getBlockEntity(extraData.readBlockPos()), new SimpleContainerData(containerDataSize));
     }
@@ -35,7 +45,6 @@ public abstract class AbstractCaterpillarMenu extends AbstractContainerMenu {
         super(menuType, id);
         this.level = playerInventory.player.level;
         this.blockEntity = blockEntity;
-        BE_INVENTORY_SLOT_COUNT = this.blockEntity.size;
         this.access = ContainerLevelAccess.create(this.level, blockEntity.getBlockPos());
         this.data = data;
 
@@ -47,51 +56,7 @@ public abstract class AbstractCaterpillarMenu extends AbstractContainerMenu {
         addDataSlots(data);
     }
 
-    protected abstract void addSlots(IItemHandler handler);
-
-    //  0 - 8 = hotbar slots (which will map to the InventoryPlayer slot numbers 0 - 8)
-    //  9 - 35 = player inventory slots (which map to the InventoryPlayer slot numbers 9 - 35)
-    //  36 - 44 = BlockEntityInventory slots, which map to our BlockEntity slot numbers 0 - 8)
-    public static final int HOTBAR_SLOT_COUNT = 9;
-    public static final int PLAYER_INVENTORY_ROW_COUNT = 3;
-    public static final int PLAYER_INVENTORY_COLUMN_COUNT = 9;
-    public static final int PLAYER_INVENTORY_SLOT_COUNT = PLAYER_INVENTORY_COLUMN_COUNT * PLAYER_INVENTORY_ROW_COUNT;
-    public static final int VANILLA_SLOT_COUNT = HOTBAR_SLOT_COUNT + PLAYER_INVENTORY_SLOT_COUNT;
-    public static final int VANILLA_FIRST_SLOT_INDEX = 0;
-    public static final int BE_INVENTORY_FIRST_SLOT_INDEX = VANILLA_FIRST_SLOT_INDEX + VANILLA_SLOT_COUNT;
-    public final int BE_INVENTORY_SLOT_COUNT;
-
-    @Override
-    public @NotNull ItemStack quickMoveStack(@NotNull Player player, int index) {
-        Slot sourceSlot = slots.get(index);
-        if (!sourceSlot.hasItem()) return ItemStack.EMPTY;
-        ItemStack sourceStack = sourceSlot.getItem();
-        ItemStack copyOfSourceStack = sourceStack.copy();
-
-        // Check if the slot clicked is one of the vanilla container slots
-        if (index < VANILLA_FIRST_SLOT_INDEX + VANILLA_SLOT_COUNT) {
-            // This is a vanilla container slot so merge the stack into the BE inventory
-            if (!moveItemStackTo(sourceStack, BE_INVENTORY_FIRST_SLOT_INDEX, BE_INVENTORY_FIRST_SLOT_INDEX + BE_INVENTORY_SLOT_COUNT, false)) {
-                return ItemStack.EMPTY;
-            }
-        } else if (index < BE_INVENTORY_FIRST_SLOT_INDEX + BE_INVENTORY_SLOT_COUNT) {
-            // This is a BE slot so merge the stack into the players inventory
-            if (!moveItemStackTo(sourceStack, VANILLA_FIRST_SLOT_INDEX, VANILLA_FIRST_SLOT_INDEX + VANILLA_SLOT_COUNT, false)) {
-                return ItemStack.EMPTY;
-            }
-        } else {
-            System.out.println("Invalid slotIndex:" + index);
-            return ItemStack.EMPTY;
-        }
-        // If stack size == 0 (the entire stack was moved) set slot contents to null
-        if (sourceStack.getCount() == 0) {
-            sourceSlot.set(ItemStack.EMPTY);
-        } else {
-            sourceSlot.setChanged();
-        }
-        sourceSlot.onTake(player, sourceStack);
-        return copyOfSourceStack;
-    }
+    protected void addSlots(IItemHandler handler) {}
 
     protected void addPlayerInventory(Inventory playerInventory) {
         int INVENTORY_SLOT_X_START = 8;
@@ -122,6 +87,38 @@ public abstract class AbstractCaterpillarMenu extends AbstractContainerMenu {
     @Override
     public boolean stillValid(@NotNull Player player) {
         return stillValid(this.access, player, this.blockEntity.getBlockState().getBlock());
+    }
+
+    @Override
+    public ItemStack quickMoveStack(Player player, int index) {
+        Slot sourceSlot = slots.get(index);
+        if (!sourceSlot.hasItem()) return ItemStack.EMPTY;
+        ItemStack sourceStack = sourceSlot.getItem();
+        ItemStack copyOfSourceStack = sourceStack.copy();
+
+        // Check if the slot clicked is one of the vanilla container slots
+        if (index < VANILLA_FIRST_SLOT_INDEX + VANILLA_SLOT_COUNT) {
+            // This is a vanilla container slot so merge the stack into the BE inventory
+            if (!moveItemStackTo(sourceStack, BE_INVENTORY_FIRST_SLOT_INDEX, BE_INVENTORY_FIRST_SLOT_INDEX + BE_INVENTORY_SLOT_COUNT, false)) {
+                return ItemStack.EMPTY;
+            }
+        } else if (index < BE_INVENTORY_FIRST_SLOT_INDEX + BE_INVENTORY_SLOT_COUNT) {
+            // This is a BE slot so merge the stack into the players inventory
+            if (!moveItemStackTo(sourceStack, VANILLA_FIRST_SLOT_INDEX, VANILLA_FIRST_SLOT_INDEX + VANILLA_SLOT_COUNT, false)) {
+                return ItemStack.EMPTY;
+            }
+        } else {
+            System.out.println("Invalid slotIndex:" + index);
+            return ItemStack.EMPTY;
+        }
+        // If stack size == 0 (the entire stack was moved) set slot contents to null
+        if (sourceStack.getCount() == 0) {
+            sourceSlot.set(ItemStack.EMPTY);
+        } else {
+            sourceSlot.setChanged();
+        }
+        sourceSlot.onTake(player, sourceStack);
+        return copyOfSourceStack;
     }
 
     public List<AbstractCaterpillarBlockEntity> getConnectedCaterpillarBlockEntities() {

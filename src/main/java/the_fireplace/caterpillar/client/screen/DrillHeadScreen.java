@@ -12,7 +12,7 @@ import the_fireplace.caterpillar.client.screen.util.ScreenTabs;
 import the_fireplace.caterpillar.common.block.entity.DrillHeadBlockEntity;
 import the_fireplace.caterpillar.common.menu.DrillHeadMenu;
 import the_fireplace.caterpillar.core.network.PacketHandler;
-import the_fireplace.caterpillar.core.network.packet.client.DrillHeadPowerSyncC2SPacket;
+import the_fireplace.caterpillar.core.network.packet.client.DrillHeadSyncPowerC2SPacket;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -113,11 +113,17 @@ public class DrillHeadScreen extends AbstractCaterpillarScreen<DrillHeadMenu> {
     }
 
     private void setPowerOn() {
-        PacketHandler.sendToServer(new DrillHeadPowerSyncC2SPacket(true, this.menu.blockEntity.getBlockPos()));
+        if (this.menu.blockEntity instanceof DrillHeadBlockEntity drillHeadBlockEntity) {
+            // drillHeadBlockEntity.setPowerOn();
+            PacketHandler.sendToServer(new DrillHeadSyncPowerC2SPacket(true, this.menu.blockEntity.getBlockPos()));
+        }
     }
 
     private void setPowerOff() {
-        PacketHandler.sendToServer(new DrillHeadPowerSyncC2SPacket(false, this.menu.blockEntity.getBlockPos()));
+        if (this.menu.blockEntity instanceof DrillHeadBlockEntity drillHeadBlockEntity) {
+            // drillHeadBlockEntity.setPowerOff();
+            PacketHandler.sendToServer(new DrillHeadSyncPowerC2SPacket(false, this.menu.blockEntity.getBlockPos()));
+        }
     }
 
     public void removeWidget(ImageButton button) {

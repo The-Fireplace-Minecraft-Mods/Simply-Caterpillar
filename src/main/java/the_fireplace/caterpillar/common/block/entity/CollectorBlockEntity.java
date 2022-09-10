@@ -16,7 +16,7 @@ import java.util.List;
 
 public class CollectorBlockEntity extends AbstractCaterpillarBlockEntity {
 
-    private static final int INVENTORY_SIZE = 0;
+    public static final int INVENTORY_SIZE = 0;
 
     public CollectorBlockEntity(BlockPos pos, BlockState state) {
         super(BlockEntityInit.COLLECTOR.get(), pos, state, INVENTORY_SIZE);

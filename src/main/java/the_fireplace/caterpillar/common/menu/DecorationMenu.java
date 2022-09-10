@@ -6,7 +6,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 import the_fireplace.caterpillar.common.block.entity.DecorationBlockEntity;
@@ -14,6 +13,8 @@ import the_fireplace.caterpillar.common.menu.syncdata.DecorationContainerData;
 import the_fireplace.caterpillar.core.init.MenuInit;
 import the_fireplace.caterpillar.core.network.PacketHandler;
 import the_fireplace.caterpillar.core.network.packet.client.DecorationSyncSelectedMapC2SPacket;
+
+import static the_fireplace.caterpillar.common.block.entity.DecorationBlockEntity.INVENTORY_MAX_SLOTS;
 
 public class DecorationMenu extends AbstractCaterpillarMenu {
 
@@ -31,15 +32,15 @@ public class DecorationMenu extends AbstractCaterpillarMenu {
 
     @Override
     protected void addSlots(IItemHandler handler) {
+        int slotId = 0;
+
         for(int row = 0; row < 3; row++) {
             for(int column = 0; column < 3; column++) {
                 if (row != 1 || column != 1) {
-                    super.addSlot(new SlotItemHandler(handler, column + row * 3, DECORATION_SLOT_X_START + column * SLOT_SIZE_PLUS_2, DECORATION_SLOT_Y_START + row * SLOT_SIZE_PLUS_2));
+                    super.addSlot(new SlotItemHandler(handler, slotId++, DECORATION_SLOT_X_START + column * SLOT_SIZE_PLUS_2, DECORATION_SLOT_Y_START + row * SLOT_SIZE_PLUS_2));
                 }
             }
         }
-
-        this.scrollTo(this.getSelectedMap() / 9.0F);
     }
 
     @Override
@@ -58,40 +59,15 @@ public class DecorationMenu extends AbstractCaterpillarMenu {
         return 0;
     }
 
-    public void scrollTo(float scrollOffs) {
+    public void scrollTo(int selectedMap) {
         if (this.blockEntity instanceof DecorationBlockEntity decorationBlockEntity) {
-            int i = 9;
-            int j = (int)((double)(scrollOffs * (float)i) + 0.5D);
-            if (j < 0) {
-                j = 0;
+            decorationBlockEntity.setSelectedMap(selectedMap);
+            decorationBlockEntity.setChanged();
+
+            for (int i = 0; i < INVENTORY_MAX_SLOTS; i++) {
+                this.slots.get(BE_INVENTORY_FIRST_SLOT_INDEX + i).set(decorationBlockEntity.getSelectedPlacementMap().getStackInSlot(i));
             }
 
-            decorationBlockEntity.setSelectedMap(j);
-            decorationBlockEntity.setChanged();
-            this.broadcastChanges();
-
-            decorationBlockEntity.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(handler -> {
-                for (int row = 0; row < 3; row++) {
-                    for (int column = 0; column < 3; column++) {
-                        if (row != 1 || column != 1) {
-                            int placementSlotId = column + row * 3 + (decorationBlockEntity.getSelectedMap() * 9);
-                            ItemStack placementStack = handler.getStackInSlot(placementSlotId);
-
-                            int slotId = BE_INVENTORY_FIRST_SLOT_INDEX + (column + row * 3);
-                            if (slotId > 39) {
-                                slotId--;
-                            };
-
-                            Slot placementSlot =  this.getSlot(slotId);
-
-                            placementSlot.set(placementStack);
-                            placementSlot.setChanged();
-                        }
-                    }
-                }
-            });
-
-            this.broadcastChanges();
             PacketHandler.sendToServer(new DecorationSyncSelectedMapC2SPacket(decorationBlockEntity.getSelectedMap(), decorationBlockEntity.getBlockPos()));
         }
     }

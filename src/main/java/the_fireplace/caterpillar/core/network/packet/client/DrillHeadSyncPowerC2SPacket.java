@@ -12,18 +12,18 @@ import the_fireplace.caterpillar.core.network.packet.server.DrillHeadSyncPowerS2
 
 import java.util.function.Supplier;
 
-public class DrillHeadPowerSyncC2SPacket {
+public class DrillHeadSyncPowerC2SPacket {
 
     private final boolean powered;
 
     private final BlockPos pos;
 
-    public DrillHeadPowerSyncC2SPacket(boolean powered, BlockPos pos) {
+    public DrillHeadSyncPowerC2SPacket(boolean powered, BlockPos pos) {
         this.powered = powered;
         this.pos = pos;
     }
 
-    public DrillHeadPowerSyncC2SPacket(FriendlyByteBuf buf) {
+    public DrillHeadSyncPowerC2SPacket(FriendlyByteBuf buf) {
         this.powered = buf.readBoolean();
         this.pos = buf.readBlockPos();
     }
@@ -41,10 +41,9 @@ public class DrillHeadPowerSyncC2SPacket {
 
             if(level.getBlockEntity(pos) instanceof DrillHeadBlockEntity drillHeadBlockEntity) {
                 drillHeadBlockEntity.setPower(powered);
-                drillHeadBlockEntity.setChanged();
 
                 if(player.containerMenu instanceof DrillHeadMenu menu && menu.blockEntity.getBlockPos().equals(pos)) {
-                    PacketHandler.sendToClients(new DrillHeadSyncPowerS2CPacket(drillHeadBlockEntity.isPowered(), drillHeadBlockEntity.getBlockPos()));
+                    PacketHandler.sendToClients(new DrillHeadSyncPowerS2CPacket(drillHeadBlockEntity.isPowered(), menu.blockEntity.getBlockPos()));
                 }
             }
         });

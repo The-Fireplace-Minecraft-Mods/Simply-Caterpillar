@@ -19,18 +19,18 @@ import java.util.function.Supplier;
 
 import static the_fireplace.caterpillar.common.block.AbstractCaterpillarBlock.FACING;
 
-public class CaterpillarSetSelectedTabC2SPacket {
+public class CaterpillarSyncSelectedTabC2SPacket {
 
     private final ScreenTabs tab;
 
     private final BlockPos pos;
 
-    public CaterpillarSetSelectedTabC2SPacket(ScreenTabs tab, BlockPos pos) {
+    public CaterpillarSyncSelectedTabC2SPacket(ScreenTabs tab, BlockPos pos) {
         this.tab = tab;
         this.pos = pos;
     }
 
-    public CaterpillarSetSelectedTabC2SPacket(FriendlyByteBuf buf) {
+    public CaterpillarSyncSelectedTabC2SPacket(FriendlyByteBuf buf) {
         this.tab = ScreenTabs.values()[buf.readInt()];
         this.pos = buf.readBlockPos();
     }

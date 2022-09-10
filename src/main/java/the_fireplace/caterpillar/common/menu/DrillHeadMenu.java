@@ -7,11 +7,14 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
+import org.jetbrains.annotations.NotNull;
 import the_fireplace.caterpillar.common.block.entity.DrillHeadBlockEntity;
 import the_fireplace.caterpillar.common.menu.slot.CaterpillarFuelSlot;
 import the_fireplace.caterpillar.common.menu.syncdata.DrillHeadContainerData;
 import the_fireplace.caterpillar.common.menu.util.CaterpillarMenuUtil;
 import the_fireplace.caterpillar.core.init.MenuInit;
+
+import static the_fireplace.caterpillar.common.block.entity.DrillHeadBlockEntity.INVENTORY_SIZE;
 
 public class DrillHeadMenu extends AbstractCaterpillarMenu {
 
@@ -33,6 +36,8 @@ public class DrillHeadMenu extends AbstractCaterpillarMenu {
 
     public DrillHeadMenu(int id, Inventory playerInventory, DrillHeadBlockEntity entity, DrillHeadContainerData data) {
         super(MenuInit.DRILL_HEAD.get(), id, playerInventory, entity, data);
+
+        super.BE_INVENTORY_SLOT_COUNT = INVENTORY_SIZE;
     }
 
     @Override
@@ -60,7 +65,7 @@ public class DrillHeadMenu extends AbstractCaterpillarMenu {
 
     @Override
     public ItemStack quickMoveStack(Player player, int index) {
-        Slot sourceSlot = slots.get(index);
+                Slot sourceSlot = slots.get(index);
         if (sourceSlot == null || !sourceSlot.hasItem()) return ItemStack.EMPTY;
         ItemStack sourceStack = sourceSlot.getItem();
         ItemStack copyOfSourceStack = sourceStack.copy();
@@ -74,10 +79,10 @@ public class DrillHeadMenu extends AbstractCaterpillarMenu {
                     return ItemStack.EMPTY;
                 }
             } else {
-                return super.quickMoveStack(player, index);
+                return quickMoveStack(player, index);
             }
         } else {
-            return super.quickMoveStack(player, index);
+            return quickMoveStack(player, index);
         }
 
         return copyOfSourceStack;

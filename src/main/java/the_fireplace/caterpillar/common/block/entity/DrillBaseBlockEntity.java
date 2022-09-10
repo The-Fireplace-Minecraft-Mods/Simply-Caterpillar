@@ -9,7 +9,7 @@ import the_fireplace.caterpillar.core.init.BlockEntityInit;
 
 public class DrillBaseBlockEntity extends AbstractCaterpillarBlockEntity {
 
-    private static final int INVENTORY_SIZE = 0;
+    public static final int INVENTORY_SIZE = 0;
 
     public DrillBaseBlockEntity(BlockPos pos, BlockState state) {
         super(BlockEntityInit.DRILL_BASE.get(), pos, state, INVENTORY_SIZE);

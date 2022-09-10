@@ -36,13 +36,10 @@ public class DecorationSyncSelectedMapS2CPacket {
         NetworkEvent.Context context = supplier.get();
         context.enqueueWork(() -> {
             ClientLevel level = Minecraft.getInstance().level;
-            LocalPlayer player = Minecraft.getInstance().player;
 
             if(level.getBlockEntity(pos) instanceof DecorationBlockEntity blockEntity) {
                 blockEntity.setSelectedMap(selectedMap);
                 blockEntity.setChanged();
-
-                player.containerMenu.broadcastChanges();
             }
         });
         context.setPacketHandled(true);

@@ -14,7 +14,7 @@ public class StorageBlockEntity extends AbstractCaterpillarBlockEntity {
 
 
     public StorageBlockEntity(BlockPos pos, BlockState state) {
-        super(BlockEntityInit.STORAGE.get(), pos, state, StorageBlockEntity.INVENTORY_SIZE);
+        super(BlockEntityInit.STORAGE.get(), pos, state, INVENTORY_SIZE);
     }
 
     public void move() {

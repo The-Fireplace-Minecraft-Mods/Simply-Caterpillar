@@ -54,7 +54,6 @@ public class DrillHeadBlockEntity extends AbstractCaterpillarBlockEntity {
     private static final int GATHERED_SLOT_START = 10;
 
     private static final int GATHERED_SLOT_END = 18;
-    public static final int INVENTORY_SIZE = 19;
 
     // 60 ticks equals 3 seconds
     public static final int MOVEMENT_TICK = 60;
@@ -64,6 +63,9 @@ public class DrillHeadBlockEntity extends AbstractCaterpillarBlockEntity {
     protected int litDuration;
 
     public boolean powered;
+
+    public static final int INVENTORY_SIZE = 19;
+
 
     public DrillHeadBlockEntity(BlockPos pos, BlockState state) {
         super(BlockEntityInit.DRILL_HEAD.get(), pos, state, INVENTORY_SIZE);
@@ -82,8 +84,9 @@ public class DrillHeadBlockEntity extends AbstractCaterpillarBlockEntity {
 
         if (blockEntity.isPowered() && blockEntity.isLit()) {
             --blockEntity.litTime;
-            blockEntity.tick();
-            PacketHandler.sendToClients(new DrillHeadSyncLitS2CPacket(blockEntity.litTime, blockEntity.litDuration, blockEntity.getBlockPos()));
+            PacketHandler.sendToClients(new DrillHeadSyncLitS2CPacket(blockEntity.getLitTime(), blockEntity.getLitDuration(), blockEntity.getBlockPos()));
+
+            blockEntity.timer++;
 
             if (blockEntity.timer != 0 && blockEntity.timer % MOVEMENT_TICK == 0) {
                 blockEntity.drill();
@@ -97,7 +100,7 @@ public class DrillHeadBlockEntity extends AbstractCaterpillarBlockEntity {
             needsUpdate = true;
         }
 
-        ItemStack stack = blockEntity.getItemInSlot(DrillHeadBlockEntity.FUEl_SLOT);
+        ItemStack stack = blockEntity.getStackInSlot(DrillHeadBlockEntity.FUEl_SLOT);
         boolean fuelSlotIsEmpty = stack.isEmpty();
 
         if (blockEntity.isPowered() && !blockEntity.isLit() || !fuelSlotIsEmpty) {
@@ -121,7 +124,7 @@ public class DrillHeadBlockEntity extends AbstractCaterpillarBlockEntity {
         }
 
         if (needsUpdate) {
-            blockEntity.requiresUpdate = true;
+            blockEntity.setChanged();
         }
     }
 
@@ -203,11 +206,11 @@ public class DrillHeadBlockEntity extends AbstractCaterpillarBlockEntity {
 
     public boolean addItemToInventory(ItemStack stack) {
         for (int i = GATHERED_SLOT_START; i < GATHERED_SLOT_END; i++) {
-            if (this.getItemInSlot(i).isEmpty()) {
+            if (this.getStackInSlot(i).isEmpty()) {
                 this.insertItem(i, stack);
                 this.setChanged();
                 return true;
-            } else if (this.getItemInSlot(i).getCount() + stack.getCount() <= this.getItemInSlot(i).getMaxStackSize()) {
+            } else if (this.getStackInSlot(i).getCount() + stack.getCount() <= this.getStackInSlot(i).getMaxStackSize()) {
                 this.insertItem(i, stack);
                 this.setChanged();
                 return true;
@@ -217,7 +220,7 @@ public class DrillHeadBlockEntity extends AbstractCaterpillarBlockEntity {
     }
 
     public boolean isFuelSlotEmpty() {
-        return this.getItemInSlot(FUEl_SLOT).isEmpty();
+        return this.getStackInSlot(FUEl_SLOT).isEmpty();
     }
 
     public int getBurnDuration(ItemStack stack) {
@@ -241,10 +244,9 @@ public class DrillHeadBlockEntity extends AbstractCaterpillarBlockEntity {
             this.powered = true;
 
             if (!isFuelSlotEmpty() && this.getLitTime() == this.getLitDuration()) {
-                ItemStack stack = this.getItemInSlot(DrillHeadBlockEntity.FUEl_SLOT);
+                ItemStack stack = this.getStackInSlot(DrillHeadBlockEntity.FUEl_SLOT);
                 stack.shrink(1);
             }
-
             this.setChanged();
         }
     }
@@ -281,17 +283,22 @@ public class DrillHeadBlockEntity extends AbstractCaterpillarBlockEntity {
 
     public void setLitTime(int litTime) {
         this.litTime = litTime;
-        super.update();
+        setChanged();
     }
 
     public void setLitDuration(int litDuration) {
         this.litDuration = litDuration;
-        super.update();
+        setChanged();
     }
 
     @Override
     protected ItemStackHandler createInventory() {
         return new ItemStackHandler(this.size) {
+            @Override
+            protected void onContentsChanged(int slot) {
+                super.onContentsChanged(slot);
+            }
+
             @Override
             public boolean isItemValid(int slot, @NotNull ItemStack stack) {
                 if (slot == FUEl_SLOT) {
@@ -314,14 +321,16 @@ public class DrillHeadBlockEntity extends AbstractCaterpillarBlockEntity {
     @Override
     public void load(CompoundTag tag) {
         super.load(tag);
+
         this.litTime = tag.getInt("BurnTime");
-        this.litDuration = this.getBurnDuration(this.getItemInSlot(FUEl_SLOT));
+        this.litDuration = this.getBurnDuration(this.getStackInSlot(FUEl_SLOT));
         this.powered = tag.getBoolean("Powered");
     }
 
     @Override
     protected void saveAdditional(CompoundTag tag) {
         super.saveAdditional(tag);
+
         tag.putInt("BurnTime", this.litTime);
         tag.putBoolean("Powered", this.powered);
     }
