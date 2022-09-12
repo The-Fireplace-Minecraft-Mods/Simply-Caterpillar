@@ -15,11 +15,11 @@ public class ReinforcementMenu extends AbstractCaterpillarMenu {
     private static final int REINFORCEMENT_SLOT_Y_START = 4;
 
     public ReinforcementMenu(int id, Inventory playerInventory, FriendlyByteBuf extraData) {
-        super(MenuInit.REINFORCEMENT.get(), id, playerInventory, extraData, 0);
+        super(MenuInit.REINFORCEMENT.get(), id, playerInventory, extraData, 0, ReinforcementBlockEntity.INVENTORY_SIZE);
     }
 
     public ReinforcementMenu(int id, Inventory playerInventory, ReinforcementBlockEntity blockEntity, ContainerData data) {
-        super(MenuInit.REINFORCEMENT.get(), id, playerInventory, blockEntity, data);
+        super(MenuInit.REINFORCEMENT.get(), id, playerInventory, blockEntity, data, ReinforcementBlockEntity.INVENTORY_SIZE);
     }
 
     @Override

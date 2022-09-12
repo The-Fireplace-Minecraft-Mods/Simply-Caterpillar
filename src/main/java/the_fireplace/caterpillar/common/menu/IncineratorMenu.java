@@ -15,11 +15,11 @@ public class IncineratorMenu extends AbstractCaterpillarMenu {
     private static final int INCINERATOR_SLOT_Y_START = 17;
 
     public IncineratorMenu(int id, Inventory playerInventory, FriendlyByteBuf extraData) {
-        super(MenuInit.INCINERATOR.get(), id, playerInventory, extraData, 0);
+        super(MenuInit.INCINERATOR.get(), id, playerInventory, extraData, 0, IncineratorBlockEntity.INVENTORY_SIZE);
     }
 
     public IncineratorMenu(int id, Inventory playerInventory, IncineratorBlockEntity blockEntity, ContainerData data) {
-        super(MenuInit.INCINERATOR.get(), id, playerInventory, blockEntity, data);
+        super(MenuInit.INCINERATOR.get(), id, playerInventory, blockEntity, data, IncineratorBlockEntity.INVENTORY_SIZE);
     }
 
     @Override

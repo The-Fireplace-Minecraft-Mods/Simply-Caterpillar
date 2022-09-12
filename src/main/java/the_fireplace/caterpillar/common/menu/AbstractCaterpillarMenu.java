@@ -37,16 +37,17 @@ public abstract class AbstractCaterpillarMenu extends AbstractContainerMenu {
 
     public int BE_INVENTORY_SLOT_COUNT;
 
-    public AbstractCaterpillarMenu(MenuType<?> menuType, int id, Inventory playerInventory, FriendlyByteBuf extraData, int containerDataSize) {
-        this(menuType, id, playerInventory, (AbstractCaterpillarBlockEntity) playerInventory.player.level.getBlockEntity(extraData.readBlockPos()), new SimpleContainerData(containerDataSize));
+    public AbstractCaterpillarMenu(MenuType<?> menuType, int id, Inventory playerInventory, FriendlyByteBuf extraData, int containerDataSize, int inventorySize) {
+        this(menuType, id, playerInventory, (AbstractCaterpillarBlockEntity) playerInventory.player.level.getBlockEntity(extraData.readBlockPos()), new SimpleContainerData(containerDataSize), inventorySize);
     }
 
-    public <T> AbstractCaterpillarMenu(MenuType<?> menuType, int id, Inventory playerInventory, AbstractCaterpillarBlockEntity blockEntity, ContainerData data) {
+    public <T> AbstractCaterpillarMenu(MenuType<?> menuType, int id, Inventory playerInventory, AbstractCaterpillarBlockEntity blockEntity, ContainerData data, int inventorySize) {
         super(menuType, id);
         this.level = playerInventory.player.level;
         this.blockEntity = blockEntity;
         this.access = ContainerLevelAccess.create(this.level, blockEntity.getBlockPos());
         this.data = data;
+        this.BE_INVENTORY_SLOT_COUNT = inventorySize;
 
         addPlayerInventory(playerInventory);
         addPlayerHotbar(playerInventory);

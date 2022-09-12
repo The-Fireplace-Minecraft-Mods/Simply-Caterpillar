@@ -14,8 +14,6 @@ import the_fireplace.caterpillar.core.init.MenuInit;
 import the_fireplace.caterpillar.core.network.PacketHandler;
 import the_fireplace.caterpillar.core.network.packet.client.DecorationSyncSelectedMapC2SPacket;
 
-import static the_fireplace.caterpillar.common.block.entity.DecorationBlockEntity.INVENTORY_MAX_SLOTS;
-
 public class DecorationMenu extends AbstractCaterpillarMenu {
 
     private static final int DECORATION_SLOT_X_START = 62;
@@ -23,11 +21,11 @@ public class DecorationMenu extends AbstractCaterpillarMenu {
     private static final int DECORATION_SLOT_Y_START = 17;
 
     public DecorationMenu(int id, Inventory playerInventory, FriendlyByteBuf extraData) {
-        super(MenuInit.DECORATION.get(), id, playerInventory, extraData, DecorationContainerData.SIZE);
+        super(MenuInit.DECORATION.get(), id, playerInventory, extraData, DecorationContainerData.SIZE, DecorationBlockEntity.INVENTORY_SIZE);
     }
 
     public DecorationMenu(int id, Inventory playerInventory, DecorationBlockEntity blockEntity, ContainerData data) {
-        super(MenuInit.DECORATION.get(), id, playerInventory, blockEntity, data);
+        super(MenuInit.DECORATION.get(), id, playerInventory, blockEntity, data, DecorationBlockEntity.INVENTORY_SIZE);
     }
 
     @Override
@@ -62,9 +60,8 @@ public class DecorationMenu extends AbstractCaterpillarMenu {
     public void scrollTo(int selectedMap) {
         if (this.blockEntity instanceof DecorationBlockEntity decorationBlockEntity) {
             decorationBlockEntity.setSelectedMap(selectedMap);
-            decorationBlockEntity.setChanged();
 
-            for (int i = 0; i < INVENTORY_MAX_SLOTS; i++) {
+            for (int i = 0; i < DecorationBlockEntity.INVENTORY_MAX_SLOTS; i++) {
                 this.slots.get(BE_INVENTORY_FIRST_SLOT_INDEX + i).set(decorationBlockEntity.getSelectedPlacementMap().getStackInSlot(i));
             }
 

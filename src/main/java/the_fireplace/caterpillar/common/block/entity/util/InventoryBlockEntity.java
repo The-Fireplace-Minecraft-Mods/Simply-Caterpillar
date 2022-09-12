@@ -81,14 +81,19 @@ public class InventoryBlockEntity extends BlockEntity {
     public void load(CompoundTag tag) {
         super.load(tag);
 
-        tag.put("Inventory", this.inventory.serializeNBT());
+        this.inventory.deserializeNBT(tag.getCompound("Inventory"));
+    }
+
+    @Override
+    public void onLoad() {
+        this.handler = LazyOptional.of(() -> this.inventory);
     }
 
     @Override
     protected void saveAdditional(CompoundTag tag) {
-        super.saveAdditional(tag);
-
         tag.put("Inventory", this.inventory.serializeNBT());
+
+        super.saveAdditional(tag);
     }
 
     public void drops() {

@@ -4,6 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -76,7 +77,7 @@ public class DecorationBlockEntity extends AbstractCaterpillarBlockEntity {
             this.placementMap.add(createInventory());
         }
 
-        this.setDefaultPlacementToMineshaft();
+        // this.setDefaultPlacementToMineshaft();
     }
 
     private void setDefaultPlacementToMineshaft() {
@@ -145,7 +146,7 @@ public class DecorationBlockEntity extends AbstractCaterpillarBlockEntity {
         } else {
             this.selectedMap = selectedMap;
         }
-        this.setChanged();
+        setChanged();
     }
 
     @Override
@@ -162,12 +163,11 @@ public class DecorationBlockEntity extends AbstractCaterpillarBlockEntity {
         return new ItemStackHandler(this.size) {
             @Override
             protected void onContentsChanged(int slot) {
-                super.onContentsChanged(slot);
+                setChanged();
 
-                PacketHandler.sendToClients(new DecorationSyncSelectedMapS2CPacket(DecorationBlockEntity.this.selectedMap, worldPosition));
-
-                for (int i = 0; i < PLACEMENT_MAX_MAP; i++) {
-                    PacketHandler.sendToClients(new DecorationItemStackSyncS2CPacket(i, DecorationBlockEntity.this.placementMap.get(i), worldPosition));
+                if(level != null && !level.isClientSide()) {
+                    PacketHandler.sendToClients(new DecorationSyncSelectedMapS2CPacket(DecorationBlockEntity.this.getSelectedMap(), worldPosition));
+                    PacketHandler.sendToClients(new DecorationItemStackSyncS2CPacket(DecorationBlockEntity.this.getSelectedMap(), DecorationBlockEntity.this.placementMap.get(DecorationBlockEntity.this.getSelectedMap()), worldPosition));
                 }
             }
         };
@@ -176,10 +176,32 @@ public class DecorationBlockEntity extends AbstractCaterpillarBlockEntity {
     @Override
     public void setInventory(ItemStackHandler inventory) {
         this.placementMap.set(this.getSelectedMap(), inventory);
+        setChanged();
     }
 
     public void setPlacementMap(int placementMapId, ItemStackHandler inventory) {
         this.placementMap.set(placementMapId, inventory);
+        setChanged();
+    }
+
+    @Override
+    public void load(CompoundTag tag) {
+        super.load(tag);
+
+        this.placementMap.clear();
+        for (int i = 0; i < PLACEMENT_MAX_MAP; i++) {
+            this.placementMap.add(createInventory());
+        }
+
+        ListTag tagList = tag.getList("PlacementMap", Tag.TAG_COMPOUND);
+
+        for (int i = 0; i < tagList.size(); i++) {
+            CompoundTag itemTags = tagList.getCompound(i);
+
+            this.placementMap.get(i).deserializeNBT(itemTags);
+        }
+
+        this.selectedMap = tag.getInt("SelectedMap");
     }
 
     @Override
@@ -193,38 +215,17 @@ public class DecorationBlockEntity extends AbstractCaterpillarBlockEntity {
     }
 
     @Override
-    public void load(CompoundTag tag) {
-        super.load(tag);
-
-        // TODO: Load placement map
-        // ListTag listTag = tag.getList("placementMap", 10);
-        // System.out.println(listTag);
-
-        this.selectedMap = tag.getInt("SelectedMap");
-    }
-
-    @Override
     protected void saveAdditional(CompoundTag tag) {
-        super.saveAdditional(tag);
-
-        ListTag nbtTagList = new ListTag();
-        for (int i = 0; i < PLACEMENT_MAX_MAP; i++)
+        ListTag listTag = new ListTag();
+        for (int i = 0; i < this.placementMap.size(); i++)
         {
-            if (!this.placementMap.get(i).serializeNBT().isEmpty())
-            {
-                CompoundTag itemTag = new CompoundTag();
-                itemTag.putInt("Slot", i);
-                this.placementMap.get(i).serializeNBT().put("Items", itemTag);
-                nbtTagList.add(itemTag);
-            }
+            listTag.add(this.placementMap.get(i).serializeNBT());
         }
 
-        CompoundTag nbt = new CompoundTag();
-        nbt.put("Items", nbtTagList);
-        nbt.putInt("Size", this.placementMap.size());
-
-        tag.put("PlacementMap", nbt);
+        tag.put("PlacementMap", listTag);
         tag.putInt("SelectedMap", this.selectedMap);
+
+        super.saveAdditional(tag);
     }
 
     @Override
@@ -235,6 +236,11 @@ public class DecorationBlockEntity extends AbstractCaterpillarBlockEntity {
     @Nullable
     @Override
     public AbstractContainerMenu createMenu(int id, Inventory playerInventory, Player player) {
+        PacketHandler.sendToClients(new DecorationSyncSelectedMapS2CPacket(DecorationBlockEntity.this.selectedMap, worldPosition));
+        for (int i = 0; i < this.placementMap.size(); i++) {
+            PacketHandler.sendToClients(new DecorationItemStackSyncS2CPacket(i, this.placementMap.get(i), this.getBlockPos()));
+        }
+
         return new DecorationMenu(id, playerInventory, this, new DecorationContainerData(this, DecorationContainerData.SIZE));
     }
 }

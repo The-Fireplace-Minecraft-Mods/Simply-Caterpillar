@@ -40,7 +40,6 @@ public class DecorationSyncSelectedMapC2SPacket {
 
             if(level.getBlockEntity(pos) instanceof DecorationBlockEntity blockEntity) {
                 blockEntity.setSelectedMap(selectedMap);
-                blockEntity.setChanged();
             }
         });
         context.setPacketHandled(true);

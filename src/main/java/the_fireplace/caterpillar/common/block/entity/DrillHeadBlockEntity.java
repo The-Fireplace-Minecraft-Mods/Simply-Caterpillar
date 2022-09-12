@@ -30,6 +30,7 @@ import the_fireplace.caterpillar.common.block.util.DrillHeadPart;
 import the_fireplace.caterpillar.core.network.PacketHandler;
 import the_fireplace.caterpillar.core.network.packet.server.DrillHeadSyncLitS2CPacket;
 import the_fireplace.caterpillar.core.network.packet.server.DrillHeadSyncPowerS2CPacket;
+import the_fireplace.caterpillar.core.network.packet.server.ItemStackSyncS2CPacket;
 
 public class DrillHeadBlockEntity extends AbstractCaterpillarBlockEntity {
 
@@ -69,6 +70,8 @@ public class DrillHeadBlockEntity extends AbstractCaterpillarBlockEntity {
 
     public DrillHeadBlockEntity(BlockPos pos, BlockState state) {
         super(BlockEntityInit.DRILL_HEAD.get(), pos, state, INVENTORY_SIZE);
+
+        // TODO: Check if storage block is present
     }
 
     public static void tick(Level level, BlockPos pos, BlockState state, DrillHeadBlockEntity blockEntity) {
@@ -296,7 +299,11 @@ public class DrillHeadBlockEntity extends AbstractCaterpillarBlockEntity {
         return new ItemStackHandler(this.size) {
             @Override
             protected void onContentsChanged(int slot) {
-                super.onContentsChanged(slot);
+                setChanged();
+
+                if(level != null && !level.isClientSide()) {
+                    PacketHandler.sendToClients(new ItemStackSyncS2CPacket(this, worldPosition));
+                }
             }
 
             @Override
@@ -329,10 +336,10 @@ public class DrillHeadBlockEntity extends AbstractCaterpillarBlockEntity {
 
     @Override
     protected void saveAdditional(CompoundTag tag) {
-        super.saveAdditional(tag);
-
         tag.putInt("BurnTime", this.litTime);
         tag.putBoolean("Powered", this.powered);
+
+        super.saveAdditional(tag);
     }
 
     @Override
