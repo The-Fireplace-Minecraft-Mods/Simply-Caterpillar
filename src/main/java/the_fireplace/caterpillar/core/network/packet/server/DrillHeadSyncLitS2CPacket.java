@@ -47,13 +47,11 @@ public class DrillHeadSyncLitS2CPacket {
             if(level.getBlockEntity(pos) instanceof DrillHeadBlockEntity blockEntity) {
                 blockEntity.setLitTime(litTime);
                 blockEntity.setLitDuration(litDuration);
-                blockEntity.setChanged();
 
                 if(player.containerMenu instanceof DrillHeadMenu menu && menu.blockEntity.getBlockPos().equals(pos)) {
                     if (menu.blockEntity instanceof DrillHeadBlockEntity menuBlockEntity) {
                         menuBlockEntity.setLitTime(litTime);
                         menuBlockEntity.setLitDuration(litDuration);
-                        menuBlockEntity.setChanged();
                     }
                 }
             }

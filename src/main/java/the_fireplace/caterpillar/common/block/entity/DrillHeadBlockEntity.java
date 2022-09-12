@@ -106,19 +106,6 @@ public class DrillHeadBlockEntity extends AbstractCaterpillarBlockEntity {
         ItemStack stack = blockEntity.getStackInSlot(DrillHeadBlockEntity.FUEl_SLOT);
         boolean fuelSlotIsEmpty = stack.isEmpty();
 
-        if (blockEntity.isPowered() && !blockEntity.isLit() || !fuelSlotIsEmpty) {
-            if (!blockEntity.isLit()) {
-                blockEntity.litTime = blockEntity.getBurnDuration(stack);
-                blockEntity.litDuration = blockEntity.litTime;
-
-                if (blockEntity.isPowered() && !fuelSlotIsEmpty) {
-                    stack.shrink(1);
-                }
-
-                needsUpdate = true;
-            }
-        }
-
         if (blockEntity.isPowered() && !blockEntity.isLit() && fuelSlotIsEmpty) {
             blockEntity.setPowerOff();
             PacketHandler.sendToClients(new DrillHeadSyncPowerS2CPacket(false, blockEntity.getBlockPos()));
@@ -243,13 +230,18 @@ public class DrillHeadBlockEntity extends AbstractCaterpillarBlockEntity {
     }
 
     public void setPowerOn() {
-        if (!isFuelSlotEmpty() || isLit()) {
-            this.powered = true;
+        ItemStack stack = this.getStackInSlot(DrillHeadBlockEntity.FUEl_SLOT);
+        boolean fuelSlotIsEmpty = stack.isEmpty();
 
-            if (!isFuelSlotEmpty() && this.getLitTime() == this.getLitDuration()) {
-                ItemStack stack = this.getStackInSlot(DrillHeadBlockEntity.FUEl_SLOT);
+        if (!fuelSlotIsEmpty || this.isLit()) {
+            if (!this.isLit()) {
+                this.litTime = this.getBurnDuration(stack);
+                this.litDuration = this.litTime;
+
                 stack.shrink(1);
             }
+
+            this.powered = true;
             this.setChanged();
         }
     }
@@ -302,6 +294,8 @@ public class DrillHeadBlockEntity extends AbstractCaterpillarBlockEntity {
                 setChanged();
 
                 if(level != null && !level.isClientSide()) {
+                    PacketHandler.sendToClients(new DrillHeadSyncPowerS2CPacket(DrillHeadBlockEntity.this.isPowered(), worldPosition));
+                    PacketHandler.sendToClients(new DrillHeadSyncLitS2CPacket(DrillHeadBlockEntity.this.getLitTime(), DrillHeadBlockEntity.this.getLitDuration(), worldPosition));
                     PacketHandler.sendToClients(new ItemStackSyncS2CPacket(this, worldPosition));
                 }
             }

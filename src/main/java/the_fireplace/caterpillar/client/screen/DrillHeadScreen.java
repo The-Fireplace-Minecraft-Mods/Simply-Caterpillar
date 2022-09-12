@@ -114,15 +114,13 @@ public class DrillHeadScreen extends AbstractCaterpillarScreen<DrillHeadMenu> {
 
     private void setPowerOn() {
         if (this.menu.blockEntity instanceof DrillHeadBlockEntity drillHeadBlockEntity) {
-            // drillHeadBlockEntity.setPowerOn();
-            PacketHandler.sendToServer(new DrillHeadSyncPowerC2SPacket(true, this.menu.blockEntity.getBlockPos()));
+            PacketHandler.sendToServer(new DrillHeadSyncPowerC2SPacket(true, drillHeadBlockEntity.getBlockPos()));
         }
     }
 
     private void setPowerOff() {
         if (this.menu.blockEntity instanceof DrillHeadBlockEntity drillHeadBlockEntity) {
-            // drillHeadBlockEntity.setPowerOff();
-            PacketHandler.sendToServer(new DrillHeadSyncPowerC2SPacket(false, this.menu.blockEntity.getBlockPos()));
+            PacketHandler.sendToServer(new DrillHeadSyncPowerC2SPacket(false, drillHeadBlockEntity.getBlockPos()));
         }
     }
 
