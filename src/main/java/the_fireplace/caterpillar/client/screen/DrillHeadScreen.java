@@ -6,6 +6,8 @@ import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.ClickType;
+import net.minecraft.world.inventory.Slot;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import the_fireplace.caterpillar.client.screen.util.ScreenTabs;
@@ -16,6 +18,11 @@ import the_fireplace.caterpillar.core.network.packet.client.DrillHeadSyncPowerC2
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static the_fireplace.caterpillar.common.block.entity.DrillHeadBlockEntity.GATHERED_SLOT_END;
+import static the_fireplace.caterpillar.common.block.entity.DrillHeadBlockEntity.GATHERED_SLOT_START;
+import static the_fireplace.caterpillar.common.menu.AbstractCaterpillarMenu.BE_INVENTORY_FIRST_SLOT_INDEX;
+
 @OnlyIn(Dist.CLIENT)
 public class DrillHeadScreen extends AbstractCaterpillarScreen<DrillHeadMenu> {
 
@@ -126,5 +133,18 @@ public class DrillHeadScreen extends AbstractCaterpillarScreen<DrillHeadMenu> {
 
     public void removeWidget(ImageButton button) {
         super.removeWidget(button);
+    }
+
+    @Override
+    protected void slotClicked(Slot slot, int slotId, int mouseButton, ClickType type) {
+        if (this.isGatheredSlot(slotId) && !this.menu.getCarried().isEmpty()) {
+            return;
+        }
+
+        super.slotClicked(slot, slotId, mouseButton, type);
+    }
+
+    private boolean isGatheredSlot(int slotId) {
+        return slotId >= BE_INVENTORY_FIRST_SLOT_INDEX + GATHERED_SLOT_START && slotId <= BE_INVENTORY_FIRST_SLOT_INDEX + GATHERED_SLOT_END;
     }
 }

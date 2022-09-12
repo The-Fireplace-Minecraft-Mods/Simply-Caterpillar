@@ -58,6 +58,10 @@ public class InventoryBlockEntity extends BlockEntity {
         }
     }
 
+    public ItemStackHandler getInventory() {
+        return this.inventory;
+    }
+
     @Override
     public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
         if(cap == ForgeCapabilities.ITEM_HANDLER) {
@@ -73,8 +77,8 @@ public class InventoryBlockEntity extends BlockEntity {
 
     protected ItemStack insertItem(int slot, ItemStack stack) {
         ItemStack copy = stack.copy();
-        stack.shrink(copy.getCount());
-        return this.handler.map(inventory -> inventory.insertItem(slot, stack, false)).orElse(ItemStack.EMPTY);
+        copy.setCount(1);
+        return this.handler.map(inventory -> inventory.insertItem(slot, copy, false)).orElse(ItemStack.EMPTY);
     }
 
     @Override

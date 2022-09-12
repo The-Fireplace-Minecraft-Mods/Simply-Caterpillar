@@ -46,15 +46,15 @@ public class DrillHeadBlockEntity extends AbstractCaterpillarBlockEntity {
             "container." + Caterpillar.MOD_ID + ".drill_head.consumption"
     );
 
-    private static final int CONSUMPTION_SLOT_START = 0;
+    public static final int CONSUMPTION_SLOT_START = 0;
 
-    private static final int CONSUMPTION_SLOT_END = 8;
+    public static final int CONSUMPTION_SLOT_END = 8;
 
     public static final int FUEl_SLOT = 9;
 
-    private static final int GATHERED_SLOT_START = 10;
+    public static final int GATHERED_SLOT_START = 10;
 
-    private static final int GATHERED_SLOT_END = 18;
+    public static final int GATHERED_SLOT_END = 18;
 
     // 60 ticks equals 3 seconds
     public static final int MOVEMENT_TICK = 60;
@@ -105,6 +105,11 @@ public class DrillHeadBlockEntity extends AbstractCaterpillarBlockEntity {
 
         ItemStack stack = blockEntity.getStackInSlot(DrillHeadBlockEntity.FUEl_SLOT);
         boolean fuelSlotIsEmpty = stack.isEmpty();
+
+        if (blockEntity.isPowered() && blockEntity.getLitTime() == 0 && !fuelSlotIsEmpty) {
+            stack.shrink(1);
+            blockEntity.setChanged();
+        }
 
         if (blockEntity.isPowered() && !blockEntity.isLit() && fuelSlotIsEmpty) {
             blockEntity.setPowerOff();
@@ -195,17 +200,18 @@ public class DrillHeadBlockEntity extends AbstractCaterpillarBlockEntity {
     }
 
     public boolean addItemToInventory(ItemStack stack) {
-        for (int i = GATHERED_SLOT_START; i < GATHERED_SLOT_END; i++) {
+        for (int i = GATHERED_SLOT_START; i <= GATHERED_SLOT_END; i++) {
             if (this.getStackInSlot(i).isEmpty()) {
                 this.insertItem(i, stack);
-                this.setChanged();
-                return true;
-            } else if (this.getStackInSlot(i).getCount() + stack.getCount() <= this.getStackInSlot(i).getMaxStackSize()) {
+
+               return  true;
+            } else if (this.getStackInSlot(i).getItem() == stack.getItem() && this.getStackInSlot(i).getCount() + stack.getCount() <= this.getStackInSlot(i).getMaxStackSize()) {
                 this.insertItem(i, stack);
-                this.setChanged();
+
                 return true;
             }
         }
+
         return false;
     }
 
@@ -311,7 +317,7 @@ public class DrillHeadBlockEntity extends AbstractCaterpillarBlockEntity {
                 }
 
                 if (slot >= GATHERED_SLOT_START && slot <= GATHERED_SLOT_END) {
-                    return false;
+                    return true;
                 }
 
                 return super.isItemValid(slot, stack);
@@ -345,7 +351,6 @@ public class DrillHeadBlockEntity extends AbstractCaterpillarBlockEntity {
     @Override
     public AbstractContainerMenu createMenu(int id, Inventory playerInventory, Player player) {
         PacketHandler.sendToClients(new DrillHeadSyncPowerS2CPacket(this.isPowered(), this.getBlockPos()));
-        PacketHandler.sendToClients(new DrillHeadSyncLitS2CPacket(this.getLitTime(), this.getLitDuration(), this.getBlockPos()));
         return new DrillHeadMenu(id, playerInventory, this, new DrillHeadContainerData(this, DrillHeadContainerData.SIZE));
     }
 }

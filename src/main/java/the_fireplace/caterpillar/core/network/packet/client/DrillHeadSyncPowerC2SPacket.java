@@ -43,6 +43,10 @@ public class DrillHeadSyncPowerC2SPacket {
                 drillHeadBlockEntity.setPower(powered);
 
                 if(player.containerMenu instanceof DrillHeadMenu menu && menu.blockEntity.getBlockPos().equals(pos)) {
+                    if (menu.blockEntity instanceof DrillHeadBlockEntity menuBlockEntity) {
+                        menuBlockEntity.setPower(powered);
+                    }
+
                     PacketHandler.sendToClients(new DrillHeadSyncPowerS2CPacket(drillHeadBlockEntity.isPowered(), menu.blockEntity.getBlockPos()));
                 }
             }
