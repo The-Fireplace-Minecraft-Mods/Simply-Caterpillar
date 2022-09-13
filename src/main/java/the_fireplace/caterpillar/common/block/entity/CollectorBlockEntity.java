@@ -9,7 +9,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.phys.AABB;
 import the_fireplace.caterpillar.common.block.CollectorBlock;
-import the_fireplace.caterpillar.common.block.util.CaterpillarBlocksUtil;
+import the_fireplace.caterpillar.common.block.util.CaterpillarBlockUtil;
 import the_fireplace.caterpillar.core.init.BlockEntityInit;
 
 import java.util.List;
@@ -37,7 +37,7 @@ public class CollectorBlockEntity extends AbstractCaterpillarBlockEntity {
     }
 
     public void suckInItems(BlockPos nextPos) {
-        BlockPos caterpillarHeadPos = CaterpillarBlocksUtil.getCaterpillarHeadPos(this.getLevel(), nextPos, this.getBlockState().getValue(CollectorBlock.FACING));
+        BlockPos caterpillarHeadPos = CaterpillarBlockUtil.getCaterpillarHeadPos(this.getLevel(), nextPos, this.getBlockState().getValue(CollectorBlock.FACING));
         BlockEntity blockEntity = this.getLevel().getBlockEntity(caterpillarHeadPos);
 
         if (blockEntity instanceof DrillHeadBlockEntity drillHeadBlockEntity) {

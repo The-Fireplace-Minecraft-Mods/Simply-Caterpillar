@@ -12,7 +12,7 @@ import net.minecraftforge.network.NetworkHooks;
 import the_fireplace.caterpillar.client.screen.util.ScreenTabs;
 import the_fireplace.caterpillar.common.block.AbstractCaterpillarBlock;
 import the_fireplace.caterpillar.common.block.entity.AbstractCaterpillarBlockEntity;
-import the_fireplace.caterpillar.common.block.util.CaterpillarBlocksUtil;
+import the_fireplace.caterpillar.common.block.util.CaterpillarBlockUtil;
 
 import java.util.ArrayList;
 import java.util.function.Supplier;
@@ -52,10 +52,10 @@ public class CaterpillarSyncSelectedTabC2SPacket {
                 AbstractCaterpillarBlock block = (AbstractCaterpillarBlock) currentBlockEntity.getBlockState().getBlock();
                 Direction direction = state.getValue(FACING);
                 BlockPos basePos = block.getBasePos(state, pos);
-                BlockPos caterpillarHeadPos = CaterpillarBlocksUtil.getCaterpillarHeadPos(level, basePos, direction);
+                BlockPos caterpillarHeadPos = CaterpillarBlockUtil.getCaterpillarHeadPos(level, basePos, direction);
 
                 if (caterpillarHeadPos != null) {
-                    CaterpillarBlocksUtil.getConnectedCaterpillarBlockEntities(level, caterpillarHeadPos, new ArrayList<>()).forEach(connectedBlockEntity -> {
+                    CaterpillarBlockUtil.getConnectedCaterpillarBlockEntities(level, caterpillarHeadPos, new ArrayList<>()).forEach(connectedBlockEntity -> {
                         if (connectedBlockEntity.getBlockState().getBlock().getDescriptionId().equals(tab.ITEM.getDescriptionId())) {
                             NetworkHooks.openScreen(player, connectedBlockEntity, connectedBlockEntity.getBlockPos());
                         }

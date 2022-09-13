@@ -24,7 +24,7 @@ import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import the_fireplace.caterpillar.common.block.entity.DrillHeadBlockEntity;
-import the_fireplace.caterpillar.common.block.util.CaterpillarBlocksUtil;
+import the_fireplace.caterpillar.common.block.util.CaterpillarBlockUtil;
 
 import java.util.EnumMap;
 import java.util.Map;
@@ -74,6 +74,12 @@ public abstract class AbstractCaterpillarBlock extends BaseEntityBlock {
         return RenderShape.MODEL;
     }
 
+
+    @Override
+    public VoxelShape getBlockSupportShape(BlockState pState, BlockGetter pReader, BlockPos pPos) {
+        return super.getBlockSupportShape(pState, pReader, pPos);
+    }
+
     @Override
     public @NotNull InteractionResult use(@NotNull BlockState state, Level level, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult hit) {
         if (level.isClientSide) {
@@ -81,7 +87,7 @@ public abstract class AbstractCaterpillarBlock extends BaseEntityBlock {
         } else {
             Direction direction = state.getValue(FACING);
             BlockPos basePos = getBasePos(state, pos);
-            BlockPos caterpillarHeadPos = CaterpillarBlocksUtil.getCaterpillarHeadPos(level, basePos, direction);
+            BlockPos caterpillarHeadPos = CaterpillarBlockUtil.getCaterpillarHeadPos(level, basePos, direction);
 
             if (caterpillarHeadPos != null) {
                 BlockEntity blockEntity = level.getBlockEntity(caterpillarHeadPos);

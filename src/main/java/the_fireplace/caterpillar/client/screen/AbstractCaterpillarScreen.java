@@ -13,7 +13,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
 import the_fireplace.caterpillar.client.screen.util.ScreenTabs;
 import the_fireplace.caterpillar.common.block.entity.*;
-import the_fireplace.caterpillar.common.block.util.CaterpillarBlocksUtil;
+import the_fireplace.caterpillar.common.block.util.CaterpillarBlockUtil;
 import the_fireplace.caterpillar.common.menu.AbstractCaterpillarMenu;
 import the_fireplace.caterpillar.core.network.PacketHandler;
 import the_fireplace.caterpillar.core.network.packet.client.CaterpillarSyncSelectedTabC2SPacket;
@@ -38,8 +38,8 @@ public abstract class AbstractCaterpillarScreen<T extends AbstractCaterpillarMen
         super.imageWidth = SELECTED_TAB.IMAGE_WIDTH;
         super.imageHeight = SELECTED_TAB.IMAGE_HEIGHT;
 
-        BlockPos caterpillarHeadPos = CaterpillarBlocksUtil.getCaterpillarHeadPos(this.menu.blockEntity.getLevel(), this.menu.blockEntity.getBlockPos(), this.menu.blockEntity.getBlockState().getValue(FACING));
-        caterpillarBlockEntities = CaterpillarBlocksUtil.getConnectedCaterpillarBlockEntities(this.menu.blockEntity.getLevel(), caterpillarHeadPos, new ArrayList<>());
+        BlockPos caterpillarHeadPos = CaterpillarBlockUtil.getCaterpillarHeadPos(this.menu.blockEntity.getLevel(), this.menu.blockEntity.getBlockPos(), this.menu.blockEntity.getBlockState().getValue(FACING));
+        caterpillarBlockEntities = CaterpillarBlockUtil.getConnectedCaterpillarBlockEntities(this.menu.blockEntity.getLevel(), caterpillarHeadPos, new ArrayList<>());
     }
 
     @Override

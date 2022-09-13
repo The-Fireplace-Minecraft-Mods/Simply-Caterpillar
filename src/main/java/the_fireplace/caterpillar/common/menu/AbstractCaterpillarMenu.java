@@ -10,7 +10,7 @@ import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.items.IItemHandler;
 import org.jetbrains.annotations.NotNull;
 import the_fireplace.caterpillar.common.block.entity.AbstractCaterpillarBlockEntity;
-import the_fireplace.caterpillar.common.block.util.CaterpillarBlocksUtil;
+import the_fireplace.caterpillar.common.block.util.CaterpillarBlockUtil;
 
 import java.util.Collections;
 import java.util.List;
@@ -123,6 +123,6 @@ public abstract class AbstractCaterpillarMenu extends AbstractContainerMenu {
     }
 
     public List<AbstractCaterpillarBlockEntity> getConnectedCaterpillarBlockEntities() {
-        return CaterpillarBlocksUtil.getConnectedCaterpillarBlockEntities(this.level, this.blockEntity.getBlockPos(), Collections.emptyList());
+        return CaterpillarBlockUtil.getConnectedCaterpillarBlockEntities(this.level, this.blockEntity.getBlockPos(), Collections.emptyList());
     }
 }
