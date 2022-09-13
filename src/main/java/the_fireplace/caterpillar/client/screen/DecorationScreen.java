@@ -39,7 +39,7 @@ public class DecorationScreen extends AbstractCaterpillarScreen<DecorationMenu> 
     }
 
     @Override
-    protected void renderBg(PoseStack stack, float partialTicks, int mouseX, int mouseY) {
+    protected void renderBg(@NotNull PoseStack stack, float partialTicks, int mouseX, int mouseY) {
         super.renderBg(stack, partialTicks, mouseX, mouseY);
 
         this.renderScrollBar(stack);
@@ -58,7 +58,7 @@ public class DecorationScreen extends AbstractCaterpillarScreen<DecorationMenu> 
     }
 
     @Override
-    protected void slotClicked(Slot slot, int slotId, int mouseButton, ClickType type) {
+    protected void slotClicked(@NotNull Slot slot, int slotId, int mouseButton, @NotNull ClickType type) {
         if (!this.isDecorationSlot(slotId) || slot == null) {
             super.slotClicked(slot, slotId, mouseButton, type);
             return;

@@ -53,10 +53,9 @@ public abstract class AbstractCaterpillarBlock extends BaseEntityBlock {
     }
 
     @Override
-    public @NotNull BlockState rotate(BlockState state, Rotation rotation) {
+    public BlockState rotate(BlockState state, Rotation rotation) {
         return state.setValue(FACING, rotation.rotate(state.getValue(FACING)));
     }
-
 
     @Override
     public @NotNull BlockState mirror(BlockState state, Mirror mirror) {
@@ -72,12 +71,6 @@ public abstract class AbstractCaterpillarBlock extends BaseEntityBlock {
     @Override
     public @NotNull RenderShape getRenderShape(@NotNull BlockState state) {
         return RenderShape.MODEL;
-    }
-
-
-    @Override
-    public VoxelShape getBlockSupportShape(BlockState pState, BlockGetter pReader, BlockPos pPos) {
-        return super.getBlockSupportShape(pState, pReader, pPos);
     }
 
     @Override

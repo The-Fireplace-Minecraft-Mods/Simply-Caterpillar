@@ -117,7 +117,7 @@ public class DecorationBlockEntity extends AbstractCaterpillarBlockEntity {
         oldTag.remove("y");
         oldTag.remove("z");
 
-        this.getLevel().setBlock(nextPos, this.getBlockState(), 35);
+        this.getLevel().setBlockAndUpdate(nextPos, this.getBlockState());
 
         BlockEntity nextBlockEntity = this.getLevel().getBlockEntity(nextPos);
         if (nextBlockEntity instanceof DecorationBlockEntity nextDecorationBlockEntity) {
@@ -148,7 +148,7 @@ public class DecorationBlockEntity extends AbstractCaterpillarBlockEntity {
         BlockPos decoratePos;
         Direction direction = this.getBlockState().getValue(FACING);
         int placementSlotId = INVENTORY_MAX_SLOTS;
-        ItemStackHandler currrentPlacementMap =  this.placementMap.get(this.currentMap);
+        ItemStackHandler currentPlacementMap =  this.placementMap.get(this.currentMap);
 
         for (int i = -1; i < 2; i++) {
             for (int j = -1; j < 2; j++) {
@@ -164,7 +164,7 @@ public class DecorationBlockEntity extends AbstractCaterpillarBlockEntity {
                     default -> this.getBlockPos().offset(j, i, -1);
                 };
 
-                Item itemToPlace = currrentPlacementMap.getStackInSlot(--placementSlotId).getItem();
+                Item itemToPlace = currentPlacementMap.getStackInSlot(--placementSlotId).getItem();
                 Block blockToPlace = Block.byItem(itemToPlace);
 
                 if (blockToPlace != null && blockToPlace.defaultBlockState() != null) {
@@ -342,9 +342,8 @@ public class DecorationBlockEntity extends AbstractCaterpillarBlockEntity {
     @Override
     protected void saveAdditional(CompoundTag tag) {
         ListTag listTag = new ListTag();
-        for (int i = 0; i < this.placementMap.size(); i++)
-        {
-            listTag.add(this.placementMap.get(i).serializeNBT());
+        for (ItemStackHandler itemStackHandler : this.placementMap) {
+            listTag.add(itemStackHandler.serializeNBT());
         }
 
         tag.put("PlacementMap", listTag);
@@ -355,13 +354,13 @@ public class DecorationBlockEntity extends AbstractCaterpillarBlockEntity {
     }
 
     @Override
-    public Component getDisplayName() {
+    public @NotNull Component getDisplayName() {
         return TITLE;
     }
 
     @Nullable
     @Override
-    public AbstractContainerMenu createMenu(int id, Inventory playerInventory, Player player) {
+    public AbstractContainerMenu createMenu(int id, @NotNull Inventory playerInventory, @NotNull Player player) {
         PacketHandler.sendToClients(new DecorationSyncSelectedMapS2CPacket(DecorationBlockEntity.this.selectedMap, worldPosition));
         PacketHandler.sendToClients(new DecorationSyncCurrentMapS2CPacket(DecorationBlockEntity.this.getCurrentMap(), worldPosition));
         for (int i = 0; i < this.placementMap.size(); i++) {

@@ -313,13 +313,13 @@ public class DrillHeadBlockEntity extends AbstractCaterpillarBlockEntity {
     }
 
     @Override
-    public Component getDisplayName() {
+    public @NotNull Component getDisplayName() {
         return TITLE;
     }
 
     @Nullable
     @Override
-    public AbstractContainerMenu createMenu(int id, Inventory playerInventory, Player player) {
+    public AbstractContainerMenu createMenu(int id, @NotNull Inventory playerInventory, @NotNull Player player) {
         PacketHandler.sendToClients(new DrillHeadSyncPowerS2CPacket(this.isPowered(), this.getBlockPos()));
         return new DrillHeadMenu(id, playerInventory, this, new DrillHeadContainerData(this, DrillHeadContainerData.SIZE));
     }

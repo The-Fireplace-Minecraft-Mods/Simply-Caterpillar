@@ -18,7 +18,7 @@ public class DrillBaseBlockEntity extends AbstractCaterpillarBlockEntity {
     public void move() {
         BlockPos nextPos = this.getBlockPos().relative(this.getBlockState().getValue(DrillBaseBlock.FACING).getOpposite());
 
-        this.getLevel().setBlock(nextPos, this.getBlockState(), 35);
+        this.getLevel().setBlockAndUpdate(nextPos, this.getBlockState());
         this.getLevel().removeBlock(this.getBlockPos(), false);
 
         this.getLevel().playSound(null, this.getBlockPos(), SoundEvents.PISTON_EXTEND, SoundSource.BLOCKS, 1.0F, 1.0F);

@@ -94,7 +94,7 @@ public class InventoryBlockEntity extends BlockEntity {
     }
 
     @Override
-    public void load(CompoundTag tag) {
+    public void load(@NotNull CompoundTag tag) {
         super.load(tag);
 
         this.inventory.deserializeNBT(tag.getCompound("Inventory"));

@@ -60,13 +60,13 @@ public class DrillHeadBlock extends AbstractCaterpillarBlock {
     }
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateDefinition.@NotNull Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
         builder.add(DrillHeadBlock.PART);
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+    public @NotNull VoxelShape getShape(BlockState state, @NotNull BlockGetter level, @NotNull BlockPos pos, @NotNull CollisionContext context) {
         if (state.getValue(DrillHeadBlock.PART) == DrillHeadPart.BASE) {
             return DrillHeadBlock.SHAPES_BASE.get(state.getValue(FACING));
         }
@@ -119,7 +119,7 @@ public class DrillHeadBlock extends AbstractCaterpillarBlock {
     }
 
     @Override
-    public void playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
+    public void playerWillDestroy(@NotNull Level level, @NotNull BlockPos pos, @NotNull BlockState state, @NotNull Player player) {
         BlockPos basePos = getBasePos(state, pos);
         this.dropContents(level, basePos);
         this.destroyStructure(level, basePos, state, player);
@@ -199,7 +199,7 @@ public class DrillHeadBlock extends AbstractCaterpillarBlock {
 
     @Nullable
     @Override
-    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+    public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
         return BlockEntityInit.DRILL_HEAD.get().create(pos, state);
     }
 }

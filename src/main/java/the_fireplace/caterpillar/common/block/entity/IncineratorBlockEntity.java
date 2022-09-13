@@ -15,6 +15,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import the_fireplace.caterpillar.Caterpillar;
 import the_fireplace.caterpillar.common.block.IncineratorBlock;
@@ -54,7 +55,7 @@ public class IncineratorBlockEntity extends AbstractCaterpillarBlockEntity {
         oldTag.remove("y");
         oldTag.remove("z");
 
-        this.getLevel().setBlock(nextPos, this.getBlockState(), 35);
+        this.getLevel().setBlockAndUpdate(nextPos, this.getBlockState());
 
         BlockEntity nextBlockEntity = this.getLevel().getBlockEntity(nextPos);
         if (nextBlockEntity instanceof IncineratorBlockEntity nextIncineratorBlockEntity) {
@@ -96,13 +97,13 @@ public class IncineratorBlockEntity extends AbstractCaterpillarBlockEntity {
     }
 
     @Override
-    public Component getDisplayName() {
+    public @NotNull Component getDisplayName() {
         return TITLE;
     }
 
     @Nullable
     @Override
-    public AbstractContainerMenu createMenu(int id, Inventory playerInventory, Player player) {
+    public AbstractContainerMenu createMenu(int id, @NotNull Inventory playerInventory, @NotNull Player player) {
         return new IncineratorMenu(id, playerInventory, this, new SimpleContainerData(0));
     }
 }

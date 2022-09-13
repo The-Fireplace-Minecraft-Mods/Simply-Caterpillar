@@ -5,6 +5,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 import the_fireplace.caterpillar.client.screen.util.ScreenTabs;
 import the_fireplace.caterpillar.common.block.entity.IncineratorBlockEntity;
 import the_fireplace.caterpillar.common.menu.IncineratorMenu;
@@ -20,7 +21,7 @@ public class IncineratorScreen extends AbstractCaterpillarScreen<IncineratorMenu
     }
 
     @Override
-    protected void slotClicked(Slot slot, int slotId, int mouseButton, ClickType type) {
+    protected void slotClicked(@NotNull Slot slot, int slotId, int mouseButton, @NotNull ClickType type) {
         if (!this.isIncineratorSlot(slotId) || slot == null) {
             super.slotClicked(slot, slotId, mouseButton, type);
             return;

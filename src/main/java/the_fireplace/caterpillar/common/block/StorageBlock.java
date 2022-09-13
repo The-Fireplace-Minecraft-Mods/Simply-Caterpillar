@@ -65,13 +65,13 @@ public class StorageBlock extends AbstractCaterpillarBlock {
     }
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateDefinition.@NotNull Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
         builder.add(StorageBlock.PART);
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+    public @NotNull VoxelShape getShape(BlockState state, @NotNull BlockGetter level, @NotNull BlockPos pos, @NotNull CollisionContext context) {
         return switch (state.getValue(StorageBlock.PART)) {
             case LEFT -> StorageBlock.SHAPES_LEFT.get(state.getValue(FACING));
             case RIGHT -> StorageBlock.SHAPES_RIGHT.get(state.getValue(FACING));
@@ -100,8 +100,8 @@ public class StorageBlock extends AbstractCaterpillarBlock {
     public void setPlacedBy(Level level, BlockPos blockPos, BlockState blockState, @Nullable LivingEntity livingEntity, @NotNull ItemStack stack) {
         Direction direction = blockState.getValue(FACING);
 
-        level.setBlock(blockPos.relative(direction.getCounterClockWise()), blockState.setValue(StorageBlock.PART, StoragePart.LEFT), 3);
-        level.setBlock(blockPos.relative(direction.getClockWise()), blockState.setValue(StorageBlock.PART, StoragePart.RIGHT), 3);
+        level.setBlockAndUpdate(blockPos.relative(direction.getCounterClockWise()), blockState.setValue(StorageBlock.PART, StoragePart.LEFT));
+        level.setBlockAndUpdate(blockPos.relative(direction.getClockWise()), blockState.setValue(StorageBlock.PART, StoragePart.RIGHT));
 
         super.setPlacedBy(level, blockPos, blockState, livingEntity, stack);
     }
@@ -140,7 +140,7 @@ public class StorageBlock extends AbstractCaterpillarBlock {
 
     @Nullable
     @Override
-    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+    public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
         return BlockEntityInit.STORAGE.get().create(pos, state);
     }
 }

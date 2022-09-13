@@ -20,9 +20,9 @@ public class StorageBlockEntity extends AbstractCaterpillarBlockEntity {
     public void move() {
         BlockPos nextPos = this.getBlockPos().relative(this.getBlockState().getValue(StorageBlock.FACING).getOpposite());
 
-        this.getLevel().setBlock(nextPos, this.getBlockState(), 35);
-        this.getLevel().setBlock(nextPos.relative(this.getBlockState().getValue(StorageBlock.FACING).getCounterClockWise()), this.getBlockState().setValue(StorageBlock.PART, StoragePart.LEFT), 3);
-        this.getLevel().setBlock(nextPos.relative(this.getBlockState().getValue(StorageBlock.FACING).getClockWise()), this.getBlockState().setValue(StorageBlock.PART, StoragePart.RIGHT), 3);
+        this.getLevel().setBlockAndUpdate(nextPos, this.getBlockState());
+        this.getLevel().setBlockAndUpdate(nextPos.relative(this.getBlockState().getValue(StorageBlock.FACING).getCounterClockWise()), this.getBlockState().setValue(StorageBlock.PART, StoragePart.LEFT));
+        this.getLevel().setBlockAndUpdate(nextPos.relative(this.getBlockState().getValue(StorageBlock.FACING).getClockWise()), this.getBlockState().setValue(StorageBlock.PART, StoragePart.RIGHT));
 
         this.getLevel().removeBlock(this.getBlockPos(), false);
         this.getLevel().removeBlock(this.getBlockPos().relative(this.getBlockState().getValue(StorageBlock.FACING).getCounterClockWise()), false);

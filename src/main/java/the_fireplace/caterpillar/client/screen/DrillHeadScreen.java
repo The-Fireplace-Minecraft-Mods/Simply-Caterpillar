@@ -10,6 +10,7 @@ import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import org.jetbrains.annotations.NotNull;
 import the_fireplace.caterpillar.client.screen.util.ScreenTabs;
 import the_fireplace.caterpillar.common.block.entity.DrillHeadBlockEntity;
 import the_fireplace.caterpillar.common.menu.DrillHeadMenu;
@@ -37,7 +38,7 @@ public class DrillHeadScreen extends AbstractCaterpillarScreen<DrillHeadMenu> {
     }
 
     @Override
-    public void render(PoseStack stack, int mouseX, int mouseY, float partialTicks) {
+    public void render(@NotNull PoseStack stack, int mouseX, int mouseY, float partialTicks) {
         super.render(stack, mouseX, mouseY, partialTicks);
 
         this.renderTooltipPowerButton(stack, mouseX, mouseY);
@@ -45,7 +46,7 @@ public class DrillHeadScreen extends AbstractCaterpillarScreen<DrillHeadMenu> {
     }
 
     @Override
-    protected void renderBg(PoseStack stack, float partialTick, int mouseX, int mouseY) {
+    protected void renderBg(@NotNull PoseStack stack, float partialTick, int mouseX, int mouseY) {
         super.renderBg(stack, partialTick, mouseX, mouseY);
 
         if (this.menu.isPowered()) {
@@ -55,7 +56,7 @@ public class DrillHeadScreen extends AbstractCaterpillarScreen<DrillHeadMenu> {
     }
 
     @Override
-    protected void renderLabels(PoseStack stack, int mouseX, int mouseY) {
+    protected void renderLabels(@NotNull PoseStack stack, int mouseX, int mouseY) {
         int consumptionX = 4, consumptionY = 6, gatheredX = 119, gatheredY = 6;
 
         this.font.draw(stack, DrillHeadBlockEntity.CONSUMPTION_TITLE, consumptionX, consumptionY, 0x404040);
@@ -103,7 +104,7 @@ public class DrillHeadScreen extends AbstractCaterpillarScreen<DrillHeadMenu> {
     }
 
     @Override
-    protected void slotClicked(Slot slot, int slotId, int mouseButton, ClickType type) {
+    protected void slotClicked(@NotNull Slot slot, int slotId, int mouseButton, @NotNull ClickType type) {
         if (this.menu.isGatheredSlot(slotId) && !this.menu.getCarried().isEmpty()) {
             return;
         }

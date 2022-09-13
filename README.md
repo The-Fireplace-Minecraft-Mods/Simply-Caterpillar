@@ -35,7 +35,7 @@ Developing with My Mod
 
 If you want to use items or blocks from my mod, add support for, or even develop an addon for my mod, you can easily add it to your development environment! Most
 releases get uploaded to my maven repository.  
-So all you have to do to include the mod is add these lines *(in the appropriate places)* to your build.gradle
+So all you have to do to include the mod is to add these lines *(in the appropriate places)* to your build.gradle
 
     repositories {
         maven { // The_Fireplace's Mods, and BrainStoneMod

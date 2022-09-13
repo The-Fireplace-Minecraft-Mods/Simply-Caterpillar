@@ -63,13 +63,13 @@ public class CollectorBlock extends AbstractCaterpillarBlock {
     }
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateDefinition.@NotNull Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
         builder.add(CollectorBlock.HALF);
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+    public @NotNull VoxelShape getShape(BlockState state, @NotNull BlockGetter level, @NotNull BlockPos pos, @NotNull CollisionContext context) {
         if (state.getValue(CollectorBlock.HALF) == DoubleBlockHalf.LOWER) {
             return CollectorBlock.SHAPES_LOWER.get(state.getValue(FACING));
         } else {
@@ -128,7 +128,7 @@ public class CollectorBlock extends AbstractCaterpillarBlock {
 
     @Nullable
     @Override
-    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+    public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
         return BlockEntityInit.COLLECTOR.get().create(pos, state);
     }
 }

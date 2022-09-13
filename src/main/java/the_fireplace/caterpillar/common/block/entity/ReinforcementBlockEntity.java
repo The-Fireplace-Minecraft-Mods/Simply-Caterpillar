@@ -11,6 +11,7 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import the_fireplace.caterpillar.Caterpillar;
 import the_fireplace.caterpillar.common.block.ReinforcementBlock;
@@ -38,7 +39,7 @@ public class ReinforcementBlockEntity extends AbstractCaterpillarBlockEntity {
         oldTag.remove("y");
         oldTag.remove("z");
 
-        this.getLevel().setBlock(nextPos, this.getBlockState(), 35);
+        this.getLevel().setBlockAndUpdate(nextPos, this.getBlockState());
 
         BlockEntity nextBlockEntity = this.getLevel().getBlockEntity(nextPos);
         nextBlockEntity.load(oldTag);
@@ -65,13 +66,13 @@ public class ReinforcementBlockEntity extends AbstractCaterpillarBlockEntity {
     }
 
     @Override
-    public Component getDisplayName() {
+    public @NotNull Component getDisplayName() {
         return TITLE;
     }
 
     @Nullable
     @Override
-    public AbstractContainerMenu createMenu(int id, Inventory playerInventory, Player player) {
+    public AbstractContainerMenu createMenu(int id, @NotNull Inventory playerInventory, @NotNull Player player) {
         return new ReinforcementMenu(id, playerInventory, this, new SimpleContainerData(0));
     }
 }

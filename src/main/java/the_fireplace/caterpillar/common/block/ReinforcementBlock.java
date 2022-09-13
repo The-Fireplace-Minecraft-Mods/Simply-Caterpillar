@@ -86,7 +86,7 @@ public class ReinforcementBlock extends AbstractCaterpillarBlock {
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+    public @NotNull InteractionResult use(@NotNull BlockState state, Level level, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult hit) {
         if (level.isClientSide) {
             return InteractionResult.SUCCESS;
         } else {
@@ -103,13 +103,13 @@ public class ReinforcementBlock extends AbstractCaterpillarBlock {
     }
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateDefinition.@NotNull Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
         builder.add(ReinforcementBlock.PART);
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+    public @NotNull VoxelShape getShape(BlockState state, @NotNull BlockGetter level, @NotNull BlockPos pos, @NotNull CollisionContext context) {
         return switch (state.getValue(ReinforcementBlock.PART)) {
             case LEFT -> ReinforcementBlock.SHAPES_LEFT.get(state.getValue(FACING));
             case RIGHT -> ReinforcementBlock.SHAPES_RIGHT.get(state.getValue(FACING));
@@ -179,7 +179,7 @@ public class ReinforcementBlock extends AbstractCaterpillarBlock {
 
     @Nullable
     @Override
-    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+    public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
         return BlockEntityInit.REINFORCEMENT.get().create(pos, state);
     }
 }
