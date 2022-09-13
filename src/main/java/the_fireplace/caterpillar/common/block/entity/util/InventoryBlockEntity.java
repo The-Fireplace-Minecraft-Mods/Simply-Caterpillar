@@ -12,7 +12,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -26,7 +26,7 @@ public class InventoryBlockEntity extends BlockEntity {
 
     private final ItemStackHandler inventory;
 
-    private LazyOptional<IItemHandler> handler;
+    private LazyOptional<IItemHandlerModifiable> handler;
 
 
     public InventoryBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state, int size) {
@@ -54,7 +54,7 @@ public class InventoryBlockEntity extends BlockEntity {
 
     public void setInventory(ItemStackHandler inventory) {
         for (int i = 0; i < inventory.getSlots(); i++) {
-            this.inventory.setStackInSlot(i, inventory.getStackInSlot(i));
+            setStackInSlot(i, inventory.getStackInSlot(i));
         }
     }
 
@@ -73,6 +73,14 @@ public class InventoryBlockEntity extends BlockEntity {
 
     public ItemStack getStackInSlot(int slot) {
         return this.handler.map(inventory -> inventory.getStackInSlot(slot)).orElse(ItemStack.EMPTY);
+    }
+
+    public void setStackInSlot(int slot, ItemStack stack) {
+        this.handler.ifPresent(handler -> handler.setStackInSlot(slot, stack));
+    }
+
+    public void removeStackInSlot(int slot) {
+       this.setStackInSlot(slot, ItemStack.EMPTY);
     }
 
     public ItemStack insertItem(int slot, ItemStack stack) {

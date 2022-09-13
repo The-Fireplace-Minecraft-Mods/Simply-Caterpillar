@@ -4,6 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
@@ -42,7 +43,7 @@ public class CollectorBlockEntity extends AbstractCaterpillarBlockEntity {
 
         if (blockEntity instanceof DrillHeadBlockEntity drillHeadBlockEntity) {
             for(ItemEntity itemEntity : getItemsAround()) {
-                if (drillHeadBlockEntity.addItemToInventory(itemEntity.getItem())) {
+                if (insertItemToDrillHeadGathered(drillHeadBlockEntity, itemEntity.getItem())) {
                     itemEntity.kill();
                 }
             }
@@ -51,5 +52,21 @@ public class CollectorBlockEntity extends AbstractCaterpillarBlockEntity {
 
     public List<ItemEntity> getItemsAround() {
         return this.getLevel().getEntitiesOfClass(ItemEntity.class, new AABB(this.getBlockPos()).inflate(1)).stream().toList();
+    }
+
+    public boolean insertItemToDrillHeadGathered(DrillHeadBlockEntity drillHead, ItemStack stack) {
+        for (int i = DrillHeadBlockEntity.GATHERED_SLOT_START; i <= DrillHeadBlockEntity.GATHERED_SLOT_END; i++) {
+            if (drillHead.getStackInSlot(i).isEmpty()) {
+                drillHead.insertItem(i, stack);
+
+                return  true;
+            } else if (drillHead.getStackInSlot(i).getItem() == stack.getItem() && drillHead.getStackInSlot(i).getCount() + stack.getCount() <= drillHead.getStackInSlot(i).getMaxStackSize()) {
+                drillHead.insertItem(i, stack);
+
+                return true;
+            }
+        }
+
+        return false;
     }
 }

@@ -30,7 +30,6 @@ public class CaterpillarBlockUtil {
 
             moveNextBlock(level, nextBlockPos, direction);
         }
-
     }
 
     public static boolean isCaterpillarBlock(Block block) {
