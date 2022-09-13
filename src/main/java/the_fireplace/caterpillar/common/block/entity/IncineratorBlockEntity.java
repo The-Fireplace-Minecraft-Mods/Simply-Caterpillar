@@ -9,13 +9,20 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.SimpleContainerData;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 import the_fireplace.caterpillar.Caterpillar;
 import the_fireplace.caterpillar.common.block.IncineratorBlock;
+import the_fireplace.caterpillar.common.block.util.CaterpillarBlockUtil;
 import the_fireplace.caterpillar.common.menu.IncineratorMenu;
 import the_fireplace.caterpillar.core.init.BlockEntityInit;
+
+import static net.minecraft.world.level.block.HorizontalDirectionalBlock.FACING;
 
 public class IncineratorBlockEntity extends AbstractCaterpillarBlockEntity {
 
@@ -27,10 +34,20 @@ public class IncineratorBlockEntity extends AbstractCaterpillarBlockEntity {
 
     public IncineratorBlockEntity(BlockPos pos, BlockState state) {
         super(BlockEntityInit.INCINERATOR.get(), pos, state, INVENTORY_SIZE);
+
+        this.setDefaultIncinerationBlocks();
+    }
+
+    private void setDefaultIncinerationBlocks() {
+        this.setStackInSlot(0, new ItemStack(Blocks.COBBLESTONE));
+        this.setStackInSlot(1, new ItemStack(Blocks.GRAVEL));
+        this.setStackInSlot(2, new ItemStack(Blocks.SAND));
+        this.setStackInSlot(3, new ItemStack(Blocks.DIRT));
     }
 
     public void move() {
-        BlockPos nextPos = this.getBlockPos().relative(this.getBlockState().getValue(IncineratorBlock.FACING).getOpposite());
+        BlockPos basePos = this.getBlockPos();
+        BlockPos nextPos = basePos.relative(this.getBlockState().getValue(IncineratorBlock.FACING).getOpposite());
 
         CompoundTag oldTag = this.saveWithFullMetadata();
         oldTag.remove("x");
@@ -40,19 +57,42 @@ public class IncineratorBlockEntity extends AbstractCaterpillarBlockEntity {
         this.getLevel().setBlock(nextPos, this.getBlockState(), 35);
 
         BlockEntity nextBlockEntity = this.getLevel().getBlockEntity(nextPos);
-        nextBlockEntity.load(oldTag);
-        nextBlockEntity.setChanged();
+        if (nextBlockEntity instanceof IncineratorBlockEntity nextIncineratorBlockEntity) {
+            nextIncineratorBlockEntity.load(oldTag);
 
-        this.getLevel().removeBlock(this.getBlockPos(), false);
+            nextIncineratorBlockEntity.load(oldTag);
+            nextIncineratorBlockEntity.setChanged();
 
-        this.getLevel().playSound(null, this.getBlockPos(), SoundEvents.PISTON_EXTEND, SoundSource.BLOCKS, 1.0F, 1.0F);
+            this.getLevel().removeBlock(basePos, false);
 
-        this.incinerate();
+            this.getLevel().playSound(null, basePos, SoundEvents.PISTON_EXTEND, SoundSource.BLOCKS, 1.0F, 1.0F);
+
+            nextIncineratorBlockEntity.incinerate();
+        }
     }
 
-    // TODO: Implement incineration
     private void incinerate() {
+        BlockPos drillHeadPos = CaterpillarBlockUtil.getCaterpillarHeadPos(this.getLevel(), this.getBlockPos(), this.getBlockState().getValue(FACING));
+        if (drillHeadPos != null && this.getLevel().getBlockEntity(drillHeadPos) instanceof DrillHeadBlockEntity drillHeadBlockEntity) {
+            for (int i = 0; i < INVENTORY_SIZE; i++) {
+                Item itemToIncinerate = this.getStackInSlot(i).getItem();
 
+                removeItemFromDrillHeadGathered(drillHeadBlockEntity, itemToIncinerate);
+            }
+        }
+    }
+
+    private void removeItemFromDrillHeadGathered(DrillHeadBlockEntity drillHead, Item item) {
+        if (item.equals(Items.AIR)) {
+            return;
+        }
+
+        for (int slotId = DrillHeadBlockEntity.GATHERED_SLOT_START; slotId <= DrillHeadBlockEntity.GATHERED_SLOT_END; slotId++) {
+            ItemStack stack = drillHead.getStackInSlot(slotId);
+            if (stack.getItem().equals(item)) {
+                drillHead.removeStackInSlot(slotId);
+            }
+        }
     }
 
     @Override
