@@ -15,8 +15,7 @@ import the_fireplace.caterpillar.core.init.MenuInit;
 import the_fireplace.caterpillar.core.network.PacketHandler;
 import the_fireplace.caterpillar.core.network.packet.client.DrillHeadSyncPowerC2SPacket;
 
-import static the_fireplace.caterpillar.common.block.entity.DrillHeadBlockEntity.GATHERED_SLOT_END;
-import static the_fireplace.caterpillar.common.block.entity.DrillHeadBlockEntity.GATHERED_SLOT_START;
+import static the_fireplace.caterpillar.common.block.entity.DrillHeadBlockEntity.*;
 
 public class DrillHeadMenu extends AbstractCaterpillarMenu {
 
@@ -80,10 +79,14 @@ public class DrillHeadMenu extends AbstractCaterpillarMenu {
                         return ItemStack.EMPTY;
                     }
                 } else {
-                    return super.quickMoveStack(player, index);
+                    if (!moveItemStackTo(sourceStack, BE_INVENTORY_FIRST_SLOT_INDEX + CONSUMPTION_SLOT_START, BE_INVENTORY_FIRST_SLOT_INDEX + CONSUMPTION_SLOT_END + 1, false)) {
+                        return ItemStack.EMPTY;
+                    }
                 }
             } else {
-                return super.quickMoveStack(player, index);
+                if (!moveItemStackTo(sourceStack, BE_INVENTORY_FIRST_SLOT_INDEX + CONSUMPTION_SLOT_START, BE_INVENTORY_FIRST_SLOT_INDEX + CONSUMPTION_SLOT_END + 1, false)) {
+                    return ItemStack.EMPTY;
+                }
             }
         } else {
             return super.quickMoveStack(player, index);
@@ -95,6 +98,7 @@ public class DrillHeadMenu extends AbstractCaterpillarMenu {
         } else {
             sourceSlot.setChanged();
         }
+
         sourceSlot.onTake(player, sourceStack);
         return copyOfSourceStack;
     }

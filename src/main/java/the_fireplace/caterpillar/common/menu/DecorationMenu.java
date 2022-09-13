@@ -43,11 +43,7 @@ public class DecorationMenu extends AbstractCaterpillarMenu {
 
     @Override
     public ItemStack quickMoveStack(Player player, int index) {
-        Slot sourceSlot = slots.get(index);
-        if (sourceSlot == null || !sourceSlot.hasItem()) return ItemStack.EMPTY;
-        ItemStack sourceStack = sourceSlot.getItem();
-
-        return sourceStack.copy();
+        return ItemStack.EMPTY;
     }
 
     public int getSelectedMap() {

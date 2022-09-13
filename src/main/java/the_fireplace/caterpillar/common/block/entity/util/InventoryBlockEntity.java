@@ -112,6 +112,13 @@ public class InventoryBlockEntity extends BlockEntity {
         super.saveAdditional(tag);
     }
 
+    @Override
+    public void invalidateCaps() {
+        super.invalidateCaps();
+
+        this.handler.invalidate();
+    }
+
     public void drops() {
         SimpleContainer inventory = new SimpleContainer(this.inventory.getSlots());
 
