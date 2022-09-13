@@ -11,6 +11,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -63,10 +64,10 @@ public class DecorationBlock extends AbstractCaterpillarBlock {
 
     public DecorationBlock(Properties properties) {
         super(properties);
-        registerDefaultState(defaultBlockState().setValue(DecorationBlock.PART, DecorationPart.BASE));
-        runCalculation(DecorationBlock.SHAPES_LEFT, DecorationBlock.SHAPE_LEFT.get());
-        runCalculation(DecorationBlock.SHAPES_BASE, DecorationBlock.SHAPE_BASE.get());
-        runCalculation(DecorationBlock.SHAPES_RIGHT, DecorationBlock.SHAPE_RIGHT.get());
+        super.registerDefaultState(defaultBlockState().setValue(DecorationBlock.PART, DecorationPart.BASE));
+        super.runCalculation(DecorationBlock.SHAPES_LEFT, DecorationBlock.SHAPE_LEFT.get());
+        super.runCalculation(DecorationBlock.SHAPES_BASE, DecorationBlock.SHAPE_BASE.get());
+        super.runCalculation(DecorationBlock.SHAPES_RIGHT, DecorationBlock.SHAPE_RIGHT.get());
     }
 
     @Override
@@ -115,13 +116,13 @@ public class DecorationBlock extends AbstractCaterpillarBlock {
     }
 
     @Override
-    public void setPlacedBy(Level level, BlockPos blockPos, BlockState blockState, @Nullable LivingEntity livingEntity, @NotNull ItemStack stack) {
-        Direction direction = blockState.getValue(FACING);
+    public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity livingEntity, @NotNull ItemStack stack) {
+        Direction direction = state.getValue(FACING);
 
-        level.setBlock(blockPos.relative(direction.getCounterClockWise()), blockState.setValue(DecorationBlock.PART, DecorationPart.LEFT), 3);
-        level.setBlock(blockPos.relative(direction.getClockWise()), blockState.setValue(DecorationBlock.PART, DecorationPart.RIGHT), 3);
+        level.setBlock(pos.relative(direction.getCounterClockWise()), state.setValue(DecorationBlock.PART, DecorationPart.LEFT), 3);
+        level.setBlock(pos.relative(direction.getClockWise()), state.setValue(DecorationBlock.PART, DecorationPart.RIGHT), 3);
 
-        super.setPlacedBy(level, blockPos, blockState, livingEntity, stack);
+        super.setPlacedBy(level, pos, state, livingEntity, stack);
     }
 
     @Override

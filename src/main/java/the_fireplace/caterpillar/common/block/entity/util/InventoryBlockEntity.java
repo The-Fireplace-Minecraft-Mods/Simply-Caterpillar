@@ -71,14 +71,18 @@ public class InventoryBlockEntity extends BlockEntity {
         return super.getCapability(cap, side);
     }
 
-    protected ItemStack getStackInSlot(int slot) {
+    public ItemStack getStackInSlot(int slot) {
         return this.handler.map(inventory -> inventory.getStackInSlot(slot)).orElse(ItemStack.EMPTY);
     }
 
-    protected ItemStack insertItem(int slot, ItemStack stack) {
+    public ItemStack insertItem(int slot, ItemStack stack) {
         ItemStack copy = stack.copy();
         copy.setCount(1);
         return this.handler.map(inventory -> inventory.insertItem(slot, copy, false)).orElse(ItemStack.EMPTY);
+    }
+
+    public ItemStack extractItem(int slot, int amount) {
+        return this.handler.map(inventory -> inventory.extractItem(slot, amount, false)).orElse(ItemStack.EMPTY);
     }
 
     @Override

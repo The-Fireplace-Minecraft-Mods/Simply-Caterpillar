@@ -57,6 +57,13 @@ public class DecorationMenu extends AbstractCaterpillarMenu {
         return 0;
     }
 
+    public int getCurrentMap() {
+        if (this.blockEntity instanceof DecorationBlockEntity decorationBlockEntity) {
+            return decorationBlockEntity.getCurrentMap();
+        }
+        return 0;
+    }
+
     public void scrollTo(int selectedMap) {
         if (this.blockEntity instanceof DecorationBlockEntity decorationBlockEntity) {
             decorationBlockEntity.setSelectedMap(selectedMap);

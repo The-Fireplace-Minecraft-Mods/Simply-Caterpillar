@@ -64,6 +64,12 @@ public final class PacketHandler {
                 .consumerMainThread(DecorationSyncSelectedMapS2CPacket::handle)
                 .add();
 
+        CHANNEL.messageBuilder(DecorationSyncCurrentMapS2CPacket.class, index++, NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(DecorationSyncCurrentMapS2CPacket::new)
+                .encoder(DecorationSyncCurrentMapS2CPacket::toBytes)
+                .consumerMainThread(DecorationSyncCurrentMapS2CPacket::handle)
+                .add();
+
         CHANNEL.messageBuilder(DecorationSyncSlotC2SPacket.class, index++, NetworkDirection.PLAY_TO_SERVER)
                 .decoder(DecorationSyncSlotC2SPacket::new)
                 .encoder(DecorationSyncSlotC2SPacket::toBytes)

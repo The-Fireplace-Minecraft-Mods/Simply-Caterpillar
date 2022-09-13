@@ -1,6 +1,7 @@
 package the_fireplace.caterpillar.client.screen;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
@@ -51,8 +52,9 @@ public class DecorationScreen extends AbstractCaterpillarScreen<DecorationMenu> 
         blit(stack, i, j + (int)((float)(k - j - SCROLLER_WIDTH) * this.scrollOffs), 176, 0, 12, 15);
 
         int m = 9;
-        int n = (int)((double)(scrollOffs * (float)m) + 0.5D);
-        this.font.draw(stack, "" + n, this.leftPos + 31, this.topPos + 39, 0x404040);
+        int placementIndex = (int)((double)(scrollOffs * (float)m) + 0.5D);
+        int colorPlacement = this.menu.getCurrentMap() == this.menu.getSelectedMap() ? ChatFormatting.BLACK.getColor() : 0x404040;
+        this.font.draw(stack, "" + placementIndex, this.leftPos + 31, this.topPos + 39, colorPlacement);
     }
 
     @Override
