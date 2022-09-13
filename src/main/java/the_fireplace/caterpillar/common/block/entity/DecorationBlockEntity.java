@@ -11,7 +11,9 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -107,8 +109,8 @@ public class DecorationBlockEntity extends AbstractCaterpillarBlockEntity {
 
     public void move() {
         BlockPos basePos = this.getBlockPos();
-        Direction direction = this.getBlockState().getValue(FACING).getOpposite();
-        BlockPos nextPos = basePos.relative(direction);
+        Direction direction = this.getBlockState().getValue(FACING);
+        BlockPos nextPos = basePos.relative(direction.getOpposite());
 
         CompoundTag oldTag = this.saveWithFullMetadata();
         oldTag.remove("x");
@@ -154,61 +156,83 @@ public class DecorationBlockEntity extends AbstractCaterpillarBlockEntity {
                     continue;
                 }
 
-                decoratePos = switch (direction.getOpposite()) {
-                    case EAST, WEST -> this.getBlockPos().offset(0, i, j);
-                    case SOUTH, NORTH -> this.getBlockPos().offset(j, i, -1);
+                decoratePos = switch (direction) {
+                    case EAST -> this.getBlockPos().offset(1, i, j);
+                    case WEST -> this.getBlockPos().offset(-1, i, j);
+                    case SOUTH -> this.getBlockPos().offset(j, i, 1);
+                    case NORTH -> this.getBlockPos().offset(j, i, -1);
                     default -> this.getBlockPos().offset(j, i, -1);
                 };
 
-                Block blockToPlace = Block.byItem(currrentPlacementMap.getStackInSlot(--placementSlotId).getItem());
+                Item itemToPlace = currrentPlacementMap.getStackInSlot(--placementSlotId).getItem();
+                Block blockToPlace = Block.byItem(itemToPlace);
 
                 if (blockToPlace != null && blockToPlace.defaultBlockState() != null) {
-                    if (takeBlockFromInventory(blockToPlace)) {
+                    if (takeItemFromDrillHeadInventory(itemToPlace)) {
                         BlockState blockState = blockToPlace.defaultBlockState();
 
                         if (!blockToPlace.defaultBlockState().canSurvive(this.getLevel(), decoratePos)) {
-                            if (j == -1) { // Right
-                                if (blockToPlace.equals(Blocks.TORCH) ) {
-                                    blockState = Blocks.WALL_TORCH.defaultBlockState().setValue(WallTorchBlock.FACING, direction.getClockWise());
-                                } else if (blockToPlace.equals(Blocks.REDSTONE_TORCH)) {
-                                    blockState = Blocks.REDSTONE_WALL_TORCH.defaultBlockState().setValue(WallTorchBlock.FACING, direction.getClockWise());
+                            if (blockToPlace.equals(Blocks.TORCH)) {
+                                blockState = Blocks.WALL_TORCH.defaultBlockState();
+                            } else if (blockToPlace.equals(Blocks.REDSTONE_TORCH)) {
+                                blockState = Blocks.REDSTONE_WALL_TORCH.defaultBlockState();
+                            } else if (blockToPlace.equals(Blocks.SOUL_TORCH)) {
+                                blockState = Blocks.SOUL_WALL_TORCH.defaultBlockState();
+                            } else {
+                                continue;
+                            }
+
+                            if (j == -1) {
+                                switch (direction) {
+                                    case NORTH, EAST -> blockState = blockState.setValue(HorizontalDirectionalBlock.FACING, direction.getClockWise());
+                                    case SOUTH, WEST -> blockState = blockState.setValue(HorizontalDirectionalBlock.FACING, direction.getCounterClockWise());
                                 }
-                            } else if (j == 1) { // Left
-                                if (blockToPlace.equals(Blocks.TORCH) ) {
-                                    blockState = Blocks.WALL_TORCH.defaultBlockState().setValue(WallTorchBlock.FACING, direction.getCounterClockWise());
-                                } else if (blockToPlace.equals(Blocks.REDSTONE_TORCH)) {
-                                    blockState = Blocks.REDSTONE_WALL_TORCH.defaultBlockState().setValue(WallTorchBlock.FACING, direction.getCounterClockWise());
+                            } else if (j == 0) {
+                                blockState = blockState.setValue(HorizontalDirectionalBlock.FACING, direction.getOpposite());
+                            } else if (j == 1) {
+                                switch (direction) {
+                                    case NORTH, EAST -> blockState = blockState.setValue(HorizontalDirectionalBlock.FACING, direction.getCounterClockWise());
+                                    case SOUTH, WEST -> blockState = blockState.setValue(HorizontalDirectionalBlock.FACING, direction.getClockWise());
                                 }
                             }
                         }
 
-                        /*
-                            if (blockToPlace instanceof FenceBlock fenceBlock) {
-                                if (j == -1) { // Right
-                                    blockState = fenceBlock.defaultBlockState().setValue(FenceBlock.WEST,true);
-                                } else if (j == 1) { // Left
-                                    blockState = fenceBlock.defaultBlockState().setValue(FenceBlock.EAST,true);
+                        if (blockToPlace instanceof FenceBlock) {
+                            if (j == -1) {
+                                switch (direction) {
+                                    case NORTH -> blockState = blockState.setValue(FenceBlock.WEST, true);
+                                    case SOUTH -> blockState = blockState.setValue(FenceBlock.EAST, true);
+                                    case EAST -> blockState = blockState.setValue(FenceBlock.NORTH, true);
+                                    case WEST -> blockState = blockState.setValue(FenceBlock.SOUTH, true);
+                                }
+                            } else if (j == 1) {
+                                switch (direction) {
+                                    case NORTH -> blockState = blockState.setValue(FenceBlock.EAST, true);
+                                    case SOUTH -> blockState = blockState.setValue(FenceBlock.WEST, true);
+                                    case EAST -> blockState = blockState.setValue(FenceBlock.SOUTH, true);
+                                    case WEST -> blockState = blockState.setValue(FenceBlock.NORTH, true);
                                 }
                             }
-                         */
+                        } else if (blockToPlace instanceof WallBlock wallBlock) {
 
-                        this.getLevel().setBlock(decoratePos, blockState, 35);
+                        }
 
+                        this.getLevel().setBlockAndUpdate(decoratePos, blockState);
                     }
                 }
             }
         }
     }
 
-    private boolean takeBlockFromInventory(Block block) {
-        if (block.equals(Blocks.AIR)) {
+    private boolean takeItemFromDrillHeadInventory(Item item) {
+        if (item.equals(Items.AIR)) {
             return true;
         }
 
         BlockPos drillHeadPos = CaterpillarBlockUtil.getCaterpillarHeadPos(this.getLevel(), this.getBlockPos(), this.getBlockState().getValue(FACING));
         if (drillHeadPos != null && this.getLevel().getBlockEntity(drillHeadPos) instanceof DrillHeadBlockEntity drillHeadBlockEntity) {
-            for (int i = 0; i < INVENTORY_MAX_SLOTS; i++) {
-                if (drillHeadBlockEntity.getStackInSlot(i).getItem().equals(block.asItem())) {
+            for (int i = DrillHeadBlockEntity.CONSUMPTION_SLOT_START; i < DrillHeadBlockEntity.CONSUMPTION_SLOT_END; i++) {
+                if (drillHeadBlockEntity.getStackInSlot(i).getItem().equals(item)) {
                     drillHeadBlockEntity.extractItem(i, 1);
                     return true;
                 }
