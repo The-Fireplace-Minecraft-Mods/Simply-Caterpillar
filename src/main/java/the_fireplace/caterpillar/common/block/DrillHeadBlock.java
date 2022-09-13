@@ -109,10 +109,20 @@ public class DrillHeadBlock extends AbstractCaterpillarBlock {
         super.setPlacedBy(level, pos, state, livingEntity, stack);
     }
 
+    private void dropContents(Level level, BlockPos pos) {
+        BlockEntity blockentity = level.getBlockEntity(pos);
+        if (blockentity instanceof DrillHeadBlockEntity drillHeadBlockEntity) {
+            if (!level.isClientSide()) {
+                drillHeadBlockEntity.drops();
+            }
+        }
+    }
+
     @Override
-    public void playerWillDestroy(@NotNull Level level, @NotNull BlockPos pos, @NotNull BlockState state, @NotNull Player player) {
+    public void playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
         BlockPos basePos = getBasePos(state, pos);
-        destroyStructure(level, basePos, state, player);
+        this.dropContents(level, basePos);
+        this.destroyStructure(level, basePos, state, player);
 
         super.playerWillDestroy(level, pos, state, player);
     }
@@ -131,23 +141,51 @@ public class DrillHeadBlock extends AbstractCaterpillarBlock {
         level.destroyBlock(pos.below().relative(direction.getClockWise()), false);
     }
 
-    private void buildStructure(Level level, BlockPos pos, BlockState state) {
+    public static void removeStructure(Level level, BlockPos pos, BlockState state) {
         Direction direction = state.getValue(FACING);
 
-        level.setBlock(pos.relative(direction.getCounterClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_LEFT_BOTTOM), 3);
-        level.setBlock(pos.relative(direction.getClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_RIGHT_BOTTOM), 3);
-        level.setBlock(pos.above().relative(direction.getCounterClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_LEFT), 3);
-        level.setBlock(pos.above().relative(direction.getClockWise()), state.setValue(PART, DrillHeadPart.BLADE_RIGHT), 3);
-        level.setBlock(pos.above(2), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_TOP), 3);
-        level.setBlock(pos.above(2).relative(direction.getCounterClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_LEFT_TOP), 3);
-        level.setBlock(pos.above(2).relative(direction.getClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_RIGHT_TOP), 3);
-        level.setBlock(pos.above(), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BASE), 3);
+        level.removeBlock(pos, false);
+        level.removeBlock(pos.relative(direction.getCounterClockWise()), false);
+        level.removeBlock(pos.relative(direction.getClockWise()), false);
+        level.removeBlock(pos.above(), false);
+        level.removeBlock(pos.below(), false);
+        level.removeBlock(pos.above().relative(direction.getCounterClockWise()), false);
+        level.removeBlock(pos.above().relative(direction.getClockWise()), false);
+        level.removeBlock(pos.below().relative(direction.getCounterClockWise()), false);
+        level.removeBlock(pos.below().relative(direction.getClockWise()), false);
+    }
+
+    public static void buildStructure(Level level, BlockPos pos, BlockState state) {
+        Direction direction = state.getValue(FACING);
+
+        level.setBlockAndUpdate(pos.relative(direction.getCounterClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_LEFT_BOTTOM));
+        level.setBlockAndUpdate(pos.relative(direction.getClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_RIGHT_BOTTOM));
+        level.setBlockAndUpdate(pos.above().relative(direction.getCounterClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_LEFT));
+        level.setBlockAndUpdate(pos.above().relative(direction.getClockWise()), state.setValue(PART, DrillHeadPart.BLADE_RIGHT));
+        level.setBlockAndUpdate(pos.above(2), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_TOP));
+        level.setBlockAndUpdate(pos.above(2).relative(direction.getCounterClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_LEFT_TOP));
+        level.setBlockAndUpdate(pos.above(2).relative(direction.getClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_RIGHT_TOP));
+        level.setBlockAndUpdate(pos.above(), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BASE));
+    }
+
+    public static void moveStructure(Level level, BlockPos pos, BlockState state) {
+        Direction direction = state.getValue(FACING);
+
+        level.setBlockAndUpdate(pos.below(), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_BOTTOM));
+        level.setBlockAndUpdate(pos.below().relative(direction.getCounterClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_LEFT_BOTTOM));
+        level.setBlockAndUpdate(pos.below().relative(direction.getClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_RIGHT_BOTTOM));
+        level.setBlockAndUpdate(pos.relative(direction.getCounterClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_LEFT));
+        level.setBlockAndUpdate(pos.relative(direction.getClockWise()), state.setValue(PART, DrillHeadPart.BLADE_RIGHT));
+        level.setBlockAndUpdate(pos.above(), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_TOP));
+        level.setBlockAndUpdate(pos.above().relative(direction.getCounterClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_LEFT_TOP));
+        level.setBlockAndUpdate(pos.above().relative(direction.getClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_RIGHT_TOP));
     }
 
     public BlockPos getBasePos(BlockState state, BlockPos pos) {
         Direction direction = state.getValue(FACING);
 
         return switch (state.getValue(PART)) {
+            case BLADE_RIGHT -> pos.relative(direction.getCounterClockWise());
             case BLADE_LEFT -> pos.relative(direction.getClockWise());
             case BLADE_TOP -> pos.below();
             case BLADE_BOTTOM -> pos.above();

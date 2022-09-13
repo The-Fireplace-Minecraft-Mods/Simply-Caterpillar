@@ -107,8 +107,11 @@ public class DrillHeadBlockEntity extends AbstractCaterpillarBlockEntity {
         boolean fuelSlotIsEmpty = stack.isEmpty();
 
         if (blockEntity.isPowered() && blockEntity.getLitTime() == 0 && !fuelSlotIsEmpty) {
-            stack.shrink(1);
+            blockEntity.litTime = blockEntity.getBurnDuration(stack);
+            blockEntity.litDuration = blockEntity.litTime;
             blockEntity.setChanged();
+
+            stack.shrink(1);
         }
 
         if (blockEntity.isPowered() && !blockEntity.isLit() && fuelSlotIsEmpty) {
@@ -125,7 +128,6 @@ public class DrillHeadBlockEntity extends AbstractCaterpillarBlockEntity {
 
     @Override
     public void move() {
-        Direction direction = this.getBlockState().getValue(DrillHeadBlock.FACING);
         BlockPos basePos = this.getBlockPos();
         BlockPos nextBasePos = this.getBlockPos().relative(this.getBlockState().getValue(DrillHeadBlock.FACING).getOpposite());
         BlockEntity blockEntity = this.getLevel().getBlockEntity(basePos);
@@ -136,7 +138,7 @@ public class DrillHeadBlockEntity extends AbstractCaterpillarBlockEntity {
             oldTag.remove("y");
             oldTag.remove("z");
 
-            this.getLevel().setBlock(nextBasePos, this.getBlockState(), 35);
+            this.getLevel().setBlockAndUpdate(nextBasePos, this.getBlockState());
             BlockEntity nextBlockEntity =  this.getLevel().getBlockEntity(nextBasePos);
 
             if (nextBlockEntity instanceof DrillHeadBlockEntity nextDrillHeadBlockEntity) {
@@ -146,24 +148,8 @@ public class DrillHeadBlockEntity extends AbstractCaterpillarBlockEntity {
                 nextDrillHeadBlockEntity.setPower(drillHeadBlockEntity.isPowered());
                 nextDrillHeadBlockEntity.setChanged();
 
-                this.getLevel().setBlock(nextBasePos.relative(direction.getCounterClockWise()), nextDrillHeadBlockEntity.getBlockState().setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_LEFT), 35);
-                this.getLevel().setBlock(nextBasePos.below(), nextDrillHeadBlockEntity.getBlockState().setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_BOTTOM), 35);
-                this.getLevel().setBlock(nextBasePos.below().relative(direction.getClockWise()), nextDrillHeadBlockEntity.getBlockState().setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_RIGHT_BOTTOM), 35);
-                this.getLevel().setBlock(nextBasePos.below().relative(direction.getCounterClockWise()), nextDrillHeadBlockEntity.getBlockState().setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_LEFT_BOTTOM), 35);
-                this.getLevel().setBlock(nextBasePos.above(), nextDrillHeadBlockEntity.getBlockState().setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_TOP), 35);
-                this.getLevel().setBlock(nextBasePos.above().relative(direction.getClockWise()), nextDrillHeadBlockEntity.getBlockState().setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_RIGHT_TOP), 35);
-                this.getLevel().setBlock(nextBasePos.above().relative(direction.getCounterClockWise()), nextDrillHeadBlockEntity.getBlockState().setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_LEFT_TOP), 35);
-                this.getLevel().setBlock(nextBasePos.relative(direction.getClockWise()), nextDrillHeadBlockEntity.getLevel().getBlockState(basePos.relative(direction.getClockWise())), 35);
-
-                this.getLevel().removeBlock(basePos, false);
-                this.getLevel().removeBlock(basePos.relative(direction.getCounterClockWise()), false);
-                this.getLevel().removeBlock(basePos.relative(direction.getClockWise()), false);
-                this.getLevel().removeBlock(basePos.above(), false);
-                this.getLevel().removeBlock(basePos.below(), false);
-                this.getLevel().removeBlock(basePos.above().relative(direction.getCounterClockWise()), false);
-                this.getLevel().removeBlock(basePos.above().relative(direction.getClockWise()), false);
-                this.getLevel().removeBlock(basePos.below().relative(direction.getCounterClockWise()), false);
-                this.getLevel().removeBlock(basePos.below().relative(direction.getClockWise()), false);
+                DrillHeadBlock.removeStructure(this.getLevel(), basePos, nextDrillHeadBlockEntity.getBlockState());
+                DrillHeadBlock.moveStructure(this.getLevel(), nextBasePos, nextDrillHeadBlockEntity.getBlockState());
 
                 this.getLevel().playSound(null, basePos, SoundEvents.PISTON_EXTEND, SoundSource.BLOCKS, 1.0F, 1.0F);
             }
@@ -179,12 +165,12 @@ public class DrillHeadBlockEntity extends AbstractCaterpillarBlockEntity {
 
         for (int i = -1; i < 2; i++) {
             for (int j = -1; j < 2; j++) {
-                destroyPos = switch (direction.getOpposite()) {
-                    case EAST -> this.getBlockPos().offset(1, i, j);
-                    case WEST -> this.getBlockPos().offset(-1, i, j);
-                    case SOUTH -> this.getBlockPos().offset(j, i, 1);
-                    case NORTH -> this.getBlockPos().offset(j, i, -1);
-                    default -> this.getBlockPos().offset(j, i, -1);
+                destroyPos = switch (direction) {
+                    case EAST -> this.getBlockPos().offset(-1, i, j);
+                    case WEST -> this.getBlockPos().offset(1, i, j);
+                    case SOUTH -> this.getBlockPos().offset(j, i, -1);
+                    case NORTH -> this.getBlockPos().offset(j, i, 1);
+                    default -> this.getBlockPos().offset(j, i, 1);
                 };
 
                 BlockState blockState = this.getLevel().getBlockState(destroyPos);
@@ -197,22 +183,6 @@ public class DrillHeadBlockEntity extends AbstractCaterpillarBlockEntity {
                 }
             }
         }
-    }
-
-    public boolean addItemToInventory(ItemStack stack) {
-        for (int i = GATHERED_SLOT_START; i <= GATHERED_SLOT_END; i++) {
-            if (this.getStackInSlot(i).isEmpty()) {
-                this.insertItem(i, stack);
-
-               return  true;
-            } else if (this.getStackInSlot(i).getItem() == stack.getItem() && this.getStackInSlot(i).getCount() + stack.getCount() <= this.getStackInSlot(i).getMaxStackSize()) {
-                this.insertItem(i, stack);
-
-                return true;
-            }
-        }
-
-        return false;
     }
 
     public boolean isFuelSlotEmpty() {
