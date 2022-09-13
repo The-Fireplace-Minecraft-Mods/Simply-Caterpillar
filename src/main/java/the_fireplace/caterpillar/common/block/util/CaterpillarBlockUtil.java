@@ -14,7 +14,7 @@ import the_fireplace.caterpillar.core.init.BlockInit;
 
 import java.util.List;
 
-public class CaterpillarBlocksUtil {
+public class CaterpillarBlockUtil {
 
     public static void moveNextBlock(Level level, BlockPos pos, Direction direction) {
         BlockPos nextBlockPos = pos.relative(direction);
@@ -46,7 +46,7 @@ public class CaterpillarBlocksUtil {
     public static BlockPos getCaterpillarHeadPos(Level level, BlockPos pos, Direction direction) {
         BlockState state = level.getBlockState(pos);
 
-        if (!CaterpillarBlocksUtil.isCaterpillarBlock(state.getBlock())) {
+        if (!CaterpillarBlockUtil.isCaterpillarBlock(state.getBlock())) {
             return pos.relative(direction);
         }
 

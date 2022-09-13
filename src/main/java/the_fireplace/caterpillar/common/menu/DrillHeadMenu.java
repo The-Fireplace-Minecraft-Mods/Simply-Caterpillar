@@ -12,6 +12,11 @@ import the_fireplace.caterpillar.common.menu.slot.CaterpillarFuelSlot;
 import the_fireplace.caterpillar.common.menu.syncdata.DrillHeadContainerData;
 import the_fireplace.caterpillar.common.menu.util.CaterpillarMenuUtil;
 import the_fireplace.caterpillar.core.init.MenuInit;
+import the_fireplace.caterpillar.core.network.PacketHandler;
+import the_fireplace.caterpillar.core.network.packet.client.DrillHeadSyncPowerC2SPacket;
+
+import static the_fireplace.caterpillar.common.block.entity.DrillHeadBlockEntity.GATHERED_SLOT_END;
+import static the_fireplace.caterpillar.common.block.entity.DrillHeadBlockEntity.GATHERED_SLOT_START;
 
 public class DrillHeadMenu extends AbstractCaterpillarMenu {
 
@@ -69,10 +74,13 @@ public class DrillHeadMenu extends AbstractCaterpillarMenu {
         // Check if the slot clicked is one of the vanilla container slots
         if (index < VANILLA_FIRST_SLOT_INDEX + VANILLA_SLOT_COUNT) {
             // This is a vanilla container slot so merge the stack into the BE inventory
-
             if (CaterpillarMenuUtil.isFuel(sourceStack)) {
-                if (!moveItemStackTo(sourceStack, BE_INVENTORY_FIRST_SLOT_INDEX + DrillHeadBlockEntity.FUEl_SLOT, BE_INVENTORY_FIRST_SLOT_INDEX + DrillHeadBlockEntity.FUEl_SLOT + 1, false)) {
-                    return ItemStack.EMPTY;
+                if (fuelSlotIsEmpty() || this.getSlot(BE_INVENTORY_FIRST_SLOT_INDEX + DrillHeadBlockEntity.FUEl_SLOT).getItem().sameItem(copyOfSourceStack)) {
+                    if (!moveItemStackTo(sourceStack, BE_INVENTORY_FIRST_SLOT_INDEX + DrillHeadBlockEntity.FUEl_SLOT, BE_INVENTORY_FIRST_SLOT_INDEX + DrillHeadBlockEntity.FUEl_SLOT + 1, false)) {
+                        return ItemStack.EMPTY;
+                    }
+                } else {
+                    return super.quickMoveStack(player, index);
                 }
             } else {
                 return super.quickMoveStack(player, index);
@@ -81,6 +89,50 @@ public class DrillHeadMenu extends AbstractCaterpillarMenu {
             return super.quickMoveStack(player, index);
         }
 
+        // If stack size == 0 (the entire stack was moved) set slot contents to null
+        if (sourceStack.getCount() == 0) {
+            sourceSlot.set(ItemStack.EMPTY);
+        } else {
+            sourceSlot.setChanged();
+        }
+        sourceSlot.onTake(player, sourceStack);
         return copyOfSourceStack;
     }
- }
+
+    public int getLitProgress() {
+        if (this.blockEntity instanceof DrillHeadBlockEntity drillHeadBlockEntity) {
+            return drillHeadBlockEntity.getLitProgress();
+        }
+
+        return 0;
+    }
+
+    public boolean isPowered() {
+        if (this.blockEntity instanceof DrillHeadBlockEntity drillHeadBlockEntity) {
+            return drillHeadBlockEntity.isPowered();
+        }
+
+        return false;
+    }
+
+    public void setPowerOn() {
+        if (this.blockEntity instanceof DrillHeadBlockEntity drillHeadBlockEntity) {
+            PacketHandler.sendToServer(new DrillHeadSyncPowerC2SPacket(true, drillHeadBlockEntity.getBlockPos()));
+        }
+    }
+
+    public void setPowerOff() {
+        if (this.blockEntity instanceof DrillHeadBlockEntity drillHeadBlockEntity) {
+            PacketHandler.sendToServer(new DrillHeadSyncPowerC2SPacket(false, drillHeadBlockEntity.getBlockPos()));
+        }
+    }
+
+    public boolean isGatheredSlot(int slotId) {
+        return slotId >= BE_INVENTORY_FIRST_SLOT_INDEX + GATHERED_SLOT_START && slotId <= BE_INVENTORY_FIRST_SLOT_INDEX + GATHERED_SLOT_END;
+    }
+
+    public boolean fuelSlotIsEmpty() {
+        return this.getSlot(BE_INVENTORY_FIRST_SLOT_INDEX + DrillHeadBlockEntity.FUEl_SLOT).getItem().isEmpty();
+    }
+
+}

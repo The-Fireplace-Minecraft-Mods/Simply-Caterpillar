@@ -13,15 +13,9 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import the_fireplace.caterpillar.client.screen.util.ScreenTabs;
 import the_fireplace.caterpillar.common.block.entity.DrillHeadBlockEntity;
 import the_fireplace.caterpillar.common.menu.DrillHeadMenu;
-import the_fireplace.caterpillar.core.network.PacketHandler;
-import the_fireplace.caterpillar.core.network.packet.client.DrillHeadSyncPowerC2SPacket;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static the_fireplace.caterpillar.common.block.entity.DrillHeadBlockEntity.GATHERED_SLOT_END;
-import static the_fireplace.caterpillar.common.block.entity.DrillHeadBlockEntity.GATHERED_SLOT_START;
-import static the_fireplace.caterpillar.common.menu.AbstractCaterpillarMenu.BE_INVENTORY_FIRST_SLOT_INDEX;
 
 @OnlyIn(Dist.CLIENT)
 public class DrillHeadScreen extends AbstractCaterpillarScreen<DrillHeadMenu> {
@@ -54,8 +48,8 @@ public class DrillHeadScreen extends AbstractCaterpillarScreen<DrillHeadMenu> {
     protected void renderBg(PoseStack stack, float partialTick, int mouseX, int mouseY) {
         super.renderBg(stack, partialTick, mouseX, mouseY);
 
-        if (this.isPowered()) {
-            int litProgress = this.getLitProgress();
+        if (this.menu.isPowered()) {
+            int litProgress = this.menu.getLitProgress();
             blit(stack, super.leftPos + BURN_SLOT_BG_X, super.topPos + BURN_SLOT_BG_Y - litProgress, ScreenTabs.DRILL_HEAD.IMAGE_WIDTH, 12 - litProgress, BURN_SLOT_BG_WIDTH, litProgress + 1);
         }
     }
@@ -72,10 +66,10 @@ public class DrillHeadScreen extends AbstractCaterpillarScreen<DrillHeadMenu> {
     public void renderPowerButton() {
         removeWidget(powerButton);
 
-        if (this.isPowered()) {
-            powerButton = new ImageButton(super.leftPos + (super.imageWidth - SLOT_SIZE) / 2, super.topPos + 16, POWER_BG_WIDTH, POWER_BG_HEIGHT, 176 + POWER_BG_WIDTH, 15, 0, ScreenTabs.DRILL_HEAD.TEXTURE, (onPress) -> this.setPowerOff());
+        if (this.menu.isPowered()) {
+            powerButton = new ImageButton(super.leftPos + (super.imageWidth - SLOT_SIZE) / 2, super.topPos + 16, POWER_BG_WIDTH, POWER_BG_HEIGHT, 176 + POWER_BG_WIDTH, 15, 0, ScreenTabs.DRILL_HEAD.TEXTURE, (onPress) -> this.menu.setPowerOff());
         } else {
-            powerButton = new ImageButton(super.leftPos + (super.imageWidth - SLOT_SIZE) / 2 - 3, super.topPos + 16, POWER_BG_WIDTH, POWER_BG_HEIGHT, 176, 15, 0, ScreenTabs.DRILL_HEAD.TEXTURE, (onPress) -> this.setPowerOn());
+            powerButton = new ImageButton(super.leftPos + (super.imageWidth - SLOT_SIZE) / 2 - 3, super.topPos + 16, POWER_BG_WIDTH, POWER_BG_HEIGHT, 176, 15, 0, ScreenTabs.DRILL_HEAD.TEXTURE, (onPress) -> this.menu.setPowerOn());
         }
 
         this.addRenderableWidget(powerButton);
@@ -90,7 +84,7 @@ public class DrillHeadScreen extends AbstractCaterpillarScreen<DrillHeadMenu> {
         ) {
             List<Component> powerStatusComponents = new ArrayList<>();
             MutableComponent powerStatusComponent = Component.translatable("power").append(" ");
-            if (this.isPowered()) {
+            if (this.menu.isPowered()) {
                 powerStatusComponent.append(Component.translatable("on").withStyle(ChatFormatting.GREEN));
                 powerStatusComponents.add(powerStatusComponent);
             } else {
@@ -103,33 +97,6 @@ public class DrillHeadScreen extends AbstractCaterpillarScreen<DrillHeadMenu> {
         }
     }
 
-    public int getLitProgress() {
-        if (this.menu.blockEntity instanceof DrillHeadBlockEntity drillHeadBlockEntity) {
-            return drillHeadBlockEntity.getLitProgress();
-        }
-
-        return 0;
-    }
-
-    private boolean isPowered() {
-        if (this.menu.blockEntity instanceof DrillHeadBlockEntity drillHeadBlockEntity) {
-            return drillHeadBlockEntity.isPowered();
-        }
-
-        return false;
-    }
-
-    private void setPowerOn() {
-        if (this.menu.blockEntity instanceof DrillHeadBlockEntity drillHeadBlockEntity) {
-            PacketHandler.sendToServer(new DrillHeadSyncPowerC2SPacket(true, drillHeadBlockEntity.getBlockPos()));
-        }
-    }
-
-    private void setPowerOff() {
-        if (this.menu.blockEntity instanceof DrillHeadBlockEntity drillHeadBlockEntity) {
-            PacketHandler.sendToServer(new DrillHeadSyncPowerC2SPacket(false, drillHeadBlockEntity.getBlockPos()));
-        }
-    }
 
     public void removeWidget(ImageButton button) {
         super.removeWidget(button);
@@ -137,14 +104,10 @@ public class DrillHeadScreen extends AbstractCaterpillarScreen<DrillHeadMenu> {
 
     @Override
     protected void slotClicked(Slot slot, int slotId, int mouseButton, ClickType type) {
-        if (this.isGatheredSlot(slotId) && !this.menu.getCarried().isEmpty()) {
+        if (this.menu.isGatheredSlot(slotId) && !this.menu.getCarried().isEmpty()) {
             return;
         }
 
         super.slotClicked(slot, slotId, mouseButton, type);
-    }
-
-    private boolean isGatheredSlot(int slotId) {
-        return slotId >= BE_INVENTORY_FIRST_SLOT_INDEX + GATHERED_SLOT_START && slotId <= BE_INVENTORY_FIRST_SLOT_INDEX + GATHERED_SLOT_END;
     }
 }

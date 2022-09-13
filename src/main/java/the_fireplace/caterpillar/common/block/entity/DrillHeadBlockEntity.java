@@ -21,7 +21,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import the_fireplace.caterpillar.Caterpillar;
 import the_fireplace.caterpillar.common.block.DrillHeadBlock;
-import the_fireplace.caterpillar.common.block.util.CaterpillarBlocksUtil;
+import the_fireplace.caterpillar.common.block.util.CaterpillarBlockUtil;
 import the_fireplace.caterpillar.common.menu.DrillHeadMenu;
 import the_fireplace.caterpillar.common.menu.syncdata.DrillHeadContainerData;
 import the_fireplace.caterpillar.common.menu.util.CaterpillarMenuUtil;
@@ -96,7 +96,7 @@ public class DrillHeadBlockEntity extends AbstractCaterpillarBlockEntity {
                 if (blockEntity.isPowered()) {
                     blockEntity.move();
                     Direction direction = state.getValue(DrillHeadBlock.FACING);
-                    CaterpillarBlocksUtil.moveNextBlock(level, pos, direction);
+                    CaterpillarBlockUtil.moveNextBlock(level, pos, direction);
                 }
             }
 
@@ -192,7 +192,7 @@ public class DrillHeadBlockEntity extends AbstractCaterpillarBlockEntity {
                 if (blockState.getBlock() == Blocks.BEDROCK) {
                     setPowerOff();
                     PacketHandler.sendToClients(new DrillHeadSyncPowerS2CPacket(false, this.getBlockPos()));
-                } else if (CaterpillarBlocksUtil.canBreakBlock(blockState.getBlock())) {
+                } else if (CaterpillarBlockUtil.canBreakBlock(blockState.getBlock())) {
                     this.getLevel().destroyBlock(destroyPos, true);
                 }
             }
