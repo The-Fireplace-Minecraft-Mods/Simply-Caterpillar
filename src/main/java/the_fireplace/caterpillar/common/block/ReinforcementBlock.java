@@ -142,10 +142,10 @@ public class ReinforcementBlock extends AbstractCaterpillarBlock {
     public void setPlacedBy(Level level, BlockPos blockPos, BlockState blockState, @Nullable LivingEntity livingEntity, @NotNull ItemStack stack) {
         Direction direction = blockState.getValue(FACING);
 
-        level.setBlock(blockPos.above().relative(direction.getCounterClockWise()), blockState.setValue(PART, ReinforcementPart.LEFT), 3);
-        level.setBlock(blockPos.above().relative(direction.getClockWise()), blockState.setValue(ReinforcementBlock.PART, ReinforcementPart.RIGHT), 3);
-        level.setBlock(blockPos.above(), blockState.setValue(ReinforcementBlock.PART, ReinforcementPart.BASE), 3);
-        level.setBlock(blockPos.above(2), blockState.setValue(ReinforcementBlock.PART, ReinforcementPart.TOP), 3);
+        level.setBlockAndUpdate(blockPos.above().relative(direction.getCounterClockWise()), blockState.setValue(PART, ReinforcementPart.LEFT));
+        level.setBlockAndUpdate(blockPos.above().relative(direction.getClockWise()), blockState.setValue(ReinforcementBlock.PART, ReinforcementPart.RIGHT));
+        level.setBlockAndUpdate(blockPos.above(), blockState.setValue(ReinforcementBlock.PART, ReinforcementPart.BASE));
+        level.setBlockAndUpdate(blockPos.above(2), blockState.setValue(ReinforcementBlock.PART, ReinforcementPart.TOP));
 
         super.setPlacedBy(level, blockPos, blockState, livingEntity, stack);
     }
