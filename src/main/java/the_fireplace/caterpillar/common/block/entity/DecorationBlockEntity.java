@@ -125,8 +125,8 @@ public class DecorationBlockEntity extends AbstractCaterpillarBlockEntity {
             nextDecorationBlockEntity.setCurrentMap(this.getCurrentMap());
             nextDecorationBlockEntity.setChanged();
 
-            this.getLevel().setBlock(nextPos.relative(direction.getCounterClockWise()), this.getBlockState().setValue(DecorationBlock.PART, DecorationPart.LEFT), 35);
-            this.getLevel().setBlock(nextPos.relative(direction.getClockWise()), this.getBlockState().setValue(DecorationBlock.PART, DecorationPart.RIGHT), 35);
+            this.getLevel().setBlockAndUpdate(nextPos.relative(direction.getCounterClockWise()), nextDecorationBlockEntity.getBlockState().setValue(DecorationBlock.PART, DecorationPart.LEFT));
+            this.getLevel().setBlockAndUpdate(nextPos.relative(direction.getClockWise()), nextDecorationBlockEntity.getBlockState().setValue(DecorationBlock.PART, DecorationPart.RIGHT));
 
             this.getLevel().removeBlock(basePos, false);
             this.getLevel().removeBlock(basePos.relative(direction.getCounterClockWise()), false);
@@ -145,23 +145,23 @@ public class DecorationBlockEntity extends AbstractCaterpillarBlockEntity {
         }
         this.setChanged();
 
-        BlockPos decoratePos;
         Direction direction = this.getBlockState().getValue(FACING);
+        BlockPos basePos = this.getBlockPos();
         int placementSlotId = INVENTORY_MAX_SLOTS;
         ItemStackHandler currentPlacementMap =  this.placementMap.get(this.currentMap);
 
-        for (int i = -1; i < 2; i++) {
-            for (int j = -1; j < 2; j++) {
+        for (int i = -1; i <= 1; i++) {
+            for (int j = -1; j <= 1; j++) {
                 if (i == 0 && j == 0) {
                     continue;
                 }
 
-                decoratePos = switch (direction) {
-                    case EAST -> this.getBlockPos().offset(1, i, j);
-                    case WEST -> this.getBlockPos().offset(-1, i, j);
-                    case SOUTH -> this.getBlockPos().offset(j, i, 1);
-                    case NORTH -> this.getBlockPos().offset(j, i, -1);
-                    default -> this.getBlockPos().offset(j, i, -1);
+                BlockPos decoratePos = switch (direction) {
+                    case EAST -> basePos.offset(1, i, j);
+                    case WEST -> basePos.offset(-1, i, j);
+                    case SOUTH -> basePos.offset(j, i, 1);
+                    case NORTH -> basePos.offset(j, i, -1);
+                    default -> basePos.offset(j, i, -1);
                 };
 
                 Item itemToPlace = currentPlacementMap.getStackInSlot(--placementSlotId).getItem();
@@ -181,6 +181,8 @@ public class DecorationBlockEntity extends AbstractCaterpillarBlockEntity {
                             } else {
                                 continue;
                             }
+
+                            // TODO: Check if the block can be placed on the side of the block
 
                             if (j == -1) {
                                 switch (direction) {

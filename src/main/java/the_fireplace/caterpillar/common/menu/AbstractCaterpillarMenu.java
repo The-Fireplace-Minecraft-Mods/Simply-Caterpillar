@@ -1,5 +1,6 @@
 package the_fireplace.caterpillar.common.menu;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -12,8 +13,10 @@ import org.jetbrains.annotations.NotNull;
 import the_fireplace.caterpillar.common.block.entity.AbstractCaterpillarBlockEntity;
 import the_fireplace.caterpillar.common.block.util.CaterpillarBlockUtil;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
+
+import static the_fireplace.caterpillar.common.block.AbstractCaterpillarBlock.FACING;
 
 public abstract class AbstractCaterpillarMenu extends AbstractContainerMenu {
 
@@ -24,6 +27,8 @@ public abstract class AbstractCaterpillarMenu extends AbstractContainerMenu {
     private final Level level;
 
     public final AbstractCaterpillarBlockEntity blockEntity;
+
+    private final List<AbstractCaterpillarBlockEntity> caterpillarBlockEntities;
 
     public static final int SLOT_SIZE_PLUS_2 = 18;
 
@@ -45,7 +50,7 @@ public abstract class AbstractCaterpillarMenu extends AbstractContainerMenu {
         super(menuType, id);
         this.level = playerInventory.player.level;
         this.blockEntity = blockEntity;
-        this.access = ContainerLevelAccess.create(this.level, blockEntity.getBlockPos());
+        this.access = ContainerLevelAccess.create(this.level, this.blockEntity.getBlockPos());
         this.data = data;
         this.BE_INVENTORY_SLOT_COUNT = inventorySize;
 
@@ -55,6 +60,9 @@ public abstract class AbstractCaterpillarMenu extends AbstractContainerMenu {
         this.blockEntity.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(this::addSlots);
 
         addDataSlots(data);
+
+        BlockPos caterpillarHeadPos = CaterpillarBlockUtil.getCaterpillarHeadPos(this.level, this.blockEntity.getBlockPos(), this.blockEntity.getBlockState().getValue(FACING));
+        caterpillarBlockEntities = CaterpillarBlockUtil.getConnectedCaterpillarBlockEntities(this.level, caterpillarHeadPos, new ArrayList<>());
     }
 
     protected void addSlots(IItemHandler handler) {}
@@ -123,6 +131,6 @@ public abstract class AbstractCaterpillarMenu extends AbstractContainerMenu {
     }
 
     public List<AbstractCaterpillarBlockEntity> getConnectedCaterpillarBlockEntities() {
-        return CaterpillarBlockUtil.getConnectedCaterpillarBlockEntities(this.level, this.blockEntity.getBlockPos(), Collections.emptyList());
+        return caterpillarBlockEntities;
     }
 }

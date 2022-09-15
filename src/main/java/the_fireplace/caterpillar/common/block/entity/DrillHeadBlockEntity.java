@@ -59,13 +59,13 @@ public class DrillHeadBlockEntity extends AbstractCaterpillarBlockEntity {
     // 60 ticks equals 3 seconds
     public static final int MOVEMENT_TICK = 60;
 
+    public static final int INVENTORY_SIZE = 19;
+
     protected int litTime;
 
     protected int litDuration;
 
     public boolean powered;
-
-    public static final int INVENTORY_SIZE = 19;
 
 
     public DrillHeadBlockEntity(BlockPos pos, BlockState state) {
@@ -163,8 +163,8 @@ public class DrillHeadBlockEntity extends AbstractCaterpillarBlockEntity {
         BlockPos destroyPos;
         Direction direction = this.getBlockState().getValue(DrillHeadBlock.FACING);
 
-        for (int i = -1; i < 2; i++) {
-            for (int j = -1; j < 2; j++) {
+        for (int i = -1; i <= 1; i++) {
+            for (int j = -1; j <= 1; j++) {
                 destroyPos = switch (direction) {
                     case EAST -> this.getBlockPos().offset(-1, i, j);
                     case WEST -> this.getBlockPos().offset(1, i, j);

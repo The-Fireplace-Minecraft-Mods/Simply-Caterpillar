@@ -118,8 +118,8 @@ public class DecorationBlock extends AbstractCaterpillarBlock {
     public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity livingEntity, @NotNull ItemStack stack) {
         Direction direction = state.getValue(FACING);
 
-        level.setBlock(pos.relative(direction.getCounterClockWise()), state.setValue(DecorationBlock.PART, DecorationPart.LEFT), 3);
-        level.setBlock(pos.relative(direction.getClockWise()), state.setValue(DecorationBlock.PART, DecorationPart.RIGHT), 3);
+        level.setBlockAndUpdate(pos.relative(direction.getCounterClockWise()), state.setValue(DecorationBlock.PART, DecorationPart.LEFT));
+        level.setBlockAndUpdate(pos.relative(direction.getClockWise()), state.setValue(DecorationBlock.PART, DecorationPart.RIGHT));
 
         super.setPlacedBy(level, pos, state, livingEntity, stack);
     }

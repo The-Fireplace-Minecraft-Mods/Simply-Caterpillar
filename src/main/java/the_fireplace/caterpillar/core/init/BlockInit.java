@@ -31,21 +31,18 @@ public class BlockInit {
             new Item.Properties().tab(Caterpillar.CATERPILLAR_CREATIVE_MODE_TAB)
     );
 
-    public static final RegistryObject<ReinforcementBlock> REINFORCEMENT = register(
-            "reinforcement",
-            () -> new ReinforcementBlock(BlockBehaviour.Properties.of(Material.STONE).strength(1.5F, 6.0F).sound(SoundType.STONE).requiresCorrectToolForDrops()),
-            new Item.Properties().tab(Caterpillar.CATERPILLAR_CREATIVE_MODE_TAB)
-    );
-    public static final RegistryObject<DecorationBlock> DECORATION = register(
-            "decoration",
-            () -> new DecorationBlock(BlockBehaviour.Properties.of(Material.STONE).strength(1.5F, 6.0F).sound(SoundType.STONE).requiresCorrectToolForDrops()),
-            new Item.Properties().tab(Caterpillar.CATERPILLAR_CREATIVE_MODE_TAB)
-    );
     public static final RegistryObject<CollectorBlock> COLLECTOR = register(
             "collector",
             () -> new CollectorBlock(BlockBehaviour.Properties.of(Material.STONE).strength(1.5F, 6.0F).sound(SoundType.STONE).requiresCorrectToolForDrops()),
             new Item.Properties().tab(Caterpillar.CATERPILLAR_CREATIVE_MODE_TAB)
     );
+
+    public static final RegistryObject<ReinforcementBlock> REINFORCEMENT = register(
+            "reinforcement",
+            () -> new ReinforcementBlock(BlockBehaviour.Properties.of(Material.STONE).strength(1.5F, 6.0F).sound(SoundType.STONE).requiresCorrectToolForDrops()),
+            new Item.Properties().tab(Caterpillar.CATERPILLAR_CREATIVE_MODE_TAB)
+    );
+
     public static final RegistryObject<StorageBlock> STORAGE = register(
             "storage",
             () -> new StorageBlock(BlockBehaviour.Properties.of(Material.STONE).strength(1.5F, 6.0F).sound(SoundType.STONE).requiresCorrectToolForDrops()),
@@ -56,6 +53,13 @@ public class BlockInit {
             () -> new IncineratorBlock(BlockBehaviour.Properties.of(Material.STONE).strength(1.5F, 6.0F).sound(SoundType.STONE).requiresCorrectToolForDrops()),
             new Item.Properties().tab(Caterpillar.CATERPILLAR_CREATIVE_MODE_TAB)
     );
+
+    public static final RegistryObject<DecorationBlock> DECORATION = register(
+            "decoration",
+            () -> new DecorationBlock(BlockBehaviour.Properties.of(Material.STONE).strength(1.5F, 6.0F).sound(SoundType.STONE).requiresCorrectToolForDrops()),
+            new Item.Properties().tab(Caterpillar.CATERPILLAR_CREATIVE_MODE_TAB)
+    );
+
     private static <T extends Block> RegistryObject<T> register(String name, Supplier<T> supplier, Item.Properties properties) {
         RegistryObject<T> block = BLOCKS.register(name, supplier);
         ItemInit.ITEMS.register(name, () -> new BlockItem(block.get(), properties));

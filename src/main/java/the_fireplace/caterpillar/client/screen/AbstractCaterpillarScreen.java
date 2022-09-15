@@ -5,7 +5,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraftforge.api.distmarker.Dist;
@@ -13,15 +12,9 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
 import the_fireplace.caterpillar.client.screen.util.ScreenTabs;
 import the_fireplace.caterpillar.common.block.entity.*;
-import the_fireplace.caterpillar.common.block.util.CaterpillarBlockUtil;
 import the_fireplace.caterpillar.common.menu.AbstractCaterpillarMenu;
 import the_fireplace.caterpillar.core.network.PacketHandler;
 import the_fireplace.caterpillar.core.network.packet.client.CaterpillarSyncSelectedTabC2SPacket;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static the_fireplace.caterpillar.common.block.AbstractCaterpillarBlock.FACING;
 
 @OnlyIn(Dist.CLIENT)
 public abstract class AbstractCaterpillarScreen<T extends AbstractCaterpillarMenu> extends AbstractContainerScreen<T> {
@@ -30,16 +23,11 @@ public abstract class AbstractCaterpillarScreen<T extends AbstractCaterpillarMen
 
     private final ScreenTabs SELECTED_TAB;
 
-    private final List<AbstractCaterpillarBlockEntity> caterpillarBlockEntities;
-
     public AbstractCaterpillarScreen(T menu, Inventory playerInventory, Component title, ScreenTabs selectedTab) {
         super(menu, playerInventory, title);
         this.SELECTED_TAB = selectedTab;
         super.imageWidth = SELECTED_TAB.IMAGE_WIDTH;
         super.imageHeight = SELECTED_TAB.IMAGE_HEIGHT;
-
-        BlockPos caterpillarHeadPos = CaterpillarBlockUtil.getCaterpillarHeadPos(this.menu.blockEntity.getLevel(), this.menu.blockEntity.getBlockPos(), this.menu.blockEntity.getBlockState().getValue(FACING));
-        caterpillarBlockEntities = CaterpillarBlockUtil.getConnectedCaterpillarBlockEntities(this.menu.blockEntity.getLevel(), caterpillarHeadPos, new ArrayList<>());
     }
 
     @Override
@@ -124,13 +112,19 @@ public abstract class AbstractCaterpillarScreen<T extends AbstractCaterpillarMen
         }
     }
     private boolean tabShouldBeDisplayed(ScreenTabs tab) {
-        if (caterpillarBlockEntities.isEmpty()) {
+        if (this.menu.getConnectedCaterpillarBlockEntities().isEmpty()) {
             return false;
+        }
+
+        for (AbstractCaterpillarBlockEntity entity : this.menu.getConnectedCaterpillarBlockEntities()) {
+            if (entity instanceof DecorationBlockEntity) {
+                return true;
+            }
         }
 
         switch (tab) {
             case DECORATION -> {
-                for (AbstractCaterpillarBlockEntity entity : caterpillarBlockEntities) {
+                for (AbstractCaterpillarBlockEntity entity : this.menu.getConnectedCaterpillarBlockEntities()) {
                     if (entity instanceof DecorationBlockEntity) {
                         return true;
                     }
@@ -138,7 +132,7 @@ public abstract class AbstractCaterpillarScreen<T extends AbstractCaterpillarMen
                 return false;
             }
             case REINFORCEMENT -> {
-                for (AbstractCaterpillarBlockEntity entity : caterpillarBlockEntities) {
+                for (AbstractCaterpillarBlockEntity entity : this.menu.getConnectedCaterpillarBlockEntities()) {
                     if (entity instanceof ReinforcementBlockEntity) {
                         return true;
                     }
@@ -146,7 +140,7 @@ public abstract class AbstractCaterpillarScreen<T extends AbstractCaterpillarMen
                 return false;
             }
             case INCINERATOR -> {
-                for (AbstractCaterpillarBlockEntity entity : caterpillarBlockEntities) {
+                for (AbstractCaterpillarBlockEntity entity : this.menu.getConnectedCaterpillarBlockEntities()) {
                     if (entity instanceof IncineratorBlockEntity) {
                         return true;
                     }
@@ -154,7 +148,7 @@ public abstract class AbstractCaterpillarScreen<T extends AbstractCaterpillarMen
                 return false;
             }
             case DRILL_HEAD -> {
-                for (AbstractCaterpillarBlockEntity entity : caterpillarBlockEntities) {
+                for (AbstractCaterpillarBlockEntity entity : this.menu.getConnectedCaterpillarBlockEntities()) {
                     if (entity instanceof DrillHeadBlockEntity) {
                         return true;
                     }

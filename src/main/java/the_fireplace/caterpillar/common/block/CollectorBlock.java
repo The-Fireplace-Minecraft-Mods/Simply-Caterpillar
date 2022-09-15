@@ -116,7 +116,7 @@ public class CollectorBlock extends AbstractCaterpillarBlock {
 
     @Override
     public void setPlacedBy(Level level, BlockPos blockPos, BlockState blockState, @Nullable LivingEntity livingEntity, @NotNull ItemStack stack) {
-        level.setBlock(blockPos.above(), blockState.setValue(CollectorBlock.HALF, DoubleBlockHalf.UPPER), 3);
+        level.setBlockAndUpdate(blockPos.above(), blockState.setValue(CollectorBlock.HALF, DoubleBlockHalf.UPPER));
 
         super.setPlacedBy(level, blockPos, blockState, livingEntity, stack);
     }
