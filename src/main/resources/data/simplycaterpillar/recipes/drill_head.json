@@ -6,21 +6,17 @@
     " f "
   ],
   "key": {
-    "d":
-    {
+    "d": {
       "item": "simplycaterpillar:drill_base"
     },
-    "f":
-    {
+    "f": {
       "item": "minecraft:furnace"
     },
-    "i":
-    {
+    "i": {
       "item": "minecraft:iron_ingot"
     }
   },
   "result": {
-    "item": "simplycaterpillar:drill_head",
-    "count": 1
+    "item": "simplycaterpillar:drill_head"
   }
 }

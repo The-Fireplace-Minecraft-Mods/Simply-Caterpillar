@@ -6,17 +6,14 @@
     " p "
   ],
   "key": {
-    "d":
-    {
+    "d": {
       "item": "simplycaterpillar:drill_base"
     },
-    "p":
-    {
+    "p": {
       "item": "minecraft:piston"
     }
   },
   "result": {
-    "item": "simplycaterpillar:reinforcement",
-    "count": 1
+    "item": "simplycaterpillar:reinforcement"
   }
 }

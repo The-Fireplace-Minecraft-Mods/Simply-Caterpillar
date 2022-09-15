@@ -3,24 +3,20 @@
   "pattern": [
     "c c",
     "crc",
-    "cic"
+    "cpc"
   ],
   "key": {
-    "c":
-    {
+    "c": {
       "item": "minecraft:cobblestone"
     },
-    "r":
-    {
+    "r": {
       "item": "minecraft:redstone"
     },
-    "i":
-   {
-     "item": "minecraft:iron_ingot"
+    "p": {
+     "tag": "minecraft:planks"
    }
   },
   "result": {
-    "item": "simplycaterpillar:drill_base",
-    "count": 1
+    "item": "simplycaterpillar:drill_base"
   }
 }
