@@ -5,8 +5,8 @@
 		"rod": "simplycaterpillar:block/pieces/wood_piece",
 		"blades": "simplycaterpillar:block/drill_head/blades/blades",
 		"none_blades": "simplycaterpillar:block/drill_head/blades/none_blades",
-		"side": "simplycaterpillar:block/drill_head/rock_side",
-		"particle": "simplycaterpillar:block/drill_head/rock_side"
+		"particle": "simplycaterpillar:block/drill_head/rock_side",
+		"side": "simplycaterpillar:block/drill_head/rock_side"
 	},
 	"elements": [
 		{
