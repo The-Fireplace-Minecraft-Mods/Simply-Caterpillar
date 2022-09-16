@@ -1,29 +1,32 @@
 modLoader="javafml"
-loaderVersion="[43,)"
+loaderVersion="${loaderVersionRange}"
 license="GNU LGPLv3"
 issueTrackerURL="https://github.com/The-Fireplace/Simply-Caterpillar/issues"
 
 [[mods]] #mandatory
-modId="simplycaterpillar"
-version="1.19.2-1.0-DEV"
+modId="${modId}"
+version="${modVersion}"
 displayName="Simply Caterpillar"
 #updateJSONURL=""
 displayURL="https://github.com/The-Fireplace/Simply-Caterpillar/"
 logoFile="simplycaterpillar.png"
 credits="Daniel Appleby for the original Caterpillar mod"
 authors="The_Fireplace, Daniel-Mendes"
-description="Adds a caterpillar drill to Minecraft."
+description="${modDescription}"
 
 [[dependencies.simplycaterpillar]]
     modId="forge"
     mandatory=true
-    versionRange="[43,)"
+    versionRange="${forgeVersionRange}"
     ordering="NONE"
     side="BOTH"
 
 [[dependencies.simplycaterpillar]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.19,1.20)"
+    versionRange="${minecraftVersionRange}"
     ordering="NONE"
     side="BOTH"
+
+[modproperties.jei]
+    catalogueImageIcon="simplycaterpillar.png"

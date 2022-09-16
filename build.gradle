@@ -5,15 +5,16 @@ plugins {
     id 'org.parchmentmc.librarian.forgegradle' version '1.+'
 }
 
-version = modMinecraftVersion + "-" + modVersion
+// gradle.properties
+version = minecraftVersion + "-" + modVersion
 group = modGroup
-archivesBaseName = modFileName
+archivesBaseName = modFileName + "-" + minecraftVersion
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+java.toolchain.languageVersion = JavaLanguageVersion.of(minecraftJavaVersion)
 
 println "Java: ${System.getProperty 'java.version'}, JVM: ${System.getProperty 'java.vm.version'} (${System.getProperty 'java.vendor'}), Arch: ${System.getProperty 'os.arch'}"
 minecraft {
-    mappings channel: modMappingsChannel, version: modMappingsVersion
+    mappings channel: mappingsChannel, version: mappingsVersion
 
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 
@@ -79,7 +80,7 @@ repositories {
 }
 
 dependencies {
-    minecraft "net.minecraftforge:forge:" + modMinecraftVersion + "-" + modForgeVersion
+    minecraft "net.minecraftforge:forge:" + minecraftVersion + "-" + forgeVersion
 }
 
 jar {
@@ -90,7 +91,7 @@ jar {
                 "Specification-Version"   : "1",
                 "Implementation-Title"    : project.name,
                 "Implementation-Version"  : project.jar.archiveVersion,
-                // "Implementation-Version"  : modMinecraftVersion + "-" + modVersion,
+                // "Implementation-Version"  : minecraftVersion + "-" + modVersion,
                 "Implementation-Vendor"   : modGroup,
                 "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
                 "Signing-Fingerprint"     : project.hasProperty('signSHA1') ? project.findProperty('signSHA1') : "unsigned"
@@ -115,4 +116,15 @@ publishing {
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
+}
+
+tasks.withType(ProcessResources) {
+    filesMatching(['META-INF/mods.toml', 'pack.mcmeta']) {
+        expand  'loaderVersionRange': loaderVersionRange,
+                'modId': modId,
+                'modVersion': modVersion,
+                'modDescription': modDescription,
+                'forgeVersionRange': forgeVersionRange,
+                'minecraftVersionRange': minecraftVersionRange
+    }
 }
