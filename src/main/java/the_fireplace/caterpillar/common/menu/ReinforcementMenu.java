@@ -8,6 +8,8 @@ import net.minecraftforge.items.SlotItemHandler;
 import the_fireplace.caterpillar.common.block.entity.ReinforcementBlockEntity;
 import the_fireplace.caterpillar.core.init.MenuInit;
 
+import static the_fireplace.caterpillar.common.block.entity.ReinforcementBlockEntity.INVENTORY_SIZE;
+
 public class ReinforcementMenu extends AbstractCaterpillarMenu {
 
     private static final int REINFORCEMENT_SLOT_X_START = 44;
@@ -15,11 +17,11 @@ public class ReinforcementMenu extends AbstractCaterpillarMenu {
     private static final int REINFORCEMENT_SLOT_Y_START = 4;
 
     public ReinforcementMenu(int id, Inventory playerInventory, FriendlyByteBuf extraData) {
-        super(MenuInit.REINFORCEMENT.get(), id, playerInventory, extraData, 0, ReinforcementBlockEntity.INVENTORY_SIZE);
+        super(MenuInit.REINFORCEMENT.get(), id, playerInventory, extraData, 0, INVENTORY_SIZE);
     }
 
     public ReinforcementMenu(int id, Inventory playerInventory, ReinforcementBlockEntity blockEntity, ContainerData data) {
-        super(MenuInit.REINFORCEMENT.get(), id, playerInventory, blockEntity, data, ReinforcementBlockEntity.INVENTORY_SIZE);
+        super(MenuInit.REINFORCEMENT.get(), id, playerInventory, blockEntity, data, INVENTORY_SIZE);
     }
 
     @Override

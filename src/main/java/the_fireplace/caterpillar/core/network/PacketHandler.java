@@ -85,10 +85,10 @@ public final class PacketHandler {
                 .consumerMainThread(ItemStackSyncS2CPacket::handle)
                 .add();
 
-        CHANNEL.messageBuilder(IncineratorSyncSlotC2SPacket.class, index++, NetworkDirection.PLAY_TO_SERVER)
-                .decoder(IncineratorSyncSlotC2SPacket::new)
-                .encoder(IncineratorSyncSlotC2SPacket::toBytes)
-                .consumerMainThread(IncineratorSyncSlotC2SPacket::handle)
+        CHANNEL.messageBuilder(CaterpillarSyncSlotC2SPacket.class, index++, NetworkDirection.PLAY_TO_SERVER)
+                .decoder(CaterpillarSyncSlotC2SPacket::new)
+                .encoder(CaterpillarSyncSlotC2SPacket::toBytes)
+                .consumerMainThread(CaterpillarSyncSlotC2SPacket::handle)
                 .add();
     }
 

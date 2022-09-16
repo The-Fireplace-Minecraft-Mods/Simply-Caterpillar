@@ -6,11 +6,11 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.network.NetworkEvent;
-import the_fireplace.caterpillar.common.block.entity.IncineratorBlockEntity;
+import the_fireplace.caterpillar.common.block.entity.AbstractCaterpillarBlockEntity;
 
 import java.util.function.Supplier;
 
-public class IncineratorSyncSlotC2SPacket {
+public class CaterpillarSyncSlotC2SPacket {
 
     private final int slotId;
 
@@ -19,13 +19,13 @@ public class IncineratorSyncSlotC2SPacket {
     private final BlockPos pos;
 
 
-    public IncineratorSyncSlotC2SPacket(int slotId, ItemStack stack, BlockPos pos) {
+    public CaterpillarSyncSlotC2SPacket(int slotId, ItemStack stack, BlockPos pos) {
         this.slotId = slotId;
         this.stack = stack;
         this.pos = pos;
     }
 
-    public IncineratorSyncSlotC2SPacket(FriendlyByteBuf buf) {
+    public CaterpillarSyncSlotC2SPacket(FriendlyByteBuf buf) {
         this.slotId = buf.readInt();
         this.stack = buf.readItem();
         this.pos = buf.readBlockPos();
@@ -43,8 +43,8 @@ public class IncineratorSyncSlotC2SPacket {
             ServerPlayer player = context.getSender();
             ServerLevel level = player.getLevel();
 
-            if(level.getBlockEntity(pos) instanceof IncineratorBlockEntity incineratorBlockEntity) {
-                incineratorBlockEntity.setStackInSlot(slotId, stack);
+            if(level.getBlockEntity(pos) instanceof AbstractCaterpillarBlockEntity blockEntity) {
+                blockEntity.setStackInSlot(slotId, stack);
             }
         });
         context.setPacketHandled(true);

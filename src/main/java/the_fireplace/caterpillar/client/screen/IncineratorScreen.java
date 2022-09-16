@@ -10,7 +10,7 @@ import the_fireplace.caterpillar.client.screen.util.ScreenTabs;
 import the_fireplace.caterpillar.common.block.entity.IncineratorBlockEntity;
 import the_fireplace.caterpillar.common.menu.IncineratorMenu;
 import the_fireplace.caterpillar.core.network.PacketHandler;
-import the_fireplace.caterpillar.core.network.packet.client.IncineratorSyncSlotC2SPacket;
+import the_fireplace.caterpillar.core.network.packet.client.CaterpillarSyncSlotC2SPacket;
 
 import static the_fireplace.caterpillar.common.block.entity.IncineratorBlockEntity.INVENTORY_SIZE;
 import static the_fireplace.caterpillar.common.menu.AbstractCaterpillarMenu.BE_INVENTORY_FIRST_SLOT_INDEX;
@@ -46,7 +46,7 @@ public class IncineratorScreen extends AbstractCaterpillarScreen<IncineratorMenu
         if (this.menu.blockEntity instanceof IncineratorBlockEntity incineratorBlockEntity) {
             incineratorBlockEntity.setStackInSlot(incineratorSlotId, stack);
 
-            PacketHandler.sendToServer(new IncineratorSyncSlotC2SPacket(incineratorSlotId, stack, this.menu.blockEntity.getBlockPos()));
+            PacketHandler.sendToServer(new CaterpillarSyncSlotC2SPacket(incineratorSlotId, stack, incineratorBlockEntity.getBlockPos()));
         }
     }
 
