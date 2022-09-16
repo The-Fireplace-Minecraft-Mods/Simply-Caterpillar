@@ -226,24 +226,6 @@ public class DecorationBlockEntity extends AbstractCaterpillarBlockEntity {
         }
     }
 
-    private boolean takeItemFromDrillHeadInventory(Item item) {
-        if (item.equals(Items.AIR)) {
-            return true;
-        }
-
-        BlockPos drillHeadPos = CaterpillarBlockUtil.getCaterpillarHeadPos(this.getLevel(), this.getBlockPos(), this.getBlockState().getValue(FACING));
-        if (drillHeadPos != null && this.getLevel().getBlockEntity(drillHeadPos) instanceof DrillHeadBlockEntity drillHeadBlockEntity) {
-            for (int i = DrillHeadBlockEntity.CONSUMPTION_SLOT_START; i < DrillHeadBlockEntity.CONSUMPTION_SLOT_END; i++) {
-                if (drillHeadBlockEntity.getStackInSlot(i).getItem().equals(item)) {
-                    drillHeadBlockEntity.extractItem(i, 1);
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
-
     public ItemStackHandler getSelectedPlacementMap() {
         return this.placementMap.get(this.getSelectedMap());
     }

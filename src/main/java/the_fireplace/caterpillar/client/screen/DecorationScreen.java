@@ -81,7 +81,7 @@ public class DecorationScreen extends AbstractCaterpillarScreen<DecorationMenu> 
         if (this.menu.blockEntity instanceof DecorationBlockEntity decorationBlockEntity) {
             decorationBlockEntity.getSelectedPlacementMap().setStackInSlot(placementSlotId, placementStack);
 
-            PacketHandler.sendToServer(new DecorationSyncSlotC2SPacket(placementSlotId, placementStack, this.menu.blockEntity.getBlockPos()));
+            PacketHandler.sendToServer(new DecorationSyncSlotC2SPacket(placementSlotId, placementStack, decorationBlockEntity.getBlockPos()));
         }
     }
 
