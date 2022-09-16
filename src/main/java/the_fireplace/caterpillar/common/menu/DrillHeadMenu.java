@@ -9,6 +9,7 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 import the_fireplace.caterpillar.common.block.entity.DrillHeadBlockEntity;
 import the_fireplace.caterpillar.common.menu.slot.CaterpillarFuelSlot;
+import the_fireplace.caterpillar.common.menu.slot.SlotWithRestriction;
 import the_fireplace.caterpillar.common.menu.syncdata.DrillHeadContainerData;
 import the_fireplace.caterpillar.common.menu.util.CaterpillarMenuUtil;
 import the_fireplace.caterpillar.core.init.MenuInit;
@@ -57,7 +58,7 @@ public class DrillHeadMenu extends AbstractCaterpillarMenu {
         // Drill_head Gathered slots
         for(int row = 0; row < 3; row++) {
             for(int column = 0; column < 3; column++) {
-                super.addSlot(new SlotItemHandler(handler, slotId++, GATHERED_SLOT_X_START + column * SLOT_SIZE_PLUS_2, GATHERED_SLOT_Y_START + row * SLOT_SIZE_PLUS_2));
+                super.addSlot(new SlotWithRestriction(handler, slotId++, GATHERED_SLOT_X_START + column * SLOT_SIZE_PLUS_2, GATHERED_SLOT_Y_START + row * SLOT_SIZE_PLUS_2));
             }
         }
     }
@@ -131,12 +132,7 @@ public class DrillHeadMenu extends AbstractCaterpillarMenu {
         }
     }
 
-    public boolean isGatheredSlot(int slotId) {
-        return slotId >= BE_INVENTORY_FIRST_SLOT_INDEX + GATHERED_SLOT_START && slotId <= BE_INVENTORY_FIRST_SLOT_INDEX + GATHERED_SLOT_END;
-    }
-
     public boolean fuelSlotIsEmpty() {
         return this.getSlot(BE_INVENTORY_FIRST_SLOT_INDEX + DrillHeadBlockEntity.FUEl_SLOT).getItem().isEmpty();
     }
-
 }

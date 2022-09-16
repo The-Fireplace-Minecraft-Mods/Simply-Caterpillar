@@ -6,8 +6,6 @@ import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.inventory.ClickType;
-import net.minecraft.world.inventory.Slot;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
@@ -101,14 +99,5 @@ public class DrillHeadScreen extends AbstractCaterpillarScreen<DrillHeadMenu> {
 
     public void removeWidget(ImageButton button) {
         super.removeWidget(button);
-    }
-
-    @Override
-    protected void slotClicked(@NotNull Slot slot, int slotId, int mouseButton, @NotNull ClickType type) {
-        if (this.menu.isGatheredSlot(slotId) && !this.menu.getCarried().isEmpty()) {
-            return;
-        }
-
-        super.slotClicked(slot, slotId, mouseButton, type);
     }
 }
