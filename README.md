@@ -1,57 +1,105 @@
-[Simply Caterpillar](https://minecraft.curseforge.com/projects/simply-caterpillar)
-============================================================================
+<img src="C:\Users\dmendesg\Programmation\Simply-Caterpillar\sources\simplycaterpillar.png" alt="simplycaterpillar icon" style="zoom:30%;" />
 
-[![Curse Forge](http://cf.way2muchnoise.eu/short_245437_downloads.svg)](https://minecraft.curseforge.com/projects/simply-caterpillar)
+![simply-caterpillar-title](C:\Users\dmendesg\Programmation\Simply-Caterpillar\sources\simply-caterpillar-title.png)
 
-[Issue Reporting](https://github.com/The-Fireplace/Simply-Caterpillar/issues)
-------------------------------------------------------------------
+<p align="center">
+	<a href="https://github.com/The-Fireplace-Minecraft-Mods/Simply-Caterpillar">Source code</a>
+    |
+   	<a href="https://github.com/The-Fireplace-Minecraft-Mods/Simply-Caterpillar/issues">Issue tracker</a>
+</p>
 
-If you found a bug or even are experiencing a crash please report it, so we can fix it. Please check at first if a bug report for the issue already
-[exists](https://github.com/The-Fireplace/Simply-Caterpillar/issues). If not just create a [new issue](https://github.com/The-Fireplace/Simply-Caterpillar/issues/new) and fill out the
-form.
+<p align="center">
+    <a href="https://minecraft.curseforge.com/projects/simply-caterpillar">
+        <img src="C:\Users\dmendesg\Programmation\Simply-Caterpillar\sources\curseforge-badge.png" alt="Curse Forge download link" />
+    </a>
+    <a href="https://modrinth.com/mod/simply-caterpillar">
+        <img src="C:\Users\dmendesg\Programmation\Simply-Caterpillar\sources\modrinth-badge.png" alt="modrinth download link" />
+	</a>
+</p>
 
-Please include the following:
+**Simply Caterpillar** adds a drill that makes 3x3 mineshafts for you. You can add or not add any part to customize your drill.
 
-* Minecraft version
-* Mod version
-* Forge version/build
-* Versions of any mods potentially related to the issue 
-* Any relevant screenshots/videos are greatly appreciated.
-* For crashes:
-  * Steps to reproduce
-  * fml-client-latest.log or fml-server-latest.log from the logs folder.
- 
-*(When creating a new issue please follow the template)*
+## Features
 
-[Feature Requests](https://github.com/The-Fireplace/Simply-Caterpillar/issues)
--------------------------------------------------------------------
+- Has unlimited possible caterpillar length.
+- Doesn't require you to keep adding drill blades.
+- Doesn't limit the number of components in each drill.
 
-If you want a new feature added, go ahead an open a [new issue](https://github.com/The-Fireplace/Simply-Caterpillar/issues/new), remove the existing form and describe your
-feature the best you can. The more details you provide the easier it will be to implement it.
-You can also talk to me on [Discord](https://discord.gg/29aj3Ah)
+### Drill base
 
-Developing with My Mod
-----------------------
+**This is the drill base, its used for all parts**
 
-If you want to use items or blocks from my mod, add support for, or even develop an addon for my mod, you can easily add it to your development environment! Most
-releases get uploaded to my maven repository.  
-So all you have to do to include the mod is to add these lines *(in the appropriate places)* to your build.gradle
+#### Recipe
 
-    repositories {
-        maven { // The_Fireplace's Mods, and BrainStoneMod
-            url "http://maven.brainstonemod.com"
-        }
-        // Other repos...
-    }
-    
-    dependencies {
-        deobfCompile "the_fireplace.caterpillar:SimplyCaterpillar-<MC-Version>:<version>"
-        // Other dependencies
-    }
+![Drill base recipe](C:\Users\dmendesg\Programmation\Simply-Caterpillar\sources\recipe-drill_base.png)
 
-Setting up a Workspace/Compiling from Source
---------------------------------------------
+### Drill head
 
-* Setup: Run [gradle] in the repository root: `gradlew[.bat] setupDecompWorkspace [eclipse|idea]`
-* Build: Run [gradle] in the repository root: `gradlew[.bat] build`
-* If obscure Gradle issues are found try running `gradlew clean` and `gradlew cleanCache`(This one is a last resort)
+The main part of the drill. Has 24 slots of storage built in, and a fuel slot. Power can be toggled in the gui, and fuel consumption will pause when the caterpillar is turned off.This is the drill head, its used to drill and has the inventory for the drill.
+
+#### Screen
+
+![Drill head screen](C:\Users\dmendesg\Programmation\Simply-Caterpillar\sources\screen-drill_head.png)
+
+#### Recipe
+
+![Drill head recipe](C:\Users\dmendesg\Programmation\Simply-Caterpillar\sources\recipe-drill_head.png)
+
+### Item Collector
+
+Collects fallen items as it moves, and puts them in the caterpillar's inventory. Pretty useful if you don't want to manually pick up all blocks the drill breaks.
+
+#### Recipe
+
+![Collector recipe](C:\Users\dmendesg\Programmation\Simply-Caterpillar\sources\recipe-collector.png)
+
+### Decoration placer
+
+Builds the inside of the mineshaft. By default, it is set up to make it resemble a vanilla mineshaft, but it is highly configurable. Again, configuration is done from the gui.
+
+#### Screen
+
+![Decoration placer screen](C:\Users\dmendesg\Programmation\Simply-Caterpillar\sources\screen-decoration.png)
+
+This is where you edit the decorations to be placed. By default, it places them similarly to the vanilla mineshafts.
+
+#### Recipe
+
+![Decoration placer recipe](C:\Users\dmendesg\Programmation\Simply-Caterpillar\sources\recipe-decoration.png)
+
+### Reinforcement placer
+
+Replaces gravel/sand, lava, water, and air in the square surrounding the mineshaft with the block of your choice. The blocks can all be configured in the gui, as well as what gets replaced on each side.
+
+#### Screen
+
+![Reinforcement placer screen](C:\Users\dmendesg\Programmation\Simply-Caterpillar\sources\screen-reinforcement.png)
+
+Edit the blocks used to reinforce the walls here and what gets replaced, so you can keep water, lava, sand, gravel, etc out of your mineshaft, or build yourself a floor to walk on, and walls and a ceiling if you wish.
+
+#### Recipe
+
+![Reinforcement placer recipe](C:\Users\dmendesg\Programmation\Simply-Caterpillar\sources\recipe-reinforcement.png)
+
+### Incinerator
+
+Set anything you don't want to keep to be incinerated here. This allows you to destroy anything the caterpillar mines that you don't want, and save inventory space for what matters.
+
+#### Screen
+
+![Incinerator screen](C:\Users\dmendesg\Programmation\Simply-Caterpillar\sources\screen-incinerator.png)
+
+### Storage
+
+Adds 24 more slots to the drill's inventory.
+
+#### Recipe
+
+![Storage recipe](C:\Users\dmendesg\Programmation\Simply-Caterpillar\sources\recipe-storage.png)
+
+## Credits
+
+- Daniel-Mendes
+- The_Fireplace **[Twitter](https://twitter.com/The_FireplaceMC)** **[Discord](https://discord.gg/CJ6pNEk)**
+- freethemice
+- Rumaruka
