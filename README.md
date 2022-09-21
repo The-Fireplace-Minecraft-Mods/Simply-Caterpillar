@@ -1,6 +1,7 @@
-<img src="C:\Users\dmendesg\Programmation\Simply-Caterpillar\sources\simplycaterpillar.png" alt="simplycaterpillar icon" style="zoom:30%;" />
-
-![simply-caterpillar-title](C:\Users\dmendesg\Programmation\Simply-Caterpillar\sources\simply-caterpillar-title.png)
+<p align="center">
+	<img src="https://raw.githubusercontent.com/Daniel-Mendes/Simply-Caterpillar/feature/1.19/.github/sources/simplycaterpillar.png" alt="simplycaterpillar icon" style="zoom:30%;" />
+	<img src="https://raw.githubusercontent.com/Daniel-Mendes/Simply-Caterpillar/feature/1.19/.github/sources/simply-caterpillar-title.png" alt="simply-caterpillar-title" />
+</p>
 
 <p align="center">
 	<a href="https://github.com/The-Fireplace-Minecraft-Mods/Simply-Caterpillar">Source code</a>
@@ -10,10 +11,10 @@
 
 <p align="center">
     <a href="https://minecraft.curseforge.com/projects/simply-caterpillar">
-        <img src="C:\Users\dmendesg\Programmation\Simply-Caterpillar\sources\curseforge-badge.png" alt="Curse Forge download link" />
-    </a>
+		<img src="https://raw.githubusercontent.com/Daniel-Mendes/Simply-Caterpillar/feature/1.19/.github/sources/curseforge-badge.png" alt="Curse Forge download link" />
+	</a>
     <a href="https://modrinth.com/mod/simply-caterpillar">
-        <img src="C:\Users\dmendesg\Programmation\Simply-Caterpillar\sources\modrinth-badge.png" alt="modrinth download link" />
+        <img src="https://raw.githubusercontent.com/Daniel-Mendes/Simply-Caterpillar/feature/1.19/.github/sources/modrinth-badge.png" alt="modrinth download link" />
 	</a>
 </p>
 
@@ -31,7 +32,7 @@
 
 #### Recipe
 
-![Drill base recipe](C:\Users\dmendesg\Programmation\Simply-Caterpillar\sources\recipe-drill_base.png)
+![Drill base recipe](https://raw.githubusercontent.com/Daniel-Mendes/Simply-Caterpillar/feature/1.19/.github/sources/recipe-drill_base.png)
 
 ### Drill head
 
@@ -39,11 +40,11 @@ The main part of the drill. Has 24 slots of storage built in, and a fuel slot. P
 
 #### Screen
 
-![Drill head screen](C:\Users\dmendesg\Programmation\Simply-Caterpillar\sources\screen-drill_head.png)
+![Drill head screen](https://raw.githubusercontent.com/Daniel-Mendes/Simply-Caterpillar/feature/1.19/.github/sources/screen-drill_head.png)
 
 #### Recipe
 
-![Drill head recipe](C:\Users\dmendesg\Programmation\Simply-Caterpillar\sources\recipe-drill_head.png)
+![Drill head recipe](https://raw.githubusercontent.com/Daniel-Mendes/Simply-Caterpillar/feature/1.19/.github/sources/recipe-drill_head.png)
 
 ### Item Collector
 
@@ -51,7 +52,7 @@ Collects fallen items as it moves, and puts them in the caterpillar's inventory.
 
 #### Recipe
 
-![Collector recipe](C:\Users\dmendesg\Programmation\Simply-Caterpillar\sources\recipe-collector.png)
+![Collector recipe](https://raw.githubusercontent.com/Daniel-Mendes/Simply-Caterpillar/feature/1.19/.github/sources/recipe-collector.png)
 
 ### Decoration placer
 
@@ -59,13 +60,13 @@ Builds the inside of the mineshaft. By default, it is set up to make it resemble
 
 #### Screen
 
-![Decoration placer screen](C:\Users\dmendesg\Programmation\Simply-Caterpillar\sources\screen-decoration.png)
+![Decoration placer screen](https://raw.githubusercontent.com/Daniel-Mendes/Simply-Caterpillar/feature/1.19/.github/sources/screen-decoration.png)
 
 This is where you edit the decorations to be placed. By default, it places them similarly to the vanilla mineshafts.
 
 #### Recipe
 
-![Decoration placer recipe](C:\Users\dmendesg\Programmation\Simply-Caterpillar\sources\recipe-decoration.png)
+![Decoration placer recipe](https://raw.githubusercontent.com/Daniel-Mendes/Simply-Caterpillar/feature/1.19/.github/sources/recipe-decoration.png)
 
 ### Reinforcement placer
 
@@ -73,13 +74,13 @@ Replaces gravel/sand, lava, water, and air in the square surrounding the minesha
 
 #### Screen
 
-![Reinforcement placer screen](C:\Users\dmendesg\Programmation\Simply-Caterpillar\sources\screen-reinforcement.png)
+![Reinforcement placer screen](https://raw.githubusercontent.com/Daniel-Mendes/Simply-Caterpillar/feature/1.19/.github/sources/screen-reinforcement.png)
 
 Edit the blocks used to reinforce the walls here and what gets replaced, so you can keep water, lava, sand, gravel, etc out of your mineshaft, or build yourself a floor to walk on, and walls and a ceiling if you wish.
 
 #### Recipe
 
-![Reinforcement placer recipe](C:\Users\dmendesg\Programmation\Simply-Caterpillar\sources\recipe-reinforcement.png)
+![Reinforcement placer recipe](https://raw.githubusercontent.com/Daniel-Mendes/Simply-Caterpillar/feature/1.19/.github/sources/recipe-reinforcement.png)
 
 ### Incinerator
 
@@ -87,7 +88,7 @@ Set anything you don't want to keep to be incinerated here. This allows you to d
 
 #### Screen
 
-![Incinerator screen](C:\Users\dmendesg\Programmation\Simply-Caterpillar\sources\screen-incinerator.png)
+![Incinerator screen](https://raw.githubusercontent.com/Daniel-Mendes/Simply-Caterpillar/feature/1.19/.github/sources/screen-incinerator.png)
 
 ### Storage
 
@@ -95,7 +96,7 @@ Adds 24 more slots to the drill's inventory.
 
 #### Recipe
 
-![Storage recipe](C:\Users\dmendesg\Programmation\Simply-Caterpillar\sources\recipe-storage.png)
+![Storage recipe](https://raw.githubusercontent.com/Daniel-Mendes/Simply-Caterpillar/feature/1.19/.github/sources/recipe-storage.png)
 
 ## Credits
 
