@@ -4,16 +4,16 @@
 </p>
 
 <p align="center">
-	<a href="https://github.com/The-Fireplace-Minecraft-Mods/Simply-Caterpillar">Source code</a>
+	<a href="https://github.com/The-Fireplace-Minecraft-Mods/Simply-Caterpillar" target="_blank">Source code</a>
     |
-   	<a href="https://github.com/The-Fireplace-Minecraft-Mods/Simply-Caterpillar/issues">Issue tracker</a>
+   	<a href="https://github.com/The-Fireplace-Minecraft-Mods/Simply-Caterpillar/issues" target="_blank">Issue tracker</a>
 </p>
 
 <p align="center">
-    <a href="https://minecraft.curseforge.com/projects/simply-caterpillar">
+    <a href="https://minecraft.curseforge.com/projects/simply-caterpillar" target="_blank">
 		<img src="https://raw.githubusercontent.com/Daniel-Mendes/Simply-Caterpillar/feature/1.19/.github/sources/curseforge-badge.png" alt="Curse Forge download link" />
 	</a>
-    <a href="https://modrinth.com/mod/simply-caterpillar">
+    <a href="https://modrinth.com/mod/simply-caterpillar" target="_blank">
         <img src="https://raw.githubusercontent.com/Daniel-Mendes/Simply-Caterpillar/feature/1.19/.github/sources/modrinth-badge.png" alt="modrinth download link" />
 	</a>
 </p>
