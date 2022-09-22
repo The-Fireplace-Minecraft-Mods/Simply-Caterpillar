@@ -39,7 +39,7 @@
 <details>
 	<summary>
 		<h3>Drill head</h3>
-		<p>This is the main part of the drill, its used to drill and has the inventory for the drill.</p>
+		<p>This is the main part of the drill, it's used to drill and has the inventory for the drill.</p>
 	</summary>
 	<h4>Screen</h4>
 	<p>It has 18 slots of storage built in, and a fuel slot. Power can be toggled in the gui, and fuel consumption will pause when the caterpillar is turned off.</p>
@@ -96,7 +96,7 @@
 <details>
 	<summary>
 		<h3>Storage</h3>
-		<p>Adds 12 more slots to the drill head's inventory.</p>
+		<p>Adds 18 more slots to the drill head's inventory.</p>
 	</summary>
 	<h4>Screen</h4>
 	<br>
