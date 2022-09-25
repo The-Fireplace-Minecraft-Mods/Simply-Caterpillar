@@ -39,11 +39,11 @@ public class DrillHeadBlockEntity extends AbstractCaterpillarBlockEntity {
     );
 
     public static final Component GATHERED_TITLE = Component.translatable(
-            "container." + Caterpillar.MOD_ID + ".drill_head.gathered"
+            "gui." + Caterpillar.MOD_ID + ".drill_head.gathered"
     );
 
     public static final Component CONSUMPTION_TITLE = Component.translatable(
-            "container." + Caterpillar.MOD_ID + ".drill_head.consumption"
+            "gui." + Caterpillar.MOD_ID + ".drill_head.consumption"
     );
 
     public static final int CONSUMPTION_SLOT_START = 0;

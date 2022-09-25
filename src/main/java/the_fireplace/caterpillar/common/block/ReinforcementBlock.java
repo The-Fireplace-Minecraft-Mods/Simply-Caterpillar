@@ -90,10 +90,11 @@ public class ReinforcementBlock extends AbstractCaterpillarBlock {
         if (level.isClientSide) {
             return InteractionResult.SUCCESS;
         } else {
-            BlockEntity blockEntity = level.getBlockEntity(pos);
+            BlockPos basePos = getBasePos(state, pos);
+            BlockEntity blockEntity = level.getBlockEntity(basePos);
 
             if (blockEntity instanceof ReinforcementBlockEntity reinforcementBlockEntity) {
-                NetworkHooks.openScreen((ServerPlayer) player, reinforcementBlockEntity, pos);
+                NetworkHooks.openScreen((ServerPlayer) player, reinforcementBlockEntity, basePos);
 
                 return InteractionResult.CONSUME;
             } else {

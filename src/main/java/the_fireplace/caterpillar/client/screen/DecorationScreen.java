@@ -9,6 +9,7 @@ import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import the_fireplace.caterpillar.Caterpillar;
 import the_fireplace.caterpillar.client.screen.util.ScreenTabs;
 import the_fireplace.caterpillar.common.block.entity.DecorationBlockEntity;
 import the_fireplace.caterpillar.common.menu.DecorationMenu;
@@ -36,6 +37,8 @@ public class DecorationScreen extends AbstractCaterpillarScreen<DecorationMenu> 
     @Override
     public void render(@NotNull PoseStack stack, int mouseX, int mouseY, float partialTicks) {
         super.render(stack, mouseX, mouseY, partialTicks);
+
+        this.renderTooltipCurrentMap(stack, mouseX, mouseY);
     }
 
     @Override
@@ -55,6 +58,23 @@ public class DecorationScreen extends AbstractCaterpillarScreen<DecorationMenu> 
         int placementIndex = (int)((double)(scrollOffs * (float)m) + 0.5D);
         int colorPlacement = this.menu.getCurrentMap() == this.menu.getSelectedMap() ? ChatFormatting.BLACK.getColor() : 0x404040;
         this.font.draw(stack, "" + placementIndex, this.leftPos + 31, this.topPos + 39, colorPlacement);
+    }
+
+    private void renderTooltipCurrentMap(PoseStack stack, int mouseX, int mouseY) {
+        if (
+                mouseX >= super.leftPos + 25 &&
+                mouseY >= super.topPos + 34 &&
+                mouseX <= super.leftPos + 25 + SLOT_SIZE &&
+                mouseY <= super.topPos + 34 + SLOT_SIZE
+        ) {
+            if (this.menu.getSelectedMap() == this.menu.getCurrentMap()) {
+                Component currentMap = Component.translatable("gui." + Caterpillar.MOD_ID +".decoration.current_map");
+
+                int currentMapTooltipX = -8;
+                int currentMapTooltipY = 32;
+                this.renderTooltip(stack, currentMap, super.leftPos + currentMapTooltipX, super.topPos + currentMapTooltipY);
+            }
+        }
     }
 
     @Override

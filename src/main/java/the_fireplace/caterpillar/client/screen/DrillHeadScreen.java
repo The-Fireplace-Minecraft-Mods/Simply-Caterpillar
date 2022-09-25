@@ -9,6 +9,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
+import the_fireplace.caterpillar.Caterpillar;
 import the_fireplace.caterpillar.client.screen.util.ScreenTabs;
 import the_fireplace.caterpillar.common.block.entity.DrillHeadBlockEntity;
 import the_fireplace.caterpillar.common.menu.DrillHeadMenu;
@@ -66,9 +67,9 @@ public class DrillHeadScreen extends AbstractCaterpillarScreen<DrillHeadMenu> {
         removeWidget(powerButton);
 
         if (this.menu.isPowered()) {
-            powerButton = new ImageButton(super.leftPos + (super.imageWidth - SLOT_SIZE) / 2, super.topPos + 16, POWER_BG_WIDTH, POWER_BG_HEIGHT, 176 + POWER_BG_WIDTH, 15, 0, ScreenTabs.DRILL_HEAD.TEXTURE, (onPress) -> this.menu.setPowerOff());
+            this.powerButton = new ImageButton(super.leftPos + (super.imageWidth - SLOT_SIZE) / 2, super.topPos + 16, POWER_BG_WIDTH, POWER_BG_HEIGHT, 176 + POWER_BG_WIDTH, 15, 0, ScreenTabs.DRILL_HEAD.TEXTURE, (onPress) -> this.menu.setPowerOff());
         } else {
-            powerButton = new ImageButton(super.leftPos + (super.imageWidth - SLOT_SIZE) / 2 - 3, super.topPos + 16, POWER_BG_WIDTH, POWER_BG_HEIGHT, 176, 15, 0, ScreenTabs.DRILL_HEAD.TEXTURE, (onPress) -> this.menu.setPowerOn());
+            this.powerButton = new ImageButton(super.leftPos + (super.imageWidth - SLOT_SIZE) / 2 - 3, super.topPos + 16, POWER_BG_WIDTH, POWER_BG_HEIGHT, 176, 15, 0, ScreenTabs.DRILL_HEAD.TEXTURE, (onPress) -> this.menu.setPowerOn());
         }
 
         this.addRenderableWidget(powerButton);
@@ -82,12 +83,12 @@ public class DrillHeadScreen extends AbstractCaterpillarScreen<DrillHeadMenu> {
                 mouseY <= super.topPos + 16 + 18
         ) {
             List<Component> powerStatusComponents = new ArrayList<>();
-            MutableComponent powerStatusComponent = Component.translatable("power").append(" ");
+            MutableComponent powerStatusComponent = Component.translatable("gui." + Caterpillar.MOD_ID +".drill_head.power").append(" ");
             if (this.menu.isPowered()) {
-                powerStatusComponent.append(Component.translatable("on").withStyle(ChatFormatting.GREEN));
+                powerStatusComponent.append(Component.translatable("gui." + Caterpillar.MOD_ID +".drill_head.power.on").withStyle(ChatFormatting.GREEN));
                 powerStatusComponents.add(powerStatusComponent);
             } else {
-                powerStatusComponent.append(Component.translatable("off").withStyle(ChatFormatting.RED));
+                powerStatusComponent.append(Component.translatable("gui." + Caterpillar.MOD_ID +".drill_head.power.off").withStyle(ChatFormatting.RED));
                 powerStatusComponents.add(powerStatusComponent);
             }
 
@@ -95,7 +96,6 @@ public class DrillHeadScreen extends AbstractCaterpillarScreen<DrillHeadMenu> {
             this.renderComponentTooltip(stack, powerStatusComponents, super.leftPos + (super.imageWidth - super.font.width(powerStatusComponent) - tooltipPadding) / 2, super.topPos - 1);
         }
     }
-
 
     public void removeWidget(ImageButton button) {
         super.removeWidget(button);

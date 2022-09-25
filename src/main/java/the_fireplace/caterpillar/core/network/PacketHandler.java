@@ -25,6 +25,24 @@ public final class PacketHandler {
         int index = 0;
         Caterpillar.LOGGER.info("Registered {} packets!", index);
 
+        CHANNEL.messageBuilder(ItemStackSyncS2CPacket.class, index++, NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(ItemStackSyncS2CPacket::new)
+                .encoder(ItemStackSyncS2CPacket::toBytes)
+                .consumerMainThread(ItemStackSyncS2CPacket::handle)
+                .add();
+
+        CHANNEL.messageBuilder(CaterpillarSyncSlotC2SPacket.class, index++, NetworkDirection.PLAY_TO_SERVER)
+                .decoder(CaterpillarSyncSlotC2SPacket::new)
+                .encoder(CaterpillarSyncSlotC2SPacket::toBytes)
+                .consumerMainThread(CaterpillarSyncSlotC2SPacket::handle)
+                .add();
+
+        CHANNEL.messageBuilder(CaterpillarSyncSlotC2SPacket.class, index++, NetworkDirection.PLAY_TO_SERVER)
+                .decoder(CaterpillarSyncSlotC2SPacket::new)
+                .encoder(CaterpillarSyncSlotC2SPacket::toBytes)
+                .consumerMainThread(CaterpillarSyncSlotC2SPacket::handle)
+                .add();
+
         CHANNEL.messageBuilder(CaterpillarSyncSelectedTabC2SPacket.class, index++, NetworkDirection.PLAY_TO_SERVER)
                 .decoder(CaterpillarSyncSelectedTabC2SPacket::new)
                 .encoder(CaterpillarSyncSelectedTabC2SPacket::toBytes)
@@ -79,16 +97,34 @@ public final class PacketHandler {
                 .consumerMainThread(DecorationItemStackSyncS2CPacket::handle)
                 .add();
 
-        CHANNEL.messageBuilder(ItemStackSyncS2CPacket.class, index++, NetworkDirection.PLAY_TO_CLIENT)
-                .decoder(ItemStackSyncS2CPacket::new)
-                .encoder(ItemStackSyncS2CPacket::toBytes)
-                .consumerMainThread(ItemStackSyncS2CPacket::handle)
+        CHANNEL.messageBuilder(ReinforcementSyncStateReplacerC2SPacket.class, index++, NetworkDirection.PLAY_TO_SERVER)
+                .decoder(ReinforcementSyncStateReplacerC2SPacket::new)
+                .encoder(ReinforcementSyncStateReplacerC2SPacket::toBytes)
+                .consumerMainThread(ReinforcementSyncStateReplacerC2SPacket::handle)
                 .add();
 
-        CHANNEL.messageBuilder(CaterpillarSyncSlotC2SPacket.class, index++, NetworkDirection.PLAY_TO_SERVER)
-                .decoder(CaterpillarSyncSlotC2SPacket::new)
-                .encoder(CaterpillarSyncSlotC2SPacket::toBytes)
-                .consumerMainThread(CaterpillarSyncSlotC2SPacket::handle)
+        CHANNEL.messageBuilder(ReinforcementSyncStateReplacerS2CPacket.class, index++, NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(ReinforcementSyncStateReplacerS2CPacket::new)
+                .encoder(ReinforcementSyncStateReplacerS2CPacket::toBytes)
+                .consumerMainThread(ReinforcementSyncStateReplacerS2CPacket::handle)
+                .add();
+
+        CHANNEL.messageBuilder(ReinforcementSyncSelectedReplacerC2SPacket.class, index++, NetworkDirection.PLAY_TO_SERVER)
+                .decoder(ReinforcementSyncSelectedReplacerC2SPacket::new)
+                .encoder(ReinforcementSyncSelectedReplacerC2SPacket::toBytes)
+                .consumerMainThread(ReinforcementSyncSelectedReplacerC2SPacket::handle)
+                .add();
+
+        CHANNEL.messageBuilder(ReinforcementSyncSelectedReplacerS2CPacket.class, index++, NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(ReinforcementSyncSelectedReplacerS2CPacket::new)
+                .encoder(ReinforcementSyncSelectedReplacerS2CPacket::toBytes)
+                .consumerMainThread(ReinforcementSyncSelectedReplacerS2CPacket::handle)
+                .add();
+
+        CHANNEL.messageBuilder(ReinforcementSyncReplacerS2CPacket.class, index++, NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(ReinforcementSyncReplacerS2CPacket::new)
+                .encoder(ReinforcementSyncReplacerS2CPacket::toBytes)
+                .consumerMainThread(ReinforcementSyncReplacerS2CPacket::handle)
                 .add();
     }
 

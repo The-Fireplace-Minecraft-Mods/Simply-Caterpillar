@@ -33,7 +33,7 @@ public class CaterpillarBlockUtil {
     }
 
     public static boolean isCaterpillarBlock(Block block) {
-        return (block == BlockInit.DRILL_HEAD.get()) ||
+        return  (block == BlockInit.DRILL_HEAD.get()) ||
                 (block == BlockInit.DECORATION.get()) ||
                 (block == BlockInit.REINFORCEMENT.get()) ||
                 (block == BlockInit.INCINERATOR.get()) ||
@@ -53,7 +53,7 @@ public class CaterpillarBlockUtil {
     }
 
     public static boolean canBreakBlock(Block block) {
-        return !block.equals(Blocks.AIR) &&
+        return  !block.equals(Blocks.AIR) &&
                 !block.equals(Blocks.WATER) &&
                 !block.equals(Blocks.LAVA);
     }

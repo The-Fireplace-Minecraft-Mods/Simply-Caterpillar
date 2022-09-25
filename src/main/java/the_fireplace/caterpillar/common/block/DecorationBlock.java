@@ -74,10 +74,11 @@ public class DecorationBlock extends AbstractCaterpillarBlock {
         if (level.isClientSide) {
             return InteractionResult.SUCCESS;
         } else {
-            BlockEntity blockEntity = level.getBlockEntity(pos);
+            BlockPos basePos = getBasePos(state, pos);
+            BlockEntity blockEntity = level.getBlockEntity(basePos);
 
             if (blockEntity instanceof DecorationBlockEntity decorationBlockEntity) {
-                NetworkHooks.openScreen((ServerPlayer) player, decorationBlockEntity, pos);
+                NetworkHooks.openScreen((ServerPlayer) player, decorationBlockEntity, basePos);
 
                 return InteractionResult.CONSUME;
             } else {

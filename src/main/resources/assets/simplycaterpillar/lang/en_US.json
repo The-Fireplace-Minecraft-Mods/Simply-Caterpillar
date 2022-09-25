@@ -13,13 +13,26 @@
 
   "itemGroup.simplycaterpillar": "Caterpillar",
 
-  "container.simplycaterpillar.drill_head": "Drill head",
-  "container.simplycaterpillar.drill_head.consumption": "Consumption",
-  "container.simplycaterpillar.drill_head.gathered": "Gathered",
+  "container.simplycaterpillar.drill_head": "Drill Head",
+  "container.simplycaterpillar.reinforcement": "Reinforcement Builder",
   "container.simplycaterpillar.decoration": "Decoration Placer",
-  "container.simplycaterpillar.reinforcement": "Reinforcement",
   "container.simplycaterpillar.incinerator": "Incinerator",
-  "container.simplycaterpillar.storage": "Storage",
+
+  "gui.simplycaterpillar.drill_head.consumption": "Consumption",
+  "gui.simplycaterpillar.drill_head.gathered": "Gathered",
+  "gui.simplycaterpillar.drill_head.power": "Power:",
+  "gui.simplycaterpillar.drill_head.power.on": "On",
+  "gui.simplycaterpillar.drill_head.power.off": "Off",
+
+  "gui.simplycaterpillar.decoration.current_map":  "Current Map",
+
+  "gui.simplycaterpillar.replacement.wont_replace": "Will Not Replace",
+  "gui.simplycaterpillar.replacement.will_replace": "Will Replace",
+  "gui.simplycaterpillar.replacement.air": "Air",
+  "gui.simplycaterpillar.replacement.water": "Water",
+  "gui.simplycaterpillar.replacement.lava": "Lava",
+  "gui.simplycaterpillar.replacement.falling_blocks": "Sand and Gravel",
+  "gui.simplycaterpillar.replacement.all": "All",
 
   "simplycaterpillar.config.drill_head": "Does this show the drill head tutorial ?",
   "simplycaterpillar.config.coal": "Does this show the coal tutorial ?",
@@ -53,20 +66,10 @@
   "leftwall": "Left Wall",
   "rightwall": "Right Wall",
   "floor": "Floor",
-  "wontreplace": "Will Not Replace",
-  "willreplace": "Will Replace",
   "selected": "Selected:",
   "where": "Drill Is At:",
   "clicktoselect": "Click To Select:",
 
   "furnace": "Furnace:",
-  "updatesaftermoving": "Updates after moving",
-  "on": "On",
-  "off": "Off",
-  "power": "Power:",
-  "replacement.air": "Air",
-  "replacement.water": "Water",
-  "replacement.lava": "Lava",
-  "replacement.falling_blocks": "Sand and Gravel",
-  "replacement.all": "All"
+  "updatesaftermoving": "Updates after moving"
 }

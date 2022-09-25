@@ -5,29 +5,29 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
-import the_fireplace.caterpillar.common.block.entity.DecorationBlockEntity;
+import the_fireplace.caterpillar.common.block.entity.ReinforcementBlockEntity;
 
 import java.util.function.Supplier;
 
-public class DecorationSyncSelectedMapS2CPacket {
+public class ReinforcementSyncReplacerS2CPacket {
 
-    private final int selectedMap;
+    private final byte[] replacer;
 
     private final BlockPos pos;
 
 
-    public DecorationSyncSelectedMapS2CPacket(int selectedMap, BlockPos pos) {
-        this.selectedMap = selectedMap;
+    public ReinforcementSyncReplacerS2CPacket(byte[] replacer, BlockPos pos) {
+        this.replacer = replacer;
         this.pos = pos;
     }
 
-    public DecorationSyncSelectedMapS2CPacket(FriendlyByteBuf buf) {
-        this.selectedMap = buf.readInt();
+    public ReinforcementSyncReplacerS2CPacket(FriendlyByteBuf buf) {
+        this.replacer = buf.readByteArray();
         this.pos = buf.readBlockPos();
     }
 
     public void toBytes(FriendlyByteBuf buf) {
-        buf.writeInt(selectedMap);
+        buf.writeByteArray(replacer);
         buf.writeBlockPos(pos);
     }
 
@@ -36,12 +36,11 @@ public class DecorationSyncSelectedMapS2CPacket {
         context.enqueueWork(() -> {
             ClientLevel level = Minecraft.getInstance().level;
 
-            if(level.getBlockEntity(pos) instanceof DecorationBlockEntity decorationBlockEntity) {
-                decorationBlockEntity.setSelectedMap(selectedMap);
-                decorationBlockEntity.setChanged();
+            if(level.getBlockEntity(pos) instanceof ReinforcementBlockEntity reinforcementBlockEntity) {
+                reinforcementBlockEntity.replacers.add(replacer);
+                reinforcementBlockEntity.setChanged();
             }
         });
         context.setPacketHandled(true);
     }
 }
-

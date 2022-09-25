@@ -2,7 +2,7 @@ package the_fireplace.caterpillar.common.block.entity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.*;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -23,14 +23,13 @@ import the_fireplace.caterpillar.Caterpillar;
 import the_fireplace.caterpillar.common.block.ReinforcementBlock;
 import the_fireplace.caterpillar.common.block.util.ReinforcementPart;
 import the_fireplace.caterpillar.common.block.util.Replacement;
-import the_fireplace.caterpillar.common.block.entity.util.Replacer;
 import the_fireplace.caterpillar.common.menu.ReinforcementMenu;
 import the_fireplace.caterpillar.core.init.BlockEntityInit;
+import the_fireplace.caterpillar.core.network.PacketHandler;
+import the_fireplace.caterpillar.core.network.packet.server.*;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static net.minecraft.world.level.block.HorizontalDirectionalBlock.FACING;
 
@@ -40,9 +39,9 @@ public class ReinforcementBlockEntity extends AbstractCaterpillarBlockEntity {
             "container." + Caterpillar.MOD_ID + ".reinforcement"
     );
 
-    public static final int REINFORCEMENT_SLOT_TOP_START = 0;
+    public static final int REINFORCEMENT_SLOT_CEILING_START = 0;
 
-    public static final int REINFORCEMENT_SLOT_TOP_END = 4;
+    public static final int REINFORCEMENT_SLOT_CEILING_END = 4;
 
     public static final int REINFORCEMENT_SLOT_LEFT_START = 5;
 
@@ -52,19 +51,30 @@ public class ReinforcementBlockEntity extends AbstractCaterpillarBlockEntity {
 
     public static final int REINFORCEMENT_SLOT_RIGHT_END = 10;
 
-    public static final int REINFORCEMENT_SLOT_BOTTOM_START = 11;
+    public static final int REINFORCEMENT_SLOT_FLOOR_START = 11;
 
-    public static final int REINFORCEMENT_SLOT_BOTTOM_END = 15;
+    public static final int REINFORCEMENT_SLOT_FLOOR_END = 15;
 
     public static final int INVENTORY_SIZE = 16;
 
-    private final Map<Direction, List<Replacer>> replacers = new HashMap<>(4);
+    public final List<byte[]> replacers = new ArrayList<>();
+
+    public static final int REPLACER_CEILING = 0;
+
+    public static final int REPLACER_LEFT = 1;
+
+    public static final int REPLACER_RIGHT = 2;
+
+    public static final int REPLACER_FLOOR = 3;
+
+    private int selectedReplacer;
 
     public ReinforcementBlockEntity(BlockPos pos, BlockState state) {
         super(BlockEntityInit.REINFORCEMENT.get(), pos, state, INVENTORY_SIZE);
 
         this.setDefaultReinforcementBlocks();
         this.setDefaultReplacers();
+        this.selectedReplacer = 0;
     }
 
     private void setDefaultReinforcementBlocks() {
@@ -74,34 +84,33 @@ public class ReinforcementBlockEntity extends AbstractCaterpillarBlockEntity {
     }
 
     private void setDefaultReplacers() {
-        this.replacers.put(Direction.UP, new ArrayList<>(Replacement.values().length));
-        this.replacers.put(Direction.DOWN, new ArrayList<>(Replacement.values().length));
-        this.replacers.put(Direction.EAST, new ArrayList<>(Replacement.values().length));
-        this.replacers.put(Direction.WEST, new ArrayList<>(Replacement.values().length));
+        for (int i = 0; i <= 3; i++) {
+            this.replacers.add(new byte[Replacement.values().length]);
+        }
 
-        this.replacers.get(Direction.UP).add(new Replacer(Replacement.AIR, false));
-        this.replacers.get(Direction.UP).add(new Replacer(Replacement.WATER, true));
-        this.replacers.get(Direction.UP).add(new Replacer(Replacement.LAVA, true));
-        this.replacers.get(Direction.UP).add(new Replacer(Replacement.FALLING_BLOCKS, true));
-        this.replacers.get(Direction.UP).add(new Replacer(Replacement.ALL, false));
+        this.replacers.get(REPLACER_CEILING)[Replacement.WATER.INDEX] = 1;
+        this.replacers.get(REPLACER_CEILING)[Replacement.LAVA.INDEX] = 1;
+        this.replacers.get(REPLACER_CEILING)[Replacement.FALLING_BLOCKS.INDEX] = 1;
+        this.replacers.get(REPLACER_CEILING)[Replacement.AIR.INDEX] = 0;
+        this.replacers.get(REPLACER_CEILING)[Replacement.ALL.INDEX] = 0;
 
-        this.replacers.get(Direction.DOWN).add(new Replacer(Replacement.AIR, true));
-        this.replacers.get(Direction.DOWN).add(new Replacer(Replacement.WATER, true));
-        this.replacers.get(Direction.DOWN).add(new Replacer(Replacement.LAVA, true));
-        this.replacers.get(Direction.DOWN).add(new Replacer(Replacement.FALLING_BLOCKS, false));
-        this.replacers.get(Direction.DOWN).add(new Replacer(Replacement.ALL, false));
+        this.replacers.get(REPLACER_LEFT)[Replacement.WATER.INDEX] = 1;
+        this.replacers.get(REPLACER_LEFT)[Replacement.LAVA.INDEX] = 1;
+        this.replacers.get(REPLACER_LEFT)[Replacement.FALLING_BLOCKS.INDEX] = 0;
+        this.replacers.get(REPLACER_LEFT)[Replacement.AIR.INDEX] = 0;
+        this.replacers.get(REPLACER_LEFT)[Replacement.ALL.INDEX] = 0;
 
-        this.replacers.get(Direction.EAST).add(new Replacer(Replacement.AIR, false));
-        this.replacers.get(Direction.EAST).add(new Replacer(Replacement.WATER, true));
-        this.replacers.get(Direction.EAST).add(new Replacer(Replacement.LAVA, true));
-        this.replacers.get(Direction.EAST).add(new Replacer(Replacement.FALLING_BLOCKS, false));
-        this.replacers.get(Direction.EAST).add(new Replacer(Replacement.ALL, false));
+        this.replacers.get(REPLACER_RIGHT)[Replacement.WATER.INDEX] = 1;
+        this.replacers.get(REPLACER_RIGHT)[Replacement.LAVA.INDEX] = 1;
+        this.replacers.get(REPLACER_RIGHT)[Replacement.FALLING_BLOCKS.INDEX] = 0;
+        this.replacers.get(REPLACER_RIGHT)[Replacement.AIR.INDEX] = 0;
+        this.replacers.get(REPLACER_RIGHT)[Replacement.ALL.INDEX] = 0;
 
-        this.replacers.get(Direction.WEST).add(new Replacer(Replacement.AIR, false));
-        this.replacers.get(Direction.WEST).add(new Replacer(Replacement.WATER, true));
-        this.replacers.get(Direction.WEST).add(new Replacer(Replacement.LAVA, true));
-        this.replacers.get(Direction.WEST).add(new Replacer(Replacement.FALLING_BLOCKS, false));
-        this.replacers.get(Direction.WEST).add(new Replacer(Replacement.ALL, false));
+        this.replacers.get(REPLACER_FLOOR)[Replacement.WATER.INDEX] = 1;
+        this.replacers.get(REPLACER_FLOOR)[Replacement.LAVA.INDEX] = 1;
+        this.replacers.get(REPLACER_FLOOR)[Replacement.FALLING_BLOCKS.INDEX] = 0;
+        this.replacers.get(REPLACER_FLOOR)[Replacement.AIR.INDEX] = 1;
+        this.replacers.get(REPLACER_FLOOR)[Replacement.ALL.INDEX] = 0;
     }
 
     public void move() {
@@ -119,6 +128,11 @@ public class ReinforcementBlockEntity extends AbstractCaterpillarBlockEntity {
 
         if (nextBlockEntity instanceof ReinforcementBlockEntity reinforcementBlockEntity) {
             reinforcementBlockEntity.load(oldTag);
+            reinforcementBlockEntity.setSelectedReplacer(this.getSelectedReplacer());
+            reinforcementBlockEntity.replacers.clear();
+            for (byte[] replacer : this.replacers) {
+                reinforcementBlockEntity.replacers.add(replacer);
+            }
             reinforcementBlockEntity.setChanged();
 
             this.getLevel().setBlockAndUpdate(nextPos.relative(reinforcementBlockEntity.getBlockState().getValue(ReinforcementBlock.FACING).getCounterClockWise()), nextBlockEntity.getBlockState().setValue(ReinforcementBlock.PART, ReinforcementPart.LEFT));
@@ -155,30 +169,30 @@ public class ReinforcementBlockEntity extends AbstractCaterpillarBlockEntity {
                         default -> basePos.offset(j, i, -k);
                     };
 
-                    if (i == 2) { // TOP
-                        int slotId = REINFORCEMENT_SLOT_TOP_START + j + 2;
+                    if (i == 2) { // CEILING
+                        int slotId = REINFORCEMENT_SLOT_CEILING_START + j + 2;
 
                         if (direction == Direction.NORTH || direction == Direction.EAST) {
-                            slotId = REINFORCEMENT_SLOT_TOP_START + (-1 * j) + 2;
+                            slotId = REINFORCEMENT_SLOT_CEILING_START + (-1 * j) + 2;
                         }
 
                         Item reinforceItem = this.getStackInSlot(slotId).getItem();
                         Block reinforceBlock = Block.byItem(reinforceItem);
 
-                        if (checkIfReinforcementIsNeeded(Direction.UP, reinforcePos, reinforceBlock) && takeItemFromDrillHeadInventory(reinforceItem)) {
+                        if (checkIfReinforcementIsNeeded(REPLACER_CEILING, reinforcePos, reinforceBlock) && takeItemFromDrillHeadInventory(reinforceItem)) {
                             this.level.setBlockAndUpdate(reinforcePos, reinforceBlock.defaultBlockState());
                         }
-                    } else if (i == -2) { // BOTTOM
-                        int slotId = REINFORCEMENT_SLOT_BOTTOM_START + j + 2;
+                    } else if (i == -2) { // FLOOR
+                        int slotId = REINFORCEMENT_SLOT_FLOOR_START + j + 2;
 
                         if (direction == Direction.NORTH || direction == Direction.EAST) {
-                            slotId = REINFORCEMENT_SLOT_BOTTOM_START + (-1 * j) + 2;
+                            slotId = REINFORCEMENT_SLOT_FLOOR_START + (-1 * j) + 2;
                         }
 
                         Item reinforceItem = this.getStackInSlot(slotId).getItem();
                         Block reinforceBlock = Block.byItem(reinforceItem);
 
-                        if (checkIfReinforcementIsNeeded(Direction.DOWN, reinforcePos, reinforceBlock) && takeItemFromDrillHeadInventory(reinforceItem)) {
+                        if (checkIfReinforcementIsNeeded(REPLACER_FLOOR, reinforcePos, reinforceBlock) && takeItemFromDrillHeadInventory(reinforceItem)) {
                             this.level.setBlockAndUpdate(reinforcePos, reinforceBlock.defaultBlockState());
                         }
                     } else if (
@@ -190,7 +204,7 @@ public class ReinforcementBlockEntity extends AbstractCaterpillarBlockEntity {
                         Item reinforceItem = this.getStackInSlot(slotId).getItem();
                         Block reinforceBlock = Block.byItem(reinforceItem);
 
-                        if (checkIfReinforcementIsNeeded(Direction.EAST, reinforcePos, reinforceBlock) && takeItemFromDrillHeadInventory(reinforceItem)) {
+                        if (checkIfReinforcementIsNeeded(REPLACER_RIGHT, reinforcePos, reinforceBlock) && takeItemFromDrillHeadInventory(reinforceItem)) {
                             this.level.setBlockAndUpdate(reinforcePos, reinforceBlock.defaultBlockState());
                         }
                     } else if (
@@ -202,7 +216,7 @@ public class ReinforcementBlockEntity extends AbstractCaterpillarBlockEntity {
                         Item reinforceItem = this.getStackInSlot(slotId).getItem();
                         Block reinforceBlock = Block.byItem(reinforceItem);
 
-                        if (checkIfReinforcementIsNeeded(Direction.WEST, reinforcePos, reinforceBlock) && takeItemFromDrillHeadInventory(reinforceItem)) {
+                        if (checkIfReinforcementIsNeeded(REPLACER_LEFT, reinforcePos, reinforceBlock) && takeItemFromDrillHeadInventory(reinforceItem)) {
                             this.level.setBlockAndUpdate(reinforcePos, reinforceBlock.defaultBlockState());
                         }
                     } else if (i != -2 && i != 2 && j != -2 && j != 2) {
@@ -223,12 +237,12 @@ public class ReinforcementBlockEntity extends AbstractCaterpillarBlockEntity {
         }
     }
 
-    private boolean checkIfReinforcementIsNeeded(Direction direction, BlockPos reinforcePos, Block reinforceBlock) {
+    private boolean checkIfReinforcementIsNeeded(int side, BlockPos reinforcePos, Block reinforceBlock) {
         Block block = this.level.getBlockState(reinforcePos).getBlock();
 
-        for(Replacer replacer : this.replacers.get(direction)) {
-            if (replacer.isActive()) {
-                for (Block blockToReplace : replacer.getReplacement().BLOCKS) {
+        for(byte replacer : this.replacers.get(side)) {
+            if (replacer == 1) {
+                for (Block blockToReplace : Replacement.values()[replacer].BLOCKS) {
                     if (blockToReplace.equals(block) && !blockToReplace.equals(reinforceBlock)) {
                         return true;
                     }
@@ -240,6 +254,46 @@ public class ReinforcementBlockEntity extends AbstractCaterpillarBlockEntity {
     }
 
     @Override
+    public void load(@NotNull CompoundTag tag) {
+        super.load(tag);
+
+        // TODO: Check why is empty or size 8 -> this.replacers.clear();
+        ListTag replacersTagList = (ListTag) tag.get("Replacers");
+
+        for (int i = 0; i < replacersTagList.size(); i++) {
+            ByteArrayTag replacers = (ByteArrayTag) replacersTagList.get(i);
+
+            this.replacers.add(replacers.getAsByteArray());
+        }
+
+        this.selectedReplacer = tag.getInt("SelectedReplacer");
+    }
+
+    @Override
+    protected void saveAdditional(CompoundTag tag) {
+        ListTag listTag = new ListTag();
+        for (byte[] replacer : this.replacers) {
+            listTag.add(new ByteArrayTag(replacer));
+        }
+
+        tag.put("Replacers", listTag);
+        tag.putInt("SelectedReplacer", this.selectedReplacer);
+        super.saveAdditional(tag);
+    }
+
+    public byte[] getReplacers(int side) {
+        return this.replacers.get(side);
+    }
+
+    public int getSelectedReplacer() {
+        return this.selectedReplacer;
+    }
+
+    public void setSelectedReplacer(int selectedReplacer) {
+        this.selectedReplacer = selectedReplacer;
+    }
+
+    @Override
     public @NotNull Component getDisplayName() {
         return TITLE;
     }
@@ -247,6 +301,11 @@ public class ReinforcementBlockEntity extends AbstractCaterpillarBlockEntity {
     @Nullable
     @Override
     public AbstractContainerMenu createMenu(int id, @NotNull Inventory playerInventory, @NotNull Player player) {
+        PacketHandler.sendToClients(new ReinforcementSyncSelectedReplacerS2CPacket(this.selectedReplacer, worldPosition));
+        for (byte[] replacer : this.replacers) {
+            PacketHandler.sendToClients(new ReinforcementSyncReplacerS2CPacket(replacer, worldPosition));
+        }
+
         return new ReinforcementMenu(id, playerInventory, this, new SimpleContainerData(0));
     }
 }

@@ -16,12 +16,17 @@ import the_fireplace.caterpillar.common.menu.AbstractCaterpillarMenu;
 import the_fireplace.caterpillar.core.network.PacketHandler;
 import the_fireplace.caterpillar.core.network.packet.client.CaterpillarSyncSelectedTabC2SPacket;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @OnlyIn(Dist.CLIENT)
 public abstract class AbstractCaterpillarScreen<T extends AbstractCaterpillarMenu> extends AbstractContainerScreen<T> {
 
     public static final int SLOT_SIZE = 18;
 
     private final ScreenTabs SELECTED_TAB;
+
+    private List<ImageButton> tabButtons = new ArrayList<>();
 
     public AbstractCaterpillarScreen(T menu, Inventory playerInventory, Component title, ScreenTabs selectedTab) {
         super(menu, playerInventory, title);
@@ -63,20 +68,27 @@ public abstract class AbstractCaterpillarScreen<T extends AbstractCaterpillarMen
     }
 
     private void renderTabButtons() {
-        int incrementTabPos = 0;
+        for (ImageButton button : this.tabButtons) {
+            removeWidget(button);
+        }
 
+        int incrementTabPos = 0;
         for (ScreenTabs tab: ScreenTabs.values()) {
             if (tabShouldBeDisplayed(tab)) {
                 if (this.SELECTED_TAB.equals(tab)) {
-                    this.addRenderableWidget(new ImageButton(super.leftPos - 28, super.topPos + 3 + incrementTabPos*20, 31, 20, 176 , 58 + 20, 0, ScreenTabs.DRILL_HEAD.TEXTURE, (onPress) -> {
+                    this.tabButtons.add(new ImageButton(super.leftPos - 28, super.topPos + 3 + incrementTabPos*20, 31, 20, 176 , 58 + 20, 0, ScreenTabs.DRILL_HEAD.TEXTURE, (onPress) -> {
 
                     }));
                 } else {
-                    this.addRenderableWidget(new ImageButton(super.leftPos - 31, super.topPos + 3 + incrementTabPos*20, 31, 20, 176 , 58, 0, ScreenTabs.DRILL_HEAD.TEXTURE, (onPress) -> PacketHandler.sendToServer(new CaterpillarSyncSelectedTabC2SPacket(tab, this.menu.blockEntity.getBlockPos()))));
+                    this.tabButtons.add(new ImageButton(super.leftPos - 31, super.topPos + 3 + incrementTabPos*20, 31, 20, 176 , 58, 0, ScreenTabs.DRILL_HEAD.TEXTURE, (onPress) -> PacketHandler.sendToServer(new CaterpillarSyncSelectedTabC2SPacket(tab, this.menu.blockEntity.getBlockPos()))));
                 }
 
                 incrementTabPos++;
             }
+        }
+
+        for (ImageButton button : this.tabButtons) {
+            this.addRenderableWidget(button);
         }
     }
 
@@ -114,12 +126,6 @@ public abstract class AbstractCaterpillarScreen<T extends AbstractCaterpillarMen
     private boolean tabShouldBeDisplayed(ScreenTabs tab) {
         if (this.menu.getConnectedCaterpillarBlockEntities().isEmpty()) {
             return false;
-        }
-
-        for (AbstractCaterpillarBlockEntity entity : this.menu.getConnectedCaterpillarBlockEntities()) {
-            if (entity instanceof DecorationBlockEntity) {
-                return true;
-            }
         }
 
         switch (tab) {
