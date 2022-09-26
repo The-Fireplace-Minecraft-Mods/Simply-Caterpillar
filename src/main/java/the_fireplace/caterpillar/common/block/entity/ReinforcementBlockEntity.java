@@ -240,14 +240,19 @@ public class ReinforcementBlockEntity extends AbstractCaterpillarBlockEntity {
     private boolean checkIfReinforcementIsNeeded(int side, BlockPos reinforcePos, Block reinforceBlock) {
         Block block = this.level.getBlockState(reinforcePos).getBlock();
 
+        int replacerIndex = 0;
         for(byte replacer : this.replacers.get(side)) {
-            if (replacer == 1) {
-                for (Block blockToReplace : Replacement.values()[replacer].BLOCKS) {
-                    if (blockToReplace.equals(block) && !blockToReplace.equals(reinforceBlock)) {
-                        return true;
+            if (replacer == (byte) 1) {
+                for (Block replacementBlock : Replacement.values()[replacerIndex].BLOCKS) {
+                    if (replacementBlock.equals(block)) {
+                        if (replacementBlock.equals(block) && !replacementBlock.equals(reinforceBlock)) {
+                            return true;
+                        }
                     }
                 }
             }
+
+            replacerIndex++;
         }
 
         return false;
