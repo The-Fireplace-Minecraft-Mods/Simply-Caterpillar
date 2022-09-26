@@ -42,18 +42,10 @@ public class ReinforcementSyncReplacerS2CPacket {
         NetworkEvent.Context context = supplier.get();
         context.enqueueWork(() -> {
             ClientLevel level = Minecraft.getInstance().level;
-            LocalPlayer player = Minecraft.getInstance().player;
 
             if(level.getBlockEntity(pos) instanceof ReinforcementBlockEntity reinforcementBlockEntity) {
                 reinforcementBlockEntity.replacers.set(replacerIndex, replacer);
                 reinforcementBlockEntity.setChanged();
-
-                if(player.containerMenu instanceof ReinforcementMenu menu && menu.blockEntity.getBlockPos().equals(pos)) {
-                    if (menu.blockEntity instanceof ReinforcementBlockEntity menuBlockEntity) {
-                        menuBlockEntity.replacers.set(replacerIndex, replacer);
-                        menuBlockEntity.setChanged();
-                    }
-                }
             }
         });
         context.setPacketHandled(true);

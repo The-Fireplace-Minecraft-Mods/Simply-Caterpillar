@@ -56,7 +56,7 @@ public class DecorationScreen extends AbstractCaterpillarScreen<DecorationMenu> 
 
         int m = 9;
         int placementIndex = (int)((double)(scrollOffs * (float)m) + 0.5D);
-        int colorPlacement = this.menu.getCurrentMap() == this.menu.getSelectedMap() ? ChatFormatting.BLACK.getColor() : 0x404040;
+        int colorPlacement = this.menu.getCurrentMap() == this.menu.getSelectedMap() ? ChatFormatting.BLUE.getColor() : 0x404040;
         this.font.draw(stack, "" + placementIndex, this.leftPos + 31, this.topPos + 39, colorPlacement);
     }
 
