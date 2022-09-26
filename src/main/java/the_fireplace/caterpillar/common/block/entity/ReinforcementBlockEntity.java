@@ -257,8 +257,11 @@ public class ReinforcementBlockEntity extends AbstractCaterpillarBlockEntity {
     public void load(@NotNull CompoundTag tag) {
         super.load(tag);
 
-        // TODO: Check why is empty or size 8 -> this.replacers.clear();
         ListTag replacersTagList = (ListTag) tag.get("Replacers");
+
+        if (replacersTagList.size() > 0) {
+            this.replacers.clear();
+        }
 
         for (int i = 0; i < replacersTagList.size(); i++) {
             ByteArrayTag replacers = (ByteArrayTag) replacersTagList.get(i);
@@ -302,8 +305,8 @@ public class ReinforcementBlockEntity extends AbstractCaterpillarBlockEntity {
     @Override
     public AbstractContainerMenu createMenu(int id, @NotNull Inventory playerInventory, @NotNull Player player) {
         PacketHandler.sendToClients(new ReinforcementSyncSelectedReplacerS2CPacket(this.selectedReplacer, worldPosition));
-        for (byte[] replacer : this.replacers) {
-            PacketHandler.sendToClients(new ReinforcementSyncReplacerS2CPacket(replacer, worldPosition));
+        for (int replacerIndex = 0; replacerIndex < this.replacers.size(); replacerIndex++) {
+            PacketHandler.sendToClients(new ReinforcementSyncReplacerS2CPacket(replacerIndex, this.replacers.get(replacerIndex), worldPosition));
         }
 
         return new ReinforcementMenu(id, playerInventory, this, new SimpleContainerData(0));
