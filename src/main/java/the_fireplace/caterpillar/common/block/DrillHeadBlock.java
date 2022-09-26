@@ -9,12 +9,16 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
@@ -30,9 +34,11 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-public class DrillHeadBlock extends AbstractCaterpillarBlock {
+public class DrillHeadBlock extends AbstractCaterpillarBlock implements SimpleWaterloggedBlock {
 
     public static final EnumProperty<DrillHeadPart> PART = EnumProperty.create("part", DrillHeadPart.class);
+
+    public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
     private static final Map<Direction, VoxelShape> SHAPES_BASE = new EnumMap<>(Direction.class);
 
@@ -54,7 +60,7 @@ public class DrillHeadBlock extends AbstractCaterpillarBlock {
 
     public DrillHeadBlock(Properties properties) {
         super(properties);
-        super.registerDefaultState(defaultBlockState().setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_BOTTOM));
+        super.registerDefaultState(defaultBlockState().setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_BOTTOM).setValue(DrillHeadBlock.WATERLOGGED, true));
         super.runCalculation(DrillHeadBlock.SHAPES_BLADES, DrillHeadBlock.SHAPE_BLADES.get());
         super.runCalculation(DrillHeadBlock.SHAPES_BASE, DrillHeadBlock.SHAPE_BASE.get());
     }
@@ -62,7 +68,7 @@ public class DrillHeadBlock extends AbstractCaterpillarBlock {
     @Override
     protected void createBlockStateDefinition(StateDefinition.@NotNull Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
-        builder.add(DrillHeadBlock.PART);
+        builder.add(DrillHeadBlock.PART, DrillHeadBlock.WATERLOGGED);
     }
 
     @Override
@@ -90,7 +96,7 @@ public class DrillHeadBlock extends AbstractCaterpillarBlock {
                 level.getBlockState(blockPos.above(2).relative(direction.getClockWise())).canBeReplaced(context) &&
                 level.getBlockState(blockPos.above(2).relative(direction.getCounterClockWise())).canBeReplaced(context)
         ) {
-            return defaultBlockState().setValue(FACING, direction.getOpposite()).setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_BOTTOM);
+            return defaultBlockState().setValue(FACING, direction.getOpposite()).setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_BOTTOM).setValue(DrillHeadBlock.WATERLOGGED, context.getLevel().getFluidState(context.getClickedPos()).getType() == Fluids.WATER);
         }
 
         return null;

@@ -12,10 +12,14 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -33,9 +37,11 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-public class ReinforcementBlock extends AbstractCaterpillarBlock {
+public class ReinforcementBlock extends AbstractCaterpillarBlock implements SimpleWaterloggedBlock {
 
     public static final EnumProperty<ReinforcementPart> PART = EnumProperty.create("part", ReinforcementPart.class);
+
+    public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
     private static final Map<Direction, VoxelShape> SHAPES_LEFT = new EnumMap<>(Direction.class);
 
@@ -77,7 +83,7 @@ public class ReinforcementBlock extends AbstractCaterpillarBlock {
 
     public ReinforcementBlock(Properties properties) {
         super(properties);
-        super.registerDefaultState(super.defaultBlockState().setValue(ReinforcementBlock.PART, ReinforcementPart.BOTTOM));
+        super.registerDefaultState(super.defaultBlockState().setValue(ReinforcementBlock.PART, ReinforcementPart.BOTTOM).setValue(ReinforcementBlock.WATERLOGGED, true));
         super.runCalculation(ReinforcementBlock.SHAPES_LEFT, ReinforcementBlock.SHAPE_LEFT.get());
         super.runCalculation(ReinforcementBlock.SHAPES_BASE, ReinforcementBlock.SHAPE_BASE.get());
         super.runCalculation(ReinforcementBlock.SHAPES_RIGHT, ReinforcementBlock.SHAPE_RIGHT.get());
@@ -106,7 +112,7 @@ public class ReinforcementBlock extends AbstractCaterpillarBlock {
     @Override
     protected void createBlockStateDefinition(StateDefinition.@NotNull Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
-        builder.add(ReinforcementBlock.PART);
+        builder.add(ReinforcementBlock.PART, ReinforcementBlock.WATERLOGGED);
     }
 
     @Override
@@ -133,7 +139,7 @@ public class ReinforcementBlock extends AbstractCaterpillarBlock {
             level.getBlockState(blockPos.above()).canBeReplaced(context) &&
             level.getBlockState(blockPos.above(2)).canBeReplaced(context)
         ){
-            return defaultBlockState().setValue(FACING, direction.getOpposite()).setValue(ReinforcementBlock.PART, ReinforcementPart.BOTTOM);
+            return defaultBlockState().setValue(FACING, direction.getOpposite()).setValue(ReinforcementBlock.PART, ReinforcementPart.BOTTOM).setValue(DrillHeadBlock.WATERLOGGED, context.getLevel().getFluidState(context.getClickedPos()).getType() == Fluids.WATER);
         }
 
         return null;
