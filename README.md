@@ -1,9 +1,5 @@
 <div align="center">
-	<img src=".github/sources/simply-caterpillar-logo.png" alt="Simply Caterpillar icon" width="300" />
-</div>
-
-<div align="center">
-    <img src=".github/sources/simply-caterpillar-title.png" alt="Simply Caterpillar title" />
+	<img src=".github/sources/simply-caterpillar-logo.png" alt="Simply Caterpillar icon" width="400" />
 </div>
 
 <div align="center">
