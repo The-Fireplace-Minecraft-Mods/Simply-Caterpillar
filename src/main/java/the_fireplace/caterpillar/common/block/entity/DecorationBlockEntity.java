@@ -145,7 +145,7 @@ public class DecorationBlockEntity extends AbstractCaterpillarBlockEntity {
         }
         this.setChanged();
 
-        Direction direction = this.getBlockState().getValue(FACING);
+        Direction direction = this.getBlockState().getValue(FACING).getOpposite();
         BlockPos basePos = this.getBlockPos();
         int placementSlotId = INVENTORY_MAX_SLOTS;
         ItemStackHandler currentPlacementMap =  this.placementMap.get(this.currentMap);
@@ -157,10 +157,10 @@ public class DecorationBlockEntity extends AbstractCaterpillarBlockEntity {
                 }
 
                 BlockPos decoratePos = switch (direction) {
-                    case EAST -> basePos.offset(1, i, j);
-                    case WEST -> basePos.offset(-1, i, j);
-                    case SOUTH -> basePos.offset(j, i, 1);
-                    case NORTH -> basePos.offset(j, i, -1);
+                    case EAST -> basePos.offset(-1, i, j);
+                    case WEST -> basePos.offset(1, i, j);
+                    case SOUTH -> basePos.offset(j, i, -1);
+                    case NORTH -> basePos.offset(j, i, 1);
                     default -> basePos.offset(j, i, -1);
                 };
 
@@ -200,20 +200,11 @@ public class DecorationBlockEntity extends AbstractCaterpillarBlockEntity {
                         }
 
                         if (blockToPlace instanceof FenceBlock) {
-                            if (j == -1) {
-                                switch (direction) {
-                                    case NORTH -> blockState = blockState.setValue(FenceBlock.WEST, true);
-                                    case SOUTH -> blockState = blockState.setValue(FenceBlock.EAST, true);
-                                    case EAST -> blockState = blockState.setValue(FenceBlock.NORTH, true);
-                                    case WEST -> blockState = blockState.setValue(FenceBlock.SOUTH, true);
-                                }
-                            } else if (j == 1) {
-                                switch (direction) {
-                                    case NORTH -> blockState = blockState.setValue(FenceBlock.EAST, true);
-                                    case SOUTH -> blockState = blockState.setValue(FenceBlock.WEST, true);
-                                    case EAST -> blockState = blockState.setValue(FenceBlock.SOUTH, true);
-                                    case WEST -> blockState = blockState.setValue(FenceBlock.NORTH, true);
-                                }
+                            switch (direction) {
+                                case NORTH -> blockState = blockState.setValue(j == 1 ? FenceBlock.EAST : FenceBlock.WEST, true);
+                                case SOUTH -> blockState = blockState.setValue(j == 1 ? FenceBlock.EAST : FenceBlock.WEST, true);
+                                case EAST -> blockState = blockState.setValue(j == 1 ? FenceBlock.NORTH : FenceBlock.SOUTH, true);
+                                case WEST -> blockState = blockState.setValue(j == 1 ? FenceBlock.SOUTH : FenceBlock.NORTH, true);
                             }
                         } else if (blockToPlace instanceof WallBlock wallBlock) {
 
