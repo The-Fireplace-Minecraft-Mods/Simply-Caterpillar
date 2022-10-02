@@ -74,7 +74,7 @@ public class ReinforcementScreen extends AbstractCaterpillarScreen<Reinforcement
     protected void renderBg(@NotNull PoseStack stack, float partialTick, int mouseX, int mouseY) {
         super.renderBg(stack, partialTick, mouseX, mouseY);
 
-        this.renderScrollBar(stack);
+        this.renderScroller(stack);
         this.renderBgSelectedMapSlots(stack);
     }
 
@@ -178,7 +178,7 @@ public class ReinforcementScreen extends AbstractCaterpillarScreen<Reinforcement
         }
     }
 
-    private void renderScrollBar(PoseStack stack) {
+    private void renderScroller(PoseStack stack) {
         int i = this.leftPos + SCROLLBAR_X;
         int j = this.topPos + SCROLLBAR_Y;
         int k = j + SCROLLBAR_HEIGHT;

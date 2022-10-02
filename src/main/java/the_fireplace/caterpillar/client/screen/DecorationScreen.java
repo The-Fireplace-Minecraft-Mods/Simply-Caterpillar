@@ -48,7 +48,7 @@ public class DecorationScreen extends AbstractCaterpillarScreen<DecorationMenu> 
         this.renderScrollBar(stack);
     }
 
-    private void renderScrollBar(PoseStack stack) {
+    public void renderScrollBar(PoseStack stack) {
         int i = this.leftPos + 156;
         int j = this.topPos + SCROLLER_WIDTH;
         int k = j + SCROLLER_HEIGHT;
@@ -135,7 +135,7 @@ public class DecorationScreen extends AbstractCaterpillarScreen<DecorationMenu> 
         return slotId >= BE_INVENTORY_FIRST_SLOT_INDEX && slotId < BE_INVENTORY_FIRST_SLOT_INDEX + INVENTORY_MAX_SLOTS;
     }
 
-    private boolean insideScrollBar(double mouseX, double mouseY) {
+    public boolean insideScrollBar(double mouseX, double mouseY) {
         int i = this.leftPos + 156;
         int j = this.topPos + SCROLLER_WIDTH;
         int k = j + SCROLLER_HEIGHT;
@@ -170,7 +170,7 @@ public class DecorationScreen extends AbstractCaterpillarScreen<DecorationMenu> 
         return true;
     }
 
-    private void scrollTo(float scrollOffs) {
+    public void scrollTo(float scrollOffs) {
         int i = 9;
         int j = (int)((double)(scrollOffs * (float)i) + 0.5D);
         if (j < 0) {

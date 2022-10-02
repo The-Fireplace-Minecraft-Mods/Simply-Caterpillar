@@ -6,10 +6,12 @@ import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
+import the_fireplace.caterpillar.Caterpillar;
 import the_fireplace.caterpillar.client.screen.util.ScreenTabs;
 import the_fireplace.caterpillar.common.block.entity.*;
 import the_fireplace.caterpillar.common.menu.AbstractCaterpillarMenu;
@@ -23,6 +25,24 @@ import java.util.List;
 public abstract class AbstractCaterpillarScreen<T extends AbstractCaterpillarMenu> extends AbstractContainerScreen<T> {
 
     public static final int SLOT_SIZE = 18;
+
+    public static final ResourceLocation GUI_TABS = new ResourceLocation(Caterpillar.MOD_ID, "textures/gui/caterpillar.png");
+
+    public static final int TAB_WIDTH = 31;
+
+    public static final int TAB_HEIGHT = 20;
+
+    public static final int TAB_X_SELECTED = -28;
+
+    public static final int TAB_X_UNSELECTED = -31;
+
+    public static final int TAB_Y = 3;
+
+    public static final int TAB_BG_X = 0;
+
+    public static final int TAB_BG_Y_SELECTED = 21;
+
+    public static final int TAB_BG_Y_UNSELECTED = 0;
 
     private final ScreenTabs SELECTED_TAB;
 
@@ -76,11 +96,11 @@ public abstract class AbstractCaterpillarScreen<T extends AbstractCaterpillarMen
         for (ScreenTabs tab: ScreenTabs.values()) {
             if (tabShouldBeDisplayed(tab)) {
                 if (this.SELECTED_TAB.equals(tab)) {
-                    this.tabButtons.add(new ImageButton(super.leftPos - 28, super.topPos + 3 + incrementTabPos*20, 31, 20, 176 , 58 + 20, 0, ScreenTabs.DRILL_HEAD.TEXTURE, (onPress) -> {
+                    this.tabButtons.add(new ImageButton(super.leftPos + TAB_X_SELECTED, super.topPos + TAB_Y + incrementTabPos*TAB_HEIGHT, TAB_WIDTH, TAB_HEIGHT, TAB_BG_X , TAB_BG_Y_SELECTED, 0, GUI_TABS, (onPress) -> {
 
                     }));
                 } else {
-                    this.tabButtons.add(new ImageButton(super.leftPos - 31, super.topPos + 3 + incrementTabPos*20, 31, 20, 176 , 58, 0, ScreenTabs.DRILL_HEAD.TEXTURE, (onPress) -> PacketHandler.sendToServer(new CaterpillarSyncSelectedTabC2SPacket(tab, this.menu.blockEntity.getBlockPos()))));
+                    this.tabButtons.add(new ImageButton(super.leftPos + TAB_X_UNSELECTED, super.topPos + TAB_Y + incrementTabPos*TAB_HEIGHT, TAB_WIDTH, TAB_HEIGHT, TAB_BG_X , TAB_BG_Y_UNSELECTED, 0, GUI_TABS, (onPress) -> PacketHandler.sendToServer(new CaterpillarSyncSelectedTabC2SPacket(tab, this.menu.blockEntity.getBlockPos()))));
                 }
 
                 incrementTabPos++;

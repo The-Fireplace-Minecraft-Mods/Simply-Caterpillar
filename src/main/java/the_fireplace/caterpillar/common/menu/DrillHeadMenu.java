@@ -120,6 +120,14 @@ public class DrillHeadMenu extends AbstractCaterpillarMenu {
         return false;
     }
 
+    public void setPower(boolean powered) {
+        if (powered) {
+            this.setPowerOn();
+        } else {
+            this.setPowerOff();
+        }
+    }
+
     public void setPowerOn() {
         if (this.blockEntity instanceof DrillHeadBlockEntity drillHeadBlockEntity) {
             PacketHandler.sendToServer(new DrillHeadSyncPowerC2SPacket(true, drillHeadBlockEntity.getBlockPos()));
@@ -134,5 +142,9 @@ public class DrillHeadMenu extends AbstractCaterpillarMenu {
 
     public boolean fuelSlotIsEmpty() {
         return this.getSlot(BE_INVENTORY_FIRST_SLOT_INDEX + DrillHeadBlockEntity.FUEl_SLOT).getItem().isEmpty();
+    }
+
+    public boolean canScroll() {
+        return this.slots.size() > 9;
     }
 }
