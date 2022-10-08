@@ -8,6 +8,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 import the_fireplace.caterpillar.common.block.entity.DrillHeadBlockEntity;
+import the_fireplace.caterpillar.common.block.entity.ReinforcementBlockEntity;
 import the_fireplace.caterpillar.common.menu.slot.CaterpillarFuelSlot;
 import the_fireplace.caterpillar.common.menu.slot.SlotWithRestriction;
 import the_fireplace.caterpillar.common.menu.syncdata.DrillHeadContainerData;
@@ -15,6 +16,9 @@ import the_fireplace.caterpillar.common.menu.util.CaterpillarMenuUtil;
 import the_fireplace.caterpillar.core.init.MenuInit;
 import the_fireplace.caterpillar.core.network.PacketHandler;
 import the_fireplace.caterpillar.core.network.packet.client.DrillHeadSyncPowerC2SPacket;
+import the_fireplace.caterpillar.core.network.packet.client.DrillHeadSyncSelectedGatheredScrollsC2SPacket;
+import the_fireplace.caterpillar.core.network.packet.client.ReinforcementSyncSelectedReplacerC2SPacket;
+import the_fireplace.caterpillar.core.network.packet.server.DrillHeadSyncScrollsS2CPacket;
 
 import static the_fireplace.caterpillar.common.block.entity.DrillHeadBlockEntity.*;
 
@@ -144,7 +148,23 @@ public class DrillHeadMenu extends AbstractCaterpillarMenu {
         return this.getSlot(BE_INVENTORY_FIRST_SLOT_INDEX + DrillHeadBlockEntity.FUEl_SLOT).getItem().isEmpty();
     }
 
+    public int getSelectedGatheredScroll() {
+        if (this.blockEntity instanceof DrillHeadBlockEntity drillHeadBlockEntity) {
+            return drillHeadBlockEntity.getSelectedGatheredScroll();
+        }
+
+        return 0;
+    }
+
     public boolean canScroll() {
         return this.slots.size() > 9;
+    }
+
+    public void gatheredScrollTo(int gatheredScrollTo) {
+        if (this.blockEntity instanceof DrillHeadBlockEntity drillHeadBlockEntity) {
+            drillHeadBlockEntity.setSelectedGatheredScroll(gatheredScrollTo);
+
+            PacketHandler.sendToServer(new DrillHeadSyncSelectedGatheredScrollsC2SPacket(gatheredScrollTo, drillHeadBlockEntity.getBlockPos()));
+        }
     }
 }

@@ -30,6 +30,7 @@ import the_fireplace.caterpillar.common.block.util.DrillHeadPart;
 import the_fireplace.caterpillar.core.network.PacketHandler;
 import the_fireplace.caterpillar.core.network.packet.server.DrillHeadSyncLitS2CPacket;
 import the_fireplace.caterpillar.core.network.packet.server.DrillHeadSyncPowerS2CPacket;
+import the_fireplace.caterpillar.core.network.packet.server.DrillHeadSyncScrollsS2CPacket;
 import the_fireplace.caterpillar.core.network.packet.server.ItemStackSyncS2CPacket;
 
 public class DrillHeadBlockEntity extends AbstractCaterpillarBlockEntity {
@@ -67,6 +68,9 @@ public class DrillHeadBlockEntity extends AbstractCaterpillarBlockEntity {
 
     public boolean powered;
 
+    private int selectedConsumptionScroll;
+
+    private int selectedGatheredScroll;
 
     public DrillHeadBlockEntity(BlockPos pos, BlockState state) {
         super(BlockEntityInit.DRILL_HEAD.get(), pos, state, INVENTORY_SIZE);
@@ -295,6 +299,22 @@ public class DrillHeadBlockEntity extends AbstractCaterpillarBlockEntity {
         };
     }
 
+    public void setSelectedConsumptionScroll(int selectedConsumptionScroll) {
+        this.selectedConsumptionScroll = selectedConsumptionScroll;
+    }
+
+    public void setSelectedGatheredScroll(int selectedGatheredScroll) {
+        this.selectedGatheredScroll = selectedGatheredScroll;
+    }
+
+    public int getSelectedConsumptionScroll() {
+        return selectedConsumptionScroll;
+    }
+
+    public int getSelectedGatheredScroll() {
+        return selectedGatheredScroll;
+    }
+
     @Override
     public void load(CompoundTag tag) {
         super.load(tag);
@@ -321,6 +341,7 @@ public class DrillHeadBlockEntity extends AbstractCaterpillarBlockEntity {
     @Override
     public AbstractContainerMenu createMenu(int id, @NotNull Inventory playerInventory, @NotNull Player player) {
         PacketHandler.sendToClients(new DrillHeadSyncPowerS2CPacket(this.isPowered(), this.getBlockPos()));
+        PacketHandler.sendToClients(new DrillHeadSyncScrollsS2CPacket(this.selectedConsumptionScroll, this.selectedGatheredScroll, this.getBlockPos()));
         return new DrillHeadMenu(id, playerInventory, this, new DrillHeadContainerData(this, DrillHeadContainerData.SIZE));
     }
 }
