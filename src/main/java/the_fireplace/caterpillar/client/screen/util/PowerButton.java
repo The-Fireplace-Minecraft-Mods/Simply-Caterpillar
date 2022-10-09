@@ -40,9 +40,9 @@ public class PowerButton extends ImageButton {
             yOffset += this.yDiffTex;
         }
 
-        if (this.isHoveredOrFocused()) {
-            xOffset += this.width;
-        }
+//        if (this.isHoveredOrFocused()) {
+//            xOffset += this.width;
+//        }
 
         RenderSystem.enableDepthTest();
         super.blit(poseStack, this.x + (this.powered ? 0 : -3), this.y, xOffset, yOffset, this.width, this.height);

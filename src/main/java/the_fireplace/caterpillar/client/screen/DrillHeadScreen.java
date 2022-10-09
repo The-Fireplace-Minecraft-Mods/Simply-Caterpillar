@@ -45,6 +45,10 @@ public class DrillHeadScreen extends AbstractScrollableScreen<DrillHeadMenu> {
 
     private static final int POWER_BG_HEIGHT = 18;
 
+    private static final int POWER_BG_X = 176;
+
+    private static final int POWER_BG_Y = 15;
+
     private static final int BURN_SLOT_BG_X = 81;
 
     private static final int BURN_SLOT_BG_Y = 36 + 12;
@@ -53,15 +57,23 @@ public class DrillHeadScreen extends AbstractScrollableScreen<DrillHeadMenu> {
 
     public PowerButton powerButton;
 
+    private float gatheredScrollOffs;
+
+    private boolean gatheredScrolling;
+
     public DrillHeadScreen(DrillHeadMenu menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title, ScreenTabs.DRILL_HEAD, SCROLLER_BG_X, SCROLLER_BG_Y, SCROLLER_WIDTH, SCROLLER_HEIGHT, CONSUMPTION_SCROLLBAR_X, SCROLLBAR_Y, SCROLLBAR_HEIGHT);
 
-        this.setScrollOffs(menu.getSelectedGatheredScroll() / 2.0F);
+        this.setConsumptionScrollOffs(menu.getSelectedConsumptionScroll() / 2.0F);
+        this.setGatheredScrollOffs(menu.getSelectedGatheredScroll() / 2.0F);
     }
 
-    @Override
-    protected void setScrollOffs(float scrollOffs) {
+    protected void setConsumptionScrollOffs(float scrollOffs) {
         super.setScrollOffs(scrollOffs);
+    }
+
+    protected void setGatheredScrollOffs(float scrollOffs) {
+        this.gatheredScrollOffs = scrollOffs;
     }
 
     @Override
@@ -69,7 +81,6 @@ public class DrillHeadScreen extends AbstractScrollableScreen<DrillHeadMenu> {
         super.init();
 
         this.addPowerButton();
-        this.addTutorialButton();
     }
 
     @Override
@@ -105,7 +116,7 @@ public class DrillHeadScreen extends AbstractScrollableScreen<DrillHeadMenu> {
     }
 
     private void addPowerButton() {
-        this.powerButton = new PowerButton(this.menu.isPowered(), super.leftPos + (super.imageWidth - SLOT_SIZE) / 2, super.topPos + 16, POWER_BG_WIDTH, POWER_BG_HEIGHT, 176, 15, POWER_BG_HEIGHT, ScreenTabs.DRILL_HEAD.TEXTURE, (onPress) -> {
+        this.powerButton = new PowerButton(this.menu.isPowered(), super.leftPos + (super.imageWidth - SLOT_SIZE) / 2, super.topPos + 16, POWER_BG_WIDTH, POWER_BG_HEIGHT, POWER_BG_X, POWER_BG_Y, POWER_BG_HEIGHT, ScreenTabs.DRILL_HEAD.TEXTURE, (onPress) -> {
             this.menu.setPower(!this.menu.isPowered());
         });
         this.addRenderableWidget(powerButton);
@@ -138,18 +149,15 @@ public class DrillHeadScreen extends AbstractScrollableScreen<DrillHeadMenu> {
         }
     }
 
-    private void addTutorialButton() {
-    }
-
     @Override
     protected void renderScroller(PoseStack stack) {
         super.renderScroller(stack);
 
         int gatheredScrollbarX = this.leftPos + GATHERED_SCROLLBAR_X;
         int scrollbarY = this.topPos + SCROLLBAR_Y;
-        int scrollbarYFinish = scrollbarY + SCROLLBAR_HEIGHT;
+        int scrollbarYEnd = scrollbarY + SCROLLBAR_HEIGHT;
 
-        blit(stack, gatheredScrollbarX, scrollbarY + (int)((float)(scrollbarYFinish - scrollbarY - SCROLLBAR_Y) * this.scrollOffs), SCROLLER_BG_X, SCROLLER_BG_Y, SCROLLER_WIDTH, SCROLLER_HEIGHT);
+        blit(stack, gatheredScrollbarX, scrollbarY + (int)((float)(scrollbarYEnd - scrollbarY - SCROLLBAR_Y) * this.gatheredScrollOffs), SCROLLER_BG_X, SCROLLER_BG_Y, SCROLLER_WIDTH, SCROLLER_HEIGHT);
     }
 
     protected void gatheredScrollTo(float scrollOffs) {
@@ -163,8 +171,49 @@ public class DrillHeadScreen extends AbstractScrollableScreen<DrillHeadMenu> {
         this.menu.gatheredScrollTo(gatheredScrollTo);
     }
 
-    private boolean insideScrollBar(double mouseX, double mouseY) {
-        return false;
+    protected void consumptionScrollTo(float scrollOffs) {
+        int i = 2;
+        int j = (int)((double)(scrollOffs * (float)i) + 0.5D);
+        if (j < 0) {
+            j = 0;
+        }
+        int consumptionScrollTo = j;
+
+        this.menu.consumptionScrollTo(consumptionScrollTo);
+    }
+
+    private boolean insideGatheredScrollArea(double mouseX, double mouseY) {
+        int gatheredAreaXStart = this.leftPos + GATHERED_SCROLLBAR_X;
+        int gatheredAreaYStart = this.topPos + SCROLLBAR_Y;
+        int gatheredAreaXEnd = this.leftPos + DrillHeadMenu.GATHERED_SLOT_X_END;
+        int gatheredAreaYEnd = this.topPos + DrillHeadMenu.GATHERED_SLOT_Y_END;
+
+        return mouseX >= (double)gatheredAreaXStart && mouseY >= (double)gatheredAreaYStart && mouseX < (double)gatheredAreaXEnd && mouseY < (double)gatheredAreaYEnd;
+    }
+
+    private boolean insideGatheredScrollbar(double mouseX, double mouseY) {
+        int i = this.leftPos + GATHERED_SCROLLBAR_X;
+        int j = this.topPos + SCROLLBAR_Y;
+        int k = j + SCROLLBAR_HEIGHT;
+
+        return mouseX >= (double)i && mouseY >= (double)j && mouseX < (double)i + SCROLLER_WIDTH && mouseY < (double)k;
+    }
+
+    private boolean insideConsumptionScrollArea(double mouseX, double mouseY) {
+        int consumptionAreaXStart = this.leftPos + DrillHeadMenu.CONSUMPTION_SLOT_X_START;
+        int consumptionAreaYStart = this.topPos + DrillHeadMenu.CONSUMPTION_SLOT_Y_START;
+        int consumptionAreaXEnd = this.leftPos + CONSUMPTION_SCROLLBAR_X + SCROLLER_WIDTH;
+        int consumptionAreaYEnd = this.topPos + SCROLLBAR_Y + SCROLLBAR_HEIGHT;
+
+        return mouseX >= (double)consumptionAreaXStart && mouseY >= (double)consumptionAreaYStart && mouseX < (double)consumptionAreaXEnd && mouseY < (double)consumptionAreaYEnd;
+    }
+
+    private boolean insideConsumptionScrollbar(double mouseX, double mouseY) {
+        int i = this.leftPos + CONSUMPTION_SCROLLBAR_X;
+        int j = this.topPos + SCROLLBAR_Y;
+        int k = j + SCROLLBAR_HEIGHT;
+
+        return mouseX >= (double)i && mouseY >= (double)j && mouseX < (double)i + SCROLLER_WIDTH && mouseY < (double)k;
     }
 
     @Override
@@ -179,8 +228,11 @@ public class DrillHeadScreen extends AbstractScrollableScreen<DrillHeadMenu> {
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         if (button == 0) {
-            if (this.insideScrollBar(mouseX, mouseY)) {
-                this.scrolling = true;
+            if (this.insideGatheredScrollbar(mouseX, mouseY)) {
+                this.gatheredScrolling = true;
+                return true;
+            } else if (this.insideConsumptionScrollbar(mouseX, mouseY)) {
+                super.scrolling = true;
                 return true;
             }
         }
@@ -190,21 +242,40 @@ public class DrillHeadScreen extends AbstractScrollableScreen<DrillHeadMenu> {
 
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double delta) {
-        int i = 2;
-        float f = (float)(delta / (double)i);
-        this.scrollOffs = Mth.clamp(this.scrollOffs - f, 0.0F, 1.0F);
-        this.gatheredScrollTo(scrollOffs);
-        return true;
+        if (this.insideGatheredScrollArea(mouseX, mouseY)) {
+            int i = 2;
+            float f = (float)(delta / (double)i);
+            this.gatheredScrollOffs = Mth.clamp(this.gatheredScrollOffs - f, 0.0F, 1.0F);
+            this.gatheredScrollTo(this.gatheredScrollOffs);
+            return true;
+        } else if (this.insideConsumptionScrollArea(mouseX, mouseY)) {
+            int i = 2;
+            float f = (float)(delta / (double)i);
+            super.scrollOffs = Mth.clamp(super.scrollOffs - f, 0.0F, 1.0F);
+            this.consumptionScrollTo(super.scrollOffs);
+            return true;
+        }
+
+        return false;
     }
 
     @Override
     public boolean mouseDragged(double mouseX, double mouseY, int button, double dragX, double dragY) {
-        if (this.scrolling) {
+        if (super.scrolling) {
             int i = this.topPos + SCROLLBAR_Y;
             int j = i + SCROLLBAR_HEIGHT;
-            this.scrollOffs = ((float)mouseY - (float)i - 7.5F) / ((float)(j - i) - 15.0F);
-            this.scrollOffs = Mth.clamp(this.scrollOffs, 0.0F, 1.0F);
-            this.gatheredScrollTo(this.scrollOffs);
+            super.scrollOffs = ((float)mouseY - (float)i - 7.5F) / ((float)(j - i) - 15.0F);
+            super.scrollOffs = Mth.clamp(super.scrollOffs, 0.0F, 1.0F);
+            this.consumptionScrollTo(super.scrollOffs);
+            return true;
+        }
+
+        if (this.gatheredScrolling) {
+            int i = this.topPos + SCROLLBAR_Y;
+            int j = i + SCROLLBAR_HEIGHT;
+            this.gatheredScrollOffs = ((float)mouseY - (float)i - 7.5F) / ((float)(j - i) - 15.0F);
+            this.gatheredScrollOffs = Mth.clamp(this.gatheredScrollOffs, 0.0F, 1.0F);
+            this.gatheredScrollTo( this.gatheredScrollOffs);
             return true;
         }
 

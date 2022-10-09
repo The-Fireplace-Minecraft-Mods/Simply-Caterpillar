@@ -61,6 +61,7 @@ public abstract class AbstractCaterpillarScreen<T extends AbstractCaterpillarMen
 
         super.titleLabelX = (super.imageWidth - super.font.width(title)) / 2;
         this.addTabButtons();
+        this.addTutorialButton();
     }
 
     @Override
@@ -85,6 +86,9 @@ public abstract class AbstractCaterpillarScreen<T extends AbstractCaterpillarMen
     protected void renderLabels(@NotNull PoseStack stack, int mouseX, int mouseY) {
         this.font.draw(stack, this.SELECTED_TAB.TITLE, super.titleLabelX, super.titleLabelY, 0x404040);
         this.font.draw(stack, super.playerInventoryTitle, super.inventoryLabelX, super.inventoryLabelY, 0x404040);
+    }
+
+    private void addTutorialButton() {
     }
 
     private void addTabButtons() {

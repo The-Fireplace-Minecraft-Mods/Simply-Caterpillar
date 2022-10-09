@@ -9,17 +9,17 @@ import the_fireplace.caterpillar.common.block.entity.DrillHeadBlockEntity;
 
 import java.util.function.Supplier;
 
-public class DrillHeadSyncSelectedGatheredScrollsC2SPacket {
+public class DrillHeadSyncSelectedGatheredScrollC2SPacket {
     private final int selectedGatheredScrolls;
 
     private final BlockPos pos;
 
-    public DrillHeadSyncSelectedGatheredScrollsC2SPacket(int selectedGatheredScrolls, BlockPos pos) {
+    public DrillHeadSyncSelectedGatheredScrollC2SPacket(int selectedGatheredScrolls, BlockPos pos) {
         this.selectedGatheredScrolls = selectedGatheredScrolls;
         this.pos = pos;
     }
 
-    public DrillHeadSyncSelectedGatheredScrollsC2SPacket(FriendlyByteBuf buf) {
+    public DrillHeadSyncSelectedGatheredScrollC2SPacket(FriendlyByteBuf buf) {
         this.selectedGatheredScrolls = buf.readInt();
         this.pos = buf.readBlockPos();
     }

@@ -73,10 +73,16 @@ public final class PacketHandler {
                 .consumerMainThread(DrillHeadSyncScrollsS2CPacket::handle)
                 .add();
 
-        CHANNEL.messageBuilder(DrillHeadSyncSelectedGatheredScrollsC2SPacket.class, index++, NetworkDirection.PLAY_TO_SERVER)
-                .decoder(DrillHeadSyncSelectedGatheredScrollsC2SPacket::new)
-                .encoder(DrillHeadSyncSelectedGatheredScrollsC2SPacket::toBytes)
-                .consumerMainThread(DrillHeadSyncSelectedGatheredScrollsC2SPacket::handle)
+        CHANNEL.messageBuilder(DrillHeadSyncSelectedGatheredScrollC2SPacket.class, index++, NetworkDirection.PLAY_TO_SERVER)
+                .decoder(DrillHeadSyncSelectedGatheredScrollC2SPacket::new)
+                .encoder(DrillHeadSyncSelectedGatheredScrollC2SPacket::toBytes)
+                .consumerMainThread(DrillHeadSyncSelectedGatheredScrollC2SPacket::handle)
+                .add();
+
+        CHANNEL.messageBuilder(DrillHeadSyncSelectedConsumptionScrollC2SPacket.class, index++, NetworkDirection.PLAY_TO_SERVER)
+                .decoder(DrillHeadSyncSelectedConsumptionScrollC2SPacket::new)
+                .encoder(DrillHeadSyncSelectedConsumptionScrollC2SPacket::toBytes)
+                .consumerMainThread(DrillHeadSyncSelectedConsumptionScrollC2SPacket::handle)
                 .add();
 
         CHANNEL.messageBuilder(DecorationSyncSelectedMapC2SPacket.class, index++, NetworkDirection.PLAY_TO_SERVER)

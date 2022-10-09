@@ -45,15 +45,15 @@ public abstract class AbstractScrollableScreen<D extends AbstractCaterpillarMenu
     }
 
     protected void renderScroller(PoseStack stack) {
-        int i = this.leftPos + SCROLLBAR_X;
-        int j = this.topPos + SCROLLBAR_Y;
-        int k = j + SCROLLBAR_HEIGHT;
+        int scrollbarX = this.leftPos + SCROLLBAR_X;
+        int scrollbarY = this.topPos + SCROLLBAR_Y;
+        int scrollbarYEnd = scrollbarY + SCROLLBAR_HEIGHT;
 
-        blit(stack, i, j + (int)((float)(k - j - SCROLLBAR_Y) * this.scrollOffs), SCROLLBAR_X, SCROLLBAR_Y, SCROLLER_WIDTH, SCROLLER_HEIGHT);
+        blit(stack, scrollbarX, scrollbarY + (int)((float)(scrollbarYEnd - scrollbarY - SCROLLBAR_Y) * this.scrollOffs), SCROLLER_BG_X, SCROLLER_BG_Y, SCROLLER_WIDTH, SCROLLER_HEIGHT);
     }
 
     protected void setScrollOffs(float scrollOffs) {
-        this.scrollOffs =scrollOffs;
+        this.scrollOffs = scrollOffs;
     }
 
     protected void scrollTo(float scrollOffs) {
@@ -62,9 +62,9 @@ public abstract class AbstractScrollableScreen<D extends AbstractCaterpillarMenu
         if (j < 0) {
             j = 0;
         }
-        int scrollToReplacer = j;
+        int scrollTo = j;
 
-        // this.menu.scrollTo(scrollOffs);
+        // this.menu.scrollTo(scrollTo);
     }
 
     @Override

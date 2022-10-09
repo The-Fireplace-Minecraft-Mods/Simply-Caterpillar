@@ -8,7 +8,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 import the_fireplace.caterpillar.common.block.entity.DrillHeadBlockEntity;
-import the_fireplace.caterpillar.common.block.entity.ReinforcementBlockEntity;
 import the_fireplace.caterpillar.common.menu.slot.CaterpillarFuelSlot;
 import the_fireplace.caterpillar.common.menu.slot.SlotWithRestriction;
 import the_fireplace.caterpillar.common.menu.syncdata.DrillHeadContainerData;
@@ -16,21 +15,28 @@ import the_fireplace.caterpillar.common.menu.util.CaterpillarMenuUtil;
 import the_fireplace.caterpillar.core.init.MenuInit;
 import the_fireplace.caterpillar.core.network.PacketHandler;
 import the_fireplace.caterpillar.core.network.packet.client.DrillHeadSyncPowerC2SPacket;
-import the_fireplace.caterpillar.core.network.packet.client.DrillHeadSyncSelectedGatheredScrollsC2SPacket;
-import the_fireplace.caterpillar.core.network.packet.client.ReinforcementSyncSelectedReplacerC2SPacket;
-import the_fireplace.caterpillar.core.network.packet.server.DrillHeadSyncScrollsS2CPacket;
+import the_fireplace.caterpillar.core.network.packet.client.DrillHeadSyncSelectedConsumptionScrollC2SPacket;
+import the_fireplace.caterpillar.core.network.packet.client.DrillHeadSyncSelectedGatheredScrollC2SPacket;
 
 import static the_fireplace.caterpillar.common.block.entity.DrillHeadBlockEntity.*;
 
 public class DrillHeadMenu extends AbstractCaterpillarMenu {
 
-    private static final int CONSUMPTION_SLOT_X_START = 8;
+    public static final int CONSUMPTION_SLOT_X_START = 8;
 
-    private static final int CONSUMPTION_SLOT_Y_START = 17;
+    public static final int CONSUMPTION_SLOT_Y_START = 17;
 
-    private static final int GATHERED_SLOT_X_START = 116;
+    public static final int CONSUMPTION_SLOT_X_END = 60;
 
-    private static final int GATHERED_SLOT_Y_START = 17;
+    public static final int CONSUMPTION_SLOT_Y_END = 69;
+
+    public static final int GATHERED_SLOT_X_START = 116;
+
+    public static final int GATHERED_SLOT_Y_START = 17;
+
+    public static final int GATHERED_SLOT_X_END = 168;
+
+    public static final int GATHERED_SLOT_Y_END = 69;
 
     private static final int FUEL_SLOT_X = 80;
 
@@ -148,6 +154,14 @@ public class DrillHeadMenu extends AbstractCaterpillarMenu {
         return this.getSlot(BE_INVENTORY_FIRST_SLOT_INDEX + DrillHeadBlockEntity.FUEl_SLOT).getItem().isEmpty();
     }
 
+    public int getSelectedConsumptionScroll() {
+        if (this.blockEntity instanceof DrillHeadBlockEntity drillHeadBlockEntity) {
+            return drillHeadBlockEntity.getSelectedConsumptionScroll();
+        }
+
+        return 0;
+    }
+
     public int getSelectedGatheredScroll() {
         if (this.blockEntity instanceof DrillHeadBlockEntity drillHeadBlockEntity) {
             return drillHeadBlockEntity.getSelectedGatheredScroll();
@@ -164,7 +178,15 @@ public class DrillHeadMenu extends AbstractCaterpillarMenu {
         if (this.blockEntity instanceof DrillHeadBlockEntity drillHeadBlockEntity) {
             drillHeadBlockEntity.setSelectedGatheredScroll(gatheredScrollTo);
 
-            PacketHandler.sendToServer(new DrillHeadSyncSelectedGatheredScrollsC2SPacket(gatheredScrollTo, drillHeadBlockEntity.getBlockPos()));
+            PacketHandler.sendToServer(new DrillHeadSyncSelectedGatheredScrollC2SPacket(gatheredScrollTo, drillHeadBlockEntity.getBlockPos()));
+        }
+    }
+
+    public void consumptionScrollTo(int consumptionScrollTo) {
+        if (this.blockEntity instanceof DrillHeadBlockEntity drillHeadBlockEntity) {
+            drillHeadBlockEntity.setSelectedGatheredScroll(consumptionScrollTo);
+
+            PacketHandler.sendToServer(new DrillHeadSyncSelectedConsumptionScrollC2SPacket(consumptionScrollTo, drillHeadBlockEntity.getBlockPos()));
         }
     }
 }
