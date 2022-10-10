@@ -5,9 +5,11 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 import the_fireplace.caterpillar.common.block.entity.DrillHeadBlockEntity;
+import the_fireplace.caterpillar.common.block.entity.StorageBlockEntity;
 import the_fireplace.caterpillar.common.menu.slot.CaterpillarFuelSlot;
 import the_fireplace.caterpillar.common.menu.slot.SlotWithRestriction;
 import the_fireplace.caterpillar.common.menu.syncdata.DrillHeadContainerData;
@@ -15,8 +17,6 @@ import the_fireplace.caterpillar.common.menu.util.CaterpillarMenuUtil;
 import the_fireplace.caterpillar.core.init.MenuInit;
 import the_fireplace.caterpillar.core.network.PacketHandler;
 import the_fireplace.caterpillar.core.network.packet.client.DrillHeadSyncPowerC2SPacket;
-import the_fireplace.caterpillar.core.network.packet.client.DrillHeadSyncSelectedConsumptionScrollC2SPacket;
-import the_fireplace.caterpillar.core.network.packet.client.DrillHeadSyncSelectedGatheredScrollC2SPacket;
 
 import static the_fireplace.caterpillar.common.block.entity.DrillHeadBlockEntity.*;
 
@@ -154,39 +154,63 @@ public class DrillHeadMenu extends AbstractCaterpillarMenu {
         return this.getSlot(BE_INVENTORY_FIRST_SLOT_INDEX + DrillHeadBlockEntity.FUEl_SLOT).getItem().isEmpty();
     }
 
-    public int getSelectedConsumptionScroll() {
-        if (this.blockEntity instanceof DrillHeadBlockEntity drillHeadBlockEntity) {
-            return drillHeadBlockEntity.getSelectedConsumptionScroll();
+    public boolean storageIsConnected() {
+        if (this.getConnectedCaterpillarBlockEntities().stream().anyMatch(blockEntity -> blockEntity instanceof StorageBlockEntity)) {
+            return true;
+        } else {
+            return false;
         }
-
-        return 0;
     }
 
-    public int getSelectedGatheredScroll() {
-        if (this.blockEntity instanceof DrillHeadBlockEntity drillHeadBlockEntity) {
-            return drillHeadBlockEntity.getSelectedGatheredScroll();
+    private StorageBlockEntity getStorageBlockEntity() {
+        if (this.getConnectedCaterpillarBlockEntities().stream().anyMatch(blockEntity -> blockEntity instanceof StorageBlockEntity)) {
+            return (StorageBlockEntity)this.getConnectedCaterpillarBlockEntities().stream().filter(blockEntity -> blockEntity instanceof StorageBlockEntity).findFirst().get();
+        } else {
+            return null;
         }
-
-        return 0;
     }
 
     public boolean canScroll() {
-        return this.slots.size() > 9;
+       return this.storageIsConnected();
     }
 
     public void gatheredScrollTo(int gatheredScrollTo) {
-        if (this.blockEntity instanceof DrillHeadBlockEntity drillHeadBlockEntity) {
-            drillHeadBlockEntity.setSelectedGatheredScroll(gatheredScrollTo);
-
-            PacketHandler.sendToServer(new DrillHeadSyncSelectedGatheredScrollC2SPacket(gatheredScrollTo, drillHeadBlockEntity.getBlockPos()));
-        }
     }
 
     public void consumptionScrollTo(int consumptionScrollTo) {
         if (this.blockEntity instanceof DrillHeadBlockEntity drillHeadBlockEntity) {
-            drillHeadBlockEntity.setSelectedGatheredScroll(consumptionScrollTo);
 
-            PacketHandler.sendToServer(new DrillHeadSyncSelectedConsumptionScrollC2SPacket(consumptionScrollTo, drillHeadBlockEntity.getBlockPos()));
+            // this.clearConsumptionSlots();
+
+            if (consumptionScrollTo >= 0 && consumptionScrollTo < 3) {
+                for(int row = 0; row < 3 - consumptionScrollTo; row++) {
+                    for(int column = 0; column < 3; column++) {
+                        System.out.println(column + (consumptionScrollTo + row) * 3);
+
+                        Slot slot = super.getSlot(BE_INVENTORY_FIRST_SLOT_INDEX + CONSUMPTION_SLOT_START + column + row * 3);
+                        slot.set(drillHeadBlockEntity.getStackInSlot(column + (consumptionScrollTo + row) * 3));
+                        slot.setChanged();
+                        // super.addSlot(new SlotItemHandler(drillHeadHandler, column + row * 3, CONSUMPTION_SLOT_X_START + column * SLOT_SIZE_PLUS_2, CONSUMPTION_SLOT_Y_START + row * SLOT_SIZE_PLUS_2));
+                    }
+                }
+            }
+
+            this.getStorageBlockEntity().getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(storageHandler -> {
+               for(int row = 0; row < consumptionScrollTo; row++) {
+                    for(int column = 0; column < 3; column++) {
+                        // this.addSlot(new SlotItemHandler(storageHandler, 0, 8, 8));
+                    }
+                }
+            });
+        }
+    }
+
+    private void clearConsumptionSlots() {
+        for(int row = 0; row < 3; row++) {
+            for(int column = 0; column < 3; column++) {
+                // System.out.println(BE_INVENTORY_FIRST_SLOT_INDEX + CONSUMPTION_SLOT_START + column + row * 3);
+                super.slots.remove(BE_INVENTORY_FIRST_SLOT_INDEX + CONSUMPTION_SLOT_START + column + row * 3);
+            }
         }
     }
 }

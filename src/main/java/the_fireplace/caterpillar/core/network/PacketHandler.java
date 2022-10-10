@@ -67,24 +67,6 @@ public final class PacketHandler {
                 .consumerMainThread(DrillHeadSyncLitS2CPacket::handle)
                 .add();
 
-        CHANNEL.messageBuilder(DrillHeadSyncScrollsS2CPacket.class, index++, NetworkDirection.PLAY_TO_CLIENT)
-                .decoder(DrillHeadSyncScrollsS2CPacket::new)
-                .encoder(DrillHeadSyncScrollsS2CPacket::toBytes)
-                .consumerMainThread(DrillHeadSyncScrollsS2CPacket::handle)
-                .add();
-
-        CHANNEL.messageBuilder(DrillHeadSyncSelectedGatheredScrollC2SPacket.class, index++, NetworkDirection.PLAY_TO_SERVER)
-                .decoder(DrillHeadSyncSelectedGatheredScrollC2SPacket::new)
-                .encoder(DrillHeadSyncSelectedGatheredScrollC2SPacket::toBytes)
-                .consumerMainThread(DrillHeadSyncSelectedGatheredScrollC2SPacket::handle)
-                .add();
-
-        CHANNEL.messageBuilder(DrillHeadSyncSelectedConsumptionScrollC2SPacket.class, index++, NetworkDirection.PLAY_TO_SERVER)
-                .decoder(DrillHeadSyncSelectedConsumptionScrollC2SPacket::new)
-                .encoder(DrillHeadSyncSelectedConsumptionScrollC2SPacket::toBytes)
-                .consumerMainThread(DrillHeadSyncSelectedConsumptionScrollC2SPacket::handle)
-                .add();
-
         CHANNEL.messageBuilder(DecorationSyncSelectedMapC2SPacket.class, index++, NetworkDirection.PLAY_TO_SERVER)
                 .decoder(DecorationSyncSelectedMapC2SPacket::new)
                 .encoder(DecorationSyncSelectedMapC2SPacket::toBytes)

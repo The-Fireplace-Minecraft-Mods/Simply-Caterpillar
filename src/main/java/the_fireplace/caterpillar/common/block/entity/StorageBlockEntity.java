@@ -10,7 +10,7 @@ import the_fireplace.caterpillar.core.init.BlockEntityInit;
 
 public class StorageBlockEntity extends AbstractCaterpillarBlockEntity {
 
-    public static final int INVENTORY_SIZE = 12;
+    public static final int INVENTORY_SIZE = 18;
 
 
     public StorageBlockEntity(BlockPos pos, BlockState state) {

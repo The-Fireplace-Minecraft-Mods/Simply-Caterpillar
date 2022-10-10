@@ -62,10 +62,10 @@ public class DrillHeadScreen extends AbstractScrollableScreen<DrillHeadMenu> {
     private boolean gatheredScrolling;
 
     public DrillHeadScreen(DrillHeadMenu menu, Inventory playerInventory, Component title) {
-        super(menu, playerInventory, title, ScreenTabs.DRILL_HEAD, SCROLLER_BG_X, SCROLLER_BG_Y, SCROLLER_WIDTH, SCROLLER_HEIGHT, CONSUMPTION_SCROLLBAR_X, SCROLLBAR_Y, SCROLLBAR_HEIGHT);
+        super(menu, playerInventory, title, ScreenTabs.DRILL_HEAD, SCROLLER_BG_X + (menu.canScroll() ? 0 : SCROLLER_WIDTH), SCROLLER_BG_Y, SCROLLER_WIDTH, SCROLLER_HEIGHT, CONSUMPTION_SCROLLBAR_X, SCROLLBAR_Y, SCROLLBAR_HEIGHT);
 
-        this.setConsumptionScrollOffs(menu.getSelectedConsumptionScroll() / 2.0F);
-        this.setGatheredScrollOffs(menu.getSelectedGatheredScroll() / 2.0F);
+        this.setConsumptionScrollOffs(0.0F);
+        this.setGatheredScrollOffs(0.0F);
     }
 
     protected void setConsumptionScrollOffs(float scrollOffs) {
@@ -157,11 +157,11 @@ public class DrillHeadScreen extends AbstractScrollableScreen<DrillHeadMenu> {
         int scrollbarY = this.topPos + SCROLLBAR_Y;
         int scrollbarYEnd = scrollbarY + SCROLLBAR_HEIGHT;
 
-        blit(stack, gatheredScrollbarX, scrollbarY + (int)((float)(scrollbarYEnd - scrollbarY - SCROLLBAR_Y) * this.gatheredScrollOffs), SCROLLER_BG_X, SCROLLER_BG_Y, SCROLLER_WIDTH, SCROLLER_HEIGHT);
+        blit(stack, gatheredScrollbarX, scrollbarY + (int)((float)(scrollbarYEnd - scrollbarY - SCROLLBAR_Y) * this.gatheredScrollOffs), SCROLLER_BG_X + (this.menu.canScroll() ? 0 : SCROLLER_WIDTH), SCROLLER_BG_Y, SCROLLER_WIDTH, SCROLLER_HEIGHT);
     }
 
     protected void gatheredScrollTo(float scrollOffs) {
-        int i = 2;
+        int i = 3;
         int j = (int)((double)(scrollOffs * (float)i) + 0.5D);
         if (j < 0) {
             j = 0;
@@ -172,7 +172,7 @@ public class DrillHeadScreen extends AbstractScrollableScreen<DrillHeadMenu> {
     }
 
     protected void consumptionScrollTo(float scrollOffs) {
-        int i = 2;
+        int i = 3;
         int j = (int)((double)(scrollOffs * (float)i) + 0.5D);
         if (j < 0) {
             j = 0;
@@ -220,6 +220,7 @@ public class DrillHeadScreen extends AbstractScrollableScreen<DrillHeadMenu> {
     public boolean mouseReleased(double mouseX, double mouseY, int button) {
         if (button == 0) {
             this.scrolling = false;
+            this.gatheredScrolling = false;
         }
 
         return super.mouseReleased(mouseX, mouseY, button);
@@ -229,10 +230,10 @@ public class DrillHeadScreen extends AbstractScrollableScreen<DrillHeadMenu> {
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         if (button == 0) {
             if (this.insideGatheredScrollbar(mouseX, mouseY)) {
-                this.gatheredScrolling = true;
+                this.gatheredScrolling = this.menu.canScroll();
                 return true;
             } else if (this.insideConsumptionScrollbar(mouseX, mouseY)) {
-                super.scrolling = true;
+                super.scrolling = this.menu.canScroll();
                 return true;
             }
         }
@@ -242,14 +243,18 @@ public class DrillHeadScreen extends AbstractScrollableScreen<DrillHeadMenu> {
 
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double delta) {
+        if (!this.menu.canScroll()) {
+            return false;
+        }
+
         if (this.insideGatheredScrollArea(mouseX, mouseY)) {
-            int i = 2;
+            int i = 3;
             float f = (float)(delta / (double)i);
             this.gatheredScrollOffs = Mth.clamp(this.gatheredScrollOffs - f, 0.0F, 1.0F);
             this.gatheredScrollTo(this.gatheredScrollOffs);
             return true;
         } else if (this.insideConsumptionScrollArea(mouseX, mouseY)) {
-            int i = 2;
+            int i = 3;
             float f = (float)(delta / (double)i);
             super.scrollOffs = Mth.clamp(super.scrollOffs - f, 0.0F, 1.0F);
             this.consumptionScrollTo(super.scrollOffs);
