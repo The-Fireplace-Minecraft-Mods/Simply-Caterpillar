@@ -79,7 +79,7 @@ public class DecorationScreen extends AbstractCaterpillarScreen<DecorationMenu> 
 
     @Override
     protected void slotClicked(@NotNull Slot slot, int slotId, int mouseButton, @NotNull ClickType type) {
-        if (!this.isDecorationSlot(slotId) || slot == null) {
+        if (!this.isDecorationSlot(slotId)) {
             super.slotClicked(slot, slotId, mouseButton, type);
             return;
         }

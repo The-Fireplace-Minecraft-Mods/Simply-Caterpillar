@@ -282,7 +282,7 @@ public class DecorationBlockEntity extends AbstractCaterpillarBlockEntity {
     }
 
     @Override
-    public void load(CompoundTag tag) {
+    public void load(@NotNull CompoundTag tag) {
         super.load(tag);
 
         this.placementMap.clear();

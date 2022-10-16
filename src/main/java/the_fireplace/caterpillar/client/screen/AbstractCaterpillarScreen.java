@@ -46,7 +46,7 @@ public abstract class AbstractCaterpillarScreen<T extends AbstractCaterpillarMen
 
     private final ScreenTabs SELECTED_TAB;
 
-    private List<ImageButton> tabButtons = new ArrayList<>();
+    private final List<ImageButton> tabButtons = new ArrayList<>();
 
     public AbstractCaterpillarScreen(T menu, Inventory playerInventory, Component title, ScreenTabs selectedTab) {
         super(menu, playerInventory, title);

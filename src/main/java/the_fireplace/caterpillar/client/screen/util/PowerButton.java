@@ -5,16 +5,17 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 
 public class PowerButton extends ImageButton {
 
-    private ResourceLocation texture;
+    private final ResourceLocation texture;
 
-    private int xTexStart;
+    private final int xTexStart;
 
-    private int yTexStart;
+    private final int yTexStart;
 
-    private int yDiffTex;
+    private final int yDiffTex;
 
     private boolean powered;
 
@@ -29,23 +30,17 @@ public class PowerButton extends ImageButton {
     }
 
     @Override
-    public void renderButton(PoseStack poseStack, int mouseX, int mouseY, float partialTick) {
+    public void renderButton(@NotNull PoseStack poseStack, int mouseX, int mouseY, float partialTick) {
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderTexture(0, texture);
 
-        int xOffset = this.xTexStart;
         int yOffset = this.yTexStart;
-
         if (!this.powered) {
             yOffset += this.yDiffTex;
         }
 
-//        if (this.isHoveredOrFocused()) {
-//            xOffset += this.width;
-//        }
-
         RenderSystem.enableDepthTest();
-        super.blit(poseStack, this.x + (this.powered ? 0 : -3), this.y, xOffset, yOffset, this.width, this.height);
+        super.blit(poseStack, this.x + (this.powered ? 0 : -3), this.y, this.xTexStart, yOffset, this.width, this.height);
     }
 
     public boolean isPowered() {

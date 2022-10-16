@@ -95,13 +95,9 @@ public class ReinforcementScreen extends AbstractCaterpillarScreen<Reinforcement
         for (byte replacer : this.menu.getReplacers(this.menu.getSelectedReplacer())) {
             int finalReplacerIndex = replacerIndex;
             if (replacer == (byte) 1) {
-                this.replacerButtons.add(new ImageButton(super.leftPos + REPLACER_BTN_BG_X, super.topPos + REPLACER_BTN_BG_Y + replacerIndex * (REPLACER_BTN_BG_HEIGHT + 2), REPLACER_BTN_BG_WIDTH, REPLACER_BTN_BG_HEIGHT, 176 , replacerIndex*REPLACER_BTN_BG_HEIGHT*2, 0, ScreenTabs.REINFORCEMENT.TEXTURE, (onPress) -> {
-                    PacketHandler.sendToServer(new ReinforcementSyncStateReplacerC2SPacket(this.menu.getSelectedReplacer(), finalReplacerIndex, (byte) 0, this.menu.blockEntity.getBlockPos()));
-                }));
+                this.replacerButtons.add(new ImageButton(super.leftPos + REPLACER_BTN_BG_X, super.topPos + REPLACER_BTN_BG_Y + replacerIndex * (REPLACER_BTN_BG_HEIGHT + 2), REPLACER_BTN_BG_WIDTH, REPLACER_BTN_BG_HEIGHT, 176 , replacerIndex*REPLACER_BTN_BG_HEIGHT*2, 0, ScreenTabs.REINFORCEMENT.TEXTURE, (onPress) -> PacketHandler.sendToServer(new ReinforcementSyncStateReplacerC2SPacket(this.menu.getSelectedReplacer(), finalReplacerIndex, (byte) 0, this.menu.blockEntity.getBlockPos()))));
             } else {
-                this.replacerButtons.add(new ImageButton(super.leftPos + REPLACER_BTN_BG_X, super.topPos + REPLACER_BTN_BG_Y + replacerIndex * (REPLACER_BTN_BG_HEIGHT + 2), REPLACER_BTN_BG_WIDTH, REPLACER_BTN_BG_HEIGHT, 176 , replacerIndex*REPLACER_BTN_BG_HEIGHT*2 + REPLACER_BTN_BG_HEIGHT, 0, ScreenTabs.REINFORCEMENT.TEXTURE, (onPress) -> {
-                    PacketHandler.sendToServer(new ReinforcementSyncStateReplacerC2SPacket(this.menu.getSelectedReplacer(), finalReplacerIndex, (byte) 1, this.menu.blockEntity.getBlockPos()));
-                }));
+                this.replacerButtons.add(new ImageButton(super.leftPos + REPLACER_BTN_BG_X, super.topPos + REPLACER_BTN_BG_Y + replacerIndex * (REPLACER_BTN_BG_HEIGHT + 2), REPLACER_BTN_BG_WIDTH, REPLACER_BTN_BG_HEIGHT, 176 , replacerIndex*REPLACER_BTN_BG_HEIGHT*2 + REPLACER_BTN_BG_HEIGHT, 0, ScreenTabs.REINFORCEMENT.TEXTURE, (onPress) -> PacketHandler.sendToServer(new ReinforcementSyncStateReplacerC2SPacket(this.menu.getSelectedReplacer(), finalReplacerIndex, (byte) 1, this.menu.blockEntity.getBlockPos()))));
             }
 
             replacerIndex++;
@@ -187,7 +183,7 @@ public class ReinforcementScreen extends AbstractCaterpillarScreen<Reinforcement
 
     @Override
     protected void slotClicked(@NotNull Slot slot, int slotId, int mouseButton, @NotNull ClickType type) {
-        if (!this.isReinforcementSlot(slotId) || slot == null) {
+        if (!this.isReinforcementSlot(slotId)) {
             super.slotClicked(slot, slotId, mouseButton, type);
             return;
         }

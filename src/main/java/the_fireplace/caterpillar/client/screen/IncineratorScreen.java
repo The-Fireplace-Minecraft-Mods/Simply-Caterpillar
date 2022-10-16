@@ -22,7 +22,7 @@ public class IncineratorScreen extends AbstractCaterpillarScreen<IncineratorMenu
 
     @Override
     protected void slotClicked(@NotNull Slot slot, int slotId, int mouseButton, @NotNull ClickType type) {
-        if (!this.isIncineratorSlot(slotId) || slot == null) {
+        if (!this.isIncineratorSlot(slotId)) {
             super.slotClicked(slot, slotId, mouseButton, type);
             return;
         }
