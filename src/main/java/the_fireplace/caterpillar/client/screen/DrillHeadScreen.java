@@ -7,6 +7,8 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.ClickType;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
@@ -160,6 +162,30 @@ public class DrillHeadScreen extends AbstractScrollableScreen<DrillHeadMenu> {
         blit(stack, gatheredScrollbarX, scrollbarY + (int)((float)(scrollbarYEnd - scrollbarY - SCROLLBAR_Y) * this.gatheredScrollOffs), SCROLLER_BG_X + (this.menu.canScroll() ? 0 : SCROLLER_WIDTH), SCROLLER_BG_Y, SCROLLER_WIDTH, SCROLLER_HEIGHT);
     }
 
+    @Override
+    protected void slotClicked(@NotNull Slot slot, int slotId, int mouseButton, @NotNull ClickType type) {
+        if (!this.isDrillHeadSlot(slotId)) {
+            super.slotClicked(slot, slotId, mouseButton, type);
+            return;
+        }
+
+        int drillHeadSlotId = slotId - BE_INVENTORY_FIRST_SLOT_INDEX;
+        ItemStack stack;
+        ItemStack carried = this.menu.getCarried().copy();
+
+        if (carried.isEmpty()) {
+            carried = slot.getItem().copy();
+            stack = ItemStack.EMPTY;
+        } else {
+            stack = carried.copy();
+        }
+
+        this.menu.slots.get(BE_INVENTORY_FIRST_SLOT_INDEX  + drillHeadSlotId).set(stack);
+        this.menu.setCarried(carried);
+
+        this.menu.setSlot(drillHeadSlotId, stack);
+    }
+
     protected void gatheredScrollTo(float scrollOffs) {
         int i = 3;
         int j = (int)((double)(scrollOffs * (float)i) + 0.5D);
@@ -285,10 +311,9 @@ public class DrillHeadScreen extends AbstractScrollableScreen<DrillHeadMenu> {
         }
 
         if (getSlotUnderMouse() != null && this.isDrillHeadSlot(getSlotUnderMouse().index)) {
-            slotClicked(getSlotUnderMouse(), getSlotUnderMouse().index, 0, ClickType.PICKUP);
+            // slotClicked(getSlotUnderMouse(), getSlotUnderMouse().index, 0, ClickType.PICKUP);
             return true;
         }
-
 
         return super.mouseDragged(mouseX, mouseY, button, dragX, dragY);
     }

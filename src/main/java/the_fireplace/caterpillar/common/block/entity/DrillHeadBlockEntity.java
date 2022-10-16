@@ -46,11 +46,11 @@ public class DrillHeadBlockEntity extends AbstractCaterpillarBlockEntity {
             "gui." + Caterpillar.MOD_ID + ".drill_head.consumption"
     );
 
-    public static final int CONSUMPTION_SLOT_START = 0;
+    public static final int CONSUMPTION_SLOT_START = 1;
 
-    public static final int CONSUMPTION_SLOT_END = 8;
+    public static final int CONSUMPTION_SLOT_END = 9;
 
-    public static final int FUEl_SLOT = 9;
+    public static final int FUEl_SLOT = 0;
 
     public static final int GATHERED_SLOT_START = 10;
 
@@ -295,7 +295,7 @@ public class DrillHeadBlockEntity extends AbstractCaterpillarBlockEntity {
     }
 
     @Override
-    public void load(CompoundTag tag) {
+    public void load(@NotNull CompoundTag tag) {
         super.load(tag);
 
         this.litTime = tag.getInt("BurnTime");
