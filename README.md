@@ -1,5 +1,5 @@
 <div align="center">
-	<img src=".github/sources/simply-caterpillar-logo.png" alt="Simply Caterpillar icon" width="400" />
+	<img src=".github/sources/simply-caterpillar-logo.png" alt="Simply Caterpillar icon" width="403" />
 </div>
 
 <div align="center">

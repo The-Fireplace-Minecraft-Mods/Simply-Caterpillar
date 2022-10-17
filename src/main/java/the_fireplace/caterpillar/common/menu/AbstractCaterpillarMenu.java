@@ -24,8 +24,6 @@ public abstract class AbstractCaterpillarMenu extends AbstractContainerMenu {
 
     public final ContainerData data;
 
-    private final Level level;
-
     public final AbstractCaterpillarBlockEntity blockEntity;
 
     private final List<AbstractCaterpillarBlockEntity> caterpillarBlockEntities;
@@ -40,7 +38,7 @@ public abstract class AbstractCaterpillarMenu extends AbstractContainerMenu {
     public static final int VANILLA_FIRST_SLOT_INDEX = 0;
     public static final int BE_INVENTORY_FIRST_SLOT_INDEX = VANILLA_FIRST_SLOT_INDEX + VANILLA_SLOT_COUNT;
 
-    public int BE_INVENTORY_SLOT_COUNT;
+    public final int BE_INVENTORY_SLOT_COUNT;
 
     public AbstractCaterpillarMenu(MenuType<?> menuType, int id, Inventory playerInventory, FriendlyByteBuf extraData, int containerDataSize, int inventorySize) {
         this(menuType, id, playerInventory, (AbstractCaterpillarBlockEntity) playerInventory.player.level.getBlockEntity(extraData.readBlockPos()), new SimpleContainerData(containerDataSize), inventorySize);
@@ -48,9 +46,9 @@ public abstract class AbstractCaterpillarMenu extends AbstractContainerMenu {
 
     public <T> AbstractCaterpillarMenu(MenuType<?> menuType, int id, Inventory playerInventory, AbstractCaterpillarBlockEntity blockEntity, ContainerData data, int inventorySize) {
         super(menuType, id);
-        this.level = playerInventory.player.level;
+        Level level = playerInventory.player.level;
         this.blockEntity = blockEntity;
-        this.access = ContainerLevelAccess.create(this.level, this.blockEntity.getBlockPos());
+        this.access = ContainerLevelAccess.create(level, this.blockEntity.getBlockPos());
         this.data = data;
         this.BE_INVENTORY_SLOT_COUNT = inventorySize;
 
@@ -61,8 +59,8 @@ public abstract class AbstractCaterpillarMenu extends AbstractContainerMenu {
 
         addDataSlots(data);
 
-        BlockPos caterpillarHeadPos = CaterpillarBlockUtil.getCaterpillarHeadPos(this.level, this.blockEntity.getBlockPos(), this.blockEntity.getBlockState().getValue(FACING));
-        caterpillarBlockEntities = CaterpillarBlockUtil.getConnectedCaterpillarBlockEntities(this.level, caterpillarHeadPos, new ArrayList<>());
+        BlockPos caterpillarHeadPos = CaterpillarBlockUtil.getCaterpillarHeadPos(level, this.blockEntity.getBlockPos(), this.blockEntity.getBlockState().getValue(FACING));
+        caterpillarBlockEntities = CaterpillarBlockUtil.getConnectedCaterpillarBlockEntities(level, caterpillarHeadPos, new ArrayList<>());
     }
 
     protected void addSlots(IItemHandler handler) {}

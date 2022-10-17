@@ -130,9 +130,7 @@ public class ReinforcementBlockEntity extends AbstractCaterpillarBlockEntity {
             reinforcementBlockEntity.load(oldTag);
             reinforcementBlockEntity.setSelectedReplacer(this.getSelectedReplacer());
             reinforcementBlockEntity.replacers.clear();
-            for (byte[] replacer : this.replacers) {
-                reinforcementBlockEntity.replacers.add(replacer);
-            }
+            reinforcementBlockEntity.replacers.addAll(this.replacers);
             reinforcementBlockEntity.setChanged();
 
             this.getLevel().setBlockAndUpdate(nextPos.relative(reinforcementBlockEntity.getBlockState().getValue(ReinforcementBlock.FACING).getCounterClockWise()), nextBlockEntity.getBlockState().setValue(ReinforcementBlock.PART, ReinforcementPart.LEFT));
@@ -230,7 +228,6 @@ public class ReinforcementBlockEntity extends AbstractCaterpillarBlockEntity {
                             // this.level.setBlockAndUpdate(reinforcePos, Blocks.AIR.defaultBlockState());
                         }
                     } else {
-                        continue;
                     }
                 }
             }
@@ -268,8 +265,8 @@ public class ReinforcementBlockEntity extends AbstractCaterpillarBlockEntity {
             this.replacers.clear();
         }
 
-        for (int i = 0; i < replacersTagList.size(); i++) {
-            ByteArrayTag replacers = (ByteArrayTag) replacersTagList.get(i);
+        for (Tag value : replacersTagList) {
+            ByteArrayTag replacers = (ByteArrayTag) value;
 
             this.replacers.add(replacers.getAsByteArray());
         }

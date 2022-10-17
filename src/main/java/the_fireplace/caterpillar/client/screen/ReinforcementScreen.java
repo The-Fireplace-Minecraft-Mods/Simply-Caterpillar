@@ -139,38 +139,34 @@ public class ReinforcementScreen extends AbstractCaterpillarScreen<Reinforcement
         int slotStartY;
 
         switch (this.menu.getSelectedReplacer()) {
-            case ReinforcementBlockEntity.REPLACER_CEILING:
+            case ReinforcementBlockEntity.REPLACER_CEILING -> {
                 slotStartX = 44;
                 slotStartY = 17;
-
                 for (int x = 0; x < 5; x++) {
                     this.blit(stack, super.leftPos + slotStartX + x * 18, super.topPos + slotStartY, slotBgX, slotBgY, SLOT_SIZE, SLOT_SIZE);
                 }
-                break;
-            case ReinforcementBlockEntity.REPLACER_LEFT:
+            }
+            case ReinforcementBlockEntity.REPLACER_LEFT -> {
                 slotStartX = 44;
                 slotStartY = 35;
-
                 for (int y = 0; y < 3; y++) {
                     this.blit(stack, super.leftPos + slotStartX, super.topPos + slotStartY + y * 18, slotBgX, slotBgY, SLOT_SIZE, SLOT_SIZE);
                 }
-                break;
-            case ReinforcementBlockEntity.REPLACER_RIGHT:
+            }
+            case ReinforcementBlockEntity.REPLACER_RIGHT -> {
                 slotStartX = 116;
                 slotStartY = 35;
-
                 for (int y = 0; y < 3; y++) {
                     this.blit(stack, super.leftPos + slotStartX, super.topPos + slotStartY + y * 18, slotBgX, slotBgY, SLOT_SIZE, SLOT_SIZE);
                 }
-                break;
-            case ReinforcementBlockEntity.REPLACER_FLOOR:
+            }
+            case ReinforcementBlockEntity.REPLACER_FLOOR -> {
                 slotStartX = 44;
                 slotStartY = 89;
-
                 for (int x = 0; x < 5; x++) {
                     this.blit(stack, super.leftPos + slotStartX + x * 18, super.topPos + slotStartY, slotBgX, slotBgY, SLOT_SIZE, SLOT_SIZE);
                 }
-                break;
+            }
         }
     }
 

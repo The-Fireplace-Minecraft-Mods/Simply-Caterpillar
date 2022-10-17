@@ -118,9 +118,7 @@ public class DrillHeadScreen extends AbstractScrollableScreen<DrillHeadMenu> {
     }
 
     private void addPowerButton() {
-        this.powerButton = new PowerButton(this.menu.isPowered(), super.leftPos + (super.imageWidth - SLOT_SIZE) / 2, super.topPos + 16, POWER_BG_WIDTH, POWER_BG_HEIGHT, POWER_BG_X, POWER_BG_Y, POWER_BG_HEIGHT, ScreenTabs.DRILL_HEAD.TEXTURE, (onPress) -> {
-            this.menu.setPower(!this.menu.isPowered());
-        });
+        this.powerButton = new PowerButton(this.menu.isPowered(), super.leftPos + (super.imageWidth - SLOT_SIZE) / 2, super.topPos + 16, POWER_BG_WIDTH, POWER_BG_HEIGHT, POWER_BG_X, POWER_BG_Y, POWER_BG_HEIGHT, ScreenTabs.DRILL_HEAD.TEXTURE, (onPress) -> this.menu.setPower(!this.menu.isPowered()));
         this.addRenderableWidget(powerButton);
     }
 

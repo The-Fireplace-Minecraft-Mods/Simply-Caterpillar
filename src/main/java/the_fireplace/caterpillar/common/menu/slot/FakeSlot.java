@@ -3,6 +3,7 @@ package the_fireplace.caterpillar.common.menu.slot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
+import org.jetbrains.annotations.NotNull;
 
 public class FakeSlot extends SlotWithRestriction {
 
@@ -17,7 +18,7 @@ public class FakeSlot extends SlotWithRestriction {
     }
 
     @Override
-    public ItemStack getItem() {
+    public @NotNull ItemStack getItem() {
         return displayStack;
     }
 
@@ -27,12 +28,12 @@ public class FakeSlot extends SlotWithRestriction {
     }
 
     @Override
-    public void set(ItemStack stack) {
+    public void set(@NotNull ItemStack stack) {
         // NOP
     }
 
     @Override
-    public ItemStack remove(int i) {
+    public @NotNull ItemStack remove(int i) {
         return ItemStack.EMPTY;
     }
 

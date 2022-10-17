@@ -2,12 +2,10 @@ package the_fireplace.caterpillar.core.network.packet.server;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
 import the_fireplace.caterpillar.common.block.entity.ReinforcementBlockEntity;
-import the_fireplace.caterpillar.common.menu.ReinforcementMenu;
 
 import java.util.function.Supplier;
 
