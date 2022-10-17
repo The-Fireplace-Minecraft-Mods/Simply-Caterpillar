@@ -25,10 +25,10 @@ public final class PacketHandler {
         int index = 0;
         Caterpillar.LOGGER.info("Registered {} packets!", index);
 
-        CHANNEL.messageBuilder(ItemStackSyncS2CPacket.class, index++, NetworkDirection.PLAY_TO_CLIENT)
-                .decoder(ItemStackSyncS2CPacket::new)
-                .encoder(ItemStackSyncS2CPacket::toBytes)
-                .consumerMainThread(ItemStackSyncS2CPacket::handle)
+        CHANNEL.messageBuilder(DrillHeadItemStackSyncS2CPacket.class, index++, NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(DrillHeadItemStackSyncS2CPacket::new)
+                .encoder(DrillHeadItemStackSyncS2CPacket::toBytes)
+                .consumerMainThread(DrillHeadItemStackSyncS2CPacket::handle)
                 .add();
 
         CHANNEL.messageBuilder(CaterpillarSyncSlotC2SPacket.class, index++, NetworkDirection.PLAY_TO_SERVER)

@@ -21,7 +21,7 @@ import the_fireplace.caterpillar.common.menu.DrillHeadMenu;
 import java.util.ArrayList;
 import java.util.List;
 
-import static the_fireplace.caterpillar.common.block.entity.DrillHeadBlockEntity.INVENTORY_SIZE;
+import static the_fireplace.caterpillar.common.block.entity.DrillHeadBlockEntity.*;
 import static the_fireplace.caterpillar.common.menu.AbstractCaterpillarMenu.BE_INVENTORY_FIRST_SLOT_INDEX;
 
 @OnlyIn(Dist.CLIENT)
@@ -66,16 +66,8 @@ public class DrillHeadScreen extends AbstractScrollableScreen<DrillHeadMenu> {
     public DrillHeadScreen(DrillHeadMenu menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title, ScreenTabs.DRILL_HEAD, SCROLLER_BG_X + (menu.canScroll() ? 0 : SCROLLER_WIDTH), SCROLLER_BG_Y, SCROLLER_WIDTH, SCROLLER_HEIGHT, CONSUMPTION_SCROLLBAR_X, SCROLLBAR_Y, SCROLLBAR_HEIGHT);
 
-        this.setConsumptionScrollOffs(0.0F);
-        this.setGatheredScrollOffs(0.0F);
-    }
-
-    protected void setConsumptionScrollOffs(float scrollOffs) {
-        super.setScrollOffs(scrollOffs);
-    }
-
-    protected void setGatheredScrollOffs(float scrollOffs) {
-        this.gatheredScrollOffs = scrollOffs;
+        this.consumptionScrollTo(0.0F);
+        this.gatheredScrollTo(0.0F);
     }
 
     @Override
@@ -168,6 +160,27 @@ public class DrillHeadScreen extends AbstractScrollableScreen<DrillHeadMenu> {
         }
 
         int drillHeadSlotId = slotId - BE_INVENTORY_FIRST_SLOT_INDEX;
+        if (isConsumptionSlot(slotId)) {
+            int i = 3;
+            int j = (int)((double)(super.scrollOffs * (float)i) + 0.5D);
+            if (j < 0) {
+                j = 0;
+            }
+            int consumptionScrollTo = j;
+
+            drillHeadSlotId += consumptionScrollTo * 3;
+        } else {
+            int i = 3;
+            int j = (int)((double)(this.gatheredScrollOffs * (float)i) + 0.5D);
+            if (j < 0) {
+                j = 0;
+            }
+            int gatheredScrollTo = j;
+
+            drillHeadSlotId += gatheredScrollTo * 3;
+        }
+
+        System.out.println("Drill head slot id: " + drillHeadSlotId);
         ItemStack stack;
         ItemStack carried = this.menu.getCarried().copy();
 
@@ -176,12 +189,15 @@ public class DrillHeadScreen extends AbstractScrollableScreen<DrillHeadMenu> {
             stack = ItemStack.EMPTY;
         } else {
             stack = carried.copy();
+            carried = ItemStack.EMPTY;
         }
 
-        this.menu.slots.get(BE_INVENTORY_FIRST_SLOT_INDEX  + drillHeadSlotId).set(stack);
+        slot.set(stack);
         this.menu.setCarried(carried);
 
         this.menu.setSlot(drillHeadSlotId, stack);
+
+
     }
 
     protected void gatheredScrollTo(float scrollOffs) {
@@ -316,7 +332,15 @@ public class DrillHeadScreen extends AbstractScrollableScreen<DrillHeadMenu> {
         return super.mouseDragged(mouseX, mouseY, button, dragX, dragY);
     }
 
+    private boolean isConsumptionSlot(int slotId) {
+        return slotId >= BE_INVENTORY_FIRST_SLOT_INDEX + CONSUMPTION_SLOT_START && slotId < BE_INVENTORY_FIRST_SLOT_INDEX + CONSUMPTION_SLOT_END;
+    }
+
+    private boolean isGatheredSlot(int slotId) {
+        return slotId >= BE_INVENTORY_FIRST_SLOT_INDEX + GATHERED_SLOT_START && slotId < BE_INVENTORY_FIRST_SLOT_INDEX + GATHERED_SLOT_END;
+    }
+
     private boolean isDrillHeadSlot(int slotId) {
-        return slotId >= BE_INVENTORY_FIRST_SLOT_INDEX && slotId < BE_INVENTORY_FIRST_SLOT_INDEX + INVENTORY_SIZE;
+        return slotId >= BE_INVENTORY_FIRST_SLOT_INDEX + CONSUMPTION_SLOT_START && slotId < BE_INVENTORY_FIRST_SLOT_INDEX + GATHERED_SLOT_END;
     }
 }

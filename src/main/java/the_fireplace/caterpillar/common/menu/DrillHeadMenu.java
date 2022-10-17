@@ -174,12 +174,10 @@ public class DrillHeadMenu extends AbstractCaterpillarMenu {
     }
 
     public void consumptionScrollTo(int consumptionScrollTo) {
-        System.out.println("consumptionScrollTo: " + consumptionScrollTo);
         if (this.blockEntity instanceof DrillHeadBlockEntity drillHeadBlockEntity) {
             if (consumptionScrollTo >= 0 && consumptionScrollTo < 3) {
                 drillHeadBlockEntity.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(drillHeadHandler -> {
                     for(int row = 0; row < 3 - consumptionScrollTo; row++) {
-                        System.out.println("DrillHeadRow: " + row);
                         for(int column = 0; column < 3; column++) {
                             ItemStack stack = drillHeadHandler.getStackInSlot(CONSUMPTION_SLOT_START + column + (consumptionScrollTo + row) * 3);
                             Slot slot = super.getSlot(BE_INVENTORY_FIRST_SLOT_INDEX + CONSUMPTION_SLOT_START + column + row * 3);
@@ -194,7 +192,6 @@ public class DrillHeadMenu extends AbstractCaterpillarMenu {
 
             if (consumptionScrollTo >= 1 && consumptionScrollTo <= 3) {
                 for(int row = 3 - consumptionScrollTo; row < 3; row++) {
-                    System.out.println("StorageRow: " + row);
                     for(int column = 0; column < 3; column++) {
                         ItemStack stack = this.getStorageBlockEntity().getStackInSlot(column + row * 3);
                         Slot slot = super.getSlot(BE_INVENTORY_FIRST_SLOT_INDEX + CONSUMPTION_SLOT_START + column + row * 3);

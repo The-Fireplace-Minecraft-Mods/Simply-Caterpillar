@@ -7,10 +7,11 @@ import org.jetbrains.annotations.NotNull;
 
 public class FakeSlot extends SlotWithRestriction {
 
-    private ItemStack displayStack = ItemStack.EMPTY;
+    private ItemStack displayStack;
 
     public FakeSlot(IItemHandler itemHandler, int index, int xPosition, int yPosition) {
         super(itemHandler, index, xPosition, yPosition);
+        this.displayStack = itemHandler.getStackInSlot(index);
     }
 
     public void setDisplayStack(ItemStack itemStack) {

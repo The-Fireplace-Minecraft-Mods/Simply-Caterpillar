@@ -13,18 +13,18 @@ import java.util.Collection;
 import java.util.List;
 import java.util.function.Supplier;
 
-public class ItemStackSyncS2CPacket {
+public class DrillHeadItemStackSyncS2CPacket {
 
     private final ItemStackHandler inventory;
 
     private final BlockPos pos;
 
-    public ItemStackSyncS2CPacket(ItemStackHandler inventory, BlockPos pos) {
+    public DrillHeadItemStackSyncS2CPacket(ItemStackHandler inventory, BlockPos pos) {
         this.inventory = inventory;
         this.pos = pos;
     }
 
-    public ItemStackSyncS2CPacket(FriendlyByteBuf buf) {
+    public DrillHeadItemStackSyncS2CPacket(FriendlyByteBuf buf) {
         List<ItemStack> collection = buf.readCollection(ArrayList::new, FriendlyByteBuf::readItem);
         inventory = new ItemStackHandler(collection.size());
         for (int i = 0; i < collection.size(); i++) {

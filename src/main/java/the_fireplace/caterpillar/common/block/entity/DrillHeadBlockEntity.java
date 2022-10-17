@@ -30,7 +30,7 @@ import the_fireplace.caterpillar.common.block.util.DrillHeadPart;
 import the_fireplace.caterpillar.core.network.PacketHandler;
 import the_fireplace.caterpillar.core.network.packet.server.DrillHeadSyncLitS2CPacket;
 import the_fireplace.caterpillar.core.network.packet.server.DrillHeadSyncPowerS2CPacket;
-import the_fireplace.caterpillar.core.network.packet.server.ItemStackSyncS2CPacket;
+import the_fireplace.caterpillar.core.network.packet.server.DrillHeadItemStackSyncS2CPacket;
 
 public class DrillHeadBlockEntity extends AbstractCaterpillarBlockEntity {
 
@@ -271,7 +271,7 @@ public class DrillHeadBlockEntity extends AbstractCaterpillarBlockEntity {
                 if(level != null && !level.isClientSide()) {
                     PacketHandler.sendToClients(new DrillHeadSyncPowerS2CPacket(DrillHeadBlockEntity.this.isPowered(), worldPosition));
                     PacketHandler.sendToClients(new DrillHeadSyncLitS2CPacket(DrillHeadBlockEntity.this.getLitTime(), DrillHeadBlockEntity.this.getLitDuration(), worldPosition));
-                    PacketHandler.sendToClients(new ItemStackSyncS2CPacket(this, worldPosition));
+                    PacketHandler.sendToClients(new DrillHeadItemStackSyncS2CPacket(this, worldPosition));
                 }
             }
 
@@ -319,6 +319,7 @@ public class DrillHeadBlockEntity extends AbstractCaterpillarBlockEntity {
     @Nullable
     @Override
     public AbstractContainerMenu createMenu(int id, @NotNull Inventory playerInventory, @NotNull Player player) {
+        PacketHandler.sendToClients(new DrillHeadItemStackSyncS2CPacket(this.getInventory(), this.getBlockPos()));
         return new DrillHeadMenu(id, playerInventory, this, new DrillHeadContainerData(this, DrillHeadContainerData.SIZE));
     }
 }

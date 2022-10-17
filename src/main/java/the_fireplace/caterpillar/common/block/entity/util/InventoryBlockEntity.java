@@ -17,7 +17,7 @@ import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import the_fireplace.caterpillar.core.network.PacketHandler;
-import the_fireplace.caterpillar.core.network.packet.server.ItemStackSyncS2CPacket;
+import the_fireplace.caterpillar.core.network.packet.server.DrillHeadItemStackSyncS2CPacket;
 
 public class InventoryBlockEntity extends BlockEntity {
 
@@ -46,7 +46,7 @@ public class InventoryBlockEntity extends BlockEntity {
                 setChanged();
 
                 if(level != null && !level.isClientSide()) {
-                    PacketHandler.sendToClients(new ItemStackSyncS2CPacket(this, worldPosition));
+                    PacketHandler.sendToClients(new DrillHeadItemStackSyncS2CPacket(this, worldPosition));
                 }
             }
         };
