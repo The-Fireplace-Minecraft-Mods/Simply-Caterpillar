@@ -25,10 +25,10 @@ public final class PacketHandler {
         int index = 0;
         Caterpillar.LOGGER.info("Registered {} packets!", index);
 
-        CHANNEL.messageBuilder(DrillHeadItemStackSyncS2CPacket.class, index++, NetworkDirection.PLAY_TO_CLIENT)
-                .decoder(DrillHeadItemStackSyncS2CPacket::new)
-                .encoder(DrillHeadItemStackSyncS2CPacket::toBytes)
-                .consumerMainThread(DrillHeadItemStackSyncS2CPacket::handle)
+        CHANNEL.messageBuilder(CaterpillarSyncInventoryS2CPacket.class, index++, NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(CaterpillarSyncInventoryS2CPacket::new)
+                .encoder(CaterpillarSyncInventoryS2CPacket::toBytes)
+                .consumerMainThread(CaterpillarSyncInventoryS2CPacket::handle)
                 .add();
 
         CHANNEL.messageBuilder(CaterpillarSyncSlotC2SPacket.class, index++, NetworkDirection.PLAY_TO_SERVER)
@@ -91,10 +91,10 @@ public final class PacketHandler {
                 .consumerMainThread(DecorationSyncSlotC2SPacket::handle)
                 .add();
 
-        CHANNEL.messageBuilder(DecorationItemStackSyncS2CPacket.class, index++, NetworkDirection.PLAY_TO_CLIENT)
-                .decoder(DecorationItemStackSyncS2CPacket::new)
-                .encoder(DecorationItemStackSyncS2CPacket::toBytes)
-                .consumerMainThread(DecorationItemStackSyncS2CPacket::handle)
+        CHANNEL.messageBuilder(DecorationSyncInventoryS2CPacket.class, index++, NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(DecorationSyncInventoryS2CPacket::new)
+                .encoder(DecorationSyncInventoryS2CPacket::toBytes)
+                .consumerMainThread(DecorationSyncInventoryS2CPacket::handle)
                 .add();
 
         CHANNEL.messageBuilder(ReinforcementSyncStateReplacerC2SPacket.class, index++, NetworkDirection.PLAY_TO_SERVER)

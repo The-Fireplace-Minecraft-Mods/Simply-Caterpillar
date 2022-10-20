@@ -19,6 +19,7 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import the_fireplace.caterpillar.common.block.entity.AbstractCaterpillarBlockEntity;
 import the_fireplace.caterpillar.common.block.util.StoragePart;
 import the_fireplace.caterpillar.core.init.BlockEntityInit;
 
@@ -105,25 +106,24 @@ public class StorageBlock extends AbstractCaterpillarBlock {
 
         super.setPlacedBy(level, blockPos, blockState, livingEntity, stack);
     }
+    private void dropContents(Level level, BlockPos pos) {
+        BlockEntity blockentity = level.getBlockEntity(pos);
+        if (blockentity instanceof AbstractCaterpillarBlockEntity caterpillarBlockEntity) {
+            if (!level.isClientSide()) {
+                caterpillarBlockEntity.drops();
+            }
+        }
+    }
 
     @Override
     public void playerWillDestroy(@NotNull Level level, @NotNull BlockPos pos, BlockState state, @NotNull Player player) {
         Direction direction = state.getValue(FACING);
+        BlockPos basePos = this.getBasePos(state, pos);
 
-        switch (state.getValue(StorageBlock.PART)) {
-            case LEFT -> {
-                level.destroyBlock(pos.relative(direction.getClockWise()), false);
-                level.destroyBlock(pos.relative(direction.getClockWise(), 2), false);
-            }
-            case RIGHT -> {
-                level.destroyBlock(pos.relative(direction.getCounterClockWise()), false);
-                level.destroyBlock(pos.relative(direction.getCounterClockWise(), 2), false);
-            }
-            default -> {
-                level.destroyBlock(pos.relative(direction.getCounterClockWise()), false);
-                level.destroyBlock(pos.relative(direction.getClockWise()), false);
-            }
-        }
+        this.dropContents(level, basePos);
+
+        level.destroyBlock(pos.relative(direction.getCounterClockWise()), false);
+        level.destroyBlock(pos.relative(direction.getClockWise()), false);
 
         super.playerWillDestroy(level, pos, state, player);
     }

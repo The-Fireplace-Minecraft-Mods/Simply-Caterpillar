@@ -30,7 +30,7 @@ import the_fireplace.caterpillar.common.block.util.DrillHeadPart;
 import the_fireplace.caterpillar.core.network.PacketHandler;
 import the_fireplace.caterpillar.core.network.packet.server.DrillHeadSyncLitS2CPacket;
 import the_fireplace.caterpillar.core.network.packet.server.DrillHeadSyncPowerS2CPacket;
-import the_fireplace.caterpillar.core.network.packet.server.DrillHeadItemStackSyncS2CPacket;
+import the_fireplace.caterpillar.core.network.packet.server.CaterpillarSyncInventoryS2CPacket;
 
 public class DrillHeadBlockEntity extends AbstractCaterpillarBlockEntity {
 
@@ -50,11 +50,16 @@ public class DrillHeadBlockEntity extends AbstractCaterpillarBlockEntity {
 
     public static final int CONSUMPTION_SLOT_END = 9;
 
+    public static final int CONSUMPTION_SLOT_SIZE = 9;
+
     public static final int FUEl_SLOT = 0;
 
     public static final int GATHERED_SLOT_START = 10;
 
     public static final int GATHERED_SLOT_END = 18;
+
+    public static final int GATHERED_SLOT_SIZE = 9;
+
 
     // 60 ticks equals 3 seconds
     public static final int MOVEMENT_TICK = 60;
@@ -69,8 +74,6 @@ public class DrillHeadBlockEntity extends AbstractCaterpillarBlockEntity {
 
     public DrillHeadBlockEntity(BlockPos pos, BlockState state) {
         super(BlockEntityInit.DRILL_HEAD.get(), pos, state, INVENTORY_SIZE);
-
-        // TODO: Check if storage block is present
     }
 
     public static void tick(Level level, BlockPos pos, BlockState state, DrillHeadBlockEntity blockEntity) {
@@ -271,7 +274,7 @@ public class DrillHeadBlockEntity extends AbstractCaterpillarBlockEntity {
                 if(level != null && !level.isClientSide()) {
                     PacketHandler.sendToClients(new DrillHeadSyncPowerS2CPacket(DrillHeadBlockEntity.this.isPowered(), worldPosition));
                     PacketHandler.sendToClients(new DrillHeadSyncLitS2CPacket(DrillHeadBlockEntity.this.getLitTime(), DrillHeadBlockEntity.this.getLitDuration(), worldPosition));
-                    PacketHandler.sendToClients(new DrillHeadItemStackSyncS2CPacket(this, worldPosition));
+                    PacketHandler.sendToClients(new CaterpillarSyncInventoryS2CPacket(this, worldPosition));
                 }
             }
 
@@ -319,7 +322,7 @@ public class DrillHeadBlockEntity extends AbstractCaterpillarBlockEntity {
     @Nullable
     @Override
     public AbstractContainerMenu createMenu(int id, @NotNull Inventory playerInventory, @NotNull Player player) {
-        PacketHandler.sendToClients(new DrillHeadItemStackSyncS2CPacket(this.getInventory(), this.getBlockPos()));
+        PacketHandler.sendToClients(new CaterpillarSyncInventoryS2CPacket(this.getInventory(), this.getBlockPos()));
         return new DrillHeadMenu(id, playerInventory, this, new DrillHeadContainerData(this, DrillHeadContainerData.SIZE));
     }
 }

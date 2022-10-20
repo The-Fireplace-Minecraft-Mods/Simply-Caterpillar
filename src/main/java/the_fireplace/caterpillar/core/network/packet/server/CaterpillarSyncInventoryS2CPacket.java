@@ -6,30 +6,25 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.network.NetworkEvent;
-import the_fireplace.caterpillar.common.block.entity.DecorationBlockEntity;
+import the_fireplace.caterpillar.common.block.entity.AbstractCaterpillarBlockEntity;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Supplier;
 
-public class DecorationItemStackSyncS2CPacket {
-
-    private final int placementMapId;
+public class CaterpillarSyncInventoryS2CPacket {
 
     private final ItemStackHandler inventory;
 
     private final BlockPos pos;
 
-    public DecorationItemStackSyncS2CPacket(int placementMapId, ItemStackHandler inventory, BlockPos pos) {
-        this.placementMapId = placementMapId;
+    public CaterpillarSyncInventoryS2CPacket(ItemStackHandler inventory, BlockPos pos) {
         this.inventory = inventory;
         this.pos = pos;
     }
 
-    public DecorationItemStackSyncS2CPacket(FriendlyByteBuf buf) {
-        this.placementMapId = buf.readInt();
-
+    public CaterpillarSyncInventoryS2CPacket(FriendlyByteBuf buf) {
         List<ItemStack> collection = buf.readCollection(ArrayList::new, FriendlyByteBuf::readItem);
         inventory = new ItemStackHandler(collection.size());
         for (int i = 0; i < collection.size(); i++) {
@@ -40,8 +35,6 @@ public class DecorationItemStackSyncS2CPacket {
     }
 
     public void toBytes(FriendlyByteBuf buf) {
-        buf.writeInt(this.placementMapId);
-
         Collection<ItemStack> list = new ArrayList<>();
         for(int i = 0; i < inventory.getSlots(); i++) {
             list.add(inventory.getStackInSlot(i));
@@ -54,12 +47,11 @@ public class DecorationItemStackSyncS2CPacket {
     public void handle(Supplier<NetworkEvent.Context> supplier) {
         NetworkEvent.Context context = supplier.get();
         context.enqueueWork(() -> {
-            if(Minecraft.getInstance().level.getBlockEntity(pos) instanceof DecorationBlockEntity decorationBlockEntity) {
-                decorationBlockEntity.setPlacementMap(this.placementMapId, this.inventory);
+            if(Minecraft.getInstance().level.getBlockEntity(pos) instanceof AbstractCaterpillarBlockEntity caterpillarBlockEntity) {
+                caterpillarBlockEntity.setInventory(this.inventory);
             }
         });
         context.setPacketHandled(true);
     }
 }
-
 

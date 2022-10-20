@@ -30,7 +30,7 @@ import the_fireplace.caterpillar.common.menu.DecorationMenu;
 import the_fireplace.caterpillar.common.menu.syncdata.DecorationContainerData;
 import the_fireplace.caterpillar.core.init.BlockEntityInit;
 import the_fireplace.caterpillar.core.network.PacketHandler;
-import the_fireplace.caterpillar.core.network.packet.server.DecorationItemStackSyncS2CPacket;
+import the_fireplace.caterpillar.core.network.packet.server.DecorationSyncInventoryS2CPacket;
 import the_fireplace.caterpillar.core.network.packet.server.DecorationSyncCurrentMapS2CPacket;
 import the_fireplace.caterpillar.core.network.packet.server.DecorationSyncSelectedMapS2CPacket;
 
@@ -264,7 +264,7 @@ public class DecorationBlockEntity extends AbstractCaterpillarBlockEntity {
                 if(level != null && !level.isClientSide()) {
                     PacketHandler.sendToClients(new DecorationSyncSelectedMapS2CPacket(DecorationBlockEntity.this.getSelectedMap(), worldPosition));
                     PacketHandler.sendToClients(new DecorationSyncCurrentMapS2CPacket(DecorationBlockEntity.this.getCurrentMap(), worldPosition));
-                    PacketHandler.sendToClients(new DecorationItemStackSyncS2CPacket(DecorationBlockEntity.this.getSelectedMap(), DecorationBlockEntity.this.placementMap.get(DecorationBlockEntity.this.getSelectedMap()), worldPosition));
+                    PacketHandler.sendToClients(new DecorationSyncInventoryS2CPacket(DecorationBlockEntity.this.getSelectedMap(), DecorationBlockEntity.this.placementMap.get(DecorationBlockEntity.this.getSelectedMap()), worldPosition));
                 }
             }
         };
@@ -337,7 +337,7 @@ public class DecorationBlockEntity extends AbstractCaterpillarBlockEntity {
         PacketHandler.sendToClients(new DecorationSyncSelectedMapS2CPacket(DecorationBlockEntity.this.selectedMap, worldPosition));
         PacketHandler.sendToClients(new DecorationSyncCurrentMapS2CPacket(DecorationBlockEntity.this.getCurrentMap(), worldPosition));
         for (int i = 0; i < this.placementMap.size(); i++) {
-            PacketHandler.sendToClients(new DecorationItemStackSyncS2CPacket(i, this.placementMap.get(i), this.getBlockPos()));
+            PacketHandler.sendToClients(new DecorationSyncInventoryS2CPacket(i, this.placementMap.get(i), this.getBlockPos()));
         }
 
         return new DecorationMenu(id, playerInventory, this, new DecorationContainerData(this, DecorationContainerData.SIZE));

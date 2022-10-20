@@ -25,6 +25,7 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import the_fireplace.caterpillar.common.block.entity.AbstractCaterpillarBlockEntity;
 import the_fireplace.caterpillar.common.block.entity.DrillHeadBlockEntity;
 import the_fireplace.caterpillar.common.block.util.DrillHeadPart;
 import the_fireplace.caterpillar.core.init.BlockEntityInit;
@@ -117,9 +118,9 @@ public class DrillHeadBlock extends AbstractCaterpillarBlock implements SimpleWa
 
     private void dropContents(Level level, BlockPos pos) {
         BlockEntity blockentity = level.getBlockEntity(pos);
-        if (blockentity instanceof DrillHeadBlockEntity drillHeadBlockEntity) {
+        if (blockentity instanceof AbstractCaterpillarBlockEntity caterpillarBlockEntity) {
             if (!level.isClientSide()) {
-                drillHeadBlockEntity.drops();
+                caterpillarBlockEntity.drops();
             }
         }
     }

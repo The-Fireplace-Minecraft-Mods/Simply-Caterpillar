@@ -18,6 +18,7 @@ import the_fireplace.caterpillar.core.init.MenuInit;
 import the_fireplace.caterpillar.core.network.PacketHandler;
 import the_fireplace.caterpillar.core.network.packet.client.CaterpillarSyncSlotC2SPacket;
 import the_fireplace.caterpillar.core.network.packet.client.DrillHeadSyncPowerC2SPacket;
+import the_fireplace.caterpillar.core.network.packet.server.CaterpillarSyncInventoryS2CPacket;
 
 import static the_fireplace.caterpillar.common.block.entity.DrillHeadBlockEntity.*;
 
@@ -49,6 +50,11 @@ public class DrillHeadMenu extends AbstractCaterpillarMenu {
 
     public DrillHeadMenu(int id, Inventory playerInventory, DrillHeadBlockEntity entity, DrillHeadContainerData data) {
         super(MenuInit.DRILL_HEAD.get(), id, playerInventory, entity, data, DrillHeadBlockEntity.INVENTORY_SIZE);
+
+        StorageBlockEntity storageBlockEntity = this.getStorageBlockEntity();
+        if (storageBlockEntity != null) {
+            PacketHandler.sendToClients(new CaterpillarSyncInventoryS2CPacket(storageBlockEntity.getInventory(), storageBlockEntity.getBlockPos()));
+        }
     }
 
     @Override
@@ -159,11 +165,7 @@ public class DrillHeadMenu extends AbstractCaterpillarMenu {
     }
 
     private StorageBlockEntity getStorageBlockEntity() {
-        if (this.getConnectedCaterpillarBlockEntities().stream().anyMatch(blockEntity -> blockEntity instanceof StorageBlockEntity)) {
-            return (StorageBlockEntity)this.getConnectedCaterpillarBlockEntities().stream().filter(blockEntity -> blockEntity instanceof StorageBlockEntity).findFirst().get();
-        } else {
-            return null;
-        }
+        return (StorageBlockEntity)this.getConnectedCaterpillarBlockEntities().stream().filter(blockEntity -> blockEntity instanceof StorageBlockEntity).findFirst().orElse(null);
     }
 
     public boolean canScroll() {
@@ -171,6 +173,35 @@ public class DrillHeadMenu extends AbstractCaterpillarMenu {
     }
 
     public void gatheredScrollTo(int gatheredScrollTo) {
+        if (this.blockEntity instanceof DrillHeadBlockEntity drillHeadBlockEntity) {
+            if (gatheredScrollTo >= 0 && gatheredScrollTo < 3) {
+                drillHeadBlockEntity.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(drillHeadHandler -> {
+                    for(int row = 0; row < 3 - gatheredScrollTo; row++) {
+                        for(int column = 0; column < 3; column++) {
+                            ItemStack stack = drillHeadHandler.getStackInSlot(GATHERED_SLOT_START + column + (gatheredScrollTo + row) * 3);
+                            Slot slot = super.getSlot(BE_INVENTORY_FIRST_SLOT_INDEX + GATHERED_SLOT_START + column + row * 3);
+
+                            if (slot instanceof FakeSlot fakeSlot) {
+                                fakeSlot.setDisplayStack(stack);
+                            }
+                        }
+                    }
+                });
+            }
+
+            if (gatheredScrollTo >= 1 && gatheredScrollTo <= 3) {
+                for(int row = 3 - gatheredScrollTo; row < 3; row++) {
+                    for(int column = 0; column < 3; column++) {
+                        ItemStack stack = this.getStorageBlockEntity().getStackInSlot(column + (row - (3 - gatheredScrollTo)) * 3);
+                        Slot slot = super.getSlot(BE_INVENTORY_FIRST_SLOT_INDEX + GATHERED_SLOT_START + column + row * 3);
+
+                        if (slot instanceof FakeSlot fakeSlot) {
+                            fakeSlot.setDisplayStack(stack);
+                        }
+                    }
+                }
+            }
+        }
     }
 
     public void consumptionScrollTo(int consumptionScrollTo) {
@@ -193,7 +224,7 @@ public class DrillHeadMenu extends AbstractCaterpillarMenu {
             if (consumptionScrollTo >= 1 && consumptionScrollTo <= 3) {
                 for(int row = 3 - consumptionScrollTo; row < 3; row++) {
                     for(int column = 0; column < 3; column++) {
-                        ItemStack stack = this.getStorageBlockEntity().getStackInSlot(column + row * 3);
+                        ItemStack stack = this.getStorageBlockEntity().getStackInSlot(column + (row - (3 - consumptionScrollTo)) * 3);
                         Slot slot = super.getSlot(BE_INVENTORY_FIRST_SLOT_INDEX + CONSUMPTION_SLOT_START + column + row * 3);
 
                         if (slot instanceof FakeSlot fakeSlot) {
@@ -211,5 +242,14 @@ public class DrillHeadMenu extends AbstractCaterpillarMenu {
 
             PacketHandler.sendToServer(new CaterpillarSyncSlotC2SPacket(slotId, stack, drillHeadBlockEntity.getBlockPos()));
         }
+    }
+
+    public void setStorageSlot(int slotId, ItemStack stack) {
+       StorageBlockEntity storageBlockEntity = this.getStorageBlockEntity();
+
+       if (storageBlockEntity != null) {
+           storageBlockEntity.setStackInSlot(slotId, stack);
+           PacketHandler.sendToServer(new CaterpillarSyncSlotC2SPacket(slotId, stack, storageBlockEntity.getBlockPos()));
+       }
     }
 }
