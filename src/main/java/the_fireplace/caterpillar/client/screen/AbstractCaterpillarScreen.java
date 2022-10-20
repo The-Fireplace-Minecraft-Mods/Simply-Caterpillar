@@ -60,6 +60,7 @@ public abstract class AbstractCaterpillarScreen<T extends AbstractCaterpillarMen
         super.init();
 
         super.titleLabelX = (super.imageWidth - super.font.width(title)) / 2;
+
         this.addTabButtons();
         this.addTutorialButton();
     }
