@@ -181,22 +181,48 @@ public class DrillHeadScreen extends AbstractScrollableScreen<DrillHeadMenu> {
             drillHeadSlotId += gatheredScrollTo * 3;
         }
 
-        ItemStack stack;
-        ItemStack carried = this.menu.getCarried();
+        ItemStack stack = slot.getItem().copy();
+        ItemStack carried = this.menu.getCarried().copy();
 
         if (carried.isEmpty()) {
-            stack = ItemStack.EMPTY;
-            this.menu.setCarried(slot.getItem().copy());
-        } else {
-            stack = carried.copy();
+            if (mouseButton == 0) {
+                carried = stack.copy();
+                stack = ItemStack.EMPTY;
+            } else if (mouseButton == 1) {
+               carried = stack.split(stack.getCount() / 2 + stack.getCount() % 2);
+                if (stack.isEmpty()) {
+                    stack = ItemStack.EMPTY;
+                }
+            }
+        } else if (isConsumptionSlot(slotId)) {
+            if (stack.isEmpty()) {
+                stack = carried.copy();
 
-            if (mouseButton == 1) {
-                stack.setCount(1);
-                carried.shrink(1);
+                if (mouseButton == 1) {
+                    stack.setCount(1);
+                    carried.shrink(1);
+                } else {
+                    carried.shrink(stack.getCount());
+                }
             } else {
-                carried.shrink(stack.getCount());
+                if (stack.sameItem(carried)) {
+                    int maxStackSize = Math.min(stack.getMaxStackSize(), slot.getMaxStackSize());
+                    int stackSize = Math.min(stack.getCount() + carried.getCount(), maxStackSize);
+                    int carriedSize = carried.getCount() - (stackSize - stack.getCount());
+
+                    stack.setCount(stackSize);
+                    carried.setCount(carriedSize);
+                } else {
+                    ItemStack temp = stack.copy();
+                    stack = carried.copy();
+                    carried = temp;
+                }
             }
         }
+
+        // TODO: Remote sync don't work
+        this.menu.setCarried(carried.copy());
+        this.menu.sendAllDataToRemote();
 
         if (slot instanceof FakeSlot fakeSlot) {
             fakeSlot.setDisplayStack(stack);
@@ -205,7 +231,7 @@ public class DrillHeadScreen extends AbstractScrollableScreen<DrillHeadMenu> {
         if (isConsumptionSlot(slotId)) {
            if (drillHeadSlotId <= CONSUMPTION_SLOT_END) {
                // Consumption drill head slot
-               this.menu.setSlot(drillHeadSlotId - CONSUMPTION_SLOT_END, stack);
+               this.menu.setSlot(drillHeadSlotId, stack);
            } else {
                // Consumption storage slot
                this.menu.setStorageSlot(drillHeadSlotId - CONSUMPTION_SLOT_SIZE - CONSUMPTION_SLOT_START, stack);
@@ -219,8 +245,6 @@ public class DrillHeadScreen extends AbstractScrollableScreen<DrillHeadMenu> {
                 this.menu.setStorageSlot(drillHeadSlotId - GATHERED_SLOT_END - CONSUMPTION_SLOT_START, stack);
             }
         }
-
-        this.menu.broadcastChanges();
     }
 
     protected void gatheredScrollTo(float scrollOffs) {
