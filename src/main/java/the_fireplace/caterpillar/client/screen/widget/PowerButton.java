@@ -1,4 +1,4 @@
-package the_fireplace.caterpillar.client.screen.util;
+package the_fireplace.caterpillar.client.screen.widget;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;

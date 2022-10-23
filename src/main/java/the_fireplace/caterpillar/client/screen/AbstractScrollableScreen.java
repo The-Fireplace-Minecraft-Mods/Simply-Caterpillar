@@ -5,11 +5,9 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import org.jetbrains.annotations.NotNull;
 import the_fireplace.caterpillar.client.screen.util.ScreenTabs;
-import the_fireplace.caterpillar.common.menu.AbstractCaterpillarMenu;
+import the_fireplace.caterpillar.common.menu.AbstractScrollableMenu;
 
-public abstract class AbstractScrollableScreen<D extends AbstractCaterpillarMenu> extends AbstractCaterpillarScreen<D> {
-
-    protected float scrollOffs;
+public abstract class AbstractScrollableScreen<D extends AbstractScrollableMenu> extends AbstractCaterpillarScreen<D> {
 
     protected boolean scrolling;
 
@@ -49,11 +47,7 @@ public abstract class AbstractScrollableScreen<D extends AbstractCaterpillarMenu
         int scrollbarY = this.topPos + SCROLLBAR_Y;
         int scrollbarYEnd = scrollbarY + SCROLLBAR_HEIGHT;
 
-        blit(stack, scrollbarX, scrollbarY + (int)((float)(scrollbarYEnd - scrollbarY - SCROLLBAR_Y) * this.scrollOffs), SCROLLER_BG_X, SCROLLER_BG_Y, SCROLLER_WIDTH, SCROLLER_HEIGHT);
-    }
-
-    protected void setScrollOffs(float scrollOffs) {
-        this.scrollOffs = scrollOffs;
+        blit(stack, scrollbarX, scrollbarY + (int)((float)(scrollbarYEnd - scrollbarY - SCROLLBAR_Y) * this.menu.getScrollOffs()), SCROLLER_BG_X, SCROLLER_BG_Y, SCROLLER_WIDTH, SCROLLER_HEIGHT);
     }
 
     protected void scrollTo(float scrollOffs) {

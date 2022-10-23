@@ -3,9 +3,10 @@ package the_fireplace.caterpillar.common.menu.slot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.SlotItemHandler;
 import org.jetbrains.annotations.NotNull;
 
-public class FakeSlot extends SlotWithRestriction {
+public class FakeSlot extends SlotItemHandler {
 
     private ItemStack displayStack;
 
@@ -50,6 +51,11 @@ public class FakeSlot extends SlotWithRestriction {
 
     @Override
     public boolean mayPickup(Player player) {
+        return false;
+    }
+
+    @Override
+    public boolean mayPlace(@NotNull ItemStack stack) {
         return false;
     }
 }

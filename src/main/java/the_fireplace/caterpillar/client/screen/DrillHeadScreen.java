@@ -13,7 +13,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
 import the_fireplace.caterpillar.Caterpillar;
-import the_fireplace.caterpillar.client.screen.util.PowerButton;
+import the_fireplace.caterpillar.client.screen.widget.PowerButton;
 import the_fireplace.caterpillar.client.screen.util.ScreenTabs;
 import the_fireplace.caterpillar.common.block.entity.DrillHeadBlockEntity;
 import the_fireplace.caterpillar.common.menu.DrillHeadMenu;
@@ -59,10 +59,6 @@ public class DrillHeadScreen extends AbstractScrollableScreen<DrillHeadMenu> {
     private static final int BURN_SLOT_BG_WIDTH = 14;
 
     public PowerButton powerButton;
-
-    private float gatheredScrollOffs;
-
-    private boolean gatheredScrolling;
 
     public DrillHeadScreen(DrillHeadMenu menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title, ScreenTabs.DRILL_HEAD, SCROLLER_BG_X + (menu.canScroll() ? 0 : SCROLLER_WIDTH), SCROLLER_BG_Y, SCROLLER_WIDTH, SCROLLER_HEIGHT, CONSUMPTION_SCROLLBAR_X, SCROLLBAR_Y, SCROLLBAR_HEIGHT);
@@ -150,20 +146,20 @@ public class DrillHeadScreen extends AbstractScrollableScreen<DrillHeadMenu> {
         int scrollbarY = this.topPos + SCROLLBAR_Y;
         int scrollbarYEnd = scrollbarY + SCROLLBAR_HEIGHT;
 
-        blit(stack, gatheredScrollbarX, scrollbarY + (int)((float)(scrollbarYEnd - scrollbarY - SCROLLBAR_Y) * this.gatheredScrollOffs), SCROLLER_BG_X + (this.menu.canScroll() ? 0 : SCROLLER_WIDTH), SCROLLER_BG_Y, SCROLLER_WIDTH, SCROLLER_HEIGHT);
+        blit(stack, gatheredScrollbarX, scrollbarY + (int)((float)(scrollbarYEnd - scrollbarY - SCROLLBAR_Y) * this.menu.getGatheredScrollOffs()), SCROLLER_BG_X + (this.menu.canScroll() ? 0 : SCROLLER_WIDTH), SCROLLER_BG_Y, SCROLLER_WIDTH, SCROLLER_HEIGHT);
     }
 
     @Override
-    protected void slotClicked(@NotNull Slot slot, int slotId, int mouseButton, @NotNull ClickType type) {
-        if (!this.isDrillHeadSlot(slotId)) {
-            super.slotClicked(slot, slotId, mouseButton, type);
+    protected void slotClicked(Slot slot, int slotId, int mouseButton, ClickType clickType) {
+        if (!this.menu.isDrillHeadSlot(slotId)) {
+            super.slotClicked(slot, slotId, mouseButton, clickType);
             return;
         }
 
         int drillHeadSlotId = slotId - BE_INVENTORY_FIRST_SLOT_INDEX;
-        if (isConsumptionSlot(slotId)) {
+        if (this.menu.isConsumptionSlot(slotId)) {
             int i = 3;
-            int j = (int)((double)(super.scrollOffs * (float)i) + 0.5D);
+            int j = (int)((double)(this.menu.getScrollOffs() * (float)i) + 0.5D);
             if (j < 0) {
                 j = 0;
             }
@@ -172,7 +168,7 @@ public class DrillHeadScreen extends AbstractScrollableScreen<DrillHeadMenu> {
             drillHeadSlotId += consumptionScrollTo * 3;
         } else {
             int i = 3;
-            int j = (int)((double)(this.gatheredScrollOffs * (float)i) + 0.5D);
+            int j = (int)((double)(this.menu.getGatheredScrollOffs() * (float)i) + 0.5D);
             if (j < 0) {
                 j = 0;
             }
@@ -189,12 +185,12 @@ public class DrillHeadScreen extends AbstractScrollableScreen<DrillHeadMenu> {
                 carried = stack.copy();
                 stack = ItemStack.EMPTY;
             } else if (mouseButton == 1) {
-               carried = stack.split(stack.getCount() / 2 + stack.getCount() % 2);
+                carried = stack.split(stack.getCount() / 2 + stack.getCount() % 2);
                 if (stack.isEmpty()) {
                     stack = ItemStack.EMPTY;
                 }
             }
-        } else if (isConsumptionSlot(slotId)) {
+        } else if (this.menu.isConsumptionSlot(slotId)) {
             if (stack.isEmpty()) {
                 stack = carried.copy();
 
@@ -206,12 +202,13 @@ public class DrillHeadScreen extends AbstractScrollableScreen<DrillHeadMenu> {
                 }
             } else {
                 if (stack.sameItem(carried)) {
-                    int maxStackSize = Math.min(stack.getMaxStackSize(), slot.getMaxStackSize());
-                    int stackSize = Math.min(stack.getCount() + carried.getCount(), maxStackSize);
-                    int carriedSize = carried.getCount() - (stackSize - stack.getCount());
-
-                    stack.setCount(stackSize);
-                    carried.setCount(carriedSize);
+                    if (mouseButton == 0) {
+                        stack.grow(carried.getCount());
+                        carried = ItemStack.EMPTY;
+                    } else if (mouseButton == 1) {
+                        stack.grow(1);
+                        carried.shrink(1);
+                    }
                 } else {
                     ItemStack temp = stack.copy();
                     stack = carried.copy();
@@ -220,22 +217,20 @@ public class DrillHeadScreen extends AbstractScrollableScreen<DrillHeadMenu> {
             }
         }
 
-        // TODO: Remote sync don't work
-        this.menu.setCarried(carried.copy());
-        this.menu.sendAllDataToRemote();
+        this.menu.setCarried(carried);
 
         if (slot instanceof FakeSlot fakeSlot) {
             fakeSlot.setDisplayStack(stack);
         }
 
-        if (isConsumptionSlot(slotId)) {
-           if (drillHeadSlotId <= CONSUMPTION_SLOT_END) {
-               // Consumption drill head slot
-               this.menu.setSlot(drillHeadSlotId, stack);
-           } else {
-               // Consumption storage slot
-               this.menu.setStorageSlot(drillHeadSlotId - CONSUMPTION_SLOT_SIZE - CONSUMPTION_SLOT_START, stack);
-           }
+        if (this.menu.isConsumptionSlot(slotId)) {
+            if (drillHeadSlotId <= CONSUMPTION_SLOT_END) {
+                // Consumption drill head slot
+                this.menu.setSlot(drillHeadSlotId, stack);
+            } else {
+                // Consumption storage slot
+                this.menu.setStorageSlot(drillHeadSlotId - CONSUMPTION_SLOT_SIZE - CONSUMPTION_SLOT_START, stack);
+            }
         } else {
             if (drillHeadSlotId <= GATHERED_SLOT_END) {
                 // Gathered drill head slot
@@ -307,7 +302,7 @@ public class DrillHeadScreen extends AbstractScrollableScreen<DrillHeadMenu> {
     public boolean mouseReleased(double mouseX, double mouseY, int button) {
         if (button == 0) {
             this.scrolling = false;
-            this.gatheredScrolling = false;
+            this.menu.setGatheredScrolling(false);
         }
 
         return super.mouseReleased(mouseX, mouseY, button);
@@ -317,7 +312,7 @@ public class DrillHeadScreen extends AbstractScrollableScreen<DrillHeadMenu> {
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         if (button == 0) {
             if (this.insideGatheredScrollbar(mouseX, mouseY)) {
-                this.gatheredScrolling = this.menu.canScroll();
+                this.menu.setGatheredScrolling(this.menu.canScroll());
                 return true;
             } else if (this.insideConsumptionScrollbar(mouseX, mouseY)) {
                 super.scrolling = this.menu.canScroll();
@@ -337,14 +332,14 @@ public class DrillHeadScreen extends AbstractScrollableScreen<DrillHeadMenu> {
         if (this.insideGatheredScrollArea(mouseX, mouseY)) {
             int i = 3;
             float f = (float)(delta / (double)i);
-            this.gatheredScrollOffs = Mth.clamp(this.gatheredScrollOffs - f, 0.0F, 1.0F);
-            this.gatheredScrollTo(this.gatheredScrollOffs);
+            this.menu.setGatheredScrollOffs(Mth.clamp(this.menu.getGatheredScrollOffs() - f, 0.0F, 1.0F));
+            this.gatheredScrollTo(this.menu.getGatheredScrollOffs());
             return true;
         } else if (this.insideConsumptionScrollArea(mouseX, mouseY)) {
             int i = 3;
             float f = (float)(delta / (double)i);
-            super.scrollOffs = Mth.clamp(super.scrollOffs - f, 0.0F, 1.0F);
-            this.consumptionScrollTo(super.scrollOffs);
+            this.menu.setScrollOffs(Mth.clamp(this.menu.getScrollOffs() - f, 0.0F, 1.0F));
+            this.consumptionScrollTo(this.menu.getScrollOffs());
             return true;
         }
 
@@ -356,38 +351,27 @@ public class DrillHeadScreen extends AbstractScrollableScreen<DrillHeadMenu> {
         if (super.scrolling) {
             int i = this.topPos + SCROLLBAR_Y;
             int j = i + SCROLLBAR_HEIGHT;
-            super.scrollOffs = ((float)mouseY - (float)i - 7.5F) / ((float)(j - i) - 15.0F);
-            super.scrollOffs = Mth.clamp(super.scrollOffs, 0.0F, 1.0F);
-            this.consumptionScrollTo(super.scrollOffs);
+            super.menu.setScrollOffs(((float)mouseY - (float)i - 7.5F) / ((float)(j - i) - 15.0F));
+            super.menu.setScrollOffs(Mth.clamp(this.menu.getScrollOffs(), 0.0F, 1.0F));
+            this.consumptionScrollTo(this.menu.getScrollOffs());
             return true;
         }
 
-        if (this.gatheredScrolling) {
+        if (this.menu.isGatheredScrolling()) {
             int i = this.topPos + SCROLLBAR_Y;
             int j = i + SCROLLBAR_HEIGHT;
-            this.gatheredScrollOffs = ((float)mouseY - (float)i - 7.5F) / ((float)(j - i) - 15.0F);
-            this.gatheredScrollOffs = Mth.clamp(this.gatheredScrollOffs, 0.0F, 1.0F);
-            this.gatheredScrollTo( this.gatheredScrollOffs);
+            this.menu.setGatheredScrollOffs(((float)mouseY - (float)i - 7.5F) / ((float)(j - i) - 15.0F));
+            this.menu.setGatheredScrollOffs(Mth.clamp(this.menu.getGatheredScrollOffs(), 0.0F, 1.0F));
+            this.gatheredScrollTo(this.menu.getGatheredScrollOffs());
             return true;
         }
 
-        if (getSlotUnderMouse() != null && this.isDrillHeadSlot(getSlotUnderMouse().index)) {
+        /*
+        if (getSlotUnderMouse() != null && this.menu.isDrillHeadSlot(getSlotUnderMouse().index)) {
             // slotClicked(getSlotUnderMouse(), getSlotUnderMouse().index, 0, ClickType.PICKUP);
             return true;
-        }
+        }*/
 
         return super.mouseDragged(mouseX, mouseY, button, dragX, dragY);
-    }
-
-    private boolean isConsumptionSlot(int slotId) {
-        return slotId >= BE_INVENTORY_FIRST_SLOT_INDEX + CONSUMPTION_SLOT_START && slotId <= BE_INVENTORY_FIRST_SLOT_INDEX + CONSUMPTION_SLOT_END;
-    }
-
-    private boolean isGatheredSlot(int slotId) {
-        return slotId >= BE_INVENTORY_FIRST_SLOT_INDEX + GATHERED_SLOT_START && slotId <= BE_INVENTORY_FIRST_SLOT_INDEX + GATHERED_SLOT_END;
-    }
-
-    private boolean isDrillHeadSlot(int slotId) {
-        return slotId >= BE_INVENTORY_FIRST_SLOT_INDEX + CONSUMPTION_SLOT_START && slotId <= BE_INVENTORY_FIRST_SLOT_INDEX + GATHERED_SLOT_END;
     }
 }

@@ -18,11 +18,12 @@ import the_fireplace.caterpillar.core.init.MenuInit;
 import the_fireplace.caterpillar.core.network.PacketHandler;
 import the_fireplace.caterpillar.core.network.packet.client.CaterpillarSyncSlotC2SPacket;
 import the_fireplace.caterpillar.core.network.packet.client.DrillHeadSyncPowerC2SPacket;
+import the_fireplace.caterpillar.core.network.packet.client.CaterpillarSyncCarriedC2SPacket;
 import the_fireplace.caterpillar.core.network.packet.server.CaterpillarSyncInventoryS2CPacket;
 
 import static the_fireplace.caterpillar.common.block.entity.DrillHeadBlockEntity.*;
 
-public class DrillHeadMenu extends AbstractCaterpillarMenu {
+public class DrillHeadMenu extends AbstractScrollableMenu {
 
     public static final int CONSUMPTION_SLOT_X_START = 8;
 
@@ -43,6 +44,10 @@ public class DrillHeadMenu extends AbstractCaterpillarMenu {
     private static final int FUEL_SLOT_X = 80;
 
     private static final int FUEL_SLOT_Y = 53;
+
+    private float gatheredScrollOffs;
+
+    private boolean gatheredScrolling;
 
     public DrillHeadMenu(int id, Inventory playerInventory, FriendlyByteBuf extraData) {
         super(MenuInit.DRILL_HEAD.get(), id, playerInventory, extraData, DrillHeadContainerData.SIZE, DrillHeadBlockEntity.INVENTORY_SIZE);
@@ -239,7 +244,6 @@ public class DrillHeadMenu extends AbstractCaterpillarMenu {
     public void setSlot(int slotId, ItemStack stack) {
         if (this.blockEntity instanceof DrillHeadBlockEntity drillHeadBlockEntity) {
             drillHeadBlockEntity.setStackInSlot(slotId, stack);
-
             PacketHandler.sendToServer(new CaterpillarSyncSlotC2SPacket(slotId, stack, drillHeadBlockEntity.getBlockPos()));
         }
     }
@@ -251,5 +255,41 @@ public class DrillHeadMenu extends AbstractCaterpillarMenu {
            storageBlockEntity.setStackInSlot(slotId, stack);
            PacketHandler.sendToServer(new CaterpillarSyncSlotC2SPacket(slotId, stack, storageBlockEntity.getBlockPos()));
        }
+    }
+
+    public boolean isConsumptionSlot(int slotId) {
+        return slotId >= BE_INVENTORY_FIRST_SLOT_INDEX + CONSUMPTION_SLOT_START && slotId <= BE_INVENTORY_FIRST_SLOT_INDEX + CONSUMPTION_SLOT_END;
+    }
+
+    public boolean isGatheredSlot(int slotId) {
+        return slotId >= BE_INVENTORY_FIRST_SLOT_INDEX + GATHERED_SLOT_START && slotId <= BE_INVENTORY_FIRST_SLOT_INDEX + GATHERED_SLOT_END;
+    }
+
+    public boolean isDrillHeadSlot(int slotId) {
+        return slotId >= BE_INVENTORY_FIRST_SLOT_INDEX + CONSUMPTION_SLOT_START && slotId <= BE_INVENTORY_FIRST_SLOT_INDEX + GATHERED_SLOT_END;
+    }
+
+    public float getGatheredScrollOffs() {
+        return this.gatheredScrollOffs;
+    }
+
+    public void setGatheredScrollOffs(float scrollOffs) {
+        this.gatheredScrollOffs = scrollOffs;
+    }
+
+    public boolean isGatheredScrolling() {
+        return this.gatheredScrolling;
+    }
+
+    public void setGatheredScrolling(boolean scrolling) {
+        this.gatheredScrolling = scrolling;
+    }
+
+    @Override
+    public void setCarried(ItemStack stack) {
+        super.setCarried(stack);
+        super.setRemoteCarried(stack);
+
+        // PacketHandler.sendToServer(new CaterpillarSyncCarriedC2SPacket(stack, this.blockEntity.getBlockPos()));
     }
 }
