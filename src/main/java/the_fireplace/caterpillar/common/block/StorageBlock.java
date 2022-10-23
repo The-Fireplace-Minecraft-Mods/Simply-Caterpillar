@@ -82,14 +82,14 @@ public class StorageBlock extends AbstractCaterpillarBlock {
 
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
-        BlockPos blockPos = context.getClickedPos();
+        BlockPos pos = context.getClickedPos();
         Level level = context.getLevel();
         Direction direction = context.getHorizontalDirection();
 
         if (
-            blockPos.getY() < level.getMaxBuildHeight() - 1 &&
-            level.getBlockState(blockPos.relative(direction.getClockWise())).canBeReplaced(context) &&
-            level.getBlockState(blockPos.relative(direction.getCounterClockWise())).canBeReplaced(context)
+            pos.getY() < level.getMaxBuildHeight() - 1 &&
+            level.getBlockState(pos.relative(direction.getClockWise())).canBeReplaced(context) &&
+            level.getBlockState(pos.relative(direction.getCounterClockWise())).canBeReplaced(context)
         ) {
             return defaultBlockState().setValue(FACING, direction.getOpposite()).setValue(StorageBlock.PART, StoragePart.BASE);
         }
@@ -107,8 +107,8 @@ public class StorageBlock extends AbstractCaterpillarBlock {
         super.setPlacedBy(level, blockPos, blockState, livingEntity, stack);
     }
     private void dropContents(Level level, BlockPos pos) {
-        BlockEntity blockentity = level.getBlockEntity(pos);
-        if (blockentity instanceof AbstractCaterpillarBlockEntity caterpillarBlockEntity) {
+        BlockEntity blockEntity = level.getBlockEntity(pos);
+        if (blockEntity instanceof AbstractCaterpillarBlockEntity caterpillarBlockEntity) {
             if (!level.isClientSide()) {
                 caterpillarBlockEntity.drops();
             }
@@ -117,15 +117,20 @@ public class StorageBlock extends AbstractCaterpillarBlock {
 
     @Override
     public void playerWillDestroy(@NotNull Level level, @NotNull BlockPos pos, BlockState state, @NotNull Player player) {
-        Direction direction = state.getValue(FACING);
         BlockPos basePos = this.getBasePos(state, pos);
 
         this.dropContents(level, basePos);
-
-        level.destroyBlock(pos.relative(direction.getCounterClockWise()), false);
-        level.destroyBlock(pos.relative(direction.getClockWise()), false);
+        this.destroyStructure(level, basePos, state, player);
 
         super.playerWillDestroy(level, pos, state, player);
+    }
+
+    private void destroyStructure(Level level, BlockPos pos, BlockState state, Player player) {
+        Direction direction = state.getValue(FACING);
+
+        level.destroyBlock(pos, !player.isCreative());
+        level.destroyBlock(pos.relative(direction.getCounterClockWise()), false);
+        level.destroyBlock(pos.relative(direction.getClockWise()), false);
     }
 
     public BlockPos getBasePos(BlockState state, BlockPos pos) {
