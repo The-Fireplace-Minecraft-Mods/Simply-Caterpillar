@@ -72,5 +72,5 @@ public class CaterpillarBlockUtil {
         assert blockEntity != null;
         Direction direction = blockEntity.getBlockState().getValue(HorizontalDirectionalBlock.FACING);
         return getConnectedCaterpillarBlockEntities(level, pos.relative(direction), caterpillarBlockEntities);
-     }
+    }
 }

@@ -117,8 +117,8 @@ public class DrillHeadBlock extends AbstractCaterpillarBlock implements SimpleWa
     }
 
     private void dropContents(Level level, BlockPos pos) {
-        BlockEntity blockentity = level.getBlockEntity(pos);
-        if (blockentity instanceof AbstractCaterpillarBlockEntity caterpillarBlockEntity) {
+        BlockEntity blockEntity = level.getBlockEntity(pos);
+        if (blockEntity instanceof AbstractCaterpillarBlockEntity caterpillarBlockEntity) {
             if (!level.isClientSide()) {
                 caterpillarBlockEntity.drops();
             }
