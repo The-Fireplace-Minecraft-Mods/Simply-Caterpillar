@@ -5,6 +5,7 @@ import the_fireplace.caterpillar.Caterpillar;
 
 /**
  * For configuration settings that change the behaviour of code on the LOGICAL SERVER.
+ *
  * This can be moved to an inner class of CaterpillarConfig, but is separate because of personal preference and to keep the code organised
  */
 public class ServerConfig {

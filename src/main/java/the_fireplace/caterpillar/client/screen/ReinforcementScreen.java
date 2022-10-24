@@ -85,6 +85,11 @@ public class ReinforcementScreen extends AbstractCaterpillarScreen<Reinforcement
         super.renderLabels(stack, mouseX, mouseY);
     }
 
+    @Override
+    protected void renderTutorial(PoseStack stack) {
+
+    }
+
     private void renderReplacerButtons() {
         for (ImageButton button : this.replacerButtons) {
             super.removeWidget(button);

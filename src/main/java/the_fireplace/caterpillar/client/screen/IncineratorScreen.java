@@ -1,5 +1,6 @@
 package the_fireplace.caterpillar.client.screen;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.ClickType;
@@ -62,5 +63,10 @@ public class IncineratorScreen extends AbstractCaterpillarScreen<IncineratorMenu
 
     private boolean isIncineratorSlot(int slotId) {
         return slotId >= BE_INVENTORY_FIRST_SLOT_INDEX && slotId < BE_INVENTORY_FIRST_SLOT_INDEX + INVENTORY_SIZE;
+    }
+
+    @Override
+    protected void renderTutorial(PoseStack stack) {
+
     }
 }

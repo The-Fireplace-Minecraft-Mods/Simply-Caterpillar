@@ -48,6 +48,11 @@ public class DecorationScreen extends AbstractCaterpillarScreen<DecorationMenu> 
         this.renderScrollBar(stack);
     }
 
+    @Override
+    protected void renderTutorial(PoseStack stack) {
+
+    }
+
     public void renderScrollBar(PoseStack stack) {
         int i = this.leftPos + 156;
         int j = this.topPos + SCROLLER_WIDTH;

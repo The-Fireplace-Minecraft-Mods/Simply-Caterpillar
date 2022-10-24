@@ -58,7 +58,7 @@ public class DrillHeadScreen extends AbstractScrollableScreen<DrillHeadMenu> {
 
     private static final int BURN_SLOT_BG_WIDTH = 14;
 
-    public PowerButton powerButton;
+    private PowerButton powerButton;
 
     public DrillHeadScreen(DrillHeadMenu menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title, ScreenTabs.DRILL_HEAD, SCROLLER_BG_X + (menu.canScroll() ? 0 : SCROLLER_WIDTH), SCROLLER_BG_Y, SCROLLER_WIDTH, SCROLLER_HEIGHT, CONSUMPTION_SCROLLBAR_X, SCROLLBAR_Y, SCROLLBAR_HEIGHT);
@@ -85,6 +85,7 @@ public class DrillHeadScreen extends AbstractScrollableScreen<DrillHeadMenu> {
         super.render(stack, mouseX, mouseY, partialTicks);
 
         this.renderTooltipPowerButton(stack, mouseX, mouseY);
+        this.renderTutorialTooltip(stack, mouseX, mouseY);
     }
 
     @Override
@@ -106,9 +107,63 @@ public class DrillHeadScreen extends AbstractScrollableScreen<DrillHeadMenu> {
         this.font.draw(stack, super.playerInventoryTitle, super.inventoryLabelX, super.inventoryLabelY, 0x404040);
     }
 
+    private void renderTutorialTooltip(PoseStack stack, int mouseX, int mouseY) {
+
+    }
+
+    @Override
+    protected void renderTutorial(PoseStack stack) {
+        if (super.tutorialButton != null && super.tutorialButton.showTutorial()) {
+            if (this.menu.canScroll()) {
+                this.renderWheelStorageTutorial(stack);
+            }
+
+            this.renderFuelSlotTutorial(stack);
+            this.renderPowerButtonTutorial(stack);
+        }
+    }
+
+    private void renderPowerButtonTutorial(PoseStack stack) {
+        int tutorialX = super.leftPos + 90;
+        int tutorialY = super.topPos + 32;
+        List<Component> powerButtonTutorial = new ArrayList<>();
+
+        MutableComponent tutorialText =  Component.literal("<").withStyle(ChatFormatting.GREEN).append(" ");
+        tutorialText.append(Component.translatable(Caterpillar.MOD_ID + ".tutorial.drill_head.powerButton").withStyle(ChatFormatting.WHITE).append(""));
+        powerButtonTutorial.add(tutorialText);
+
+        this.renderComponentTooltip(stack, powerButtonTutorial, tutorialX, tutorialY);
+    }
+
+    private void renderFuelSlotTutorial(PoseStack stack) {
+        int tutorialX = super.leftPos + 90;
+        int tutorialY = super.topPos + 69;
+        List<Component> fuelSlotTutorial = new ArrayList<>();
+
+        MutableComponent tutorialText =  Component.literal("<").withStyle(ChatFormatting.GREEN).append(" ");
+        tutorialText.append(Component.translatable(Caterpillar.MOD_ID + ".tutorial.drill_head.fuelSlot").withStyle(ChatFormatting.WHITE).append(""));
+        fuelSlotTutorial.add(tutorialText);
+
+        this.renderComponentTooltip(stack, fuelSlotTutorial, tutorialX, tutorialY);
+    }
+
+    private void renderWheelStorageTutorial(PoseStack stack) {
+        int tutorialX = super.leftPos + 230;
+        int tutorialY = super.topPos + 87;
+        List<Component> storageWheelTutorial = new ArrayList<>();
+
+        Component tutorialArrow = Component.literal("             /\\        /\\").withStyle(ChatFormatting.GREEN);
+        storageWheelTutorial.add(tutorialArrow);
+
+        MutableComponent tutorialText = Component.translatable(Caterpillar.MOD_ID + ".tutorial.drill_head.wheelStorage");
+        storageWheelTutorial.add(tutorialText);
+
+        this.renderComponentTooltip(stack, storageWheelTutorial, tutorialX, tutorialY);
+    }
+
     private void addPowerButton() {
         this.powerButton = new PowerButton(this.menu.isPowered(), super.leftPos + (super.imageWidth - SLOT_SIZE) / 2, super.topPos + 16, POWER_BG_WIDTH, POWER_BG_HEIGHT, POWER_BG_X, POWER_BG_Y, POWER_BG_HEIGHT, ScreenTabs.DRILL_HEAD.TEXTURE, (onPress) -> this.menu.setPower(!this.menu.isPowered()));
-        this.addRenderableWidget(powerButton);
+        this.addRenderableWidget(this.powerButton);
     }
 
     private void renderTooltipPowerButton(PoseStack stack, int mouseX, int mouseY) {

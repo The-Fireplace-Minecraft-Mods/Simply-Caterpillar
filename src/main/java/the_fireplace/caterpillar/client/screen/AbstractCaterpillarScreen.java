@@ -13,8 +13,10 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
 import the_fireplace.caterpillar.Caterpillar;
 import the_fireplace.caterpillar.client.screen.util.ScreenTabs;
+import the_fireplace.caterpillar.client.screen.widget.TutorialButton;
 import the_fireplace.caterpillar.common.block.entity.*;
 import the_fireplace.caterpillar.common.menu.AbstractCaterpillarMenu;
+import the_fireplace.caterpillar.config.CaterpillarConfig;
 import the_fireplace.caterpillar.core.network.PacketHandler;
 import the_fireplace.caterpillar.core.network.packet.client.CaterpillarSyncSelectedTabC2SPacket;
 
@@ -26,7 +28,7 @@ public abstract class AbstractCaterpillarScreen<T extends AbstractCaterpillarMen
 
     public static final int SLOT_SIZE = 18;
 
-    public static final ResourceLocation GUI_TABS = new ResourceLocation(Caterpillar.MOD_ID, "textures/gui/caterpillar.png");
+    public static final ResourceLocation CATERPILLAR_GUI = new ResourceLocation(Caterpillar.MOD_ID, "textures/gui/caterpillar.png");
 
     public static final int TAB_WIDTH = 31;
 
@@ -47,6 +49,20 @@ public abstract class AbstractCaterpillarScreen<T extends AbstractCaterpillarMen
     private final ScreenTabs SELECTED_TAB;
 
     private final List<ImageButton> tabButtons = new ArrayList<>();
+
+    private final int TUTORIAL_WIDTH = 14;
+
+    private final int TUTORIAL_HEIGHT = 18;
+
+    private final int TUTORIAL_X = -11;
+
+    private final int TUTORIAL_Y = -TUTORIAL_HEIGHT - 6;
+
+    private final int TUTORIAL_BG_X = 0;
+
+    private final int TUTORIAL_BG_Y = 41;
+
+    TutorialButton tutorialButton;
 
     public AbstractCaterpillarScreen(T menu, Inventory playerInventory, Component title, ScreenTabs selectedTab) {
         super(menu, playerInventory, title);
@@ -74,6 +90,7 @@ public abstract class AbstractCaterpillarScreen<T extends AbstractCaterpillarMen
         this.renderTooltipTabButtons(stack, mouseX, mouseY);
 
         this.renderTabItems();
+        this.renderTutorial(stack);
     }
 
     @Override
@@ -89,7 +106,14 @@ public abstract class AbstractCaterpillarScreen<T extends AbstractCaterpillarMen
         this.font.draw(stack, super.playerInventoryTitle, super.inventoryLabelX, super.inventoryLabelY, 0x404040);
     }
 
+    protected abstract void renderTutorial(PoseStack stack);
+
     private void addTutorialButton() {
+        this.tutorialButton = new TutorialButton(false,super.leftPos + TUTORIAL_X, super.topPos + SELECTED_TAB.IMAGE_HEIGHT + TUTORIAL_Y, TUTORIAL_WIDTH, TUTORIAL_HEIGHT, TUTORIAL_BG_X, TUTORIAL_BG_Y, 0, CATERPILLAR_GUI, (onPress) -> {
+            this.tutorialButton.setShowTutorial(!this.tutorialButton.showTutorial());
+        });
+
+        this.addRenderableWidget(this.tutorialButton);
     }
 
     private void addTabButtons() {
@@ -101,11 +125,11 @@ public abstract class AbstractCaterpillarScreen<T extends AbstractCaterpillarMen
         for (ScreenTabs tab: ScreenTabs.values()) {
             if (tabShouldBeDisplayed(tab)) {
                 if (this.SELECTED_TAB.equals(tab)) {
-                    this.tabButtons.add(new ImageButton(super.leftPos + TAB_X_SELECTED, super.topPos + TAB_Y + incrementTabPos*TAB_HEIGHT, TAB_WIDTH, TAB_HEIGHT, TAB_BG_X_SELECTED, TAB_BG_Y, 0, GUI_TABS, (onPress) -> {
+                    this.tabButtons.add(new ImageButton(super.leftPos + TAB_X_SELECTED, super.topPos + TAB_Y + incrementTabPos*TAB_HEIGHT, TAB_WIDTH, TAB_HEIGHT, TAB_BG_X_SELECTED, TAB_BG_Y, 0, CATERPILLAR_GUI, (onPress) -> {
 
                     }));
                 } else {
-                    this.tabButtons.add(new ImageButton(super.leftPos + TAB_X_UNSELECTED, super.topPos + TAB_Y + incrementTabPos*TAB_HEIGHT, TAB_WIDTH, TAB_HEIGHT, TAB_BG_X_UNSELECTED, TAB_BG_Y, 0, GUI_TABS, (onPress) -> PacketHandler.sendToServer(new CaterpillarSyncSelectedTabC2SPacket(tab, this.menu.blockEntity.getBlockPos()))));
+                    this.tabButtons.add(new ImageButton(super.leftPos + TAB_X_UNSELECTED, super.topPos + TAB_Y + incrementTabPos*TAB_HEIGHT, TAB_WIDTH, TAB_HEIGHT, TAB_BG_X_UNSELECTED, TAB_BG_Y, 0, CATERPILLAR_GUI, (onPress) -> PacketHandler.sendToServer(new CaterpillarSyncSelectedTabC2SPacket(tab, this.menu.blockEntity.getBlockPos()))));
                 }
 
                 incrementTabPos++;
