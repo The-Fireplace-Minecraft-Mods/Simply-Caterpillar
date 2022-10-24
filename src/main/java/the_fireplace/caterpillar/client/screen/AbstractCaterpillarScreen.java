@@ -6,6 +6,7 @@ import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraftforge.api.distmarker.Dist;
@@ -16,7 +17,6 @@ import the_fireplace.caterpillar.client.screen.util.ScreenTabs;
 import the_fireplace.caterpillar.client.screen.widget.TutorialButton;
 import the_fireplace.caterpillar.common.block.entity.*;
 import the_fireplace.caterpillar.common.menu.AbstractCaterpillarMenu;
-import the_fireplace.caterpillar.config.CaterpillarConfig;
 import the_fireplace.caterpillar.core.network.PacketHandler;
 import the_fireplace.caterpillar.core.network.packet.client.CaterpillarSyncSelectedTabC2SPacket;
 
@@ -46,21 +46,21 @@ public abstract class AbstractCaterpillarScreen<T extends AbstractCaterpillarMen
 
     public static final int TAB_BG_Y = 0;
 
-    private final ScreenTabs SELECTED_TAB;
+    protected final ScreenTabs SELECTED_TAB;
 
     private final List<ImageButton> tabButtons = new ArrayList<>();
 
-    private final int TUTORIAL_WIDTH = 14;
+    public final int TUTORIAL_WIDTH = 14;
 
-    private final int TUTORIAL_HEIGHT = 18;
+    public final int TUTORIAL_HEIGHT = 18;
 
-    private final int TUTORIAL_X = -11;
+    public final int TUTORIAL_X = -11;
 
-    private final int TUTORIAL_Y = -TUTORIAL_HEIGHT - 6;
+    public final int TUTORIAL_Y = -TUTORIAL_HEIGHT - 6;
 
-    private final int TUTORIAL_BG_X = 0;
+    public final int TUTORIAL_BG_X = 0;
 
-    private final int TUTORIAL_BG_Y = 41;
+    public final int TUTORIAL_BG_Y = 41;
 
     TutorialButton tutorialButton;
 
@@ -88,6 +88,7 @@ public abstract class AbstractCaterpillarScreen<T extends AbstractCaterpillarMen
         super.render(stack, mouseX, mouseY, partialTicks);
         this.renderTooltip(stack, mouseX, mouseY);
         this.renderTooltipTabButtons(stack, mouseX, mouseY);
+        this.renderTutorialTooltip(stack, mouseX, mouseY);
 
         this.renderTabItems();
         this.renderTutorial(stack);
@@ -104,6 +105,22 @@ public abstract class AbstractCaterpillarScreen<T extends AbstractCaterpillarMen
     protected void renderLabels(@NotNull PoseStack stack, int mouseX, int mouseY) {
         this.font.draw(stack, this.SELECTED_TAB.TITLE, super.titleLabelX, super.titleLabelY, 0x404040);
         this.font.draw(stack, super.playerInventoryTitle, super.inventoryLabelX, super.inventoryLabelY, 0x404040);
+    }
+
+    private void renderTutorialTooltip(PoseStack stack, int mouseX, int mouseY) {
+        if (mouseX > super.leftPos + TUTORIAL_X &&
+                mouseX < super.leftPos + TUTORIAL_X + TUTORIAL_WIDTH &&
+                mouseY > super.topPos + this.SELECTED_TAB.IMAGE_HEIGHT + TUTORIAL_Y &&
+                mouseY < super.topPos + this.SELECTED_TAB.IMAGE_HEIGHT + TUTORIAL_Y + TUTORIAL_HEIGHT
+        ) {
+            int tooltipX = super.leftPos - 6;
+            int tooltipY = super.topPos + 159;
+
+            List<Component> tooltip = new ArrayList<>();
+            MutableComponent tooltipText = Component.translatable(Caterpillar.MOD_ID + ".tutorial." + (this.tutorialButton != null && this.tutorialButton.showTutorial() ? "hide" : "show"));
+            tooltip.add(tooltipText);
+            this.renderComponentTooltip(stack, tooltip, tooltipX, tooltipY);
+        }
     }
 
     protected abstract void renderTutorial(PoseStack stack);

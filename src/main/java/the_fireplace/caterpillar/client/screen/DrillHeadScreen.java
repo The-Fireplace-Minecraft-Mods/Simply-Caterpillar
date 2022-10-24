@@ -85,7 +85,6 @@ public class DrillHeadScreen extends AbstractScrollableScreen<DrillHeadMenu> {
         super.render(stack, mouseX, mouseY, partialTicks);
 
         this.renderTooltipPowerButton(stack, mouseX, mouseY);
-        this.renderTutorialTooltip(stack, mouseX, mouseY);
     }
 
     @Override
@@ -105,10 +104,6 @@ public class DrillHeadScreen extends AbstractScrollableScreen<DrillHeadMenu> {
         this.font.draw(stack, DrillHeadBlockEntity.CONSUMPTION_TITLE, consumptionX, consumptionY, 0x404040);
         this.font.draw(stack, DrillHeadBlockEntity.GATHERED_TITLE, gatheredX, gatheredY, 0x404040);
         this.font.draw(stack, super.playerInventoryTitle, super.inventoryLabelX, super.inventoryLabelY, 0x404040);
-    }
-
-    private void renderTutorialTooltip(PoseStack stack, int mouseX, int mouseY) {
-
     }
 
     @Override

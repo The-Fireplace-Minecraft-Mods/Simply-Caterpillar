@@ -52,9 +52,8 @@
   "simplycaterpillar.tutorial.show": "Show Tutorial",
   "simplycaterpillar.tutorial.hide": "Hide Tutorial",
   "simplycaterpillar.tutorial.drill_head.wheelStorage" : "Use the mouse wheel to see the storage.",
-  "simplycaterpillar.tutorial.drill_head.fuelSlot" : "Place Coal/Fuel here",
-  "simplycaterpillar.tutorial.drill_head.powerButton" : "Click on power button to Turn On/Off",
-
+  "simplycaterpillar.tutorial.drill_head.fuelSlot" : "Place fuel here",
+  "simplycaterpillar.tutorial.drill_head.powerButton" : "Click on power button to turn On/Off",
 
   "simplycaterpillar.options": "These are the options for each side\\nMouse over them to see what they are\\nClick to toggle\\nRed = off\\nGreen = on",
   "simplycaterpillar.options2": "These are the blocks it will replace with\\nNo block means it will leave it alone\\nand not replace it. you\\nmust have the blocks in\\nthe inventory of the drill\\nfor it to place them",
