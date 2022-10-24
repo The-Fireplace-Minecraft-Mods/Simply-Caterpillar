@@ -1,17 +1,23 @@
 package the_fireplace.caterpillar.client.screen;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import the_fireplace.caterpillar.Caterpillar;
 import the_fireplace.caterpillar.client.screen.util.ScreenTabs;
 import the_fireplace.caterpillar.common.block.entity.IncineratorBlockEntity;
 import the_fireplace.caterpillar.common.menu.IncineratorMenu;
 import the_fireplace.caterpillar.core.network.PacketHandler;
 import the_fireplace.caterpillar.core.network.packet.client.CaterpillarSyncSlotC2SPacket;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static the_fireplace.caterpillar.common.block.entity.IncineratorBlockEntity.INVENTORY_SIZE;
 import static the_fireplace.caterpillar.common.menu.AbstractCaterpillarMenu.BE_INVENTORY_FIRST_SLOT_INDEX;
@@ -67,6 +73,20 @@ public class IncineratorScreen extends AbstractCaterpillarScreen<IncineratorMenu
 
     @Override
     protected void renderTutorial(PoseStack stack) {
+        if (super.tutorialButton != null && super.tutorialButton.showTutorial()) {
+            this.renderIncineratorTutorial(stack);
+        }
+    }
 
+    private void renderIncineratorTutorial(PoseStack stack) {
+        int tutorialX = super.leftPos + 108;
+        int tutorialY = super.topPos + 32;
+        List<Component> incineratorTutorial = new ArrayList<>();
+
+        MutableComponent tutorialText =  Component.literal("<").withStyle(ChatFormatting.GREEN).append(" ");
+        tutorialText.append(Component.translatable(Caterpillar.MOD_ID + ".tutorial.incinerator").withStyle(ChatFormatting.WHITE).append(""));
+        incineratorTutorial.add(tutorialText);
+
+        this.renderComponentTooltip(stack, incineratorTutorial, tutorialX, tutorialY);
     }
 }
