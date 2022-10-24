@@ -120,7 +120,7 @@ public class DrillHeadScreen extends AbstractScrollableScreen<DrillHeadMenu> {
 
     private void renderPowerButtonTutorial(PoseStack stack) {
         int tutorialX = super.leftPos + 90;
-        int tutorialY = super.topPos + 32;
+        int tutorialY = super.topPos + 33;
         List<Component> powerButtonTutorial = new ArrayList<>();
 
         MutableComponent tutorialText =  Component.literal("<").withStyle(ChatFormatting.GREEN).append(" ");

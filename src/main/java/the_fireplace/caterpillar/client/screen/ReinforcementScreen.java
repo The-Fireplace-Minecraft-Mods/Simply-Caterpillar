@@ -87,7 +87,38 @@ public class ReinforcementScreen extends AbstractCaterpillarScreen<Reinforcement
 
     @Override
     protected void renderTutorial(PoseStack stack) {
+        if (super.tutorialButton != null && super.tutorialButton.showTutorial()) {
+            this.renderReplacerButtonsTutorial(stack);
+            this.renderReplacerBlocksTutorial(stack);
+        }
+    }
 
+    private void renderReplacerButtonsTutorial(PoseStack stack) {
+        int tutorialX = super.leftPos - 1;
+        int tutorialY = super.topPos + 122;
+        List<Component> replacerButtonsTutorial = new ArrayList<>();
+
+        Component tutorialArrow = Component.literal(" /\\").withStyle(ChatFormatting.GREEN);
+        replacerButtonsTutorial.add(tutorialArrow);
+
+        MutableComponent tutorialText = Component.translatable(Caterpillar.MOD_ID + ".tutorial.reinforcement.replacer_buttons").withStyle(ChatFormatting.WHITE);
+        replacerButtonsTutorial.add(tutorialText);
+
+        this.renderComponentTooltip(stack, replacerButtonsTutorial, tutorialX, tutorialY);
+    }
+
+    private void renderReplacerBlocksTutorial(PoseStack stack) {
+        int tutorialX = super.leftPos + 25;
+        int tutorialY = super.topPos - 17;
+        List<Component> replacerBlocksTutorial = new ArrayList<>();
+
+        MutableComponent tutorialText = Component.translatable(Caterpillar.MOD_ID + ".tutorial.reinforcement.replacer_blocks");
+        replacerBlocksTutorial.add(tutorialText);
+
+        Component tutorialArrow = Component.literal("  \\/").withStyle(ChatFormatting.GREEN);
+        replacerBlocksTutorial.add(tutorialArrow);
+
+        this.renderComponentTooltip(stack, replacerBlocksTutorial, tutorialX, tutorialY);
     }
 
     private void renderReplacerButtons() {

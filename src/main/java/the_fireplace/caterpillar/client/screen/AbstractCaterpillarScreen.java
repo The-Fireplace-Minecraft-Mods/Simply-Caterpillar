@@ -114,7 +114,7 @@ public abstract class AbstractCaterpillarScreen<T extends AbstractCaterpillarMen
                 mouseY < super.topPos + this.SELECTED_TAB.IMAGE_HEIGHT + TUTORIAL_Y + TUTORIAL_HEIGHT
         ) {
             int tooltipX = super.leftPos - 6;
-            int tooltipY = super.topPos + 159;
+            int tooltipY = super.topPos + this.SELECTED_TAB.IMAGE_HEIGHT - 7;
 
             List<Component> tooltip = new ArrayList<>();
             MutableComponent tooltipText = Component.translatable(Caterpillar.MOD_ID + ".tutorial." + (this.tutorialButton != null && this.tutorialButton.showTutorial() ? "hide" : "show"));
