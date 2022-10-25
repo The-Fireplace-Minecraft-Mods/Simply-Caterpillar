@@ -19,6 +19,10 @@
 
 -------
 
+<div align="center">
+	<img src=".github/sources/simply-caterpillar-wallpaper.png" alt="Simply Caterpillar wallpaper" />
+</div>
+
 **Simply Caterpillar** adds a drill that makes 3x3 mineshafts for you. You can add or not add any part to customize your drill.
 
 ## Features
