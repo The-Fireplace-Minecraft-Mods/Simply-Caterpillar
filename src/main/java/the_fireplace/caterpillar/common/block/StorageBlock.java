@@ -2,6 +2,7 @@ package the_fireplace.caterpillar.common.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -13,6 +14,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
@@ -20,9 +22,15 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import the_fireplace.caterpillar.common.block.entity.AbstractCaterpillarBlockEntity;
+import the_fireplace.caterpillar.common.block.entity.ReinforcementBlockEntity;
+import the_fireplace.caterpillar.common.block.entity.StorageBlockEntity;
+import the_fireplace.caterpillar.common.block.util.CaterpillarBlockUtil;
+import the_fireplace.caterpillar.common.block.util.ReinforcementPart;
 import the_fireplace.caterpillar.common.block.util.StoragePart;
 import the_fireplace.caterpillar.core.init.BlockEntityInit;
+import the_fireplace.caterpillar.core.init.BlockInit;
 
+import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.Optional;
@@ -91,7 +99,13 @@ public class StorageBlock extends AbstractCaterpillarBlock {
             level.getBlockState(pos.relative(direction.getClockWise())).canBeReplaced(context) &&
             level.getBlockState(pos.relative(direction.getCounterClockWise())).canBeReplaced(context)
         ) {
-            return defaultBlockState().setValue(FACING, direction.getOpposite()).setValue(StorageBlock.PART, StoragePart.BASE);
+            BlockPos caterpillarHeadPos = CaterpillarBlockUtil.getCaterpillarHeadPos(level, pos.relative(direction), direction.getOpposite());
+
+            if (!CaterpillarBlockUtil.getConnectedCaterpillarBlockEntities(level, caterpillarHeadPos, new ArrayList<>()).stream().anyMatch(blockEntity -> blockEntity instanceof StorageBlockEntity)) {
+                return defaultBlockState().setValue(FACING, direction.getOpposite()).setValue(StorageBlock.PART, StoragePart.BASE);
+            } else {
+                context.getPlayer().displayClientMessage(Component.translatable("block.simplycaterpillar.blocks.alreadyConnected", BlockInit.STORAGE.get().getName()), true);
+            }
         }
 
         return null;

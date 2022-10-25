@@ -10,6 +10,8 @@
   "block.simplycaterpillar.drill_base": "Basic Drill Segment",
   "block.simplycaterpillar.storage": "Drill Storage",
   "block.simplycaterpillar.incinerator": "Incinerator",
+  "block.simplycaterpillar.blocks.alreadyConnected": "There is already a %s connected to the caterpillar.",
+
 
   "itemGroup.simplycaterpillar": "Caterpillar",
 

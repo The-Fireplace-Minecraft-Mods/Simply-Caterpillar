@@ -2,6 +2,8 @@ package the_fireplace.caterpillar.common.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -25,9 +27,12 @@ import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import the_fireplace.caterpillar.common.block.entity.DecorationBlockEntity;
+import the_fireplace.caterpillar.common.block.util.CaterpillarBlockUtil;
 import the_fireplace.caterpillar.common.block.util.DecorationPart;
 import the_fireplace.caterpillar.core.init.BlockEntityInit;
+import the_fireplace.caterpillar.core.init.BlockInit;
 
+import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.Optional;
@@ -109,7 +114,13 @@ public class DecorationBlock extends AbstractCaterpillarBlock {
         Direction direction = context.getHorizontalDirection();
 
         if (blockPos.getY() < level.getMaxBuildHeight() - 1 && level.getBlockState(blockPos.relative(direction.getClockWise())).canBeReplaced(context) && level.getBlockState(blockPos.relative(direction.getCounterClockWise())).canBeReplaced(context)) {
-            return super.defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite()).setValue(PART, DecorationPart.BASE);
+            BlockPos caterpillarHeadPos = CaterpillarBlockUtil.getCaterpillarHeadPos(level, blockPos.relative(direction), direction.getOpposite());
+
+            if (!CaterpillarBlockUtil.getConnectedCaterpillarBlockEntities(level, caterpillarHeadPos, new ArrayList<>()).stream().anyMatch(blockEntity -> blockEntity instanceof DecorationBlockEntity)) {
+                return super.defaultBlockState().setValue(FACING, direction.getOpposite()).setValue(PART, DecorationPart.BASE);
+            } else {
+                context.getPlayer().displayClientMessage(Component.translatable("block.simplycaterpillar.blocks.alreadyConnected", BlockInit.DECORATION.get().getName()), true);
+            }
         }
 
         return null;

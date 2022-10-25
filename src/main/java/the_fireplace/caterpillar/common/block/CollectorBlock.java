@@ -2,6 +2,7 @@ package the_fireplace.caterpillar.common.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -21,8 +22,13 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import the_fireplace.caterpillar.common.block.entity.CollectorBlockEntity;
+import the_fireplace.caterpillar.common.block.entity.IncineratorBlockEntity;
+import the_fireplace.caterpillar.common.block.util.CaterpillarBlockUtil;
 import the_fireplace.caterpillar.core.init.BlockEntityInit;
+import the_fireplace.caterpillar.core.init.BlockInit;
 
+import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.Optional;
@@ -100,7 +106,13 @@ public class CollectorBlock extends AbstractCaterpillarBlock {
             blockPos.getY() < level.getMaxBuildHeight() - 1 &&
             level.getBlockState(blockPos.above()).canBeReplaced(context)
         ) {
-            return super.defaultBlockState().setValue(FACING, direction.getOpposite()).setValue(CollectorBlock.HALF, DoubleBlockHalf.LOWER);
+            BlockPos caterpillarHeadPos = CaterpillarBlockUtil.getCaterpillarHeadPos(level, blockPos.above().relative(direction), direction.getOpposite());
+
+            if (!CaterpillarBlockUtil.getConnectedCaterpillarBlockEntities(level, caterpillarHeadPos, new ArrayList<>()).stream().anyMatch(blockEntity -> blockEntity instanceof CollectorBlockEntity)) {
+                return super.defaultBlockState().setValue(FACING, direction.getOpposite()).setValue(CollectorBlock.HALF, DoubleBlockHalf.LOWER);
+            } else {
+                context.getPlayer().displayClientMessage(Component.translatable("block.simplycaterpillar.blocks.alreadyConnected", BlockInit.COLLECTOR.get().getName()), true);
+            }
         }
 
         return null;

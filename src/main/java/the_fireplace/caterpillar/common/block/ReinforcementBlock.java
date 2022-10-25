@@ -2,6 +2,7 @@ package the_fireplace.caterpillar.common.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -18,6 +19,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.BlockHitResult;
@@ -28,10 +30,14 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import the_fireplace.caterpillar.common.block.entity.CollectorBlockEntity;
 import the_fireplace.caterpillar.common.block.entity.ReinforcementBlockEntity;
+import the_fireplace.caterpillar.common.block.util.CaterpillarBlockUtil;
 import the_fireplace.caterpillar.common.block.util.ReinforcementPart;
 import the_fireplace.caterpillar.core.init.BlockEntityInit;
+import the_fireplace.caterpillar.core.init.BlockInit;
 
+import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.Optional;
@@ -139,7 +145,13 @@ public class ReinforcementBlock extends AbstractCaterpillarBlock implements Simp
             level.getBlockState(blockPos.above()).canBeReplaced(context) &&
             level.getBlockState(blockPos.above(2)).canBeReplaced(context)
         ){
-            return defaultBlockState().setValue(FACING, direction.getOpposite()).setValue(ReinforcementBlock.PART, ReinforcementPart.BOTTOM).setValue(DrillHeadBlock.WATERLOGGED, context.getLevel().getFluidState(context.getClickedPos()).getType() == Fluids.WATER);
+            BlockPos caterpillarHeadPos = CaterpillarBlockUtil.getCaterpillarHeadPos(level, blockPos.above().relative(direction), direction.getOpposite());
+
+            if (!CaterpillarBlockUtil.getConnectedCaterpillarBlockEntities(level, caterpillarHeadPos, new ArrayList<>()).stream().anyMatch(blockEntity -> blockEntity instanceof ReinforcementBlockEntity)) {
+                return defaultBlockState().setValue(FACING, direction.getOpposite()).setValue(ReinforcementBlock.PART, ReinforcementPart.BOTTOM).setValue(DrillHeadBlock.WATERLOGGED, context.getLevel().getFluidState(context.getClickedPos()).getType() == Fluids.WATER);
+            } else {
+                context.getPlayer().displayClientMessage(Component.translatable("block.simplycaterpillar.blocks.alreadyConnected", BlockInit.REINFORCEMENT.get().getName()), true);
+            }
         }
 
         return null;

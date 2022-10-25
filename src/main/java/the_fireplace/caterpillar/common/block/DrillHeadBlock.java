@@ -2,6 +2,7 @@ package the_fireplace.caterpillar.common.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -27,9 +28,12 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import the_fireplace.caterpillar.common.block.entity.AbstractCaterpillarBlockEntity;
 import the_fireplace.caterpillar.common.block.entity.DrillHeadBlockEntity;
+import the_fireplace.caterpillar.common.block.util.CaterpillarBlockUtil;
 import the_fireplace.caterpillar.common.block.util.DrillHeadPart;
 import the_fireplace.caterpillar.core.init.BlockEntityInit;
+import the_fireplace.caterpillar.core.init.BlockInit;
 
+import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.Optional;
@@ -97,7 +101,14 @@ public class DrillHeadBlock extends AbstractCaterpillarBlock implements SimpleWa
                 level.getBlockState(blockPos.above(2).relative(direction.getClockWise())).canBeReplaced(context) &&
                 level.getBlockState(blockPos.above(2).relative(direction.getCounterClockWise())).canBeReplaced(context)
         ) {
-            return defaultBlockState().setValue(FACING, direction.getOpposite()).setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_BOTTOM).setValue(DrillHeadBlock.WATERLOGGED, context.getLevel().getFluidState(context.getClickedPos()).getType() == Fluids.WATER);
+            BlockPos caterpillarHeadPos = CaterpillarBlockUtil.getCaterpillarHeadPos(level, blockPos.above().relative(direction), direction.getOpposite());
+
+            if (!CaterpillarBlockUtil.getConnectedCaterpillarBlockEntities(level, caterpillarHeadPos, new ArrayList<>()).stream().anyMatch(blockEntity -> blockEntity instanceof DrillHeadBlockEntity)) {
+                return defaultBlockState().setValue(FACING, direction.getOpposite()).setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_BOTTOM).setValue(DrillHeadBlock.WATERLOGGED, context.getLevel().getFluidState(context.getClickedPos()).getType() == Fluids.WATER);
+            } else {
+                context.getPlayer().displayClientMessage(Component.translatable("block.simplycaterpillar.blocks.alreadyConnected", BlockInit.DRILL_HEAD.get().getName()), true);
+            }
+
         }
 
         return null;

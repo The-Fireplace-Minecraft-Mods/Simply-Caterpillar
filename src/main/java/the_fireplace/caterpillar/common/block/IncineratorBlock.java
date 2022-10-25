@@ -1,14 +1,18 @@
 package the_fireplace.caterpillar.common.block;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.Shapes;
@@ -16,9 +20,15 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import the_fireplace.caterpillar.common.block.entity.CollectorBlockEntity;
+import the_fireplace.caterpillar.common.block.entity.DecorationBlockEntity;
 import the_fireplace.caterpillar.common.block.entity.IncineratorBlockEntity;
+import the_fireplace.caterpillar.common.block.util.CaterpillarBlockUtil;
+import the_fireplace.caterpillar.common.block.util.DecorationPart;
 import the_fireplace.caterpillar.core.init.BlockEntityInit;
+import the_fireplace.caterpillar.core.init.BlockInit;
 
+import java.util.ArrayList;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -50,6 +60,22 @@ public class IncineratorBlock extends AbstractCaterpillarBlock {
             } else {
                 return InteractionResult.PASS;
             }
+        }
+    }
+
+    @Override
+    public @Nullable BlockState getStateForPlacement(BlockPlaceContext context) {
+        BlockPos blockPos = context.getClickedPos();
+        Level level = context.getLevel();
+        Direction direction = context.getHorizontalDirection();
+
+        BlockPos caterpillarHeadPos = CaterpillarBlockUtil.getCaterpillarHeadPos(level, blockPos.relative(direction), direction.getOpposite());
+
+        if (!CaterpillarBlockUtil.getConnectedCaterpillarBlockEntities(level, caterpillarHeadPos, new ArrayList<>()).stream().anyMatch(blockEntity -> blockEntity instanceof IncineratorBlockEntity)) {
+            return super.getStateForPlacement(context);
+        } else {
+            context.getPlayer().displayClientMessage(Component.translatable("block.simplycaterpillar.blocks.alreadyConnected", BlockInit.INCINERATOR.get().getName()), true);
+            return null;
         }
     }
 
