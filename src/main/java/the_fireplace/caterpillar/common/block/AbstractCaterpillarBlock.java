@@ -47,9 +47,15 @@ public abstract class AbstractCaterpillarBlock extends BaseEntityBlock {
     @Nullable
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
+        BlockPos pos = context.getClickedPos();
+        Level level = context.getLevel();
         Direction direction = context.getHorizontalDirection();
 
-        return defaultBlockState().setValue(FACING, direction.getOpposite());
+        if (CaterpillarBlockUtil.isConnectedCaterpillarSameDirection(level, pos, direction.getOpposite())) {
+            return defaultBlockState().setValue(FACING, direction.getOpposite());
+        }
+
+        return null;
     }
 
     @Override

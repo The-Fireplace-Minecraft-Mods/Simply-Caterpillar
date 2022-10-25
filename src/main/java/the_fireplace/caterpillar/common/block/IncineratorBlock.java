@@ -68,11 +68,14 @@ public class IncineratorBlock extends AbstractCaterpillarBlock {
         BlockPos caterpillarHeadPos = CaterpillarBlockUtil.getCaterpillarHeadPos(level, blockPos.relative(direction), direction.getOpposite());
 
         if (!CaterpillarBlockUtil.getConnectedCaterpillarBlockEntities(level, caterpillarHeadPos, new ArrayList<>()).stream().anyMatch(blockEntity -> blockEntity instanceof IncineratorBlockEntity)) {
-            return super.getStateForPlacement(context);
+            if (CaterpillarBlockUtil.isConnectedCaterpillarSameDirection(level, blockPos, direction.getOpposite())) {
+                return super.getStateForPlacement(context);
+            }
         } else {
             context.getPlayer().displayClientMessage(Component.translatable("block.simplycaterpillar.blocks.alreadyConnected", BlockInit.INCINERATOR.get().getName()), true);
-            return null;
         }
+
+        return null;
     }
 
     @Nullable

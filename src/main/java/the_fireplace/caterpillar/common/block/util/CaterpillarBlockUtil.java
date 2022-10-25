@@ -73,4 +73,47 @@ public class CaterpillarBlockUtil {
         Direction direction = blockEntity.getBlockState().getValue(HorizontalDirectionalBlock.FACING);
         return getConnectedCaterpillarBlockEntities(level, pos.relative(direction), caterpillarBlockEntities);
     }
+
+    public static boolean isConnectedCaterpillarSameDirection(Level level, BlockPos pos, Direction direction) {
+        boolean isTheBlockInTheSameDirection = true;
+        BlockEntity blockEntity;
+
+        // Block in front
+        blockEntity = level.getBlockEntity(pos.relative(direction));
+        if (blockEntity != null) {
+            isTheBlockInTheSameDirection = isBlockEntitySameDirection(blockEntity , direction);
+        }
+
+        // Block in back
+        blockEntity = level.getBlockEntity(pos.relative(direction.getOpposite()));
+        if (blockEntity != null) {
+            isTheBlockInTheSameDirection = isBlockEntitySameDirection(blockEntity , direction);
+        }
+
+        // Block in left
+        blockEntity = level.getBlockEntity(pos.relative(direction.getClockWise()));
+        if (blockEntity != null) {
+            isTheBlockInTheSameDirection = isBlockEntitySameDirection(blockEntity , direction);
+        }
+
+        // Block in right
+        blockEntity = level.getBlockEntity(pos.relative(direction.getCounterClockWise()));
+        if (blockEntity != null) {
+            isTheBlockInTheSameDirection = isBlockEntitySameDirection(blockEntity , direction);
+        }
+
+        return isTheBlockInTheSameDirection;
+    }
+
+    private static boolean isBlockEntitySameDirection(BlockEntity blockEntity, Direction direction) {
+        if (isCaterpillarBlock(blockEntity.getBlockState().getBlock())) {
+            AbstractCaterpillarBlockEntity caterpillarBlockEntity = (AbstractCaterpillarBlockEntity) blockEntity;
+
+            if (caterpillarBlockEntity.getBlockState().getValue(HorizontalDirectionalBlock.FACING) != direction) {
+               return false;
+            }
+        }
+
+        return true;
+    }
 }
