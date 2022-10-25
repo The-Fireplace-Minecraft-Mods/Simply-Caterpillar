@@ -83,7 +83,7 @@ public class IncineratorScreen extends AbstractCaterpillarScreen<IncineratorMenu
         int tutorialY = super.topPos + 32;
         List<Component> incineratorTutorial = new ArrayList<>();
 
-        MutableComponent tutorialText =  Component.literal("<").withStyle(ChatFormatting.GREEN).append(" ");
+        MutableComponent tutorialText = Component.literal("<").withStyle(ChatFormatting.GREEN).append(" ");
         tutorialText.append(Component.translatable(Caterpillar.MOD_ID + ".tutorial.incinerator").withStyle(ChatFormatting.WHITE).append(""));
         incineratorTutorial.add(tutorialText);
 

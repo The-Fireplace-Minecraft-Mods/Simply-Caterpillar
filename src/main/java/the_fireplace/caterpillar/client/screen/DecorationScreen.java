@@ -3,6 +3,7 @@ package the_fireplace.caterpillar.client.screen;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.ClickType;
@@ -15,6 +16,9 @@ import the_fireplace.caterpillar.common.block.entity.DecorationBlockEntity;
 import the_fireplace.caterpillar.common.menu.DecorationMenu;
 import the_fireplace.caterpillar.core.network.PacketHandler;
 import the_fireplace.caterpillar.core.network.packet.client.DecorationSyncSlotC2SPacket;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static the_fireplace.caterpillar.common.block.entity.DecorationBlockEntity.INVENTORY_MAX_SLOTS;
 import static the_fireplace.caterpillar.common.menu.AbstractCaterpillarMenu.BE_INVENTORY_FIRST_SLOT_INDEX;
@@ -50,7 +54,50 @@ public class DecorationScreen extends AbstractCaterpillarScreen<DecorationMenu> 
 
     @Override
     protected void renderTutorial(PoseStack stack) {
+        if (super.tutorialButton != null && super.tutorialButton.showTutorial()) {
+            this.renderDecorationTutorial(stack);
+            this.renderMouseWheelTutorial(stack);
+            this.renderCurrentMapTutorial(stack);
+        }
+    }
 
+    private void renderDecorationTutorial(PoseStack stack) {
+        int tutorialX = super.leftPos - 32;
+        int tutorialY = super.topPos - 16;
+        List<Component> decorationTutorial = new ArrayList<>();
+
+        MutableComponent tutorialText = Component.translatable(Caterpillar.MOD_ID + ".tutorial.decoration");
+        decorationTutorial.add(tutorialText);
+
+        this.renderComponentTooltip(stack, decorationTutorial, tutorialX, tutorialY);
+    }
+
+    private void renderMouseWheelTutorial(PoseStack stack) {
+        int tutorialX = super.leftPos + 108;
+        int tutorialY = super.topPos + 49;
+        List<Component> decorationTutorial = new ArrayList<>();
+
+        Component tutorialArrow = Component.literal("         /\\").withStyle(ChatFormatting.GREEN);
+        decorationTutorial.add(tutorialArrow);
+
+        MutableComponent tutorialText = Component.translatable(Caterpillar.MOD_ID + ".tutorial.decoration.mouseWheel");
+        decorationTutorial.add(tutorialText);
+
+        this.renderComponentTooltip(stack, decorationTutorial, tutorialX, tutorialY);
+    }
+
+    private void renderCurrentMapTutorial(PoseStack stack) {
+        int tutorialX = super.leftPos + 17;
+        int tutorialY = super.topPos + 87;
+        List<Component> decorationTutorial = new ArrayList<>();
+
+        Component tutorialArrow = Component.literal("/\\").withStyle(ChatFormatting.GREEN);
+        decorationTutorial.add(tutorialArrow);
+
+        MutableComponent tutorialText = Component.translatable(Caterpillar.MOD_ID + ".tutorial.decoration.currentMap").withStyle(ChatFormatting.WHITE);
+        decorationTutorial.add(tutorialText);
+
+        this.renderComponentTooltip(stack, decorationTutorial, tutorialX, tutorialY);
     }
 
     public void renderScrollBar(PoseStack stack) {

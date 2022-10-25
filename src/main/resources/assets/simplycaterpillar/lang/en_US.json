@@ -57,10 +57,10 @@
   "simplycaterpillar.tutorial.incinerator": "Set blocks you don't want to keep\n   on the drill's gathered inventory.",
   "simplycaterpillar.tutorial.reinforcement.replacer_buttons": "These are the options for each side\nMouse over them to see what they are\n\nClick to toggle\nRed = off\nGreen = on",
   "simplycaterpillar.tutorial.reinforcement.replacer_blocks": "These are the blocks it will replace with.\nNo block means it will not replace it.\nYou must have the blocks in the drill to place them.",
+  "simplycaterpillar.tutorial.decoration": "The decoration places blocks in a pattern\nthat repeats every 10 blocks (0-9).",
+  "simplycaterpillar.tutorial.decoration.mouseWheel": "Use the wheel to select which section.",
+  "simplycaterpillar.tutorial.decoration.currentMap": "The blue number is where the drill is now.",
 
-  "simplycaterpillar.selection": "The decoration places blocks in\\na pattern that repeats every 10 blocks\\n0-9. Use the mouse wheel to Select which\\nsection. The First scrollbar is where the drill\\nis at. The second scrollbar is which section\\nyou have selected.",
-  "simplycaterpillar.selectionzero": "click the tab again to select\\nrow zero",
-  "simplycaterpillar.selectionpatter": "this view is from the \\nback of the drill. you\\nmust have the blocks in\\nthe inventory of the drill\\nfor it to place them",
   "simplycaterpillar.ceiling": "Ceiling",
   "simplycaterpillar.leftwall": "Left Wall",
   "simplycaterpillar.rightwall": "Right Wall",
