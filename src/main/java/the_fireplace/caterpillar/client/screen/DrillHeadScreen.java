@@ -8,6 +8,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -23,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static the_fireplace.caterpillar.common.block.entity.DrillHeadBlockEntity.*;
-import static the_fireplace.caterpillar.common.menu.AbstractCaterpillarMenu.BE_INVENTORY_FIRST_SLOT_INDEX;
+import static the_fireplace.caterpillar.common.menu.AbstractCaterpillarMenu.*;
 
 @OnlyIn(Dist.CLIENT)
 public class DrillHeadScreen extends AbstractScrollableScreen<DrillHeadMenu> {
@@ -200,95 +201,81 @@ public class DrillHeadScreen extends AbstractScrollableScreen<DrillHeadMenu> {
     }
 
     @Override
-    protected void slotClicked(Slot slot, int slotId, int mouseButton, ClickType clickType) {
+    protected void slotClicked(Slot slot, int slotId, int button, ClickType clickType) {
+        System.out.println("Mouse Button: " + button + ", clicktype: " + clickType);
+
         if (!this.menu.isDrillHeadSlot(slotId)) {
-            super.slotClicked(slot, slotId, mouseButton, clickType);
+            super.slotClicked(slot, slotId, button, clickType);
             return;
         }
 
-        int drillHeadSlotId = slotId - BE_INVENTORY_FIRST_SLOT_INDEX;
-        if (this.menu.isConsumptionSlot(slotId)) {
-            int i = 3;
-            int j = (int)((double)(this.menu.getScrollOffs() * (float)i) + 0.5D);
-            if (j < 0) {
-                j = 0;
-            }
-            int consumptionScrollTo = j;
+        if (clickType == ClickType.QUICK_CRAFT) {
+            System.out.println("Quick Crafting");
+        } else if (clickType == ClickType.PICKUP) {
+            ItemStack stack = slot.getItem().copy();
+            ItemStack carried = this.menu.getCarried().copy();
 
-            drillHeadSlotId += consumptionScrollTo * 3;
-        } else {
-            int i = 3;
-            int j = (int)((double)(this.menu.getGatheredScrollOffs() * (float)i) + 0.5D);
-            if (j < 0) {
-                j = 0;
-            }
-            int gatheredScrollTo = j;
-
-            drillHeadSlotId += gatheredScrollTo * 3;
-        }
-
-        ItemStack stack = slot.getItem().copy();
-        ItemStack carried = this.menu.getCarried().copy();
-
-        if (carried.isEmpty()) {
-            if (mouseButton == 0) {
-                carried = stack.copy();
-                stack = ItemStack.EMPTY;
-            } else if (mouseButton == 1) {
-                carried = stack.split(stack.getCount() / 2 + stack.getCount() % 2);
-                if (stack.isEmpty()) {
+            if (carried.isEmpty()) {
+                if (button == 0) {
+                    carried = stack.copy();
                     stack = ItemStack.EMPTY;
-                }
-            }
-        } else if (this.menu.isConsumptionSlot(slotId)) {
-            if (stack.isEmpty()) {
-                stack = carried.copy();
-
-                if (mouseButton == 1) {
-                    stack.setCount(1);
-                    carried.shrink(1);
-                } else {
-                    carried.shrink(stack.getCount());
-                }
-            } else {
-                if (stack.sameItem(carried)) {
-                    if (mouseButton == 0) {
-                        stack.grow(carried.getCount());
-                        carried = ItemStack.EMPTY;
-                    } else if (mouseButton == 1) {
-                        stack.grow(1);
-                        carried.shrink(1);
+                } else if (button == 1) {
+                    carried = stack.split(stack.getCount() / 2 + stack.getCount() % 2);
+                    if (stack.isEmpty()) {
+                        stack = ItemStack.EMPTY;
                     }
-                } else {
-                    ItemStack temp = stack.copy();
+                }
+            } else if (this.menu.isConsumptionSlot(slotId)) {
+                if (stack.isEmpty()) {
                     stack = carried.copy();
-                    carried = temp;
+
+                    if (button == 1) {
+                        stack.setCount(1);
+                        carried.shrink(1);
+                    } else {
+                        carried.shrink(stack.getCount());
+                    }
+                } else { // SWAP
+                    if (stack.sameItem(carried)) {
+                        if (button == 0) {
+                            stack.grow(carried.getCount());
+                            carried = ItemStack.EMPTY;
+                        } else if (button == 1) {
+                            stack.grow(1);
+                            carried.shrink(1);
+                        }
+                    } else {
+                        ItemStack temp = stack.copy();
+                        stack = carried.copy();
+                        carried = temp;
+                    }
                 }
             }
-        }
 
-        this.menu.setCarried(carried);
+            this.menu.syncCarried(carried);
 
-        if (slot instanceof FakeSlot fakeSlot) {
-            fakeSlot.setDisplayStack(stack);
-        }
-
-        if (this.menu.isConsumptionSlot(slotId)) {
-            if (drillHeadSlotId <= CONSUMPTION_SLOT_END) {
-                // Consumption drill head slot
-                this.menu.setSlot(drillHeadSlotId, stack);
-            } else {
-                // Consumption storage slot
-                this.menu.setStorageSlot(drillHeadSlotId - CONSUMPTION_SLOT_SIZE - CONSUMPTION_SLOT_START, stack);
+            if (slot instanceof FakeSlot fakeSlot) {
+                fakeSlot.setDisplayStack(stack);
             }
-        } else {
-            if (drillHeadSlotId <= GATHERED_SLOT_END) {
-                // Gathered drill head slot
-                this.menu.setSlot(drillHeadSlotId, stack);
-            } else {
-                // Gathered storage slot
-                this.menu.setStorageSlot(drillHeadSlotId - GATHERED_SLOT_END - CONSUMPTION_SLOT_START, stack);
+
+            this.menu.syncDrillHeadSlot(slotId, stack);
+        } else if (clickType == ClickType.QUICK_MOVE) {
+            System.out.println("Quick Move");
+            if (this.menu.moveItemStackTo(slot.getItem(), VANILLA_FIRST_SLOT_INDEX, VANILLA_FIRST_SLOT_INDEX + VANILLA_SLOT_COUNT, false)) {
+                this.menu.syncDrillHeadSlot(slotId, ItemStack.EMPTY);
             }
+        } else if (clickType == ClickType.SWAP) {
+            System.out.println("Swapping");
+        } else if (clickType == ClickType.CLONE && this.minecraft.player.getAbilities().instabuild && this.menu.getCarried().isEmpty() && slotId >= 0) {
+            if (slot.hasItem()) {
+                ItemStack itemStack = slot.getItem().copy();
+                itemStack.setCount(itemStack.getMaxStackSize());
+                this.menu.syncCarried(itemStack);
+            }
+        } else if (clickType == ClickType.THROW && this.menu.getCarried().isEmpty() && slotId >= 0) {
+            System.out.println("Throwing");
+        } else if (clickType == ClickType.PICKUP_ALL && slotId >= 0) {
+            System.out.println("Picking up all");
         }
     }
 
@@ -416,9 +403,9 @@ public class DrillHeadScreen extends AbstractScrollableScreen<DrillHeadMenu> {
             return true;
         }
 
-        /*
+        /* Disabled dragging of items
         if (getSlotUnderMouse() != null && this.menu.isDrillHeadSlot(getSlotUnderMouse().index)) {
-            // slotClicked(getSlotUnderMouse(), getSlotUnderMouse().index, 0, ClickType.PICKUP);
+            slotClicked(getSlotUnderMouse(), getSlotUnderMouse().index, button, ClickType.QUICK_CRAFT);
             return true;
         }*/
 

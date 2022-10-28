@@ -19,6 +19,7 @@ import the_fireplace.caterpillar.core.network.PacketHandler;
 import the_fireplace.caterpillar.core.network.packet.client.CaterpillarSyncSlotC2SPacket;
 import the_fireplace.caterpillar.core.network.packet.client.DrillHeadSyncPowerC2SPacket;
 import the_fireplace.caterpillar.core.network.packet.client.CaterpillarSyncCarriedC2SPacket;
+import the_fireplace.caterpillar.core.network.packet.client.MinecraftSyncSlotC2SPacket;
 import the_fireplace.caterpillar.core.network.packet.server.CaterpillarSyncInventoryS2CPacket;
 
 import static the_fireplace.caterpillar.common.block.entity.DrillHeadBlockEntity.*;
@@ -96,7 +97,8 @@ public class DrillHeadMenu extends AbstractScrollableMenu {
         if (index < VANILLA_FIRST_SLOT_INDEX + VANILLA_SLOT_COUNT) {
             // This is a vanilla container slot so merge the stack into the BE inventory
             if (CaterpillarMenuUtil.isFuel(sourceStack)) {
-                if (fuelSlotIsEmpty() || this.getSlot(BE_INVENTORY_FIRST_SLOT_INDEX + DrillHeadBlockEntity.FUEl_SLOT).getItem().sameItem(copyOfSourceStack)) {
+                CaterpillarFuelSlot fuelSlot = (CaterpillarFuelSlot) this.getSlot(BE_INVENTORY_FIRST_SLOT_INDEX + DrillHeadBlockEntity.FUEl_SLOT);
+                if (fuelSlotIsEmpty() || ItemStack.isSameItemSameTags(fuelSlot.getItem(), copyOfSourceStack) && fuelSlot.getItem().getCount() < fuelSlot.getMaxStackSize()) {
                     if (!moveItemStackTo(sourceStack, BE_INVENTORY_FIRST_SLOT_INDEX + DrillHeadBlockEntity.FUEl_SLOT, BE_INVENTORY_FIRST_SLOT_INDEX + DrillHeadBlockEntity.FUEl_SLOT + 1, false)) {
                         return ItemStack.EMPTY;
                     }
@@ -123,6 +125,186 @@ public class DrillHeadMenu extends AbstractScrollableMenu {
 
         sourceSlot.onTake(player, sourceStack);
         return copyOfSourceStack;
+    }
+
+    @Override
+    public boolean moveItemStackTo(ItemStack stack, int startIndex, int endIndex, boolean reverseDirection) {
+        StorageBlockEntity storageBlockEntity = this.getStorageBlockEntity();
+
+        boolean flag = false;
+        int i = startIndex;
+        if (reverseDirection) {
+            i = endIndex - 1;
+        }
+
+        if (stack.isStackable()) {
+            while(!stack.isEmpty()) {
+                if (reverseDirection) {
+                    if (i < startIndex) {
+                        break;
+                    }
+                } else if (i >= endIndex) {
+                    break;
+                }
+
+                Slot slot = this.slots.get(i);
+                ItemStack itemstack = slot.getItem();
+                if (!itemstack.isEmpty() && ItemStack.isSameItemSameTags(stack, itemstack)) {
+                    int j = itemstack.getCount() + stack.getCount();
+                    int maxSize = Math.min(slot.getMaxStackSize(), stack.getMaxStackSize());
+                    if (j <= maxSize) {
+                        stack.setCount(0);
+                        itemstack.setCount(j);
+                        if (slot instanceof FakeSlot) {
+                            this.syncDrillHeadSlot(i, itemstack);
+                        } else {
+                            slot.setChanged();
+                            PacketHandler.sendToServer(new MinecraftSyncSlotC2SPacket(i, itemstack));
+                        }
+                        flag = true;
+                    } else if (itemstack.getCount() < maxSize) {
+                        stack.shrink(maxSize - itemstack.getCount());
+                        itemstack.setCount(maxSize);
+                        if (slot instanceof FakeSlot) {
+                            this.syncDrillHeadSlot(i, itemstack);
+                        } else {
+                            slot.setChanged();
+                            PacketHandler.sendToServer(new MinecraftSyncSlotC2SPacket(i, itemstack));
+                        }
+                        flag = true;
+                    }
+                }
+
+                if (reverseDirection) {
+                    --i;
+                } else {
+                    ++i;
+                }
+            }
+        }
+
+        // Check storage if there is item stack with same item already
+
+        if (!stack.isEmpty()) {
+            if (reverseDirection) {
+                i = endIndex - 1;
+            } else {
+                i = startIndex;
+            }
+
+            while(true) {
+                if (reverseDirection) {
+                    if (i < startIndex) {
+                        break;
+                    }
+                } else if (i >= endIndex) {
+                    break;
+                }
+
+                Slot slot1 = this.slots.get(i);
+                ItemStack itemstack1 = slot1.getItem();
+                if (itemstack1.isEmpty()) {
+                    if (stack.getCount() > slot1.getMaxStackSize()) {
+                        if (slot1 instanceof FakeSlot fakeSlot) {
+                            fakeSlot.setDisplayStack(stack.split(slot1.getMaxStackSize()));
+                        } else {
+                            slot1.set(stack.split(slot1.getMaxStackSize()));
+                        }
+                    } else {
+                        if (slot1 instanceof FakeSlot fakeSlot) {
+                            fakeSlot.setDisplayStack(stack.split(stack.getCount()));
+                        } else {
+                            slot1.set(stack.split(stack.getCount()));
+                        }
+                    }
+
+                    if (slot1 instanceof FakeSlot fakeSlot) {
+                        this.syncDrillHeadSlot(i, fakeSlot.getItem());
+                    } else {
+                        slot1.setChanged();
+                        PacketHandler.sendToServer(new MinecraftSyncSlotC2SPacket(i, slot1.getItem()));
+                    }
+                    flag = true;
+                    break;
+                }
+
+                if (reverseDirection) {
+                    --i;
+                } else {
+                    ++i;
+                }
+            }
+        }
+
+        // Check if storage has empty space
+        if (storageBlockEntity != null) {
+            if (!stack.isEmpty()) {
+                if (reverseDirection) {
+                    i = endIndex - 1;
+                } else {
+                    i = startIndex;
+                }
+
+                while(true) {
+                    if (reverseDirection) {
+                        if (i < startIndex) {
+                            break;
+                        }
+                    } else if (i >= endIndex) {
+                        break;
+                    }
+
+                    Slot slot1 = this.slots.get(i);
+                    ItemStack itemstack1 = storageBlockEntity.getStackInSlot(i - BE_INVENTORY_FIRST_SLOT_INDEX);
+                    if (itemstack1.isEmpty()) {
+                        if (stack.getCount() > slot1.getMaxStackSize()) {
+                            if (slot1 instanceof FakeSlot fakeSlot) {
+                                fakeSlot.setDisplayStack(stack.split(slot1.getMaxStackSize()));
+                            } else {
+                                slot1.set(stack.split(slot1.getMaxStackSize()));
+                            }
+                        } else {
+                            if (slot1 instanceof FakeSlot fakeSlot) {
+                                int drillHeadSlotId = i - BE_INVENTORY_FIRST_SLOT_INDEX;
+
+                                int i1 = 3;
+                                int j = (int)((double)(this.getScrollOffs() * (float)i1) + 0.5D);
+                                if (j < 0) {
+                                    j = 0;
+                                }
+                                int consumptionScrollTo = j;
+                                drillHeadSlotId += consumptionScrollTo * 3;
+                                System.out.println("drillHeadSlotId: " + drillHeadSlotId);
+
+                                if (consumptionScrollTo >= 1 && consumptionScrollTo <= 3) {
+                                    // fakeSlot.setDisplayStack(stack.split(stack.getCount()));
+                                }
+                            } else {
+                                slot1.set(stack.split(stack.getCount()));
+                            }
+                        }
+
+                        if (slot1 instanceof FakeSlot fakeSlot) {
+                            this.syncDrillHeadSlot(i, fakeSlot.getItem());
+                        } else {
+                            slot1.setChanged();
+                            PacketHandler.sendToServer(new MinecraftSyncSlotC2SPacket(i, slot1.getItem()));
+                        }
+
+                        flag = true;
+                        break;
+                    }
+
+                    if (reverseDirection) {
+                        --i;
+                    } else {
+                        ++i;
+                    }
+                }
+            }
+        }
+
+        return flag;
     }
 
     public int getLitProgress() {
@@ -237,6 +419,52 @@ public class DrillHeadMenu extends AbstractScrollableMenu {
                         }
                     }
                 }
+            }
+        }
+    }
+    public void syncCarried(ItemStack carried) {
+        this.setCarried(carried);
+
+        PacketHandler.sendToServer(new CaterpillarSyncCarriedC2SPacket(carried));
+    }
+
+    public void syncDrillHeadSlot(int slotId, ItemStack stack) {
+        int drillHeadSlotId = slotId - BE_INVENTORY_FIRST_SLOT_INDEX;
+        if (this.isConsumptionSlot(slotId)) {
+            int i = 3;
+            int j = (int)((double)(this.getScrollOffs() * (float)i) + 0.5D);
+            if (j < 0) {
+                j = 0;
+            }
+            int consumptionScrollTo = j;
+
+            drillHeadSlotId += consumptionScrollTo * 3;
+        } else {
+            int i = 3;
+            int j = (int)((double)(this.getGatheredScrollOffs() * (float)i) + 0.5D);
+            if (j < 0) {
+                j = 0;
+            }
+            int gatheredScrollTo = j;
+
+            drillHeadSlotId += gatheredScrollTo * 3;
+        }
+
+        if (this.isConsumptionSlot(slotId)) {
+            if (drillHeadSlotId <= CONSUMPTION_SLOT_END) {
+                // Consumption drill head slot
+                this.setSlot(drillHeadSlotId, stack);
+            } else {
+                // Consumption storage slot
+                this.setStorageSlot(drillHeadSlotId - CONSUMPTION_SLOT_SIZE - CONSUMPTION_SLOT_START, stack);
+            }
+        } else {
+            if (drillHeadSlotId <= GATHERED_SLOT_END) {
+                // Gathered drill head slot
+                this.setSlot(drillHeadSlotId, stack);
+            } else {
+                // Gathered storage slot
+                this.setStorageSlot(drillHeadSlotId - GATHERED_SLOT_END - CONSUMPTION_SLOT_START, stack);
             }
         }
     }
