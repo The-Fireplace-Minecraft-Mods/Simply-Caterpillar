@@ -109,9 +109,7 @@ public class CaterpillarBlockUtil {
         if (isCaterpillarBlock(blockEntity.getBlockState().getBlock())) {
             AbstractCaterpillarBlockEntity caterpillarBlockEntity = (AbstractCaterpillarBlockEntity) blockEntity;
 
-            if (caterpillarBlockEntity.getBlockState().getValue(HorizontalDirectionalBlock.FACING) != direction) {
-               return false;
-            }
+            return caterpillarBlockEntity.getBlockState().getValue(HorizontalDirectionalBlock.FACING) == direction;
         }
 
         return true;

@@ -190,8 +190,31 @@ public class DrillHeadMenu extends AbstractScrollableMenu {
         }
 
         // Check storage if there is item stack with same item already
-        if (storageBlockEntity != null) {
+        if (storageBlockEntity != null && this.blockEntity.getLevel().isClientSide()) {
+            if (!stack.isEmpty()) {
+                for (int slotId = 0; slotId < CONSUMPTION_SLOT_SIZE; slotId++) {
+                    ItemStack storageStack = storageBlockEntity.getStackInSlot(slotId);
+                    if (!storageStack.isEmpty() && ItemStack.isSameItemSameTags(stack, storageStack)) {
+                        int j = storageStack.getCount() + stack.getCount();
+                        int maxSize = Math.min(storageStack.getMaxStackSize(), stack.getMaxStackSize());
+                        if (j <= maxSize) {
+                            stack.setCount(0);
+                            storageStack.setCount(j);
 
+                            this.setStorageSlot(slotId, storageStack);
+
+                            flag = true;
+                        } else if (storageStack.getCount() < maxSize) {
+                            stack.shrink(maxSize - storageStack.getCount());
+                            storageStack.setCount(maxSize);
+
+                            this.setStorageSlot(slotId, storageStack);
+
+                            flag = true;
+                        }
+                    }
+                }
+            }
         }
 
         if (!stack.isEmpty()) {
