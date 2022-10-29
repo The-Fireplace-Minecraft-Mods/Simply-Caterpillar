@@ -235,16 +235,24 @@ public class DrillHeadScreen extends AbstractScrollableScreen<DrillHeadMenu> {
                     } else {
                         carried.shrink(stack.getCount());
                     }
-                } else { // SWAP
+                } else {
                     if (stack.sameItem(carried)) {
                         if (button == 0) {
-                            stack.grow(carried.getCount());
-                            carried = ItemStack.EMPTY;
+                            if (stack.getCount() + carried.getCount() <= stack.getMaxStackSize()) {
+                                stack.grow(carried.getCount());
+                                carried = ItemStack.EMPTY;
+                            } else {
+                                int difference = stack.getMaxStackSize() - stack.getCount();
+                                stack.grow(difference);
+                                carried.shrink(difference);
+                            }
                         } else if (button == 1) {
-                            stack.grow(1);
-                            carried.shrink(1);
+                            if (stack.getCount() < stack.getMaxStackSize()) {
+                                stack.grow(1);
+                                carried.shrink(1);
+                            }
                         }
-                    } else {
+                    } else { // SWAP
                         ItemStack temp = stack.copy();
                         stack = carried.copy();
                         carried = temp;

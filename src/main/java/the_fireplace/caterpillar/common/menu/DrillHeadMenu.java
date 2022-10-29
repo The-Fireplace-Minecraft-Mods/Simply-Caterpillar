@@ -119,6 +119,9 @@ public class DrillHeadMenu extends AbstractScrollableMenu {
         // If stack size == 0 (the entire stack was moved) set slot contents to null
         if (sourceStack.getCount() == 0) {
             sourceSlot.set(ItemStack.EMPTY);
+            if (this.blockEntity.getLevel().isClientSide()) {
+                PacketHandler.sendToServer(new MinecraftSyncSlotC2SPacket(index, ItemStack.EMPTY));
+            }
         } else {
             sourceSlot.setChanged();
         }
@@ -243,68 +246,19 @@ public class DrillHeadMenu extends AbstractScrollableMenu {
         }
 
         // Check if storage has empty space
-        if (storageBlockEntity != null) {
+        if (storageBlockEntity != null && this.blockEntity.getLevel().isClientSide()) {
             if (!stack.isEmpty()) {
-                if (reverseDirection) {
-                    i = endIndex - 1;
-                } else {
-                    i = startIndex;
-                }
-
-                while(true) {
-                    if (reverseDirection) {
-                        if (i < startIndex) {
-                            break;
-                        }
-                    } else if (i >= endIndex) {
-                        break;
-                    }
-
-                    Slot slot1 = this.slots.get(i);
-                    ItemStack itemstack1 = storageBlockEntity.getStackInSlot(i - BE_INVENTORY_FIRST_SLOT_INDEX);
-                    if (itemstack1.isEmpty()) {
-                        if (stack.getCount() > slot1.getMaxStackSize()) {
-                            if (slot1 instanceof FakeSlot fakeSlot) {
-                                fakeSlot.setDisplayStack(stack.split(slot1.getMaxStackSize()));
-                            } else {
-                                slot1.set(stack.split(slot1.getMaxStackSize()));
-                            }
+                for (int slotId = 0; slotId < CONSUMPTION_SLOT_SIZE; slotId++) {
+                    ItemStack storageStack = storageBlockEntity.getStackInSlot(slotId);
+                    if (storageStack.isEmpty()) {
+                        if (stack.getCount() > storageStack.getMaxStackSize()) {
+                            this.setStorageSlot(slotId, stack.split(storageStack.getMaxStackSize()));
                         } else {
-                            if (slot1 instanceof FakeSlot fakeSlot) {
-                                int drillHeadSlotId = i - BE_INVENTORY_FIRST_SLOT_INDEX;
-
-                                int i1 = 3;
-                                int j = (int)((double)(this.getScrollOffs() * (float)i1) + 0.5D);
-                                if (j < 0) {
-                                    j = 0;
-                                }
-                                int consumptionScrollTo = j;
-                                drillHeadSlotId += consumptionScrollTo * 3;
-                                System.out.println("drillHeadSlotId: " + drillHeadSlotId);
-
-                                if (consumptionScrollTo >= 1 && consumptionScrollTo <= 3) {
-                                    // fakeSlot.setDisplayStack(stack.split(stack.getCount()));
-                                }
-                            } else {
-                                slot1.set(stack.split(stack.getCount()));
-                            }
-                        }
-
-                        if (slot1 instanceof FakeSlot fakeSlot) {
-                            this.syncDrillHeadSlot(i, fakeSlot.getItem());
-                        } else {
-                            slot1.setChanged();
-                            PacketHandler.sendToServer(new MinecraftSyncSlotC2SPacket(i, slot1.getItem()));
+                            this.setStorageSlot(slotId, stack.split(stack.getCount()));
                         }
 
                         flag = true;
                         break;
-                    }
-
-                    if (reverseDirection) {
-                        --i;
-                    } else {
-                        ++i;
                     }
                 }
             }
