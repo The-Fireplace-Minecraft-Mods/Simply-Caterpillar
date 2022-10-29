@@ -23,6 +23,9 @@ import the_fireplace.caterpillar.common.block.util.CaterpillarBlockUtil;
 import the_fireplace.caterpillar.common.menu.IncineratorMenu;
 import the_fireplace.caterpillar.core.init.BlockEntityInit;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static net.minecraft.world.level.block.HorizontalDirectionalBlock.FACING;
 
 public class IncineratorBlockEntity extends AbstractCaterpillarBlockEntity {
@@ -73,14 +76,29 @@ public class IncineratorBlockEntity extends AbstractCaterpillarBlockEntity {
     }
 
     private void incinerate() {
-        BlockPos drillHeadPos = CaterpillarBlockUtil.getCaterpillarHeadPos(this.getLevel(), this.getBlockPos(), this.getBlockState().getValue(FACING));
-        if (drillHeadPos != null && this.getLevel().getBlockEntity(drillHeadPos) instanceof DrillHeadBlockEntity drillHeadBlockEntity) {
-            for (int i = 0; i < INVENTORY_SIZE; i++) {
-                Item itemToIncinerate = this.getStackInSlot(i).getItem();
+        BlockPos caterpillarHeadPos = CaterpillarBlockUtil.getCaterpillarHeadPos(this.getLevel(), this.getBlockPos(), this.getBlockState().getValue(FACING));
+        if (caterpillarHeadPos != null) {
+            List<AbstractCaterpillarBlockEntity> caterpillarBlockEntities = CaterpillarBlockUtil.getConnectedCaterpillarBlockEntities(this.getLevel(), caterpillarHeadPos, new ArrayList<>());
 
-                removeItemFromDrillHeadGathered(drillHeadBlockEntity, itemToIncinerate);
+            DrillHeadBlockEntity drillHeadBlockEntity = (DrillHeadBlockEntity) caterpillarBlockEntities.stream().filter(blockEntity -> blockEntity instanceof DrillHeadBlockEntity).findFirst().orElse(null);
+            if (drillHeadBlockEntity != null) {
+                for (int i = 0; i < INVENTORY_SIZE; i++) {
+                    Item itemToIncinerate = this.getStackInSlot(i).getItem();
+
+                    removeItemFromDrillHeadGathered(drillHeadBlockEntity, itemToIncinerate);
+                }
+            }
+
+            StorageBlockEntity storageBlockEntity = (StorageBlockEntity) caterpillarBlockEntities.stream().filter(blockEntity -> blockEntity instanceof StorageBlockEntity).findFirst().orElse(null);
+            if (storageBlockEntity != null) {
+                for (int i = 0; i < INVENTORY_SIZE; i++) {
+                    Item itemToIncinerate = this.getStackInSlot(i).getItem();
+
+                    removeItemFromStorageGathered(storageBlockEntity, itemToIncinerate);
+                }
             }
         }
+
     }
 
     private void removeItemFromDrillHeadGathered(DrillHeadBlockEntity drillHead, Item item) {
@@ -92,6 +110,19 @@ public class IncineratorBlockEntity extends AbstractCaterpillarBlockEntity {
             ItemStack stack = drillHead.getStackInSlot(slotId);
             if (stack.getItem().equals(item)) {
                 drillHead.removeStackInSlot(slotId);
+            }
+        }
+    }
+
+    private void removeItemFromStorageGathered(StorageBlockEntity blockEntity, Item item) {
+        if (item.equals(Items.AIR)) {
+            return;
+        }
+
+        for (int slotId = StorageBlockEntity.GATHERED_SLOT_START; slotId <= StorageBlockEntity.GATHERED_SLOT_END; slotId++) {
+            ItemStack stack = blockEntity.getStackInSlot(slotId);
+            if (stack.getItem().equals(item)) {
+                blockEntity.removeStackInSlot(slotId);
             }
         }
     }

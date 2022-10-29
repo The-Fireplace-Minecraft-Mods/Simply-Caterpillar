@@ -12,6 +12,13 @@ public class StorageBlockEntity extends AbstractCaterpillarBlockEntity {
 
     public static final int INVENTORY_SIZE = 18;
 
+    public static final int CONSUMPTION_SLOT_START = 0;
+
+    public static final int CONSUMPTION_SLOT_END = 8;
+
+    public static final int GATHERED_SLOT_START = 9;
+
+    public static final int GATHERED_SLOT_END = 17;
 
     public StorageBlockEntity(BlockPos pos, BlockState state) {
         super(BlockEntityInit.STORAGE.get(), pos, state, INVENTORY_SIZE);

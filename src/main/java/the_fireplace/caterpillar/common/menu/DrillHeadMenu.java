@@ -192,7 +192,7 @@ public class DrillHeadMenu extends AbstractScrollableMenu {
         // Check storage if there is item stack with same item already
         if (storageBlockEntity != null && this.blockEntity.getLevel().isClientSide()) {
             if (!stack.isEmpty()) {
-                for (int slotId = 0; slotId < CONSUMPTION_SLOT_SIZE; slotId++) {
+                for (int slotId = StorageBlockEntity.CONSUMPTION_SLOT_START; slotId <= StorageBlockEntity.CONSUMPTION_SLOT_END; slotId++) {
                     ItemStack storageStack = storageBlockEntity.getStackInSlot(slotId);
                     if (!storageStack.isEmpty() && ItemStack.isSameItemSameTags(stack, storageStack)) {
                         int j = storageStack.getCount() + stack.getCount();
@@ -271,7 +271,7 @@ public class DrillHeadMenu extends AbstractScrollableMenu {
         // Check if storage has empty space
         if (storageBlockEntity != null && this.blockEntity.getLevel().isClientSide()) {
             if (!stack.isEmpty()) {
-                for (int slotId = 0; slotId < CONSUMPTION_SLOT_SIZE; slotId++) {
+                for (int slotId = StorageBlockEntity.CONSUMPTION_SLOT_START; slotId <= StorageBlockEntity.CONSUMPTION_SLOT_END; slotId++) {
                     ItemStack storageStack = storageBlockEntity.getStackInSlot(slotId);
                     if (storageStack.isEmpty()) {
                         if (stack.getCount() > storageStack.getMaxStackSize()) {
@@ -362,7 +362,7 @@ public class DrillHeadMenu extends AbstractScrollableMenu {
             if (gatheredScrollTo >= 1 && gatheredScrollTo <= 3) {
                 for(int row = 3 - gatheredScrollTo; row < 3; row++) {
                     for(int column = 0; column < 3; column++) {
-                        ItemStack stack = this.getStorageBlockEntity().getStackInSlot(column + (row - (3 - gatheredScrollTo)) * 3);
+                        ItemStack stack = this.getStorageBlockEntity().getStackInSlot(StorageBlockEntity.GATHERED_SLOT_START + column + (row - (3 - gatheredScrollTo)) * 3);
                         Slot slot = super.getSlot(BE_INVENTORY_FIRST_SLOT_INDEX + GATHERED_SLOT_START + column + row * 3);
 
                         if (slot instanceof FakeSlot fakeSlot) {

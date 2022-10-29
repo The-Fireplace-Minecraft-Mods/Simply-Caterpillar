@@ -10,6 +10,8 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 import the_fireplace.caterpillar.common.block.entity.AbstractCaterpillarBlockEntity;
+import the_fireplace.caterpillar.common.block.entity.DrillHeadBlockEntity;
+import the_fireplace.caterpillar.common.block.entity.StorageBlockEntity;
 import the_fireplace.caterpillar.core.init.BlockInit;
 
 import java.util.List;
@@ -66,12 +68,16 @@ public class CaterpillarBlockUtil {
         }
 
         AbstractCaterpillarBlockEntity blockEntity = (AbstractCaterpillarBlockEntity) level.getBlockEntity(pos);
-        assert caterpillarBlockEntities != null;
-        caterpillarBlockEntities.add(blockEntity);
+        if (caterpillarBlockEntities != null) {
+            caterpillarBlockEntities.add(blockEntity);
+        }
 
-        assert blockEntity != null;
-        Direction direction = blockEntity.getBlockState().getValue(HorizontalDirectionalBlock.FACING);
-        return getConnectedCaterpillarBlockEntities(level, pos.relative(direction), caterpillarBlockEntities);
+        if (blockEntity != null) {
+            Direction direction = blockEntity.getBlockState().getValue(HorizontalDirectionalBlock.FACING);
+            return getConnectedCaterpillarBlockEntities(level, pos.relative(direction), caterpillarBlockEntities);
+        }
+
+        return caterpillarBlockEntities;
     }
 
     public static boolean isConnectedCaterpillarSameDirection(Level level, BlockPos pos, Direction direction) {
@@ -113,5 +119,13 @@ public class CaterpillarBlockUtil {
         }
 
         return true;
+    }
+
+    public static DrillHeadBlockEntity getDrillHeadBlockEntity(List<AbstractCaterpillarBlockEntity> caterpillarBlockEntities) {
+        return (DrillHeadBlockEntity)caterpillarBlockEntities.stream().filter(blockEntity -> blockEntity instanceof DrillHeadBlockEntity).findFirst().orElse(null);
+    }
+
+    public static StorageBlockEntity getStorageBlockEntity(List<AbstractCaterpillarBlockEntity> caterpillarBlockEntities) {
+        return (StorageBlockEntity)caterpillarBlockEntities.stream().filter(blockEntity -> blockEntity instanceof StorageBlockEntity).findFirst().orElse(null);
     }
 }
