@@ -129,7 +129,10 @@ public class DrillHeadMenu extends AbstractScrollableMenu {
 
     @Override
     public boolean moveItemStackTo(ItemStack stack, int startIndex, int endIndex, boolean reverseDirection) {
-        StorageBlockEntity storageBlockEntity = this.getStorageBlockEntity();
+        StorageBlockEntity storageBlockEntity = null;
+        if (this.isDrillHeadSlot(startIndex) && this.isDrillHeadSlot(endIndex - 1)) {
+            storageBlockEntity = this.getStorageBlockEntity();
+        }
 
         boolean flag = false;
         int i = startIndex;
@@ -184,6 +187,9 @@ public class DrillHeadMenu extends AbstractScrollableMenu {
         }
 
         // Check storage if there is item stack with same item already
+        if (storageBlockEntity != null) {
+
+        }
 
         if (!stack.isEmpty()) {
             if (reverseDirection) {
