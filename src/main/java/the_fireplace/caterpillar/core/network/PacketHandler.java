@@ -43,12 +43,6 @@ public final class PacketHandler {
                 .consumerMainThread(CaterpillarSyncSlotC2SPacket::handle)
                 .add();
 
-        CHANNEL.messageBuilder(CaterpillarSyncSlotS2CPacket.class, index++, NetworkDirection.PLAY_TO_CLIENT)
-                .decoder(CaterpillarSyncSlotS2CPacket::new)
-                .encoder(CaterpillarSyncSlotS2CPacket::toBytes)
-                .consumerMainThread(CaterpillarSyncSlotS2CPacket::handle)
-                .add();
-
         CHANNEL.messageBuilder(CaterpillarSyncSlotC2SPacket.class, index++, NetworkDirection.PLAY_TO_SERVER)
                 .decoder(CaterpillarSyncSlotC2SPacket::new)
                 .encoder(CaterpillarSyncSlotC2SPacket::toBytes)

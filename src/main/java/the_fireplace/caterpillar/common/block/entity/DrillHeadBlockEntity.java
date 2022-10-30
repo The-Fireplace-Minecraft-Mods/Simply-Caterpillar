@@ -50,15 +50,11 @@ public class DrillHeadBlockEntity extends AbstractCaterpillarBlockEntity {
 
     public static final int CONSUMPTION_SLOT_END = 9;
 
-    public static final int CONSUMPTION_SLOT_SIZE = 9;
-
     public static final int FUEl_SLOT = 0;
 
     public static final int GATHERED_SLOT_START = 10;
 
     public static final int GATHERED_SLOT_END = 18;
-
-    public static final int GATHERED_SLOT_SIZE = 9;
 
 
     // 60 ticks equals 3 seconds

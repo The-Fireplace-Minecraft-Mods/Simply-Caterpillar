@@ -155,12 +155,15 @@ public class ReinforcementBlockEntity extends AbstractCaterpillarBlockEntity {
         Direction direction = this.getBlockState().getValue(FACING);
         BlockPos basePos = this.getBlockPos();
         BlockPos reinforcePos;
-        BlockPos caterpillarHeadPos = CaterpillarBlockUtil.getCaterpillarHeadPos(this.getLevel(), this.getBlockPos(), direction);
-        DrillHeadBlockEntity drillHeadBlockEntity = null;
-        if (caterpillarHeadPos != null) {
-            if (this.getLevel().getBlockEntity(caterpillarHeadPos) instanceof  DrillHeadBlockEntity blockEntity) {
-                drillHeadBlockEntity = blockEntity;
-            }
+
+        BlockPos caterpillarHeadPos = CaterpillarBlockUtil.getCaterpillarHeadPos(this.getLevel(), basePos, direction);
+        List<AbstractCaterpillarBlockEntity> caterpillarBlockEntities = CaterpillarBlockUtil.getConnectedCaterpillarBlockEntities(this.getLevel(), caterpillarHeadPos, new ArrayList<>());
+        DrillHeadBlockEntity drillHeadBlockEntity = CaterpillarBlockUtil.getDrillHeadBlockEntity(caterpillarBlockEntities);
+        StorageBlockEntity storageBlockEntity = CaterpillarBlockUtil.getStorageBlockEntity(caterpillarBlockEntities);
+        // Because caterpillar is moving, it can have a space between the caterpillar blocks
+        if (storageBlockEntity == null) {
+            caterpillarBlockEntities = CaterpillarBlockUtil.getConnectedCaterpillarBlockEntities(this.getLevel(), caterpillarBlockEntities.get(caterpillarBlockEntities.size() - 1).getBlockPos().relative(direction, 2), new ArrayList<>());
+            storageBlockEntity = CaterpillarBlockUtil.getStorageBlockEntity(caterpillarBlockEntities);
         }
 
         for (int i = -2; i <= 2; i++) {
@@ -184,7 +187,7 @@ public class ReinforcementBlockEntity extends AbstractCaterpillarBlockEntity {
                         Item reinforceItem = this.getStackInSlot(slotId).getItem();
                         Block reinforceBlock = Block.byItem(reinforceItem);
 
-                        if (checkIfReinforcementIsNeeded(REPLACER_CEILING, reinforcePos, reinforceBlock) && super.takeItemFromDrillHead(drillHeadBlockEntity, reinforceItem, DrillHeadBlockEntity.CONSUMPTION_SLOT_START, DrillHeadBlockEntity.CONSUMPTION_SLOT_END)) {
+                        if (checkIfReinforcementIsNeeded(REPLACER_CEILING, reinforcePos, reinforceBlock) && super.takeItemFromDrillHead(drillHeadBlockEntity, storageBlockEntity, reinforceItem, DrillHeadBlockEntity.CONSUMPTION_SLOT_START, DrillHeadBlockEntity.CONSUMPTION_SLOT_END)) {
                             this.level.setBlockAndUpdate(reinforcePos, reinforceBlock.defaultBlockState());
                         }
                     } else if (i == -2) { // FLOOR
@@ -197,7 +200,7 @@ public class ReinforcementBlockEntity extends AbstractCaterpillarBlockEntity {
                         Item reinforceItem = this.getStackInSlot(slotId).getItem();
                         Block reinforceBlock = Block.byItem(reinforceItem);
 
-                        if (checkIfReinforcementIsNeeded(REPLACER_FLOOR, reinforcePos, reinforceBlock) && super.takeItemFromDrillHead(drillHeadBlockEntity, reinforceItem, DrillHeadBlockEntity.CONSUMPTION_SLOT_START, DrillHeadBlockEntity.CONSUMPTION_SLOT_END)) {
+                        if (checkIfReinforcementIsNeeded(REPLACER_FLOOR, reinforcePos, reinforceBlock) && super.takeItemFromDrillHead(drillHeadBlockEntity, storageBlockEntity, reinforceItem, DrillHeadBlockEntity.CONSUMPTION_SLOT_START, DrillHeadBlockEntity.CONSUMPTION_SLOT_END)) {
                             this.level.setBlockAndUpdate(reinforcePos, reinforceBlock.defaultBlockState());
                         }
                     } else if (
@@ -209,7 +212,7 @@ public class ReinforcementBlockEntity extends AbstractCaterpillarBlockEntity {
                         Item reinforceItem = this.getStackInSlot(slotId).getItem();
                         Block reinforceBlock = Block.byItem(reinforceItem);
 
-                        if (checkIfReinforcementIsNeeded(REPLACER_RIGHT, reinforcePos, reinforceBlock) && super.takeItemFromDrillHead(drillHeadBlockEntity, reinforceItem, DrillHeadBlockEntity.CONSUMPTION_SLOT_START, DrillHeadBlockEntity.CONSUMPTION_SLOT_END)) {
+                        if (checkIfReinforcementIsNeeded(REPLACER_RIGHT, reinforcePos, reinforceBlock) && super.takeItemFromDrillHead(drillHeadBlockEntity, storageBlockEntity, reinforceItem, DrillHeadBlockEntity.CONSUMPTION_SLOT_START, DrillHeadBlockEntity.CONSUMPTION_SLOT_END)) {
                             this.level.setBlockAndUpdate(reinforcePos, reinforceBlock.defaultBlockState());
                         }
                     } else if (
@@ -221,7 +224,7 @@ public class ReinforcementBlockEntity extends AbstractCaterpillarBlockEntity {
                         Item reinforceItem = this.getStackInSlot(slotId).getItem();
                         Block reinforceBlock = Block.byItem(reinforceItem);
 
-                        if (checkIfReinforcementIsNeeded(REPLACER_LEFT, reinforcePos, reinforceBlock) && super.takeItemFromDrillHead(drillHeadBlockEntity, reinforceItem, DrillHeadBlockEntity.CONSUMPTION_SLOT_START, DrillHeadBlockEntity.CONSUMPTION_SLOT_END)) {
+                        if (checkIfReinforcementIsNeeded(REPLACER_LEFT, reinforcePos, reinforceBlock) && super.takeItemFromDrillHead(drillHeadBlockEntity, storageBlockEntity, reinforceItem, DrillHeadBlockEntity.CONSUMPTION_SLOT_START, DrillHeadBlockEntity.CONSUMPTION_SLOT_END)) {
                             this.level.setBlockAndUpdate(reinforcePos, reinforceBlock.defaultBlockState());
                         }
                     } else if (i != -2 && i != 2 && j != -2 && j != 2) {

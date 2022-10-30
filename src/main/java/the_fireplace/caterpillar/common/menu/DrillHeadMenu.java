@@ -439,7 +439,7 @@ public class DrillHeadMenu extends AbstractScrollableMenu {
                 this.setSlot(drillHeadSlotId, stack);
             } else {
                 // Consumption storage slot
-                this.setStorageSlot(drillHeadSlotId - CONSUMPTION_SLOT_SIZE - CONSUMPTION_SLOT_START, stack);
+                this.setStorageSlot(drillHeadSlotId - CONSUMPTION_SLOT_START - CONSUMPTION_SLOT_END, stack);
             }
         } else {
             if (drillHeadSlotId <= GATHERED_SLOT_END) {
@@ -447,7 +447,7 @@ public class DrillHeadMenu extends AbstractScrollableMenu {
                 this.setSlot(drillHeadSlotId, stack);
             } else {
                 // Gathered storage slot
-                this.setStorageSlot(drillHeadSlotId - GATHERED_SLOT_END - CONSUMPTION_SLOT_START, stack);
+                this.setStorageSlot(drillHeadSlotId - CONSUMPTION_SLOT_START - CONSUMPTION_SLOT_END, stack);
             }
         }
     }

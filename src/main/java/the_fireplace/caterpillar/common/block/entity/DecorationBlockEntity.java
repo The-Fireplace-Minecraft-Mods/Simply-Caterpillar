@@ -144,16 +144,20 @@ public class DecorationBlockEntity extends AbstractCaterpillarBlockEntity {
         }
         this.setChanged();
 
-        Direction direction = this.getBlockState().getValue(FACING).getOpposite();
-        BlockPos basePos = this.getBlockPos();
         int placementSlotId = INVENTORY_MAX_SLOTS;
         ItemStackHandler currentPlacementMap =  this.placementMap.get(this.currentMap);
-        BlockPos caterpillarHeadPos = CaterpillarBlockUtil.getCaterpillarHeadPos(this.getLevel(), this.getBlockPos(), direction.getOpposite());
-        DrillHeadBlockEntity drillHeadBlockEntity = null;
-        if (caterpillarHeadPos != null) {
-            if (this.getLevel().getBlockEntity(caterpillarHeadPos) instanceof  DrillHeadBlockEntity blockEntity) {
-                drillHeadBlockEntity = blockEntity;
-            }
+
+        BlockPos basePos = this.getBlockPos();
+        Direction direction = this.getBlockState().getValue(FACING).getOpposite();
+
+        BlockPos caterpillarHeadPos = CaterpillarBlockUtil.getCaterpillarHeadPos(this.getLevel(), basePos, direction.getOpposite());
+        List<AbstractCaterpillarBlockEntity> caterpillarBlockEntities = CaterpillarBlockUtil.getConnectedCaterpillarBlockEntities(this.getLevel(), caterpillarHeadPos, new ArrayList<>());
+        DrillHeadBlockEntity drillHeadBlockEntity = CaterpillarBlockUtil.getDrillHeadBlockEntity(caterpillarBlockEntities);
+        StorageBlockEntity storageBlockEntity = CaterpillarBlockUtil.getStorageBlockEntity(caterpillarBlockEntities);
+        // Because caterpillar is moving, it can have a space between the caterpillar blocks
+        if (storageBlockEntity == null) {
+            caterpillarBlockEntities = CaterpillarBlockUtil.getConnectedCaterpillarBlockEntities(this.getLevel(), caterpillarBlockEntities.get(caterpillarBlockEntities.size() - 1).getBlockPos().relative(direction.getOpposite(), 2), new ArrayList<>());
+            storageBlockEntity = CaterpillarBlockUtil.getStorageBlockEntity(caterpillarBlockEntities);
         }
 
         for (int i = -1; i <= 1; i++) {
@@ -174,7 +178,7 @@ public class DecorationBlockEntity extends AbstractCaterpillarBlockEntity {
                 Block blockToPlace = Block.byItem(itemToPlace);
 
                 if (blockToPlace != null && blockToPlace.defaultBlockState() != null) {
-                    if (takeItemFromDrillHead(drillHeadBlockEntity, itemToPlace, DrillHeadBlockEntity.CONSUMPTION_SLOT_START, DrillHeadBlockEntity.CONSUMPTION_SLOT_END)) {
+                    if (takeItemFromDrillHead(drillHeadBlockEntity, storageBlockEntity, itemToPlace, DrillHeadBlockEntity.CONSUMPTION_SLOT_START, DrillHeadBlockEntity.CONSUMPTION_SLOT_END)) {
                         BlockState blockState = blockToPlace.defaultBlockState();
 
                         if (!blockToPlace.defaultBlockState().canSurvive(this.getLevel(), decoratePos)) {

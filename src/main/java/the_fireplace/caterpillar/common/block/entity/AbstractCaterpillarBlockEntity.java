@@ -34,15 +34,26 @@ public abstract class AbstractCaterpillarBlockEntity extends InventoryBlockEntit
         return null;
     }
 
-    protected boolean takeItemFromDrillHead(DrillHeadBlockEntity drillHeadBlockEntity, Item item, int startIndex, int endIndex) {
+    protected boolean takeItemFromDrillHead(DrillHeadBlockEntity drillHeadBlockEntity, StorageBlockEntity storageBlockEntity, Item item, int startIndex, int endIndex) {
         if (item.equals(Items.AIR)) {
             return true;
         }
 
         if (drillHeadBlockEntity != null) {
             for (int i = startIndex; i <= endIndex; i++) {
-                if (drillHeadBlockEntity.getStackInSlot(i).getItem().equals(item)) {
-                    drillHeadBlockEntity.extractItem(i, 1);
+                ItemStack drillHeadStack = drillHeadBlockEntity.getStackInSlot(i);
+                if (!drillHeadStack.isEmpty() && ItemStack.isSame(drillHeadStack, new ItemStack(item))) {
+                    drillHeadStack.shrink(1);
+                    return true;
+                }
+            }
+        }
+
+        if (storageBlockEntity != null) {
+            for (int i = startIndex - 1; i <= endIndex - 1; i++) {
+                ItemStack storageStack = storageBlockEntity.getStackInSlot(i);
+                if (!storageStack.isEmpty() && ItemStack.isSame(storageStack, new ItemStack(item))) {
+                    storageStack.shrink(1);
                     return true;
                 }
             }
@@ -51,7 +62,7 @@ public abstract class AbstractCaterpillarBlockEntity extends InventoryBlockEntit
         return false;
     }
 
-    public ItemStack insertItemToDrillHead(DrillHeadBlockEntity drillHeadBlockEntity, StorageBlockEntity storageBlockEntity, ItemStack stack, int startIndex, int endIndex) {
+    public ItemStack insertItemStackToDrillHead(DrillHeadBlockEntity drillHeadBlockEntity, StorageBlockEntity storageBlockEntity, ItemStack stack, int startIndex, int endIndex) {
         // Check if drill head has same item in gathered slot
         if (drillHeadBlockEntity != null) {
             for (int i = startIndex; i <= endIndex; i++) {
@@ -74,13 +85,30 @@ public abstract class AbstractCaterpillarBlockEntity extends InventoryBlockEntit
 
         // Check if storage has same item in gathered slot
         if (storageBlockEntity != null) {
+            if (!stack.isEmpty()) {
+                for (int i = startIndex - 1; i <= endIndex - 1; i++) {
+                    ItemStack storageStack = storageBlockEntity.getStackInSlot(i);
+                    if (!storageStack.isEmpty() && ItemStack.isSameItemSameTags(stack, storageStack)) {
+                        int j = storageStack.getCount() + stack.getCount();
+                        int maxSize = Math.min(storageStack.getMaxStackSize(), stack.getMaxStackSize());
+                        if (j <= maxSize) {
+                            stack.setCount(0);
+                            storageStack.setCount(j);
 
+                            return stack;
+                        } else if (storageStack.getCount() < maxSize) {
+                            stack.shrink(maxSize - storageStack.getCount());
+                            storageStack.setCount(maxSize);
+                        }
+                    }
+                }
+            }
         }
 
         // Check if drill head has empty space
         if (drillHeadBlockEntity != null) {
             if (!stack.isEmpty()) {
-                for (int i = DrillHeadBlockEntity.GATHERED_SLOT_START; i <= DrillHeadBlockEntity.GATHERED_SLOT_END; i++) {
+                for (int i = startIndex; i <= endIndex; i++) {
                     ItemStack drillHeadStack = drillHeadBlockEntity.getStackInSlot(i);
                     if (drillHeadStack.isEmpty()) {
                         drillHeadBlockEntity.setStackInSlot(i, stack.split(stack.getCount()));
@@ -94,7 +122,7 @@ public abstract class AbstractCaterpillarBlockEntity extends InventoryBlockEntit
         // Check if storage has empty space
         if (storageBlockEntity != null) {
             if (!stack.isEmpty()) {
-                for (int i = StorageBlockEntity.GATHERED_SLOT_START; i <= StorageBlockEntity.GATHERED_SLOT_END; i++) {
+                for (int i = startIndex - 1; i <= endIndex - 1; i++) {
                     ItemStack storageStack = storageBlockEntity.getStackInSlot(i);
                     if (storageStack.isEmpty()) {
                         storageBlockEntity.setStackInSlot(i, stack.split(stack.getCount()));

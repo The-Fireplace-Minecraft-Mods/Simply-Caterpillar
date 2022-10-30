@@ -52,7 +52,7 @@ public class CollectorBlockEntity extends AbstractCaterpillarBlockEntity {
 
         if (drillHeadBlockEntity != null) {
             for(ItemEntity itemEntity : getItemsAround()) {
-                ItemStack remainderStack = super.insertItemToDrillHead(drillHeadBlockEntity, storageBlockEntity, itemEntity.getItem(), DrillHeadBlockEntity.GATHERED_SLOT_START, DrillHeadBlockEntity.GATHERED_SLOT_END);
+                ItemStack remainderStack = super.insertItemStackToDrillHead(drillHeadBlockEntity, storageBlockEntity, itemEntity.getItem(), DrillHeadBlockEntity.GATHERED_SLOT_START, DrillHeadBlockEntity.GATHERED_SLOT_END);
                 itemEntity.setItem(remainderStack);
             }
         }
