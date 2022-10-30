@@ -25,6 +25,7 @@ import the_fireplace.caterpillar.common.block.util.CaterpillarBlockUtil;
 import the_fireplace.caterpillar.common.block.util.ReinforcementPart;
 import the_fireplace.caterpillar.common.block.util.Replacement;
 import the_fireplace.caterpillar.common.menu.ReinforcementMenu;
+import the_fireplace.caterpillar.config.CaterpillarConfig;
 import the_fireplace.caterpillar.core.init.BlockEntityInit;
 import the_fireplace.caterpillar.core.network.PacketHandler;
 import the_fireplace.caterpillar.core.network.packet.server.*;
@@ -145,7 +146,9 @@ public class ReinforcementBlockEntity extends AbstractCaterpillarBlockEntity {
             this.getLevel().removeBlock(basePos.above(), false);
             this.getLevel().removeBlock(basePos.below(), false);
 
-            this.getLevel().playSound(null, basePos, SoundEvents.PISTON_EXTEND, SoundSource.BLOCKS, 1.0F, 1.0F);
+            if (CaterpillarConfig.enableSounds) {
+                this.getLevel().playSound(null, basePos, SoundEvents.PISTON_EXTEND, SoundSource.BLOCKS, 1.0F, 1.0F);
+            }
 
             reinforcementBlockEntity.reinforce();
         }

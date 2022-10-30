@@ -12,7 +12,6 @@
   "block.simplycaterpillar.incinerator": "Incinerator",
   "block.simplycaterpillar.blocks.alreadyConnected": "There is already a %s connected to the caterpillar.",
 
-
   "itemGroup.simplycaterpillar": "Caterpillar",
 
   "container.simplycaterpillar.drill_head": "Drill Head",
@@ -36,17 +35,7 @@
   "gui.simplycaterpillar.replacement.falling_blocks": "Sand and Gravel",
   "gui.simplycaterpillar.replacement.all": "All",
 
-  "simplycaterpillar.config.drill_head": "Does this show the drill head tutorial ?",
-  "simplycaterpillar.config.coal": "Does this show the coal tutorial ?",
-  "simplycaterpillar.config.power": "Does this show the power tutorial ?",
-  "simplycaterpillar.config.storage": "Does this show the storage tutorial ?",
-  "simplycaterpillar.config.decoration_selection": "Does this show the selection tutorial for the decoration ?",
-  "simplycaterpillar.config.decoration_selection_zero": "Does this show the selection zero tutorial for the decoration ?",
-  "simplycaterpillar.config.decoration_pattern": "Does this show the patter tutorial for the decoration ?",
-  "simplycaterpillar.config.reinforcement_1": "Does this show the reinforcement tutorial 1 ?",
-  "simplycaterpillar.config.reinforcement_2": "Does this show the reinforcement tutorial 2 ?",
-
-  "simplycaterpillar.config.firstUse": "Show First Time Use Message ?",
+  "simplycaterpillar.config.firstUse": "Show the tutorial if first time use ?",
   "simplycaterpillar.config.useParticles": "Use particles for effect ?",
   "simplycaterpillar.config.breakBedrock": "Can the drill break bedrock ?",
   "simplycaterpillar.config.enableSounds": "Does the drill make noise when it moves ?",

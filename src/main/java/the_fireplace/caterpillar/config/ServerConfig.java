@@ -19,23 +19,23 @@ public class ServerConfig {
         builder.push("Caterpillar");
 
         firstUse = builder
-                .comment("Show First Time Use Message ?")
-                .translation(Caterpillar.MOD_ID + "config.firstUse")
+                .comment("Show the tutorial if first time use ?")
+                .translation(Caterpillar.MOD_ID + ".config.firstUse")
                 .define("firstUse", true);
 
         useParticles = builder
                 .comment("Use particles for effect ?")
-                .translation(Caterpillar.MOD_ID + "config.useParticles")
+                .translation(Caterpillar.MOD_ID + ".config.useParticles")
                 .define("useParticles", true);
 
         breakBedrock = builder
                 .comment("Can the drill break bedrock ?")
-                .translation(Caterpillar.MOD_ID + "config.drill_head")
-                .define("breakBedrock", true);
+                .translation(Caterpillar.MOD_ID + ".config.drill_head")
+                .define("breakBedrock", false);
 
         enableSounds = builder
                 .comment("Does the drill make noise when it moves ?")
-                .translation(Caterpillar.MOD_ID + "config.drill_head")
+                .translation(Caterpillar.MOD_ID + ".config.drill_head")
                 .define("enableSounds", true);
 
         builder.pop();

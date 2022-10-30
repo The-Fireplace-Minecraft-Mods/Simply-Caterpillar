@@ -25,6 +25,7 @@ import the_fireplace.caterpillar.common.block.util.CaterpillarBlockUtil;
 import the_fireplace.caterpillar.common.menu.DrillHeadMenu;
 import the_fireplace.caterpillar.common.menu.syncdata.DrillHeadContainerData;
 import the_fireplace.caterpillar.common.menu.util.CaterpillarMenuUtil;
+import the_fireplace.caterpillar.config.CaterpillarConfig;
 import the_fireplace.caterpillar.core.init.BlockEntityInit;
 import the_fireplace.caterpillar.common.block.util.DrillHeadPart;
 import the_fireplace.caterpillar.core.network.PacketHandler;
@@ -149,7 +150,9 @@ public class DrillHeadBlockEntity extends AbstractCaterpillarBlockEntity {
                 DrillHeadBlock.removeStructure(this.getLevel(), basePos, nextDrillHeadBlockEntity.getBlockState());
                 DrillHeadBlock.moveStructure(this.getLevel(), nextBasePos, nextDrillHeadBlockEntity.getBlockState());
 
-                this.getLevel().playSound(null, basePos, SoundEvents.PISTON_EXTEND, SoundSource.BLOCKS, 1.0F, 1.0F);
+                if (CaterpillarConfig.enableSounds) {
+                    this.getLevel().playSound(null, basePos, SoundEvents.PISTON_EXTEND, SoundSource.BLOCKS, 1.0F, 1.0F);
+                }
             }
         }
     }
@@ -173,7 +176,7 @@ public class DrillHeadBlockEntity extends AbstractCaterpillarBlockEntity {
 
                 BlockState blockState = this.getLevel().getBlockState(destroyPos);
 
-                if (blockState.getBlock() == Blocks.BEDROCK) {
+                if (blockState.getBlock() == Blocks.BEDROCK && !CaterpillarConfig.breakBedrock) {
                     setPowerOff();
                     PacketHandler.sendToClients(new DrillHeadSyncPowerS2CPacket(false, this.getBlockPos()));
                 } else if (CaterpillarBlockUtil.canBreakBlock(blockState.getBlock())) {

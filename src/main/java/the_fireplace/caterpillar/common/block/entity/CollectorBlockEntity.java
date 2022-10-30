@@ -11,6 +11,7 @@ import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.phys.AABB;
 import the_fireplace.caterpillar.common.block.CollectorBlock;
 import the_fireplace.caterpillar.common.block.util.CaterpillarBlockUtil;
+import the_fireplace.caterpillar.config.CaterpillarConfig;
 import the_fireplace.caterpillar.core.init.BlockEntityInit;
 
 import java.util.ArrayList;
@@ -33,7 +34,9 @@ public class CollectorBlockEntity extends AbstractCaterpillarBlockEntity {
         this.getLevel().removeBlock(this.getBlockPos(), false);
         this.getLevel().removeBlock(this.getBlockPos().below(), false);
 
-        this.getLevel().playSound(null, this.getBlockPos(), SoundEvents.PISTON_EXTEND, SoundSource.BLOCKS, 1.0F, 1.0F);
+        if (CaterpillarConfig.enableSounds) {
+            this.getLevel().playSound(null, this.getBlockPos(), SoundEvents.PISTON_EXTEND, SoundSource.BLOCKS, 1.0F, 1.0F);
+        }
 
         this.suckInItems(nextPos);
     }

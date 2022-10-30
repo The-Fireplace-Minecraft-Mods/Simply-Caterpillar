@@ -21,6 +21,7 @@ import the_fireplace.caterpillar.Caterpillar;
 import the_fireplace.caterpillar.common.block.IncineratorBlock;
 import the_fireplace.caterpillar.common.block.util.CaterpillarBlockUtil;
 import the_fireplace.caterpillar.common.menu.IncineratorMenu;
+import the_fireplace.caterpillar.config.CaterpillarConfig;
 import the_fireplace.caterpillar.core.init.BlockEntityInit;
 
 import java.util.ArrayList;
@@ -67,7 +68,9 @@ public class IncineratorBlockEntity extends AbstractCaterpillarBlockEntity {
 
             this.getLevel().removeBlock(basePos, false);
 
-            this.getLevel().playSound(null, basePos, SoundEvents.PISTON_EXTEND, SoundSource.BLOCKS, 1.0F, 1.0F);
+            if (CaterpillarConfig.enableSounds) {
+                this.getLevel().playSound(null, basePos, SoundEvents.PISTON_EXTEND, SoundSource.BLOCKS, 1.0F, 1.0F);
+            }
 
             nextIncineratorBlockEntity.incinerate();
         }

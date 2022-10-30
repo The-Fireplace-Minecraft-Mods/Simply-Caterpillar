@@ -38,7 +38,7 @@ public class Caterpillar
 		final IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
 
 		// Register Configs
-		modLoadingContext.registerConfig(ModConfig.Type.CLIENT, ConfigHolder.CLIENT_SPEC);
+		// modLoadingContext.registerConfig(ModConfig.Type.CLIENT, ConfigHolder.CLIENT_SPEC);
 		modLoadingContext.registerConfig(ModConfig.Type.SERVER, ConfigHolder.SERVER_SPEC);
 
 		// Register Deferred Registers

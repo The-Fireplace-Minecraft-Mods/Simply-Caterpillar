@@ -29,6 +29,7 @@ import the_fireplace.caterpillar.common.block.util.CaterpillarBlockUtil;
 import the_fireplace.caterpillar.common.block.util.DecorationPart;
 import the_fireplace.caterpillar.common.menu.DecorationMenu;
 import the_fireplace.caterpillar.common.menu.syncdata.DecorationContainerData;
+import the_fireplace.caterpillar.config.CaterpillarConfig;
 import the_fireplace.caterpillar.core.init.BlockEntityInit;
 import the_fireplace.caterpillar.core.network.PacketHandler;
 import the_fireplace.caterpillar.core.network.packet.server.DecorationSyncInventoryS2CPacket;
@@ -131,7 +132,9 @@ public class DecorationBlockEntity extends AbstractCaterpillarBlockEntity {
             this.getLevel().removeBlock(basePos.relative(direction.getCounterClockWise()), false);
             this.getLevel().removeBlock(basePos.relative(direction.getClockWise()), false);
 
-            this.getLevel().playSound(null, basePos, SoundEvents.PISTON_EXTEND, SoundSource.BLOCKS, 1.0F, 1.0F);
+            if (CaterpillarConfig.enableSounds) {
+                this.getLevel().playSound(null, basePos, SoundEvents.PISTON_EXTEND, SoundSource.BLOCKS, 1.0F, 1.0F);
+            }
 
             nextDecorationBlockEntity.decorate();
         }

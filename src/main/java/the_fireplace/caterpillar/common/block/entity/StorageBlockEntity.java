@@ -8,6 +8,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import the_fireplace.caterpillar.common.block.StorageBlock;
 import the_fireplace.caterpillar.common.block.util.StoragePart;
+import the_fireplace.caterpillar.config.CaterpillarConfig;
 import the_fireplace.caterpillar.core.init.BlockEntityInit;
 
 public class StorageBlockEntity extends AbstractCaterpillarBlockEntity {
@@ -54,7 +55,9 @@ public class StorageBlockEntity extends AbstractCaterpillarBlockEntity {
             this.getLevel().removeBlock(basePos.relative(blockEntity.getBlockState().getValue(StorageBlock.FACING).getCounterClockWise()), false);
             this.getLevel().removeBlock(basePos.relative(blockEntity.getBlockState().getValue(StorageBlock.FACING).getClockWise()), false);
 
-            this.getLevel().playSound(null, basePos, SoundEvents.PISTON_EXTEND, SoundSource.BLOCKS, 1.0F, 1.0F);
+            if (CaterpillarConfig.enableSounds) {
+                this.getLevel().playSound(null, basePos, SoundEvents.PISTON_EXTEND, SoundSource.BLOCKS, 1.0F, 1.0F);
+            }
         }
     }
 }
