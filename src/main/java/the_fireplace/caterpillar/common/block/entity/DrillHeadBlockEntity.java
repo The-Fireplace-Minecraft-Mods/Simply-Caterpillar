@@ -33,6 +33,8 @@ import the_fireplace.caterpillar.core.network.packet.server.DrillHeadSyncLitS2CP
 import the_fireplace.caterpillar.core.network.packet.server.DrillHeadSyncPowerS2CPacket;
 import the_fireplace.caterpillar.core.network.packet.server.CaterpillarSyncInventoryS2CPacket;
 
+import java.util.ArrayList;
+
 public class DrillHeadBlockEntity extends AbstractCaterpillarBlockEntity {
 
     public static final Component TITLE = Component.translatable(
@@ -85,7 +87,7 @@ public class DrillHeadBlockEntity extends AbstractCaterpillarBlockEntity {
         boolean needsUpdate = false;
 
         if (blockEntity.isPowered() && blockEntity.isLit()) {
-            --blockEntity.litTime;
+            blockEntity.litTime -= CaterpillarBlockUtil.getConnectedCaterpillarBlockEntities(level, pos, new ArrayList<>()).size();
             PacketHandler.sendToClients(new DrillHeadSyncLitS2CPacket(blockEntity.getLitTime(), blockEntity.getLitDuration(), blockEntity.getBlockPos()));
 
             blockEntity.timer++;
@@ -105,7 +107,7 @@ public class DrillHeadBlockEntity extends AbstractCaterpillarBlockEntity {
         ItemStack stack = blockEntity.getStackInSlot(DrillHeadBlockEntity.FUEl_SLOT);
         boolean fuelSlotIsEmpty = stack.isEmpty();
 
-        if (blockEntity.isPowered() && blockEntity.getLitTime() == 0 && !fuelSlotIsEmpty) {
+        if (blockEntity.isPowered() && blockEntity.getLitTime() < 0 && !fuelSlotIsEmpty) {
             blockEntity.litTime = blockEntity.getBurnDuration(stack);
             blockEntity.litDuration = blockEntity.litTime;
             blockEntity.setChanged();
