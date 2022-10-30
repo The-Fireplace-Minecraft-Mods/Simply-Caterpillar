@@ -8,25 +8,29 @@ import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
 public class TabButton extends ImageButton {
+
     private final ResourceLocation resourceLocation;
 
-    private int xTexStart;
+    private final int xTexStart;
 
-    private int yTexStart;
+    private final int yTexStart;
 
-    private int yDiffTex;
+    private final int xDiffTex;
 
-    private boolean selected;
+    private final int yDiffTex;
+
+    private boolean isSelectedTab;
 
 
-    public TabButton(boolean selected, int x, int y, int width, int height, int xTexStart, int yTexStart, int yDiffTex, ResourceLocation resourceLocation, OnPress onPress) {
+    public TabButton(boolean isSelectedTab, int x, int y, int width, int height, int xTexStart, int yTexStart, int xDiffTex, int yDiffTex, ResourceLocation resourceLocation, OnPress onPress) {
         super(x, y, width, height, xTexStart, yTexStart, yDiffTex, resourceLocation, onPress);
 
         this.resourceLocation = resourceLocation;
         this.xTexStart = xTexStart;
         this.yTexStart = yTexStart;
+        this.xDiffTex = xDiffTex;
         this.yDiffTex = yDiffTex;
-        this.selected = selected;
+        this.isSelectedTab = isSelectedTab;
     }
 
     @Override
@@ -34,16 +38,22 @@ public class TabButton extends ImageButton {
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderTexture(0, this.resourceLocation);
 
-        if (this.selected) {
-            this.yTexStart = 0;
-        } else {
-            this.yTexStart += this.yDiffTex;
+        int width = super.width;
+        int xOffset = this.xTexStart;
+        int yOffset = this.yTexStart;
+        if (!this.isSelectedTab) {
+            width += this.xDiffTex;
+            xOffset += this.xDiffTex;
+            yOffset += this.yDiffTex;
         }
 
-        if (this.isHoveredOrFocused()) {
-            xTexStart += this.width;
-        }
+        super.blit(poseStack, super.x, super.y, xOffset, yOffset, width, super.height);
+    }
 
-        super.blit(poseStack, super.x, super.y, this.xTexStart, this.yTexStart, super.width, super.height);
+    @Override
+    public void onPress() {
+        if (!this.isSelectedTab) {
+            super.onPress();
+        }
     }
 }

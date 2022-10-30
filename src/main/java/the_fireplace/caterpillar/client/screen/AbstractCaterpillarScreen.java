@@ -2,7 +2,6 @@ package the_fireplace.caterpillar.client.screen;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
@@ -14,6 +13,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
 import the_fireplace.caterpillar.Caterpillar;
 import the_fireplace.caterpillar.client.screen.util.ScreenTabs;
+import the_fireplace.caterpillar.client.screen.widget.TabButton;
 import the_fireplace.caterpillar.client.screen.widget.TutorialButton;
 import the_fireplace.caterpillar.common.block.entity.*;
 import the_fireplace.caterpillar.common.menu.AbstractCaterpillarMenu;
@@ -40,15 +40,15 @@ public abstract class AbstractCaterpillarScreen<T extends AbstractCaterpillarMen
 
     public static final int TAB_Y = 3;
 
-    public static final int TAB_BG_X_SELECTED = TAB_WIDTH;
-
-    public static final int TAB_BG_X_UNSELECTED = 0;
+    public static final int TAB_BG_X = 0;
 
     public static final int TAB_BG_Y = 0;
+    public static final int TAB_BG_X_OFFSET = -2;
+    public static final int TAB_BG_Y_OFFSET = TAB_HEIGHT;
 
     protected final ScreenTabs SELECTED_TAB;
 
-    private final List<ImageButton> tabButtons = new ArrayList<>();
+    private final List<TabButton> tabButtons = new ArrayList<>();
 
     public final int TUTORIAL_WIDTH = 14;
 
@@ -57,6 +57,8 @@ public abstract class AbstractCaterpillarScreen<T extends AbstractCaterpillarMen
     public final int TUTORIAL_X = -11;
 
     public final int TUTORIAL_Y = -TUTORIAL_HEIGHT - 6;
+
+    public final int TUTORIAL_BG_Y_OFFSET = TUTORIAL_HEIGHT;
 
     public final int TUTORIAL_BG_X = 0;
 
@@ -126,7 +128,7 @@ public abstract class AbstractCaterpillarScreen<T extends AbstractCaterpillarMen
     protected abstract void renderTutorial(PoseStack stack);
 
     private void addTutorialButton() {
-        this.tutorialButton = new TutorialButton(false,super.leftPos + TUTORIAL_X, super.topPos + SELECTED_TAB.IMAGE_HEIGHT + TUTORIAL_Y, TUTORIAL_WIDTH, TUTORIAL_HEIGHT, TUTORIAL_BG_X, TUTORIAL_BG_Y, 0, CATERPILLAR_GUI, (onPress) -> {
+        this.tutorialButton = new TutorialButton(false,super.leftPos + TUTORIAL_X, super.topPos + SELECTED_TAB.IMAGE_HEIGHT + TUTORIAL_Y, TUTORIAL_WIDTH, TUTORIAL_HEIGHT, TUTORIAL_BG_X, TUTORIAL_BG_Y, TUTORIAL_BG_Y_OFFSET, CATERPILLAR_GUI, (onPress) -> {
             this.tutorialButton.setShowTutorial(!this.tutorialButton.showTutorial());
         });
 
@@ -134,26 +136,19 @@ public abstract class AbstractCaterpillarScreen<T extends AbstractCaterpillarMen
     }
 
     private void addTabButtons() {
-        for (ImageButton button : this.tabButtons) {
+        for (TabButton button : this.tabButtons) {
             removeWidget(button);
         }
 
         int incrementTabPos = 0;
         for (ScreenTabs tab: ScreenTabs.values()) {
             if (tabShouldBeDisplayed(tab)) {
-                if (this.SELECTED_TAB.equals(tab)) {
-                    this.tabButtons.add(new ImageButton(super.leftPos + TAB_X_SELECTED, super.topPos + TAB_Y + incrementTabPos*TAB_HEIGHT, TAB_WIDTH, TAB_HEIGHT, TAB_BG_X_SELECTED, TAB_BG_Y, 0, CATERPILLAR_GUI, (onPress) -> {
-
-                    }));
-                } else {
-                    this.tabButtons.add(new ImageButton(super.leftPos + TAB_X_UNSELECTED, super.topPos + TAB_Y + incrementTabPos*TAB_HEIGHT, TAB_WIDTH, TAB_HEIGHT, TAB_BG_X_UNSELECTED, TAB_BG_Y, 0, CATERPILLAR_GUI, (onPress) -> PacketHandler.sendToServer(new CaterpillarSyncSelectedTabC2SPacket(tab, this.menu.blockEntity.getBlockPos()))));
-                }
-
+                this.tabButtons.add(new TabButton(this.SELECTED_TAB.equals(tab), super.leftPos + TAB_X_SELECTED, super.topPos + TAB_Y + incrementTabPos*TAB_HEIGHT, TAB_WIDTH, TAB_HEIGHT, TAB_BG_X, TAB_BG_Y, TAB_BG_X_OFFSET, TAB_BG_Y_OFFSET, CATERPILLAR_GUI, (onPress) -> PacketHandler.sendToServer(new CaterpillarSyncSelectedTabC2SPacket(tab, this.menu.blockEntity.getBlockPos()))));
                 incrementTabPos++;
             }
         }
 
-        for (ImageButton button : this.tabButtons) {
+        for (TabButton button : this.tabButtons) {
             this.addRenderableWidget(button);
         }
     }
@@ -167,7 +162,7 @@ public abstract class AbstractCaterpillarScreen<T extends AbstractCaterpillarMen
                 if (this.SELECTED_TAB.equals(tab)) {
                     super.itemRenderer.renderAndDecorateItem(tab.ITEM,this.leftPos - 21, this.topPos + 5 + incrementTabPos*20);
                 } else {
-                    super.itemRenderer.renderAndDecorateItem(tab.ITEM, this.leftPos - 23, this.topPos + 5 + incrementTabPos*20);
+                    super.itemRenderer.renderAndDecorateItem(tab.ITEM, this.leftPos - 20, this.topPos + 5 + incrementTabPos*20);
                 }
 
                 incrementTabPos++;
