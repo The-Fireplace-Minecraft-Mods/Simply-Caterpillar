@@ -268,7 +268,6 @@ public class DrillHeadScreen extends AbstractScrollableScreen<DrillHeadMenu> {
 
             this.menu.syncDrillHeadSlot(slotId, stack);
         } else if (clickType == ClickType.QUICK_MOVE) {
-            System.out.println("Quick Move");
             ItemStack quickMoveReturnStack = this.menu.quickMoveStack(this.minecraft.player, slotId);
             this.menu.syncDrillHeadSlot(slotId, slot.remove(quickMoveReturnStack.getCount()));
         } else if (clickType == ClickType.SWAP) {

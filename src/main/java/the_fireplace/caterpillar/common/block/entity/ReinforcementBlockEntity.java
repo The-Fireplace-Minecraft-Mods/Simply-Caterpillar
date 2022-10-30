@@ -21,6 +21,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import the_fireplace.caterpillar.Caterpillar;
 import the_fireplace.caterpillar.common.block.ReinforcementBlock;
+import the_fireplace.caterpillar.common.block.util.CaterpillarBlockUtil;
 import the_fireplace.caterpillar.common.block.util.ReinforcementPart;
 import the_fireplace.caterpillar.common.block.util.Replacement;
 import the_fireplace.caterpillar.common.menu.ReinforcementMenu;
@@ -153,8 +154,14 @@ public class ReinforcementBlockEntity extends AbstractCaterpillarBlockEntity {
     private void reinforce() {
         Direction direction = this.getBlockState().getValue(FACING);
         BlockPos basePos = this.getBlockPos();
-
         BlockPos reinforcePos;
+        BlockPos caterpillarHeadPos = CaterpillarBlockUtil.getCaterpillarHeadPos(this.getLevel(), this.getBlockPos(), direction);
+        DrillHeadBlockEntity drillHeadBlockEntity = null;
+        if (caterpillarHeadPos != null) {
+            if (this.getLevel().getBlockEntity(caterpillarHeadPos) instanceof  DrillHeadBlockEntity blockEntity) {
+                drillHeadBlockEntity = blockEntity;
+            }
+        }
 
         for (int i = -2; i <= 2; i++) {
             for (int j = -2; j <= 2; j++) {
@@ -177,7 +184,7 @@ public class ReinforcementBlockEntity extends AbstractCaterpillarBlockEntity {
                         Item reinforceItem = this.getStackInSlot(slotId).getItem();
                         Block reinforceBlock = Block.byItem(reinforceItem);
 
-                        if (checkIfReinforcementIsNeeded(REPLACER_CEILING, reinforcePos, reinforceBlock) && takeItemFromDrillHeadInventory(reinforceItem)) {
+                        if (checkIfReinforcementIsNeeded(REPLACER_CEILING, reinforcePos, reinforceBlock) && super.takeItemFromDrillHead(drillHeadBlockEntity, reinforceItem, DrillHeadBlockEntity.CONSUMPTION_SLOT_START, DrillHeadBlockEntity.CONSUMPTION_SLOT_END)) {
                             this.level.setBlockAndUpdate(reinforcePos, reinforceBlock.defaultBlockState());
                         }
                     } else if (i == -2) { // FLOOR
@@ -190,7 +197,7 @@ public class ReinforcementBlockEntity extends AbstractCaterpillarBlockEntity {
                         Item reinforceItem = this.getStackInSlot(slotId).getItem();
                         Block reinforceBlock = Block.byItem(reinforceItem);
 
-                        if (checkIfReinforcementIsNeeded(REPLACER_FLOOR, reinforcePos, reinforceBlock) && takeItemFromDrillHeadInventory(reinforceItem)) {
+                        if (checkIfReinforcementIsNeeded(REPLACER_FLOOR, reinforcePos, reinforceBlock) && super.takeItemFromDrillHead(drillHeadBlockEntity, reinforceItem, DrillHeadBlockEntity.CONSUMPTION_SLOT_START, DrillHeadBlockEntity.CONSUMPTION_SLOT_END)) {
                             this.level.setBlockAndUpdate(reinforcePos, reinforceBlock.defaultBlockState());
                         }
                     } else if (
@@ -202,7 +209,7 @@ public class ReinforcementBlockEntity extends AbstractCaterpillarBlockEntity {
                         Item reinforceItem = this.getStackInSlot(slotId).getItem();
                         Block reinforceBlock = Block.byItem(reinforceItem);
 
-                        if (checkIfReinforcementIsNeeded(REPLACER_RIGHT, reinforcePos, reinforceBlock) && takeItemFromDrillHeadInventory(reinforceItem)) {
+                        if (checkIfReinforcementIsNeeded(REPLACER_RIGHT, reinforcePos, reinforceBlock) && super.takeItemFromDrillHead(drillHeadBlockEntity, reinforceItem, DrillHeadBlockEntity.CONSUMPTION_SLOT_START, DrillHeadBlockEntity.CONSUMPTION_SLOT_END)) {
                             this.level.setBlockAndUpdate(reinforcePos, reinforceBlock.defaultBlockState());
                         }
                     } else if (
@@ -214,7 +221,7 @@ public class ReinforcementBlockEntity extends AbstractCaterpillarBlockEntity {
                         Item reinforceItem = this.getStackInSlot(slotId).getItem();
                         Block reinforceBlock = Block.byItem(reinforceItem);
 
-                        if (checkIfReinforcementIsNeeded(REPLACER_LEFT, reinforcePos, reinforceBlock) && takeItemFromDrillHeadInventory(reinforceItem)) {
+                        if (checkIfReinforcementIsNeeded(REPLACER_LEFT, reinforcePos, reinforceBlock) && super.takeItemFromDrillHead(drillHeadBlockEntity, reinforceItem, DrillHeadBlockEntity.CONSUMPTION_SLOT_START, DrillHeadBlockEntity.CONSUMPTION_SLOT_END)) {
                             this.level.setBlockAndUpdate(reinforcePos, reinforceBlock.defaultBlockState());
                         }
                     } else if (i != -2 && i != 2 && j != -2 && j != 2) {

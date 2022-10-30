@@ -25,6 +25,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import the_fireplace.caterpillar.Caterpillar;
 import the_fireplace.caterpillar.common.block.DecorationBlock;
+import the_fireplace.caterpillar.common.block.util.CaterpillarBlockUtil;
 import the_fireplace.caterpillar.common.block.util.DecorationPart;
 import the_fireplace.caterpillar.common.menu.DecorationMenu;
 import the_fireplace.caterpillar.common.menu.syncdata.DecorationContainerData;
@@ -147,6 +148,13 @@ public class DecorationBlockEntity extends AbstractCaterpillarBlockEntity {
         BlockPos basePos = this.getBlockPos();
         int placementSlotId = INVENTORY_MAX_SLOTS;
         ItemStackHandler currentPlacementMap =  this.placementMap.get(this.currentMap);
+        BlockPos caterpillarHeadPos = CaterpillarBlockUtil.getCaterpillarHeadPos(this.getLevel(), this.getBlockPos(), direction.getOpposite());
+        DrillHeadBlockEntity drillHeadBlockEntity = null;
+        if (caterpillarHeadPos != null) {
+            if (this.getLevel().getBlockEntity(caterpillarHeadPos) instanceof  DrillHeadBlockEntity blockEntity) {
+                drillHeadBlockEntity = blockEntity;
+            }
+        }
 
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
@@ -166,7 +174,7 @@ public class DecorationBlockEntity extends AbstractCaterpillarBlockEntity {
                 Block blockToPlace = Block.byItem(itemToPlace);
 
                 if (blockToPlace != null && blockToPlace.defaultBlockState() != null) {
-                    if (takeItemFromDrillHeadInventory(itemToPlace)) {
+                    if (takeItemFromDrillHead(drillHeadBlockEntity, itemToPlace, DrillHeadBlockEntity.CONSUMPTION_SLOT_START, DrillHeadBlockEntity.CONSUMPTION_SLOT_END)) {
                         BlockState blockState = blockToPlace.defaultBlockState();
 
                         if (!blockToPlace.defaultBlockState().canSurvive(this.getLevel(), decoratePos)) {

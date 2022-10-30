@@ -58,7 +58,7 @@ public class DrillHeadMenu extends AbstractScrollableMenu {
         super(MenuInit.DRILL_HEAD.get(), id, playerInventory, entity, data, DrillHeadBlockEntity.INVENTORY_SIZE);
 
         StorageBlockEntity storageBlockEntity = this.getStorageBlockEntity();
-        if (storageBlockEntity != null) {
+        if (storageBlockEntity != null && !storageBlockEntity.getLevel().isClientSide()) {
             PacketHandler.sendToClients(new CaterpillarSyncInventoryS2CPacket(storageBlockEntity.getInventory(), storageBlockEntity.getBlockPos()));
         }
     }

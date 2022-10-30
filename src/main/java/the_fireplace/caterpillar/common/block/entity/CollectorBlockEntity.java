@@ -52,7 +52,7 @@ public class CollectorBlockEntity extends AbstractCaterpillarBlockEntity {
 
         if (drillHeadBlockEntity != null) {
             for(ItemEntity itemEntity : getItemsAround()) {
-                ItemStack remainderStack = insertItemToDrillHeadGathered(drillHeadBlockEntity, storageBlockEntity, itemEntity.getItem());
+                ItemStack remainderStack = super.insertItemToDrillHead(drillHeadBlockEntity, storageBlockEntity, itemEntity.getItem(), DrillHeadBlockEntity.GATHERED_SLOT_START, DrillHeadBlockEntity.GATHERED_SLOT_END);
                 itemEntity.setItem(remainderStack);
             }
         }
@@ -60,55 +60,5 @@ public class CollectorBlockEntity extends AbstractCaterpillarBlockEntity {
 
     public List<ItemEntity> getItemsAround() {
         return this.getLevel().getEntitiesOfClass(ItemEntity.class, new AABB(this.getBlockPos()).inflate(2)).stream().toList();
-    }
-
-    public ItemStack insertItemToDrillHeadGathered(DrillHeadBlockEntity drillHead, StorageBlockEntity storageBlockEntity, ItemStack stack) {
-        // Check if drill head has same item in gathered slot
-        for (int i = DrillHeadBlockEntity.GATHERED_SLOT_START; i <= DrillHeadBlockEntity.GATHERED_SLOT_END; i++) {
-            ItemStack drillHeadStack = drillHead.getStackInSlot(i);
-            if (!drillHeadStack.isEmpty() && ItemStack.isSameItemSameTags(stack, drillHeadStack)) {
-                int j = drillHeadStack.getCount() + stack.getCount();
-                int maxSize = Math.min(drillHeadStack.getMaxStackSize(), stack.getMaxStackSize());
-                if (j <= maxSize) {
-                    stack.setCount(0);
-                    drillHeadStack.setCount(j);
-
-                    return stack;
-                } else if (drillHeadStack.getCount() < maxSize) {
-                    stack.shrink(maxSize - drillHeadStack.getCount());
-                    drillHeadStack.setCount(maxSize);
-                }
-            }
-        }
-
-        // Check if storage has same item in gathered slot
-
-        // Check if drill head has empty space
-        if (!stack.isEmpty()) {
-            for (int i = DrillHeadBlockEntity.GATHERED_SLOT_START; i <= DrillHeadBlockEntity.GATHERED_SLOT_END; i++) {
-                ItemStack drillHeadStack = drillHead.getStackInSlot(i);
-                if (drillHeadStack.isEmpty()) {
-                    drillHead.setStackInSlot(i, stack.split(stack.getCount()));
-
-                    return stack;
-                }
-            }
-        }
-
-        // Check if storage has empty space
-        if (storageBlockEntity != null) {
-            if (!stack.isEmpty()) {
-                for (int i = StorageBlockEntity.GATHERED_SLOT_START; i <= StorageBlockEntity.GATHERED_SLOT_END; i++) {
-                    ItemStack storageStack = storageBlockEntity.getStackInSlot(i);
-                    if (storageStack.isEmpty()) {
-                        storageBlockEntity.setStackInSlot(i, stack.split(stack.getCount()));
-
-                        return stack;
-                    }
-                }
-            }
-        }
-
-        return stack;
     }
 }

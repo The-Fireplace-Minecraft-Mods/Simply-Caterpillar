@@ -63,8 +63,6 @@ public class IncineratorBlockEntity extends AbstractCaterpillarBlockEntity {
         BlockEntity nextBlockEntity = this.getLevel().getBlockEntity(nextPos);
         if (nextBlockEntity instanceof IncineratorBlockEntity nextIncineratorBlockEntity) {
             nextIncineratorBlockEntity.load(oldTag);
-
-            nextIncineratorBlockEntity.load(oldTag);
             nextIncineratorBlockEntity.setChanged();
 
             this.getLevel().removeBlock(basePos, false);
@@ -85,7 +83,7 @@ public class IncineratorBlockEntity extends AbstractCaterpillarBlockEntity {
                 for (int i = 0; i < INVENTORY_SIZE; i++) {
                     Item itemToIncinerate = this.getStackInSlot(i).getItem();
 
-                    removeItemFromDrillHeadGathered(drillHeadBlockEntity, itemToIncinerate);
+                    this.removeItemFromDrillHead(drillHeadBlockEntity, itemToIncinerate, DrillHeadBlockEntity.GATHERED_SLOT_START, DrillHeadBlockEntity.GATHERED_SLOT_END);
                 }
             }
 
@@ -94,19 +92,19 @@ public class IncineratorBlockEntity extends AbstractCaterpillarBlockEntity {
                 for (int i = 0; i < INVENTORY_SIZE; i++) {
                     Item itemToIncinerate = this.getStackInSlot(i).getItem();
 
-                    removeItemFromStorageGathered(storageBlockEntity, itemToIncinerate);
+                    this.removeItemFromStorage(storageBlockEntity, itemToIncinerate, StorageBlockEntity.GATHERED_SLOT_START, StorageBlockEntity.GATHERED_SLOT_END);
                 }
             }
         }
 
     }
 
-    private void removeItemFromDrillHeadGathered(DrillHeadBlockEntity drillHead, Item item) {
+    private void removeItemFromDrillHead(DrillHeadBlockEntity drillHead, Item item, int startIndex, int endIndex) {
         if (item.equals(Items.AIR)) {
             return;
         }
 
-        for (int slotId = DrillHeadBlockEntity.GATHERED_SLOT_START; slotId <= DrillHeadBlockEntity.GATHERED_SLOT_END; slotId++) {
+        for (int slotId = startIndex; slotId <= endIndex; slotId++) {
             ItemStack stack = drillHead.getStackInSlot(slotId);
             if (stack.getItem().equals(item)) {
                 drillHead.removeStackInSlot(slotId);
@@ -114,12 +112,12 @@ public class IncineratorBlockEntity extends AbstractCaterpillarBlockEntity {
         }
     }
 
-    private void removeItemFromStorageGathered(StorageBlockEntity blockEntity, Item item) {
+    private void removeItemFromStorage(StorageBlockEntity blockEntity, Item item, int startIndex, int endIndex) {
         if (item.equals(Items.AIR)) {
             return;
         }
 
-        for (int slotId = StorageBlockEntity.GATHERED_SLOT_START; slotId <= StorageBlockEntity.GATHERED_SLOT_END; slotId++) {
+        for (int slotId = startIndex; slotId <= endIndex; slotId++) {
             ItemStack stack = blockEntity.getStackInSlot(slotId);
             if (stack.getItem().equals(item)) {
                 blockEntity.removeStackInSlot(slotId);
