@@ -1,8 +1,10 @@
 package the_fireplace.caterpillar.common.block.entity;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import the_fireplace.caterpillar.common.block.StorageBlock;
 import the_fireplace.caterpillar.common.block.util.StoragePart;
@@ -25,16 +27,34 @@ public class StorageBlockEntity extends AbstractCaterpillarBlockEntity {
     }
 
     public void move() {
+        BlockPos basePos = this.getBlockPos();
         BlockPos nextPos = this.getBlockPos().relative(this.getBlockState().getValue(StorageBlock.FACING).getOpposite());
+        BlockEntity blockEntity = this.getLevel().getBlockEntity(basePos);
+
+        CompoundTag oldTag = this.saveWithFullMetadata();
+        oldTag.remove("x");
+        oldTag.remove("y");
+        oldTag.remove("z");
 
         this.getLevel().setBlockAndUpdate(nextPos, this.getBlockState());
-        this.getLevel().setBlockAndUpdate(nextPos.relative(this.getBlockState().getValue(StorageBlock.FACING).getCounterClockWise()), this.getBlockState().setValue(StorageBlock.PART, StoragePart.LEFT));
-        this.getLevel().setBlockAndUpdate(nextPos.relative(this.getBlockState().getValue(StorageBlock.FACING).getClockWise()), this.getBlockState().setValue(StorageBlock.PART, StoragePart.RIGHT));
+        BlockEntity nextBlockEntity = this.getLevel().getBlockEntity(nextPos);
 
-        this.getLevel().removeBlock(this.getBlockPos(), false);
-        this.getLevel().removeBlock(this.getBlockPos().relative(this.getBlockState().getValue(StorageBlock.FACING).getCounterClockWise()), false);
-        this.getLevel().removeBlock(this.getBlockPos().relative(this.getBlockState().getValue(StorageBlock.FACING).getClockWise()), false);
+        if (nextBlockEntity instanceof StorageBlockEntity nextStorageBlockEntity) {
+            nextStorageBlockEntity.load(oldTag);
 
-        this.getLevel().playSound(null, this.getBlockPos(), SoundEvents.PISTON_EXTEND, SoundSource.BLOCKS, 1.0F, 1.0F);
+            nextStorageBlockEntity.load(oldTag);
+            nextStorageBlockEntity.setChanged();
+
+            this.getLevel().removeBlock(basePos, false);
+
+            this.getLevel().setBlockAndUpdate(nextPos.relative(nextStorageBlockEntity.getBlockState().getValue(StorageBlock.FACING).getCounterClockWise()), nextStorageBlockEntity.getBlockState().setValue(StorageBlock.PART, StoragePart.LEFT));
+            this.getLevel().setBlockAndUpdate(nextPos.relative(nextStorageBlockEntity.getBlockState().getValue(StorageBlock.FACING).getClockWise()), nextStorageBlockEntity.getBlockState().setValue(StorageBlock.PART, StoragePart.RIGHT));
+
+            this.getLevel().removeBlock(basePos, false);
+            this.getLevel().removeBlock(basePos.relative(blockEntity.getBlockState().getValue(StorageBlock.FACING).getCounterClockWise()), false);
+            this.getLevel().removeBlock(basePos.relative(blockEntity.getBlockState().getValue(StorageBlock.FACING).getClockWise()), false);
+
+            this.getLevel().playSound(null, basePos, SoundEvents.PISTON_EXTEND, SoundSource.BLOCKS, 1.0F, 1.0F);
+        }
     }
 }
