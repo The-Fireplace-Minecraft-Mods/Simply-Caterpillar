@@ -1,14 +1,14 @@
 modLoader="javafml"
 loaderVersion="${loaderVersionRange}"
 license="GNU LGPLv3"
-issueTrackerURL="https://github.com/The-Fireplace/Simply-Caterpillar/issues"
+issueTrackerURL="https://github.com/The-Fireplace-Minecraft-Mods/Simply-Caterpillar/issues"
 
 [[mods]] #mandatory
 modId="${modId}"
 version="${modVersion}"
 displayName="Simply Caterpillar"
 #updateJSONURL=""
-displayURL="https://github.com/The-Fireplace/Simply-Caterpillar/"
+displayURL="https://github.com/The-Fireplace-Minecraft-Mods/Simply-Caterpillar"
 logoFile="simply-caterpillar-logo.png"
 credits="Daniel Appleby for the original Caterpillar mod"
 authors="The_Fireplace, Daniel-Mendes"
