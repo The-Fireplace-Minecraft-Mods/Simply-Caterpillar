@@ -1,6 +1,6 @@
 modLoader="javafml"
 loaderVersion="${loaderVersionRange}"
-license="GNU LGPLv3"
+license="MIT"
 issueTrackerURL="https://github.com/The-Fireplace-Minecraft-Mods/Simply-Caterpillar/issues"
 
 [[mods]] #mandatory
