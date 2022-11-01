@@ -1,0 +1,28 @@
+{
+    "variants": {
+        "facing=north,part=left": { "model": "simplycaterpillar:block/reinforcement/reinforcement_left" },
+        "facing=south,part=left": { "model": "simplycaterpillar:block/reinforcement/reinforcement_left", "y": 180 },
+        "facing=west,part=left":  { "model": "simplycaterpillar:block/reinforcement/reinforcement_left", "y": 270 },
+        "facing=east,part=left":  { "model": "simplycaterpillar:block/reinforcement/reinforcement_left", "y": 90 },
+
+        "facing=north,part=base": { "model": "simplycaterpillar:block/drill_base/drill_base" },
+        "facing=south,part=base": { "model": "simplycaterpillar:block/drill_base/drill_base", "y": 180 },
+        "facing=west,part=base":  { "model": "simplycaterpillar:block/drill_base/drill_base", "y": 270 },
+        "facing=east,part=base":  { "model": "simplycaterpillar:block/drill_base/drill_base", "y": 90 },
+
+        "facing=north,part=right": { "model": "simplycaterpillar:block/reinforcement/reinforcement_right" },
+        "facing=south,part=right": { "model": "simplycaterpillar:block/reinforcement/reinforcement_right", "y": 180 },
+        "facing=west,part=right":  { "model": "simplycaterpillar:block/reinforcement/reinforcement_right", "y": 270 },
+        "facing=east,part=right":  { "model": "simplycaterpillar:block/reinforcement/reinforcement_right", "y": 90 },
+
+        "facing=north,part=top": { "model": "simplycaterpillar:block/reinforcement/reinforcement_top" },
+        "facing=south,part=top": { "model": "simplycaterpillar:block/reinforcement/reinforcement_top", "y": 180 },
+        "facing=west,part=top":  { "model": "simplycaterpillar:block/reinforcement/reinforcement_top", "y": 270 },
+        "facing=east,part=top":  { "model": "simplycaterpillar:block/reinforcement/reinforcement_top", "y": 90 },
+
+        "facing=north,part=bottom": { "model": "simplycaterpillar:block/reinforcement/reinforcement_bottom" },
+        "facing=east,part=bottom":  { "model": "simplycaterpillar:block/reinforcement/reinforcement_bottom", "y": 90 },
+        "facing=south,part=bottom": { "model": "simplycaterpillar:block/reinforcement/reinforcement_bottom", "y": 180 },
+        "facing=west,part=bottom":  { "model": "simplycaterpillar:block/reinforcement/reinforcement_bottom", "y": 270 }
+    }
+}

@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "normal": [
+      { "model": "minecraft:block/glass" },
+      { "model": "minecraft:block/glass", "y": 90 },
+      { "model": "minecraft:block/glass", "y": 180 },
+      { "model": "minecraft:block/glass", "y": 270 }
+    ]
+  }
+}

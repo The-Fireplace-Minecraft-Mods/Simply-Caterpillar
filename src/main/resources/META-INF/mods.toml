@@ -1,0 +1,32 @@
+modLoader="javafml"
+loaderVersion="${loaderVersionRange}"
+license="MIT"
+issueTrackerURL="https://github.com/The-Fireplace-Minecraft-Mods/Simply-Caterpillar/issues"
+
+[[mods]] #mandatory
+modId="${modId}"
+version="${modVersion}"
+displayName="Simply Caterpillar"
+#updateJSONURL=""
+displayURL="https://github.com/The-Fireplace-Minecraft-Mods/Simply-Caterpillar"
+logoFile="simply-caterpillar-logo.png"
+credits="Daniel Appleby for the original Caterpillar mod"
+authors="The_Fireplace, Daniel-Mendes"
+description="${modDescription}"
+
+[[dependencies.simplycaterpillar]]
+    modId="forge"
+    mandatory=true
+    versionRange="${forgeVersionRange}"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.simplycaterpillar]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="${minecraftVersionRange}"
+    ordering="NONE"
+    side="BOTH"
+
+[modproperties.jei]
+    catalogueImageIcon="simplycaterpillar.png"

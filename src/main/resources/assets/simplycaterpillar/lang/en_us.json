@@ -1,0 +1,59 @@
+{
+  "block.simplycaterpillar.drill_head": "Drill Head",
+  "block.simplycaterpillar.drill_head.noFuel" : "You need to add a fuel source to power on.",
+  "block.simplycaterpillar.drill_head.powered_off" : "Drill is turning off.",
+  "block.simplycaterpillar.drill_head.powered_on" : "Drill is turning on.",
+  "block.simplycaterpillar.drill_head.not_found" : "Please, connect the block to the drill head.",
+  "block.simplycaterpillar.reinforcement": "Reinforcement Builder",
+  "block.simplycaterpillar.decoration": "Decoration Placer",
+  "block.simplycaterpillar.collector": "Item Collector",
+  "block.simplycaterpillar.drill_base": "Basic Drill Segment",
+  "block.simplycaterpillar.storage": "Drill Storage",
+  "block.simplycaterpillar.incinerator": "Incinerator",
+  "block.simplycaterpillar.blocks.alreadyConnected": "There is already a %s connected to the caterpillar.",
+
+  "itemGroup.simplycaterpillar": "Caterpillar",
+
+  "container.simplycaterpillar.drill_head": "Drill Head",
+  "container.simplycaterpillar.reinforcement": "Reinforcement Builder",
+  "container.simplycaterpillar.decoration": "Decoration Placer",
+  "container.simplycaterpillar.incinerator": "Incinerator",
+
+  "gui.simplycaterpillar.drill_head.consumption": "Consumption",
+  "gui.simplycaterpillar.drill_head.gathered": "Gathered",
+  "gui.simplycaterpillar.drill_head.power": "Power:",
+  "gui.simplycaterpillar.drill_head.power.on": "On",
+  "gui.simplycaterpillar.drill_head.power.off": "Off",
+
+  "gui.simplycaterpillar.decoration.current_map":  "Current Map",
+
+  "gui.simplycaterpillar.replacement.wont_replace": "Will Not Replace",
+  "gui.simplycaterpillar.replacement.will_replace": "Will Replace",
+  "gui.simplycaterpillar.replacement.air": "Air",
+  "gui.simplycaterpillar.replacement.water": "Water",
+  "gui.simplycaterpillar.replacement.lava": "Lava",
+  "gui.simplycaterpillar.replacement.falling_blocks": "Sand and Gravel",
+  "gui.simplycaterpillar.replacement.all": "All",
+
+  "simplycaterpillar.config.firstUse": "Show the tutorial if first time use ?",
+  "simplycaterpillar.config.useParticles": "Use particles for effect ?",
+  "simplycaterpillar.config.breakBedrock": "Can the drill break bedrock ?",
+  "simplycaterpillar.config.enableSounds": "Does the drill make noise when it moves ?",
+
+  "simplycaterpillar.tutorial.show": "Show Tutorial",
+  "simplycaterpillar.tutorial.hide": "Hide Tutorial",
+  "simplycaterpillar.tutorial.drill_head.wheelStorage": "Use the mouse wheel to see the storage.",
+  "simplycaterpillar.tutorial.drill_head.fuelSlot": "Place fuel here",
+  "simplycaterpillar.tutorial.drill_head.powerButton": "Click on power button to turn On/Off",
+  "simplycaterpillar.tutorial.incinerator": "Set blocks you don't want to keep\n   on the drill's gathered inventory.",
+  "simplycaterpillar.tutorial.reinforcement.replacer_buttons": "These are the options for each side\nMouse over them to see what they are\n\nClick to toggle\nRed = off\nGreen = on",
+  "simplycaterpillar.tutorial.reinforcement.replacer_blocks": "These are the blocks it will replace with.\nNo block means it will not replace it.\nYou must have the blocks in the drill to place them.",
+  "simplycaterpillar.tutorial.decoration": "The decoration places blocks in a pattern\nthat repeats every 10 blocks (0-9).",
+  "simplycaterpillar.tutorial.decoration.mouseWheel": "Use the wheel to select which section.",
+  "simplycaterpillar.tutorial.decoration.currentMap": "The blue number is where the drill is now.",
+
+  "simplycaterpillar.ceiling": "Ceiling",
+  "simplycaterpillar.leftwall": "Left Wall",
+  "simplycaterpillar.rightwall": "Right Wall",
+  "simplycaterpillar.floor": "Floor"
+}

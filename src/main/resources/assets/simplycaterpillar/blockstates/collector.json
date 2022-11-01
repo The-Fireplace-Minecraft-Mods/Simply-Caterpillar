@@ -1,8 +1,13 @@
 {
     "variants": {
-        "facing=north": { "model": "simplycaterpillar:collector" },
-        "facing=south": { "model": "simplycaterpillar:collector", "y": 180 },
-        "facing=west":  { "model": "simplycaterpillar:collector", "y": 270 },
-        "facing=east":  { "model": "simplycaterpillar:collector", "y": 90 }
+        "facing=north,half=upper": { "model": "simplycaterpillar:block/drill_base/drill_base" },
+        "facing=south,half=upper": { "model": "simplycaterpillar:block/drill_base/drill_base", "y": 180 },
+        "facing=west,half=upper":  { "model": "simplycaterpillar:block/drill_base/drill_base", "y": 270 },
+        "facing=east,half=upper":  { "model": "simplycaterpillar:block/drill_base/drill_base", "y": 90 },
+
+        "facing=north,half=lower": { "model": "simplycaterpillar:block/collector/collector_lower" },
+        "facing=south,half=lower": { "model": "simplycaterpillar:block/collector/collector_lower", "y": 180 },
+        "facing=west,half=lower":  { "model": "simplycaterpillar:block/collector/collector_lower", "y": 270 },
+        "facing=east,half=lower":  { "model": "simplycaterpillar:block/collector/collector_lower", "y": 90 }
     }
 }
