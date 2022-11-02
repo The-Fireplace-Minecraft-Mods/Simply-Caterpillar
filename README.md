@@ -78,7 +78,7 @@ You can add or not add any part to customize your drill.
 		<p>Replaces gravel/sand, lava, water, and air in the square surrounding the mineshaft with the block of your choice.</p>
 	</summary>
 	<h4>Screen</h4>
-		<p>Edit the blocks used to reinforce the walls here and what gets replaced, so you can keep water, lava, sand, gravel, etc out of your mineshaft, or build yourself a floor to walk on, and walls and a ceiling if you wish.</p>
+		<p>Edit the blocks used to reinforce the walls here and what gets replaced, so you can keep water, lava, sand, gravel, etc. out of your mineshaft, or build yourself a floor to walk on, and walls and a ceiling if you wish.</p>
 	<img src="https://raw.githubusercontent.com/The-Fireplace-Minecraft-Mods/Simply-Caterpillar/1.19.2/.github/sources/screen-reinforcement.png" alt="Reinforcement Builder Screen" width="480" />
 	<h4>Recipe</h4>
 	<img src="https://raw.githubusercontent.com/The-Fireplace-Minecraft-Mods/Simply-Caterpillar/1.19.2/.github/sources/recipe-reinforcement.png" alt="Reinforcement Builder Recipe" />

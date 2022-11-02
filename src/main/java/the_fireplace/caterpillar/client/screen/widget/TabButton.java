@@ -19,7 +19,7 @@ public class TabButton extends ImageButton {
 
     private final int yDiffTex;
 
-    private boolean isSelectedTab;
+    private final boolean isSelectedTab;
 
 
     public TabButton(boolean isSelectedTab, int x, int y, int width, int height, int xTexStart, int yTexStart, int xDiffTex, int yDiffTex, ResourceLocation resourceLocation, OnPress onPress) {

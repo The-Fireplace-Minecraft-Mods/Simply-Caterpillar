@@ -8,7 +8,6 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.inventory.Slot;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -22,9 +21,6 @@ import the_fireplace.caterpillar.common.menu.slot.FakeSlot;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static the_fireplace.caterpillar.common.block.entity.DrillHeadBlockEntity.*;
-import static the_fireplace.caterpillar.common.menu.AbstractCaterpillarMenu.*;
 
 @OnlyIn(Dist.CLIENT)
 public class DrillHeadScreen extends AbstractScrollableScreen<DrillHeadMenu> {

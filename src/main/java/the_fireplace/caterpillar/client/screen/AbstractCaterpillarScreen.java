@@ -128,9 +128,7 @@ public abstract class AbstractCaterpillarScreen<T extends AbstractCaterpillarMen
     protected abstract void renderTutorial(PoseStack stack);
 
     private void addTutorialButton() {
-        this.tutorialButton = new TutorialButton(false,super.leftPos + TUTORIAL_X, super.topPos + SELECTED_TAB.IMAGE_HEIGHT + TUTORIAL_Y, TUTORIAL_WIDTH, TUTORIAL_HEIGHT, TUTORIAL_BG_X, TUTORIAL_BG_Y, TUTORIAL_BG_Y_OFFSET, CATERPILLAR_GUI, (onPress) -> {
-            this.tutorialButton.setShowTutorial(!this.tutorialButton.showTutorial());
-        });
+        this.tutorialButton = new TutorialButton(false,super.leftPos + TUTORIAL_X, super.topPos + SELECTED_TAB.IMAGE_HEIGHT + TUTORIAL_Y, TUTORIAL_WIDTH, TUTORIAL_HEIGHT, TUTORIAL_BG_X, TUTORIAL_BG_Y, TUTORIAL_BG_Y_OFFSET, CATERPILLAR_GUI, (onPress) -> this.tutorialButton.setShowTutorial(!this.tutorialButton.showTutorial()));
 
         this.addRenderableWidget(this.tutorialButton);
     }
