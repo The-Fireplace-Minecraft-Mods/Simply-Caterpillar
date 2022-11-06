@@ -170,11 +170,10 @@ public class DecorationBlockEntity extends AbstractCaterpillarBlockEntity {
                 }
 
                 BlockPos decoratePos = switch (direction) {
-                    case EAST -> basePos.offset(-1, i, j);
+                    case EAST -> basePos.offset(-1, i, -j);
                     case WEST -> basePos.offset(1, i, j);
                     case SOUTH -> basePos.offset(j, i, -1);
-                    case NORTH -> basePos.offset(j, i, 1);
-                    default -> basePos.offset(j, i, -1);
+                    default -> basePos.offset(-j, i, 1);
                 };
 
                 Item itemToPlace = currentPlacementMap.getStackInSlot(--placementSlotId).getItem();
@@ -238,11 +237,60 @@ public class DecorationBlockEntity extends AbstractCaterpillarBlockEntity {
                     }
 
                     if (blockToPlace instanceof FenceBlock) {
-                        switch (direction) {
-                            case NORTH -> blockState = blockState.setValue(j == 1 ? FenceBlock.EAST : FenceBlock.WEST, true);
-                            case SOUTH -> blockState = blockState.setValue(j == 1 ? FenceBlock.EAST : FenceBlock.WEST, true);
-                            case EAST -> blockState = blockState.setValue(j == 1 ? FenceBlock.NORTH : FenceBlock.SOUTH, true);
-                            case WEST -> blockState = blockState.setValue(j == 1 ? FenceBlock.SOUTH : FenceBlock.NORTH, true);
+                        if (j == 1) {
+                            switch (direction) {
+                                case NORTH : {
+                                    if (level.getBlockState(decoratePos.relative(direction.getCounterClockWise())).isFaceSturdy(level, decoratePos.relative(direction.getCounterClockWise()), direction.getOpposite())) {
+                                        blockState = blockState.setValue(FenceBlock.WEST, true);
+                                    }
+                                    break;
+                                }
+                                case SOUTH : {
+                                    if (level.getBlockState(decoratePos.relative(direction.getCounterClockWise())).isFaceSturdy(level, decoratePos.relative(direction.getCounterClockWise()), direction.getOpposite())) {
+                                        blockState = blockState.setValue(FenceBlock.EAST, true);
+                                    }
+                                    break;
+                                }
+                                case EAST : {
+                                    if (level.getBlockState(decoratePos.relative(direction.getCounterClockWise())).isFaceSturdy(level, decoratePos.relative(direction.getCounterClockWise()), direction.getOpposite())) {
+                                        blockState = blockState.setValue(FenceBlock.NORTH, true);
+                                    }
+                                    break;
+                                }
+                                case WEST : {
+                                    if (level.getBlockState(decoratePos.relative(direction.getCounterClockWise())).isFaceSturdy(level, decoratePos.relative(direction.getCounterClockWise()), direction.getOpposite())) {
+                                        blockState = blockState.setValue(FenceBlock.SOUTH, true);
+                                    }
+                                    break;
+                                }
+                            }
+                        } else if (j == -1) {
+                            switch (direction) {
+                                case NORTH : {
+                                    if (level.getBlockState(decoratePos.relative(direction.getClockWise())).isFaceSturdy(level, decoratePos.relative(direction.getClockWise()), direction.getOpposite())) {
+                                        blockState = blockState.setValue(FenceBlock.EAST, true);
+                                    }
+                                    break;
+                                }
+                                case SOUTH : {
+                                    if (level.getBlockState(decoratePos.relative(direction.getClockWise())).isFaceSturdy(level, decoratePos.relative(direction.getClockWise()), direction.getOpposite())) {
+                                        blockState = blockState.setValue(FenceBlock.WEST, true);
+                                    }
+                                    break;
+                                }
+                                case EAST : {
+                                    if (level.getBlockState(decoratePos.relative(direction.getClockWise())).isFaceSturdy(level, decoratePos.relative(direction.getClockWise()), direction.getOpposite())) {
+                                        blockState = blockState.setValue(FenceBlock.SOUTH, true);
+                                    }
+                                    break;
+                                }
+                                case WEST : {
+                                    if (level.getBlockState(decoratePos.relative(direction.getClockWise())).isFaceSturdy(level, decoratePos.relative(direction.getClockWise()), direction.getOpposite())) {
+                                        blockState = blockState.setValue(FenceBlock.NORTH, true);
+                                    }
+                                    break;
+                                }
+                            }
                         }
                     } else if (blockToPlace instanceof WallBlock wallBlock) {
                         // TODO: Implement connection walls
