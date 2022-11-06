@@ -198,8 +198,6 @@ public class DrillHeadScreen extends AbstractScrollableScreen<DrillHeadMenu> {
 
     @Override
     protected void slotClicked(Slot slot, int slotId, int button, ClickType clickType) {
-        System.out.println("Mouse Button: " + button + ", clicktype: " + clickType);
-
         if (!this.menu.isDrillHeadSlot(slotId)) {
             super.slotClicked(slot, slotId, button, clickType);
             return;
@@ -292,6 +290,11 @@ public class DrillHeadScreen extends AbstractScrollableScreen<DrillHeadMenu> {
         this.menu.gatheredScrollTo(gatheredScrollTo);
     }
 
+    @Override
+    protected void scrollTo(float scrollOffs) {
+        this.consumptionScrollTo(scrollOffs);
+    }
+
     protected void consumptionScrollTo(float scrollOffs) {
         int i = 3;
         int j = (int)((double)(scrollOffs * (float)i) + 0.5D);
@@ -340,7 +343,7 @@ public class DrillHeadScreen extends AbstractScrollableScreen<DrillHeadMenu> {
     @Override
     public boolean mouseReleased(double mouseX, double mouseY, int button) {
         if (button == 0) {
-            this.scrolling = false;
+            this.menu.setScrolling(false);
             this.menu.setGatheredScrolling(false);
         }
 
@@ -354,7 +357,7 @@ public class DrillHeadScreen extends AbstractScrollableScreen<DrillHeadMenu> {
                 this.menu.setGatheredScrolling(this.menu.canScroll());
                 return true;
             } else if (this.insideConsumptionScrollbar(mouseX, mouseY)) {
-                super.scrolling = this.menu.canScroll();
+                this.menu.setScrolling(this.menu.canScroll());
                 return true;
             }
         }
@@ -387,7 +390,7 @@ public class DrillHeadScreen extends AbstractScrollableScreen<DrillHeadMenu> {
 
     @Override
     public boolean mouseDragged(double mouseX, double mouseY, int button, double dragX, double dragY) {
-        if (super.scrolling) {
+        if (this.menu.isScrolling()) {
             int i = this.topPos + SCROLLBAR_Y;
             int j = i + SCROLLBAR_HEIGHT;
             super.menu.setScrollOffs(((float)mouseY - (float)i - 7.5F) / ((float)(j - i) - 15.0F));

@@ -87,17 +87,17 @@ public class DrillHeadBlockEntity extends AbstractCaterpillarBlockEntity {
         boolean needsUpdate = false;
 
         if (blockEntity.isPowered() && blockEntity.isLit()) {
-            blockEntity.litTime -= CaterpillarBlockUtil.getConnectedCaterpillarBlockEntities(level, pos, new ArrayList<>()).size();
-            PacketHandler.sendToClients(new DrillHeadSyncLitS2CPacket(blockEntity.getLitTime(), blockEntity.getLitDuration(), blockEntity.getBlockPos()));
-
             blockEntity.timer++;
 
             if (blockEntity.timer != 0 && blockEntity.timer % MOVEMENT_TICK == 0) {
                 blockEntity.drill();
+
                 if (blockEntity.isPowered()) {
-                    blockEntity.move();
+                    blockEntity.litTime -= MOVEMENT_TICK * CaterpillarBlockUtil.getConnectedCaterpillarBlockEntities(level, pos, new ArrayList<>()).size();
+                    PacketHandler.sendToClients(new DrillHeadSyncLitS2CPacket(blockEntity.getLitTime(), blockEntity.getLitDuration(), blockEntity.getBlockPos()));
+
                     Direction direction = state.getValue(DrillHeadBlock.FACING);
-                    CaterpillarBlockUtil.moveNextBlock(level, pos, direction);
+                    CaterpillarBlockUtil.moveCaterpillar(level, pos, direction);
                 }
             }
 
@@ -107,7 +107,7 @@ public class DrillHeadBlockEntity extends AbstractCaterpillarBlockEntity {
         ItemStack stack = blockEntity.getStackInSlot(DrillHeadBlockEntity.FUEl_SLOT);
         boolean fuelSlotIsEmpty = stack.isEmpty();
 
-        if (blockEntity.isPowered() && blockEntity.getLitTime() < 0 && !fuelSlotIsEmpty) {
+        if (blockEntity.isPowered() && blockEntity.getLitTime() <= 0 && !fuelSlotIsEmpty) {
             blockEntity.litTime = blockEntity.getBurnDuration(stack);
             blockEntity.litDuration = blockEntity.litTime;
             blockEntity.setChanged();

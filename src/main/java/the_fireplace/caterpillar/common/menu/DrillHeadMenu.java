@@ -374,6 +374,11 @@ public class DrillHeadMenu extends AbstractScrollableMenu {
         }
     }
 
+    @Override
+    public void scrollTo(int scrollTo) {
+        this.consumptionScrollTo(scrollTo);
+    }
+
     public void consumptionScrollTo(int consumptionScrollTo) {
         if (this.blockEntity instanceof DrillHeadBlockEntity drillHeadBlockEntity) {
             if (consumptionScrollTo >= 0 && consumptionScrollTo < 3) {
