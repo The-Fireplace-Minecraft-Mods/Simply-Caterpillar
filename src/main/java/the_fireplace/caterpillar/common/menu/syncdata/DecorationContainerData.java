@@ -24,9 +24,10 @@ public class DecorationContainerData extends SimpleContainerData {
 
     @Override
     public void set(int key, int value) {
-        switch (key) {
-            case 0 -> this.blockEntity.setSelectedMap(value);
-            default -> throw new UnsupportedOperationException("There is no value corresponding to key: '" + key + "' in: '" + blockEntity + "'");
+        if (key == 0) {
+            this.blockEntity.setSelectedMap(value);
+        } else {
+            throw new UnsupportedOperationException("There is no value corresponding to key: '" + key + "' in: '" + blockEntity + "'");
         }
     }
 }

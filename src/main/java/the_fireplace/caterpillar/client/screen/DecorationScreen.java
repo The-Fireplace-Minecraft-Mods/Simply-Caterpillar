@@ -23,19 +23,26 @@ import java.util.List;
 import static the_fireplace.caterpillar.common.block.entity.DecorationBlockEntity.INVENTORY_MAX_SLOTS;
 import static the_fireplace.caterpillar.common.menu.AbstractCaterpillarMenu.BE_INVENTORY_FIRST_SLOT_INDEX;
 
-public class DecorationScreen extends AbstractCaterpillarScreen<DecorationMenu> {
+public class DecorationScreen extends AbstractScrollableScreen<DecorationMenu> {
 
-    private float scrollOffs;
+    private static final int SCROLLER_BG_X = 176;
 
-    private boolean scrolling;
+    private static final int SCROLLER_BG_Y = 0;
 
-    private static final int SCROLLER_WIDTH = 17;
-    private static final int SCROLLER_HEIGHT = 54;
+    private static final int SCROLLER_WIDTH = 12;
+
+    private static final int SCROLLER_HEIGHT = 15;
+
+    private static final int SCROLLBAR_X = 156;
+
+    private static final int SCROLLBAR_Y = 17;
+
+    private static final int SCROLLBAR_HEIGHT = 54;
 
     public DecorationScreen(DecorationMenu menu, Inventory playerInventory, Component title) {
-        super(menu, playerInventory, title, ScreenTabs.DECORATION);
+        super(menu, playerInventory, title, ScreenTabs.DECORATION, SCROLLER_BG_X, SCROLLER_BG_Y, SCROLLER_WIDTH, SCROLLER_HEIGHT, SCROLLBAR_X, SCROLLBAR_Y, SCROLLBAR_HEIGHT);
 
-        this.scrollOffs = this.menu.getSelectedMap() / 9.0F;
+        this.scrollTo(0.0F);
     }
 
     @Override
@@ -43,13 +50,7 @@ public class DecorationScreen extends AbstractCaterpillarScreen<DecorationMenu> 
         super.render(stack, mouseX, mouseY, partialTicks);
 
         this.renderTooltipCurrentMap(stack, mouseX, mouseY);
-    }
-
-    @Override
-    protected void renderBg(@NotNull PoseStack stack, float partialTicks, int mouseX, int mouseY) {
-        super.renderBg(stack, partialTicks, mouseX, mouseY);
-
-        this.renderScrollBar(stack);
+        this.renderScrollerText(stack);
     }
 
     @Override
@@ -100,16 +101,9 @@ public class DecorationScreen extends AbstractCaterpillarScreen<DecorationMenu> 
         this.renderComponentTooltip(stack, decorationTutorial, tutorialX, tutorialY);
     }
 
-    public void renderScrollBar(PoseStack stack) {
-        int i = this.leftPos + 156;
-        int j = this.topPos + SCROLLER_WIDTH;
-        int k = j + SCROLLER_HEIGHT;
-        blit(stack, i, j + (int)((float)(k - j - SCROLLER_WIDTH) * this.scrollOffs), 176, 0, 12, 15);
-
-        int m = 9;
-        int placementIndex = (int)((double)(scrollOffs * (float)m) + 0.5D);
+    private void renderScrollerText(PoseStack stack) {
         int colorPlacement = this.menu.getCurrentMap() == this.menu.getSelectedMap() ? ChatFormatting.BLUE.getColor() : 0x404040;
-        this.font.draw(stack, "" + placementIndex, this.leftPos + 31, this.topPos + 39, colorPlacement);
+        this.font.draw(stack, "" + this.menu.getSelectedMap(), this.leftPos + 31, this.topPos + 39, colorPlacement);
     }
 
     private void renderTooltipCurrentMap(PoseStack stack, int mouseX, int mouseY) {
@@ -160,7 +154,7 @@ public class DecorationScreen extends AbstractCaterpillarScreen<DecorationMenu> 
     @Override
     public boolean mouseReleased(double mouseX, double mouseY, int button) {
         if (button == 0) {
-            this.scrolling = false;
+            this.menu.setScrolling(false);
         }
 
         return super.mouseReleased(mouseX, mouseY, button);
@@ -170,7 +164,7 @@ public class DecorationScreen extends AbstractCaterpillarScreen<DecorationMenu> 
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         if (button == 0) {
             if (this.insideScrollBar(mouseX, mouseY)) {
-                this.scrolling = true;
+                this.menu.setScrolling(true);
                 return true;
             }
         }
@@ -196,12 +190,12 @@ public class DecorationScreen extends AbstractCaterpillarScreen<DecorationMenu> 
 
     @Override
     public boolean mouseDragged(double mouseX, double mouseY, int button, double dragX, double dragY) {
-        if (this.scrolling) {
+        if (this.menu.isScrolling()) {
             int i = this.topPos + SCROLLER_WIDTH;
             int j = i + SCROLLER_HEIGHT;
-            this.scrollOffs = ((float)mouseY - (float)i - 7.5F) / ((float)(j - i) - 15.0F);
-            this.scrollOffs = Mth.clamp(this.scrollOffs, 0.0F, 1.0F);
-            this.scrollTo(this.scrollOffs);
+            this.menu.setScrollOffs(((float)mouseY - (float)i - 7.5F) / ((float)(j - i) - 15.0F));
+            this.menu.setScrollOffs(Mth.clamp(this.menu.getScrollOffs(), 0.0F, 1.0F));
+            this.scrollTo(this.menu.getScrollOffs());
             return true;
         }
 
@@ -217,12 +211,12 @@ public class DecorationScreen extends AbstractCaterpillarScreen<DecorationMenu> 
     public boolean mouseScrolled(double mouseX, double mouseY, double delta) {
         int i = 9;
         float f = (float)(delta / (double)i);
-        this.scrollOffs = Mth.clamp(this.scrollOffs - f, 0.0F, 1.0F);
-        this.scrollTo(scrollOffs);
+        this.menu.setScrollOffs(Mth.clamp(this.menu.getScrollOffs() - f, 0.0F, 1.0F));
+        this.scrollTo(this.menu.getScrollOffs());
         return true;
     }
 
-    public void scrollTo(float scrollOffs) {
+    protected void scrollTo(float scrollOffs) {
         int i = 9;
         int j = (int)((double)(scrollOffs * (float)i) + 0.5D);
         if (j < 0) {

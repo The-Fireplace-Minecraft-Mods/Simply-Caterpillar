@@ -109,8 +109,6 @@ public class ReinforcementScreen extends AbstractScrollableScreen<ReinforcementM
     }
 
     private void renderTextOfCurrentReplacement(PoseStack stack) {
-        List<Component> textOfCurrentReplacer = new ArrayList<>();
-
         int i = 3;
         int j = (int)((double)(this.menu.getScrollOffs() * (float)i) + 0.5D);
         if (j < 0) {
