@@ -18,19 +18,12 @@ import java.util.List;
 
 public class CaterpillarBlockUtil {
 
-    public static void moveNextBlock(Level level, BlockPos pos, Direction direction) {
-        BlockPos nextBlockPos = pos.relative(direction);
-        BlockState nextBlockState = level.getBlockState(nextBlockPos);
-        Block nextBlock = nextBlockState.getBlock();
+    public static void moveCaterpillar(Level level, BlockPos pos, Direction direction) {
+        BlockEntity blockEntity = level.getBlockEntity(pos);
 
-        if (isCaterpillarBlock(nextBlock)) {
-            BlockEntity nextBlockEntity = level.getBlockEntity(nextBlockPos);
-
-            if (nextBlockEntity instanceof AbstractCaterpillarBlockEntity caterpillarBlockEntity) {
-                caterpillarBlockEntity.move();
-            }
-
-            moveNextBlock(level, nextBlockPos, direction);
+        if (blockEntity instanceof AbstractCaterpillarBlockEntity caterpillarBlockEntity) {
+            caterpillarBlockEntity.move();
+            CaterpillarBlockUtil.moveCaterpillar(level, pos.relative(direction), direction);
         }
     }
 

@@ -9,8 +9,6 @@ import the_fireplace.caterpillar.common.menu.AbstractScrollableMenu;
 
 public abstract class AbstractScrollableScreen<D extends AbstractScrollableMenu> extends AbstractCaterpillarScreen<D> {
 
-    protected boolean scrolling;
-
     private final int SCROLLER_BG_X;
 
     private final int SCROLLER_BG_Y;
@@ -50,16 +48,7 @@ public abstract class AbstractScrollableScreen<D extends AbstractScrollableMenu>
         blit(stack, scrollbarX, scrollbarY + (int)((float)(scrollbarYEnd - scrollbarY - SCROLLBAR_Y) * this.menu.getScrollOffs()), SCROLLER_BG_X, SCROLLER_BG_Y, SCROLLER_WIDTH, SCROLLER_HEIGHT);
     }
 
-    protected void scrollTo(float scrollOffs) {
-        int i = 2;
-        int j = (int)((double)(scrollOffs * (float)i) + 0.5D);
-        if (j < 0) {
-            j = 0;
-        }
-        int scrollTo = j;
-
-        // this.menu.scrollTo(scrollTo);
-    }
+    protected abstract void scrollTo(float scrollOffs);
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {

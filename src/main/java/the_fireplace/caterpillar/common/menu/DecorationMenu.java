@@ -14,7 +14,7 @@ import the_fireplace.caterpillar.core.init.MenuInit;
 import the_fireplace.caterpillar.core.network.PacketHandler;
 import the_fireplace.caterpillar.core.network.packet.client.DecorationSyncSelectedMapC2SPacket;
 
-public class DecorationMenu extends AbstractCaterpillarMenu {
+public class DecorationMenu extends AbstractScrollableMenu {
 
     private static final int DECORATION_SLOT_X_START = 62;
 

@@ -6,7 +6,7 @@ import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.inventory.MenuType;
 import the_fireplace.caterpillar.common.block.entity.AbstractCaterpillarBlockEntity;
 
-public class AbstractScrollableMenu extends AbstractCaterpillarMenu {
+public abstract class AbstractScrollableMenu extends AbstractCaterpillarMenu {
     private float scrollOffs;
     private boolean scrolling;
 
@@ -17,6 +17,8 @@ public class AbstractScrollableMenu extends AbstractCaterpillarMenu {
     public AbstractScrollableMenu(MenuType<?> menuType, int id, Inventory playerInventory, FriendlyByteBuf extraData, int containerDataSize, int inventorySize) {
         super(menuType, id, playerInventory, extraData, containerDataSize, inventorySize);
     }
+
+    public abstract void scrollTo(int scrollTo);
 
     public float getScrollOffs() {
         return this.scrollOffs;
