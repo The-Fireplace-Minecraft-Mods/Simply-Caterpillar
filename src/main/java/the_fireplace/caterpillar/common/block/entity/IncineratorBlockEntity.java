@@ -44,10 +44,11 @@ public class IncineratorBlockEntity extends AbstractCaterpillarBlockEntity {
     }
 
     private void setDefaultIncinerationBlocks() {
-        this.setStackInSlot(0, new ItemStack(Blocks.COBBLESTONE));
-        this.setStackInSlot(1, new ItemStack(Blocks.GRAVEL));
-        this.setStackInSlot(2, new ItemStack(Blocks.SAND));
-        this.setStackInSlot(3, new ItemStack(Blocks.DIRT));
+        this.setStackInSlot(0, new ItemStack(Blocks.GRAVEL));
+        this.setStackInSlot(1, new ItemStack(Blocks.SAND));
+        this.setStackInSlot(2, new ItemStack(Blocks.RED_SAND));
+        this.setStackInSlot(3, new ItemStack(Blocks.COBBLESTONE));
+        this.setStackInSlot(4, new ItemStack(Blocks.DIRT));
     }
 
     public void move() {
