@@ -69,14 +69,11 @@ public class ReinforcementBlockEntity extends AbstractCaterpillarBlockEntity {
 
     public static final int REPLACER_FLOOR = 3;
 
-    private int selectedReplacer;
-
     public ReinforcementBlockEntity(BlockPos pos, BlockState state) {
         super(BlockEntityInit.REINFORCEMENT.get(), pos, state, INVENTORY_SIZE);
 
         this.setDefaultReinforcementBlocks();
         this.setDefaultReplacers();
-        this.selectedReplacer = 0;
     }
 
     private void setDefaultReinforcementBlocks() {
@@ -130,7 +127,6 @@ public class ReinforcementBlockEntity extends AbstractCaterpillarBlockEntity {
 
         if (nextBlockEntity instanceof ReinforcementBlockEntity reinforcementBlockEntity) {
             reinforcementBlockEntity.load(oldTag);
-            reinforcementBlockEntity.setSelectedReplacer(this.getSelectedReplacer());
             reinforcementBlockEntity.replacers.clear();
             reinforcementBlockEntity.replacers.addAll(this.replacers);
             reinforcementBlockEntity.setChanged();
@@ -176,7 +172,6 @@ public class ReinforcementBlockEntity extends AbstractCaterpillarBlockEntity {
                         case EAST -> basePos.offset(k, i, j);
                         case WEST -> basePos.offset(-k, i, j);
                         case SOUTH -> basePos.offset(j, i, k);
-                        case NORTH -> basePos.offset(j, i, -k);
                         default -> basePos.offset(j, i, -k);
                     };
 
@@ -283,8 +278,6 @@ public class ReinforcementBlockEntity extends AbstractCaterpillarBlockEntity {
 
             this.replacers.add(replacers.getAsByteArray());
         }
-
-        this.selectedReplacer = tag.getInt("SelectedReplacer");
     }
 
     @Override
@@ -295,20 +288,11 @@ public class ReinforcementBlockEntity extends AbstractCaterpillarBlockEntity {
         }
 
         tag.put("Replacers", listTag);
-        tag.putInt("SelectedReplacer", this.selectedReplacer);
         super.saveAdditional(tag);
     }
 
     public byte[] getReplacers(int side) {
         return this.replacers.get(side);
-    }
-
-    public int getSelectedReplacer() {
-        return this.selectedReplacer;
-    }
-
-    public void setSelectedReplacer(int selectedReplacer) {
-        this.selectedReplacer = selectedReplacer;
     }
 
     @Override
@@ -319,7 +303,7 @@ public class ReinforcementBlockEntity extends AbstractCaterpillarBlockEntity {
     @Nullable
     @Override
     public AbstractContainerMenu createMenu(int id, @NotNull Inventory playerInventory, @NotNull Player player) {
-        PacketHandler.sendToClients(new ReinforcementSyncSelectedReplacerS2CPacket(this.selectedReplacer, worldPosition));
+        PacketHandler.sendToClients(new CaterpillarSyncInventoryS2CPacket(this.getInventory(), this.getBlockPos()));
         for (int replacerIndex = 0; replacerIndex < this.replacers.size(); replacerIndex++) {
             PacketHandler.sendToClients(new ReinforcementSyncReplacerS2CPacket(replacerIndex, this.replacers.get(replacerIndex), worldPosition));
         }

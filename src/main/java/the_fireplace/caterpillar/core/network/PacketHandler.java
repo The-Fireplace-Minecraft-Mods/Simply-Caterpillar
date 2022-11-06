@@ -121,18 +121,6 @@ public final class PacketHandler {
                 .consumerMainThread(ReinforcementSyncStateReplacerS2CPacket::handle)
                 .add();
 
-        CHANNEL.messageBuilder(ReinforcementSyncSelectedReplacerC2SPacket.class, index++, NetworkDirection.PLAY_TO_SERVER)
-                .decoder(ReinforcementSyncSelectedReplacerC2SPacket::new)
-                .encoder(ReinforcementSyncSelectedReplacerC2SPacket::toBytes)
-                .consumerMainThread(ReinforcementSyncSelectedReplacerC2SPacket::handle)
-                .add();
-
-        CHANNEL.messageBuilder(ReinforcementSyncSelectedReplacerS2CPacket.class, index++, NetworkDirection.PLAY_TO_CLIENT)
-                .decoder(ReinforcementSyncSelectedReplacerS2CPacket::new)
-                .encoder(ReinforcementSyncSelectedReplacerS2CPacket::toBytes)
-                .consumerMainThread(ReinforcementSyncSelectedReplacerS2CPacket::handle)
-                .add();
-
         CHANNEL.messageBuilder(ReinforcementSyncReplacerS2CPacket.class, index++, NetworkDirection.PLAY_TO_CLIENT)
                 .decoder(ReinforcementSyncReplacerS2CPacket::new)
                 .encoder(ReinforcementSyncReplacerS2CPacket::toBytes)

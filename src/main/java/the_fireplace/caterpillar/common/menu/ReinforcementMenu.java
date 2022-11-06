@@ -3,16 +3,15 @@ package the_fireplace.caterpillar.common.menu;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.ContainerData;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 import the_fireplace.caterpillar.common.block.entity.ReinforcementBlockEntity;
 import the_fireplace.caterpillar.core.init.MenuInit;
-import the_fireplace.caterpillar.core.network.PacketHandler;
-import the_fireplace.caterpillar.core.network.packet.client.ReinforcementSyncSelectedReplacerC2SPacket;
 
-import static the_fireplace.caterpillar.common.block.entity.ReinforcementBlockEntity.INVENTORY_SIZE;
+import static the_fireplace.caterpillar.common.block.entity.ReinforcementBlockEntity.*;
 
-public class ReinforcementMenu extends AbstractCaterpillarMenu {
+public class ReinforcementMenu extends AbstractScrollableMenu {
 
     private static final int REINFORCEMENT_SLOT_X_START = 44;
 
@@ -42,32 +41,57 @@ public class ReinforcementMenu extends AbstractCaterpillarMenu {
 
     @Override
     protected void addSlots(IItemHandler handler) {
+        int i = 3;
+        int j = (int)((double)(this.getScrollOffs() * (float)i) + 0.5D);
+        if (j < 0) {
+            j = 0;
+        }
+        int scrollToReplacer = j;
+
         int slotId = 0;
 
         // Reinforcement top slots
         for (int column = 0; column <= 4; column++) {
-            super.addSlot(new SlotItemHandler(handler, slotId++, REINFORCEMENT_SLOT_X_START + column * SLOT_SIZE_PLUS_2, REINFORCEMENT_SLOT_Y_START));
+            if (scrollToReplacer == REPLACER_CEILING) {
+                super.addSlot(new SlotItemHandler(handler, slotId, REINFORCEMENT_SLOT_X_START + column * SLOT_SIZE_PLUS_2, REINFORCEMENT_SLOT_Y_START));
+            }
+            slotId++;
         }
 
         // Reinforcement left slots
         for (int row = 0; row <= 2; row++) {
-            super.addSlot(new SlotItemHandler(handler, slotId++, REINFORCEMENT_SLOT_X_START, REINFORCEMENT_SLOT_Y_START + (1 + row) * SLOT_SIZE_PLUS_2));
+            if (scrollToReplacer == REPLACER_LEFT) {
+                super.addSlot(new SlotItemHandler(handler, slotId, REINFORCEMENT_SLOT_X_START, REINFORCEMENT_SLOT_Y_START + (1 + row) * SLOT_SIZE_PLUS_2));
+            }
+            slotId++;
         }
 
         // Reinforcement right slots
         for (int row = 0; row <= 2; row++) {
-            super.addSlot(new SlotItemHandler(handler, slotId++, REINFORCEMENT_SLOT_X_START + 4 * SLOT_SIZE_PLUS_2, REINFORCEMENT_SLOT_Y_START + (1 + row) * SLOT_SIZE_PLUS_2));
+            if (scrollToReplacer == REPLACER_RIGHT) {
+                super.addSlot(new SlotItemHandler(handler, slotId, REINFORCEMENT_SLOT_X_START + 4 * SLOT_SIZE_PLUS_2, REINFORCEMENT_SLOT_Y_START + (1 + row) * SLOT_SIZE_PLUS_2));
+            }
+            slotId++;
         }
 
         // Reinforcement bottom slots
         for (int column = 0; column <= 4; column++) {
-            super.addSlot(new SlotItemHandler(handler, slotId++, REINFORCEMENT_SLOT_X_START + column * SLOT_SIZE_PLUS_2, REINFORCEMENT_SLOT_Y_START + 4 * SLOT_SIZE_PLUS_2));
+            if (scrollToReplacer == REPLACER_FLOOR) {
+                super.addSlot(new SlotItemHandler(handler, slotId, REINFORCEMENT_SLOT_X_START + column * SLOT_SIZE_PLUS_2, REINFORCEMENT_SLOT_Y_START + 4 * SLOT_SIZE_PLUS_2));
+            }
+            slotId++;
         }
     }
 
     public byte[] getSelectedReplacers() {
+        int i = 3;
+        int j = (int)((double)(this.getScrollOffs() * (float)i) + 0.5D);
+        if (j < 0) {
+            j = 0;
+        }
+
         if (this.blockEntity instanceof ReinforcementBlockEntity reinforcementBlockEntity) {
-            return reinforcementBlockEntity.getReplacers(reinforcementBlockEntity.getSelectedReplacer());
+            return reinforcementBlockEntity.getReplacers(j);
         }
 
         return new byte[4];
@@ -81,25 +105,47 @@ public class ReinforcementMenu extends AbstractCaterpillarMenu {
         return new byte[4];
     }
 
-    public int getSelectedReplacer() {
-        if (this.blockEntity instanceof ReinforcementBlockEntity reinforcementBlockEntity) {
-            return reinforcementBlockEntity.getSelectedReplacer();
-        }
-
-        return 0;
-    }
-
-    public void setSelectedReplacer(int selectedReplacer) {
-        if (this.blockEntity instanceof ReinforcementBlockEntity reinforcementBlockEntity) {
-            reinforcementBlockEntity.setSelectedReplacer(selectedReplacer);
-        }
-    }
-
     public void scrollTo(int scrollToReplacer) {
         if (this.blockEntity instanceof ReinforcementBlockEntity reinforcementBlockEntity) {
-            reinforcementBlockEntity.setSelectedReplacer(scrollToReplacer);
+            reinforcementBlockEntity.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(reinforcementHandler -> {
+                while (this.slots.size() != BE_INVENTORY_FIRST_SLOT_INDEX) {
+                    this.slots.remove(this.slots.size() - 1);
+                }
 
-            PacketHandler.sendToServer(new ReinforcementSyncSelectedReplacerC2SPacket(scrollToReplacer, reinforcementBlockEntity.getBlockPos()));
+                int slotId = 0;
+
+                // Reinforcement top slots
+                for (int column = 0; column <= 4; column++) {
+                    if (scrollToReplacer == REPLACER_CEILING) {
+                        super.addSlot(new SlotItemHandler(reinforcementHandler, slotId, REINFORCEMENT_SLOT_X_START + column * SLOT_SIZE_PLUS_2, REINFORCEMENT_SLOT_Y_START));
+                    }
+                    slotId++;
+                }
+
+                // Reinforcement left slots
+                for (int row = 0; row <= 2; row++) {
+                    if (scrollToReplacer == REPLACER_LEFT) {
+                        super.addSlot(new SlotItemHandler(reinforcementHandler, slotId, REINFORCEMENT_SLOT_X_START, REINFORCEMENT_SLOT_Y_START + (1 + row) * SLOT_SIZE_PLUS_2));
+                    }
+                    slotId++;
+                }
+
+                // Reinforcement right slots
+                for (int row = 0; row <= 2; row++) {
+                    if (scrollToReplacer == REPLACER_RIGHT) {
+                        super.addSlot(new SlotItemHandler(reinforcementHandler, slotId, REINFORCEMENT_SLOT_X_START + 4 * SLOT_SIZE_PLUS_2, REINFORCEMENT_SLOT_Y_START + (1 + row) * SLOT_SIZE_PLUS_2));
+                    }
+                    slotId++;
+                }
+
+                // Reinforcement bottom slots
+                for (int column = 0; column <= 4; column++) {
+                    if (scrollToReplacer == REPLACER_FLOOR) {
+                        super.addSlot(new SlotItemHandler(reinforcementHandler, slotId, REINFORCEMENT_SLOT_X_START + column * SLOT_SIZE_PLUS_2, REINFORCEMENT_SLOT_Y_START + 4 * SLOT_SIZE_PLUS_2));
+                    }
+                    slotId++;
+                }
+            });
         }
     }
 }

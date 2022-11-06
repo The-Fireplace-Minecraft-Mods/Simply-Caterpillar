@@ -12,7 +12,7 @@ import java.util.List;
 public enum Replacement {
     WATER(0, Component.translatable("gui." + Caterpillar.MOD_ID + ".replacement.water"), List.of(Blocks.WATER)),
     LAVA(1, Component.translatable("gui." + Caterpillar.MOD_ID + ".replacement.lava"), List.of(Blocks.LAVA)),
-    FALLING_BLOCKS(2, Component.translatable("gui." + Caterpillar.MOD_ID + ".replacement.falling_blocks"), List.of(Blocks.SAND, Blocks.GRAVEL)),
+    FALLING_BLOCKS(2, Component.translatable("gui." + Caterpillar.MOD_ID + ".replacement.falling_blocks"), List.of(Blocks.SAND, Blocks.RED_SAND, Blocks.GRAVEL)),
     AIR(3, Component.translatable("gui."  + Caterpillar.MOD_ID + ".replacement.air"), List.of(Blocks.AIR)),
     ALL(4, Component.translatable("gui." + Caterpillar.MOD_ID + ".replacement.all"), Collections.emptyList());
 

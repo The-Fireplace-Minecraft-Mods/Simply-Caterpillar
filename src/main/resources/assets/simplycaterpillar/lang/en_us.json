@@ -27,6 +27,11 @@
 
   "gui.simplycaterpillar.decoration.current_map":  "Current Map",
 
+  "gui.simplycaterpillar.replacement.ceiling": "Ceiling",
+  "gui.simplycaterpillar.replacement.leftwall": "Left Wall",
+  "gui.simplycaterpillar.replacement.rightwall": "Right Wall",
+  "gui.simplycaterpillar.replacement.floor": "Floor",
+
   "gui.simplycaterpillar.replacement.wont_replace": "Will Not Replace",
   "gui.simplycaterpillar.replacement.will_replace": "Will Replace",
   "gui.simplycaterpillar.replacement.air": "Air",
@@ -50,10 +55,5 @@
   "simplycaterpillar.tutorial.reinforcement.replacer_blocks": "These are the blocks it will replace with.\nNo block means it will not replace it.\nYou must have the blocks in the drill to place them.",
   "simplycaterpillar.tutorial.decoration": "The decoration places blocks in a pattern\nthat repeats every 10 blocks (0-9).",
   "simplycaterpillar.tutorial.decoration.mouseWheel": "Use the wheel to select which section.",
-  "simplycaterpillar.tutorial.decoration.currentMap": "The blue number is where the drill is now.",
-
-  "simplycaterpillar.ceiling": "Ceiling",
-  "simplycaterpillar.leftwall": "Left Wall",
-  "simplycaterpillar.rightwall": "Right Wall",
-  "simplycaterpillar.floor": "Floor"
+  "simplycaterpillar.tutorial.decoration.currentMap": "The blue number is where the drill is now."
 }

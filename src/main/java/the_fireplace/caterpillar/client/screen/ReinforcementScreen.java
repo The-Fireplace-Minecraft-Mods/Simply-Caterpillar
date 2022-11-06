@@ -26,15 +26,11 @@ import java.util.List;
 import static the_fireplace.caterpillar.common.block.entity.ReinforcementBlockEntity.INVENTORY_SIZE;
 import static the_fireplace.caterpillar.common.menu.AbstractCaterpillarMenu.BE_INVENTORY_FIRST_SLOT_INDEX;
 
-public class ReinforcementScreen extends AbstractCaterpillarScreen<ReinforcementMenu> {
+public class ReinforcementScreen extends AbstractScrollableScreen<ReinforcementMenu> {
 
-    private float scrollOffs;
+    private static final int SCROLLER_BG_X = 202;
 
-    private boolean scrolling;
-
-    private static final int SCROLLER_X = 202;
-
-    private static final int SCROLLER_Y = 0;
+    private static final int SCROLLER_BG_Y = 0;
 
     private static final int SCROLLER_WIDTH = 12;
 
@@ -57,25 +53,16 @@ public class ReinforcementScreen extends AbstractCaterpillarScreen<Reinforcement
     private final List<ImageButton> replacerButtons = new ArrayList<>();
 
     public ReinforcementScreen(ReinforcementMenu menu, Inventory playerInventory, Component title) {
-        super(menu, playerInventory, title, ScreenTabs.REINFORCEMENT);
-
-        this.scrollOffs = this.menu.getSelectedReplacer() / 3.0F;
+       super(menu, playerInventory, title, ScreenTabs.REINFORCEMENT, SCROLLER_BG_X , SCROLLER_BG_Y, SCROLLER_WIDTH, SCROLLER_HEIGHT, SCROLLBAR_X, SCROLLBAR_Y, SCROLLBAR_HEIGHT);
     }
 
     @Override
     public void render(@NotNull PoseStack stack, int mouseX, int mouseY, float partialTicks) {
         super.render(stack, mouseX, mouseY, partialTicks);
 
+        this.renderTextOfCurrentReplacement(stack);
         this.renderReplacerButtons();
         this.renderTooltipReplacerButtons(stack, mouseX, mouseY);
-    }
-
-    @Override
-    protected void renderBg(@NotNull PoseStack stack, float partialTick, int mouseX, int mouseY) {
-        super.renderBg(stack, partialTick, mouseX, mouseY);
-
-        this.renderScroller(stack);
-        this.renderBgSelectedMapSlots(stack);
     }
 
     @Override
@@ -121,19 +108,50 @@ public class ReinforcementScreen extends AbstractCaterpillarScreen<Reinforcement
         this.renderComponentTooltip(stack, replacerBlocksTutorial, tutorialX, tutorialY);
     }
 
+    private void renderTextOfCurrentReplacement(PoseStack stack) {
+        List<Component> textOfCurrentReplacer = new ArrayList<>();
+
+        int i = 3;
+        int j = (int)((double)(this.menu.getScrollOffs() * (float)i) + 0.5D);
+        if (j < 0) {
+            j = 0;
+        }
+        int scrollIndex = j;
+
+        String currentReplacementText = switch (scrollIndex) {
+            case 0 -> "ceiling";
+            case 1 -> "leftwall";
+            case 2 -> "rightwall";
+            default -> "floor";
+        };
+
+        Component textOfCurrentReplacement = Component.translatable("gui." + Caterpillar.MOD_ID + ".replacement." + currentReplacementText);
+        int textX = super.leftPos + (super.imageWidth - super.font.width(textOfCurrentReplacement)) / 2;
+        int textY = super.topPos + 58;
+
+        this.font.draw(stack, textOfCurrentReplacement, textX, textY, 0x404040);
+    }
+
     private void renderReplacerButtons() {
         for (ImageButton button : this.replacerButtons) {
             super.removeWidget(button);
         }
         this.replacerButtons.clear();
 
+        int i = 3;
+        int j = (int)((double)(this.menu.getScrollOffs() * (float)i) + 0.5D);
+        if (j < 0) {
+            j = 0;
+        }
+        int scrollIndex = j;
+
         int replacerIndex = 0;
-        for (byte replacer : this.menu.getReplacers(this.menu.getSelectedReplacer())) {
+        for (byte replacer : this.menu.getReplacers(scrollIndex)) {
             int finalReplacerIndex = replacerIndex;
             if (replacer == (byte) 1) {
-                this.replacerButtons.add(new ImageButton(super.leftPos + REPLACER_BTN_BG_X, super.topPos + REPLACER_BTN_BG_Y + replacerIndex * (REPLACER_BTN_BG_HEIGHT + 2), REPLACER_BTN_BG_WIDTH, REPLACER_BTN_BG_HEIGHT, 176 , replacerIndex*REPLACER_BTN_BG_HEIGHT*2, 0, ScreenTabs.REINFORCEMENT.TEXTURE, (onPress) -> PacketHandler.sendToServer(new ReinforcementSyncStateReplacerC2SPacket(this.menu.getSelectedReplacer(), finalReplacerIndex, (byte) 0, this.menu.blockEntity.getBlockPos()))));
+                this.replacerButtons.add(new ImageButton(super.leftPos + REPLACER_BTN_BG_X, super.topPos + REPLACER_BTN_BG_Y + replacerIndex * (REPLACER_BTN_BG_HEIGHT + 2), REPLACER_BTN_BG_WIDTH, REPLACER_BTN_BG_HEIGHT, 176 , replacerIndex*REPLACER_BTN_BG_HEIGHT*2, 0, ScreenTabs.REINFORCEMENT.TEXTURE, (onPress) -> PacketHandler.sendToServer(new ReinforcementSyncStateReplacerC2SPacket(scrollIndex, finalReplacerIndex, (byte) 0, this.menu.blockEntity.getBlockPos()))));
             } else {
-                this.replacerButtons.add(new ImageButton(super.leftPos + REPLACER_BTN_BG_X, super.topPos + REPLACER_BTN_BG_Y + replacerIndex * (REPLACER_BTN_BG_HEIGHT + 2), REPLACER_BTN_BG_WIDTH, REPLACER_BTN_BG_HEIGHT, 176 , replacerIndex*REPLACER_BTN_BG_HEIGHT*2 + REPLACER_BTN_BG_HEIGHT, 0, ScreenTabs.REINFORCEMENT.TEXTURE, (onPress) -> PacketHandler.sendToServer(new ReinforcementSyncStateReplacerC2SPacket(this.menu.getSelectedReplacer(), finalReplacerIndex, (byte) 1, this.menu.blockEntity.getBlockPos()))));
+                this.replacerButtons.add(new ImageButton(super.leftPos + REPLACER_BTN_BG_X, super.topPos + REPLACER_BTN_BG_Y + replacerIndex * (REPLACER_BTN_BG_HEIGHT + 2), REPLACER_BTN_BG_WIDTH, REPLACER_BTN_BG_HEIGHT, 176 , replacerIndex*REPLACER_BTN_BG_HEIGHT*2 + REPLACER_BTN_BG_HEIGHT, 0, ScreenTabs.REINFORCEMENT.TEXTURE, (onPress) -> PacketHandler.sendToServer(new ReinforcementSyncStateReplacerC2SPacket(scrollIndex, finalReplacerIndex, (byte) 1, this.menu.blockEntity.getBlockPos()))));
             }
 
             replacerIndex++;
@@ -167,52 +185,6 @@ public class ReinforcementScreen extends AbstractCaterpillarScreen<Reinforcement
         }
     }
 
-    private void renderBgSelectedMapSlots(PoseStack stack) {
-        int slotBgX = 226;
-        int slotBgY = 0;
-
-        int slotStartX;
-        int slotStartY;
-
-        switch (this.menu.getSelectedReplacer()) {
-            case ReinforcementBlockEntity.REPLACER_CEILING -> {
-                slotStartX = 44;
-                slotStartY = 17;
-                for (int x = 0; x < 5; x++) {
-                    this.blit(stack, super.leftPos + slotStartX + x * 18, super.topPos + slotStartY, slotBgX, slotBgY, SLOT_SIZE, SLOT_SIZE);
-                }
-            }
-            case ReinforcementBlockEntity.REPLACER_LEFT -> {
-                slotStartX = 44;
-                slotStartY = 35;
-                for (int y = 0; y < 3; y++) {
-                    this.blit(stack, super.leftPos + slotStartX, super.topPos + slotStartY + y * 18, slotBgX, slotBgY, SLOT_SIZE, SLOT_SIZE);
-                }
-            }
-            case ReinforcementBlockEntity.REPLACER_RIGHT -> {
-                slotStartX = 116;
-                slotStartY = 35;
-                for (int y = 0; y < 3; y++) {
-                    this.blit(stack, super.leftPos + slotStartX, super.topPos + slotStartY + y * 18, slotBgX, slotBgY, SLOT_SIZE, SLOT_SIZE);
-                }
-            }
-            case ReinforcementBlockEntity.REPLACER_FLOOR -> {
-                slotStartX = 44;
-                slotStartY = 89;
-                for (int x = 0; x < 5; x++) {
-                    this.blit(stack, super.leftPos + slotStartX + x * 18, super.topPos + slotStartY, slotBgX, slotBgY, SLOT_SIZE, SLOT_SIZE);
-                }
-            }
-        }
-    }
-
-    private void renderScroller(PoseStack stack) {
-        int i = this.leftPos + SCROLLBAR_X;
-        int j = this.topPos + SCROLLBAR_Y;
-        int k = j + SCROLLBAR_HEIGHT;
-        blit(stack, i, j + (int)((float)(k - j - SCROLLBAR_Y) * this.scrollOffs), SCROLLER_X, SCROLLER_Y, SCROLLER_WIDTH, SCROLLER_HEIGHT);
-    }
-
     @Override
     protected void slotClicked(@NotNull Slot slot, int slotId, int mouseButton, @NotNull ClickType type) {
         if (!this.isReinforcementSlot(slotId)) {
@@ -220,7 +192,7 @@ public class ReinforcementScreen extends AbstractCaterpillarScreen<Reinforcement
             return;
         }
 
-        int reinforcementSlotId = slotId - BE_INVENTORY_FIRST_SLOT_INDEX;
+        int reinforcementSlotId = slot.getSlotIndex();
         ItemStack reinforcementStack;
         ItemStack carried = this.menu.getCarried().copy();
 
@@ -231,7 +203,7 @@ public class ReinforcementScreen extends AbstractCaterpillarScreen<Reinforcement
             reinforcementStack.setCount(1);
         }
 
-        this.menu.slots.get(BE_INVENTORY_FIRST_SLOT_INDEX + reinforcementSlotId).set(reinforcementStack);
+        this.menu.slots.get(slotId).set(reinforcementStack);
         this.menu.setCarried(carried);
 
         if (this.menu.blockEntity instanceof ReinforcementBlockEntity reinforcementBlockEntity) {
@@ -244,7 +216,7 @@ public class ReinforcementScreen extends AbstractCaterpillarScreen<Reinforcement
     @Override
     public boolean mouseReleased(double mouseX, double mouseY, int button) {
         if (button == 0) {
-            this.scrolling = false;
+            this.menu.setScrolling(false);
         }
 
         return super.mouseReleased(mouseX, mouseY, button);
@@ -254,7 +226,7 @@ public class ReinforcementScreen extends AbstractCaterpillarScreen<Reinforcement
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         if (button == 0) {
             if (this.insideScrollBar(mouseX, mouseY)) {
-                this.scrolling = true;
+                this.menu.setScrolling(true);
                 return true;
             }
         }
@@ -264,12 +236,12 @@ public class ReinforcementScreen extends AbstractCaterpillarScreen<Reinforcement
 
     @Override
     public boolean mouseDragged(double mouseX, double mouseY, int button, double dragX, double dragY) {
-        if (this.scrolling) {
+        if (this.menu.isScrolling()) {
             int i = this.topPos + SCROLLBAR_Y;
             int j = i + SCROLLBAR_HEIGHT;
-            this.scrollOffs = ((float)mouseY - (float)i - 7.5F) / ((float)(j - i) - 15.0F);
-            this.scrollOffs = Mth.clamp(this.scrollOffs, 0.0F, 1.0F);
-            this.scrollTo(this.scrollOffs);
+            this.menu.setScrollOffs(((float)mouseY - (float)i - 7.5F) / ((float)(j - i) - 15.0F));
+            this.menu.setScrollOffs(Mth.clamp(this.menu.getScrollOffs(), 0.0F, 1.0F));
+            this.scrollTo(this.menu.getScrollOffs());
             return true;
         }
 
@@ -285,12 +257,12 @@ public class ReinforcementScreen extends AbstractCaterpillarScreen<Reinforcement
     public boolean mouseScrolled(double mouseX, double mouseY, double delta) {
         int i = 3;
         float f = (float)(delta / (double)i);
-        this.scrollOffs = Mth.clamp(this.scrollOffs - f, 0.0F, 1.0F);
-        this.scrollTo(scrollOffs);
+        this.menu.setScrollOffs(Mth.clamp(this.menu.getScrollOffs() - f, 0.0F, 1.0F));
+        this.scrollTo(this.menu.getScrollOffs());
         return true;
     }
 
-    private void scrollTo(float scrollOffs) {
+    protected void scrollTo(float scrollOffs) {
         int i = 3;
         int j = (int)((double)(scrollOffs * (float)i) + 0.5D);
         if (j < 0) {
