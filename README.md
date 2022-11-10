@@ -27,7 +27,9 @@
 
 ## Features
 
-You can add or not add any part to customize your drill.
+You can add or not add any part to customize your drill.   
+
+>⚠️ Longer the caterpillar is, more fuel it will consume.
 
 <details>
 	<summary>
@@ -45,7 +47,6 @@ You can add or not add any part to customize your drill.
 	</summary>
 	<h4>Screen</h4>
 	<p>It has 18 slots of storage built in, and a fuel slot. Power can be toggled in the gui, and fuel consumption will pause when the caterpillar is turned off.</p>
-    <p>⚠️ Longer the caterpillar is more fuel it will consume.</p>	
 <img src="https://raw.githubusercontent.com/The-Fireplace-Minecraft-Mods/Simply-Caterpillar/1.19.2/.github/sources/screen-drill_head.png" alt="Drill head screen" width="480" />
 	<h4>Recipe</h4>
 	<img src="https://raw.githubusercontent.com/The-Fireplace-Minecraft-Mods/Simply-Caterpillar/1.19.2/.github/sources/recipe-drill_head.png" alt="Drill Head Recipe" />
