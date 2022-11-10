@@ -18,15 +18,6 @@ import java.util.List;
 
 public class CaterpillarBlockUtil {
 
-    public static void moveCaterpillar(Level level, BlockPos pos, Direction direction) {
-        BlockEntity blockEntity = level.getBlockEntity(pos);
-
-        if (blockEntity instanceof AbstractCaterpillarBlockEntity caterpillarBlockEntity) {
-            caterpillarBlockEntity.move();
-            CaterpillarBlockUtil.moveCaterpillar(level, pos.relative(direction), direction);
-        }
-    }
-
     public static boolean isCaterpillarBlock(Block block) {
         return  (block == BlockInit.DRILL_HEAD.get()) ||
                 (block == BlockInit.DECORATION.get()) ||
