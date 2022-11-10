@@ -27,8 +27,6 @@ import the_fireplace.caterpillar.core.init.BlockEntityInit;
 import java.util.ArrayList;
 import java.util.List;
 
-import static net.minecraft.world.level.block.HorizontalDirectionalBlock.FACING;
-
 public class IncineratorBlockEntity extends AbstractCaterpillarBlockEntity {
 
     public static final Component TITLE = Component.translatable(
@@ -78,7 +76,7 @@ public class IncineratorBlockEntity extends AbstractCaterpillarBlockEntity {
     }
 
     private void incinerate() {
-        BlockPos caterpillarHeadPos = CaterpillarBlockUtil.getCaterpillarHeadPos(this.getLevel(), this.getBlockPos(), this.getBlockState().getValue(FACING));
+        BlockPos caterpillarHeadPos = CaterpillarBlockUtil.getCaterpillarHeadPos(this.getLevel(), this.getBlockPos(), this.getBlockState().getValue(IncineratorBlock.FACING));
         if (caterpillarHeadPos != null) {
             List<AbstractCaterpillarBlockEntity> caterpillarBlockEntities = CaterpillarBlockUtil.getConnectedCaterpillarBlockEntities(this.getLevel(), caterpillarHeadPos, new ArrayList<>());
 

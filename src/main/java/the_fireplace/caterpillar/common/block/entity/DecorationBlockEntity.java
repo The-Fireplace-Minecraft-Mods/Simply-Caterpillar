@@ -39,8 +39,6 @@ import the_fireplace.caterpillar.core.network.packet.server.DecorationSyncSelect
 import java.util.ArrayList;
 import java.util.List;
 
-import static net.minecraft.world.level.block.HorizontalDirectionalBlock.FACING;
-
 public class DecorationBlockEntity extends AbstractCaterpillarBlockEntity {
 
     public static final Component TITLE = Component.translatable(
@@ -109,7 +107,7 @@ public class DecorationBlockEntity extends AbstractCaterpillarBlockEntity {
 
     public void move() {
         BlockPos basePos = this.getBlockPos();
-        Direction direction = this.getBlockState().getValue(FACING);
+        Direction direction = this.getBlockState().getValue(DecorationBlock.FACING);
         BlockPos nextPos = basePos.relative(direction.getOpposite());
 
         CompoundTag oldTag = this.saveWithFullMetadata();
@@ -151,7 +149,7 @@ public class DecorationBlockEntity extends AbstractCaterpillarBlockEntity {
         ItemStackHandler currentPlacementMap =  this.placementMap.get(this.currentMap);
 
         BlockPos basePos = this.getBlockPos();
-        Direction direction = this.getBlockState().getValue(FACING).getOpposite();
+        Direction direction = this.getBlockState().getValue(DecorationBlock.FACING).getOpposite();
 
         BlockPos caterpillarHeadPos = CaterpillarBlockUtil.getCaterpillarHeadPos(this.getLevel(), basePos, direction.getOpposite());
         List<AbstractCaterpillarBlockEntity> caterpillarBlockEntities = CaterpillarBlockUtil.getConnectedCaterpillarBlockEntities(this.getLevel(), caterpillarHeadPos, new ArrayList<>());
@@ -197,14 +195,14 @@ public class DecorationBlockEntity extends AbstractCaterpillarBlockEntity {
                             switch (direction) {
                                 case NORTH, EAST :
                                     if (level.getBlockState(decoratePos.relative(direction.getCounterClockWise())).isFaceSturdy(level, decoratePos.relative(direction.getCounterClockWise()), direction.getOpposite())) {
-                                        blockState = blockState.setValue(FACING, direction.getClockWise());
+                                        blockState = blockState.setValue(DecorationBlock.FACING, direction.getClockWise());
                                     } else {
                                         continue;
                                     }
                                     break;
                                 case SOUTH, WEST :
                                     if (level.getBlockState(decoratePos.relative(direction.getClockWise())).isFaceSturdy(level, decoratePos.relative(direction.getClockWise()), direction.getOpposite())) {
-                                        blockState = blockState.setValue(FACING, direction.getCounterClockWise());
+                                        blockState = blockState.setValue(DecorationBlock.FACING, direction.getCounterClockWise());
                                     } else {
                                         continue;
                                     }
@@ -212,7 +210,7 @@ public class DecorationBlockEntity extends AbstractCaterpillarBlockEntity {
                             }
                         } else if (j == 0) {
                             if (level.getBlockState(decoratePos.relative(direction.getOpposite())).isFaceSturdy(level, decoratePos.relative(direction.getOpposite()), direction.getOpposite())) {
-                                blockState = blockState.setValue(FACING, direction);
+                                blockState = blockState.setValue(DecorationBlock.FACING, direction);
                             } else {
                                 continue;
                             }
@@ -220,14 +218,14 @@ public class DecorationBlockEntity extends AbstractCaterpillarBlockEntity {
                             switch (direction) {
                                 case NORTH, EAST :
                                     if (level.getBlockState(decoratePos.relative(direction.getCounterClockWise())).isFaceSturdy(level, decoratePos.relative(direction.getCounterClockWise()), direction.getOpposite())) {
-                                        blockState = blockState.setValue(FACING, direction.getCounterClockWise());
+                                        blockState = blockState.setValue(DecorationBlock.FACING, direction.getCounterClockWise());
                                     } else {
                                         continue;
                                     }
                                     break;
                                 case SOUTH, WEST :
                                     if (level.getBlockState(decoratePos.relative(direction.getCounterClockWise())).isFaceSturdy(level, decoratePos.relative(direction.getCounterClockWise()), direction.getOpposite())) {
-                                        blockState = blockState.setValue(FACING, direction.getClockWise());
+                                        blockState = blockState.setValue(DecorationBlock.FACING, direction.getClockWise());
                                     } else {
                                         continue;
                                     }

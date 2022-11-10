@@ -33,8 +33,6 @@ import the_fireplace.caterpillar.core.network.packet.server.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static net.minecraft.world.level.block.HorizontalDirectionalBlock.FACING;
-
 public class ReinforcementBlockEntity extends AbstractCaterpillarBlockEntity {
 
     public static final Component TITLE = Component.translatable(
@@ -151,7 +149,7 @@ public class ReinforcementBlockEntity extends AbstractCaterpillarBlockEntity {
     }
 
     private void reinforce() {
-        Direction direction = this.getBlockState().getValue(FACING);
+        Direction direction = this.getBlockState().getValue(ReinforcementBlock.FACING);
         BlockPos basePos = this.getBlockPos();
         BlockPos reinforcePos;
 
