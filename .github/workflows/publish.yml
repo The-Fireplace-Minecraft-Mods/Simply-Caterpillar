@@ -1,0 +1,21 @@
+name: Publish mod to CurseForge, Modrinth and GitHub releases
+
+on: workflow_dispatch
+
+jobs:
+  publish:
+    steps:
+      - name: Download artifact JAR
+        uses: actions/download-artifact@v3
+        with:
+          name: Simply-Caterpillar_JAR
+          path: build/libs/*.jar
+      - uses: Kir-Antipov/mc-publish@v3.2
+        with:
+          modrinth-id: boPuyi2x
+          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
+
+          curseforge-id: 245437
+          curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
+
+          github-token: ${{ secrets.GITHUB_TOKEN }}
