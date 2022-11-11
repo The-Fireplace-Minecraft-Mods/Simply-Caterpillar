@@ -23,7 +23,6 @@ public final class PacketHandler {
 
     public static void register() {
         int index = 0;
-        Caterpillar.LOGGER.info("Registered {} packets!", index);
 
         CHANNEL.messageBuilder(MinecraftSyncSlotC2SPacket.class, index++, NetworkDirection.PLAY_TO_SERVER)
                 .decoder(MinecraftSyncSlotC2SPacket::new)
@@ -132,6 +131,8 @@ public final class PacketHandler {
                 .encoder(ReinforcementSyncReplacerS2CPacket::toBytes)
                 .consumerMainThread(ReinforcementSyncReplacerS2CPacket::handle)
                 .add();
+
+        Caterpillar.LOGGER.info("Registered {} packets!", index);
     }
 
     public static <MSG> void sendToServer(MSG message) {

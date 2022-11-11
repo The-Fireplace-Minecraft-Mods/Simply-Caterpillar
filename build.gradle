@@ -86,8 +86,8 @@ dependencies {
 jar {
     manifest {
         attributes([
-                "Specification-Title": modId,
-                "Specification-Vendor": modGroup,
+                "Specification-Title"     : modId,
+                "Specification-Vendor"    : modGroup,
                 "Specification-Version"   : "1",
                 "Implementation-Title"    : project.name,
                 "Implementation-Version"  : project.jar.archiveVersion,
@@ -120,10 +120,18 @@ tasks.withType(JavaCompile).configureEach {
 tasks.withType(ProcessResources) {
     filesMatching(['META-INF/mods.toml', 'pack.mcmeta']) {
         expand  'loaderVersionRange': loaderVersionRange,
+                'modLicense': modLicense,
                 'modId': modId,
+                'modDisplayName': modDisplayName,
                 'modVersion': modVersion,
                 'modDescription': modDescription,
+                'modDisplayURL': modDisplayURL,
+                'modIssueTrackerURL': modIssueTrackerURL,
+                'modUpdateJson': modUpdateJson,
+                'modLogoFile': modLogoFile,
                 'forgeVersionRange': forgeVersionRange,
-                'minecraftVersionRange': minecraftVersionRange
+                'minecraftVersionRange': minecraftVersionRange,
+                'modrinthId': modrinthId,
+                'curseForgeId': curseForgeId
     }
 }
