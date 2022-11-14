@@ -4,6 +4,8 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.inventory.Slot;
@@ -83,8 +85,8 @@ public class IncineratorScreen extends AbstractCaterpillarScreen<IncineratorMenu
         int tutorialY = super.topPos + 32;
         List<Component> incineratorTutorial = new ArrayList<>();
 
-        MutableComponent tutorialText = Component.literal("<").withStyle(ChatFormatting.GREEN).append(" ");
-        tutorialText.append(Component.translatable(Caterpillar.MOD_ID + ".tutorial.incinerator").withStyle(ChatFormatting.WHITE).append(""));
+        MutableComponent tutorialText = new TextComponent("<").withStyle(ChatFormatting.GREEN).append(" ");
+        tutorialText.append(new TranslatableComponent(Caterpillar.MOD_ID + ".tutorial.incinerator").withStyle(ChatFormatting.WHITE).append(""));
         incineratorTutorial.add(tutorialText);
 
         this.renderComponentTooltip(stack, incineratorTutorial, tutorialX, tutorialY);

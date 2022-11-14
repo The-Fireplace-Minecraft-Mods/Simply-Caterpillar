@@ -6,6 +6,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Inventory;
@@ -17,8 +18,8 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
@@ -41,7 +42,7 @@ import java.util.List;
 
 public class DecorationBlockEntity extends AbstractCaterpillarBlockEntity {
 
-    public static final Component TITLE = Component.translatable(
+    public static final Component TITLE = new TranslatableComponent(
             "container." + Caterpillar.MOD_ID + ".decoration"
     );
 
@@ -334,7 +335,7 @@ public class DecorationBlockEntity extends AbstractCaterpillarBlockEntity {
 
     @Override
     public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-        if(cap == ForgeCapabilities.ITEM_HANDLER) {
+        if(cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
             return this.placementMapHandler.get(this.getSelectedMap()).cast();
         }
 

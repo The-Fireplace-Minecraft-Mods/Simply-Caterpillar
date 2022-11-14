@@ -5,7 +5,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import org.jetbrains.annotations.NotNull;
 import the_fireplace.caterpillar.common.block.entity.DrillHeadBlockEntity;
@@ -345,7 +345,7 @@ public class DrillHeadMenu extends AbstractScrollableMenu {
     public void gatheredScrollTo(int gatheredScrollTo) {
         if (this.blockEntity instanceof DrillHeadBlockEntity drillHeadBlockEntity) {
             if (gatheredScrollTo >= 0 && gatheredScrollTo < 3) {
-                drillHeadBlockEntity.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(drillHeadHandler -> {
+                drillHeadBlockEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(drillHeadHandler -> {
                     for(int row = 0; row < 3 - gatheredScrollTo; row++) {
                         for(int column = 0; column < 3; column++) {
                             ItemStack stack = drillHeadHandler.getStackInSlot(GATHERED_SLOT_START + column + (gatheredScrollTo + row) * 3);
@@ -382,7 +382,7 @@ public class DrillHeadMenu extends AbstractScrollableMenu {
     public void consumptionScrollTo(int consumptionScrollTo) {
         if (this.blockEntity instanceof DrillHeadBlockEntity drillHeadBlockEntity) {
             if (consumptionScrollTo >= 0 && consumptionScrollTo < 3) {
-                drillHeadBlockEntity.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(drillHeadHandler -> {
+                drillHeadBlockEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(drillHeadHandler -> {
                     for(int row = 0; row < 3 - consumptionScrollTo; row++) {
                         for(int column = 0; column < 3; column++) {
                             ItemStack stack = drillHeadHandler.getStackInSlot(CONSUMPTION_SLOT_START + column + (consumptionScrollTo + row) * 3);

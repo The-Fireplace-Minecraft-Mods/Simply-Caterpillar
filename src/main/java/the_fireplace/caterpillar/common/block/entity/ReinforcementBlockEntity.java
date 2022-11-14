@@ -4,6 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.*;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Inventory;
@@ -35,7 +36,7 @@ import java.util.List;
 
 public class ReinforcementBlockEntity extends AbstractCaterpillarBlockEntity {
 
-    public static final Component TITLE = Component.translatable(
+    public static final Component TITLE = new TranslatableComponent(
             "container." + Caterpillar.MOD_ID + ".reinforcement"
     );
 

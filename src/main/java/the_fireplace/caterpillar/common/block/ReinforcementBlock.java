@@ -2,7 +2,7 @@ package the_fireplace.caterpillar.common.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -104,7 +104,7 @@ public class ReinforcementBlock extends AbstractCaterpillarBlock implements Simp
             BlockEntity blockEntity = level.getBlockEntity(basePos);
 
             if (blockEntity instanceof ReinforcementBlockEntity reinforcementBlockEntity) {
-                NetworkHooks.openScreen((ServerPlayer) player, reinforcementBlockEntity, basePos);
+                NetworkHooks.openGui((ServerPlayer) player, reinforcementBlockEntity, basePos);
 
                 return InteractionResult.CONSUME;
             } else {
@@ -150,7 +150,7 @@ public class ReinforcementBlock extends AbstractCaterpillarBlock implements Simp
                     return defaultBlockState().setValue(FACING, direction.getOpposite()).setValue(ReinforcementBlock.PART, ReinforcementPart.BOTTOM).setValue(DrillHeadBlock.WATERLOGGED, context.getLevel().getFluidState(context.getClickedPos()).getType() == Fluids.WATER);
                 }
             } else {
-                context.getPlayer().displayClientMessage(Component.translatable("block.simplycaterpillar.blocks.alreadyConnected", BlockInit.REINFORCEMENT.get().getName()), true);
+                context.getPlayer().displayClientMessage(new TranslatableComponent("block.simplycaterpillar.blocks.alreadyConnected", BlockInit.REINFORCEMENT.get().getName()), true);
             }
         }
 

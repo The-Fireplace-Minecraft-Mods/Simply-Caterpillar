@@ -13,7 +13,7 @@ import the_fireplace.caterpillar.common.menu.ReinforcementMenu;
 
 public class MenuInit {
 
-    public static final DeferredRegister<MenuType<?>> MENU_TYPES = DeferredRegister.create(ForgeRegistries.MENU_TYPES, Caterpillar.MOD_ID);
+    public static final DeferredRegister<MenuType<?>> MENU_TYPES = DeferredRegister.create(ForgeRegistries.CONTAINERS, Caterpillar.MOD_ID);
 
     public static final RegistryObject<MenuType<DecorationMenu>> DECORATION = MENU_TYPES.register("decoration", () -> IForgeMenuType.create(DecorationMenu::new));
 

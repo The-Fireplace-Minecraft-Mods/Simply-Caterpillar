@@ -1,6 +1,8 @@
 package the_fireplace.caterpillar.client.events;
 
 import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -14,6 +16,7 @@ import the_fireplace.caterpillar.client.screen.IncineratorScreen;
 import the_fireplace.caterpillar.client.screen.ReinforcementScreen;
 import the_fireplace.caterpillar.config.ConfigHelper;
 import the_fireplace.caterpillar.config.ConfigHolder;
+import the_fireplace.caterpillar.core.init.BlockInit;
 import the_fireplace.caterpillar.core.init.MenuInit;
 
 @Mod.EventBusSubscriber(modid = Caterpillar.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value =  Dist.CLIENT)
@@ -25,6 +28,8 @@ public class ClientModEvents {
         MenuScreens.register(MenuInit.DRILL_HEAD.get(), DrillHeadScreen::new);
         MenuScreens.register(MenuInit.INCINERATOR.get(), IncineratorScreen::new);
         MenuScreens.register(MenuInit.REINFORCEMENT.get(), ReinforcementScreen::new);
+
+        ItemBlockRenderTypes.setRenderLayer(BlockInit.DRILL_HEAD.get(), RenderType.cutoutMipped());
     }
 
     /**

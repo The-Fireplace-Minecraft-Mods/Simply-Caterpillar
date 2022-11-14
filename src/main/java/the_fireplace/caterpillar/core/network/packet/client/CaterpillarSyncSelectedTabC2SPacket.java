@@ -3,7 +3,7 @@ package the_fireplace.caterpillar.core.network.packet.client;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.block.state.BlockState;
@@ -57,11 +57,11 @@ public class CaterpillarSyncSelectedTabC2SPacket {
                 if (caterpillarHeadPos != null) {
                     CaterpillarBlockUtil.getConnectedCaterpillarBlockEntities(level, caterpillarHeadPos, new ArrayList<>()).forEach(connectedBlockEntity -> {
                         if (connectedBlockEntity.getBlockState().getBlock().getDescriptionId().equals(tab.ITEM.getDescriptionId())) {
-                            NetworkHooks.openScreen(player, connectedBlockEntity, connectedBlockEntity.getBlockPos());
+                            NetworkHooks.openGui(player, connectedBlockEntity, connectedBlockEntity.getBlockPos());
                         }
                     });
                 } else {
-                    player.displayClientMessage(Component.translatable("block.simplycaterpillar.drill_head.not_found"), true);
+                    player.displayClientMessage(new TranslatableComponent("block.simplycaterpillar.drill_head.not_found"), true);
                 }
             }
         });

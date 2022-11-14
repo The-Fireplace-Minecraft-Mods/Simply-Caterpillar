@@ -6,6 +6,7 @@ import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraftforge.api.distmarker.Dist;
@@ -119,7 +120,7 @@ public abstract class AbstractCaterpillarScreen<T extends AbstractCaterpillarMen
             int tooltipY = super.topPos + this.SELECTED_TAB.IMAGE_HEIGHT - 7;
 
             List<Component> tooltip = new ArrayList<>();
-            MutableComponent tooltipText = Component.translatable(Caterpillar.MOD_ID + ".tutorial." + (this.tutorialButton != null && this.tutorialButton.showTutorial() ? "hide" : "show"));
+            MutableComponent tooltipText = new TranslatableComponent(Caterpillar.MOD_ID + ".tutorial." + (this.tutorialButton != null && this.tutorialButton.showTutorial() ? "hide" : "show"));
             tooltip.add(tooltipText);
             this.renderComponentTooltip(stack, tooltip, tooltipX, tooltipY);
         }

@@ -2,7 +2,7 @@ package the_fireplace.caterpillar.common.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -29,7 +29,7 @@ import the_fireplace.caterpillar.common.block.util.CaterpillarBlockUtil;
 import java.util.EnumMap;
 import java.util.Map;
 
-public abstract class AbstractCaterpillarBlock extends BaseEntityBlock {
+public abstract class AbstractCaterpillarBlock extends BaseEntityBlock{
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 
     protected static final Map<Direction, VoxelShape> SHAPES = new EnumMap<>(Direction.class);
@@ -91,9 +91,9 @@ public abstract class AbstractCaterpillarBlock extends BaseEntityBlock {
             if (caterpillarHeadPos != null) {
                 BlockEntity blockEntity = level.getBlockEntity(caterpillarHeadPos);
                 if (blockEntity instanceof DrillHeadBlockEntity drillHeadBlockEntity) {
-                    NetworkHooks.openScreen((ServerPlayer) player, drillHeadBlockEntity, caterpillarHeadPos);
+                    NetworkHooks.openGui((ServerPlayer) player, drillHeadBlockEntity, caterpillarHeadPos);
                 } else {
-                    player.displayClientMessage(Component.translatable("block.simplycaterpillar.drill_head.not_found"), true);
+                    player.displayClientMessage(new TranslatableComponent("block.simplycaterpillar.drill_head.not_found"), true);
                 }
             }
 

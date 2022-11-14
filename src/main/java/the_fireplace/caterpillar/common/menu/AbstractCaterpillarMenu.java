@@ -7,7 +7,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import org.jetbrains.annotations.NotNull;
 import the_fireplace.caterpillar.common.block.entity.AbstractCaterpillarBlockEntity;
@@ -55,7 +55,7 @@ public abstract class AbstractCaterpillarMenu extends AbstractContainerMenu {
         addPlayerInventory(playerInventory);
         addPlayerHotbar(playerInventory);
         
-        this.blockEntity.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(this::addSlots);
+        this.blockEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(this::addSlots);
 
         addDataSlots(data);
 

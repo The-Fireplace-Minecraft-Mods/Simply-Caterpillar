@@ -3,7 +3,7 @@ package the_fireplace.caterpillar.common.menu;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.ContainerData;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 import the_fireplace.caterpillar.common.block.entity.ReinforcementBlockEntity;
@@ -107,7 +107,7 @@ public class ReinforcementMenu extends AbstractScrollableMenu {
 
     public void scrollTo(int scrollToReplacer) {
         if (this.blockEntity instanceof ReinforcementBlockEntity reinforcementBlockEntity) {
-            reinforcementBlockEntity.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(reinforcementHandler -> {
+            reinforcementBlockEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(reinforcementHandler -> {
                 while (this.slots.size() != BE_INVENTORY_FIRST_SLOT_INDEX) {
                     this.slots.remove(this.slots.size() - 1);
                 }

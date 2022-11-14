@@ -4,6 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Inventory;
@@ -39,15 +40,15 @@ import java.util.List;
 
 public class DrillHeadBlockEntity extends AbstractCaterpillarBlockEntity {
 
-    public static final Component TITLE = Component.translatable(
+    public static final Component TITLE = new TranslatableComponent(
             "container." + Caterpillar.MOD_ID + ".drill_head"
     );
 
-    public static final Component GATHERED_TITLE = Component.translatable(
+    public static final Component GATHERED_TITLE = new TranslatableComponent(
             "gui." + Caterpillar.MOD_ID + ".drill_head.gathered"
     );
 
-    public static final Component CONSUMPTION_TITLE = Component.translatable(
+    public static final Component CONSUMPTION_TITLE = new TranslatableComponent(
             "gui." + Caterpillar.MOD_ID + ".drill_head.consumption"
     );
 

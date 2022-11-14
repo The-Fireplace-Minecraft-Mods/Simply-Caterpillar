@@ -9,7 +9,7 @@ import the_fireplace.caterpillar.common.block.entity.*;
 
 public class BlockEntityInit {
 
-    public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, Caterpillar.MOD_ID);
+    public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITIES, Caterpillar.MOD_ID);
 
     // Block entities
     public static final RegistryObject<BlockEntityType<DrillBaseBlockEntity>> DRILL_BASE = BLOCK_ENTITY_TYPES.register("drill_base", () -> BlockEntityType.Builder.of(DrillBaseBlockEntity::new, BlockInit.DRILL_BASE.get()).build(null));

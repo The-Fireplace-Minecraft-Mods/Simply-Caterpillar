@@ -5,6 +5,8 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.ClickType;
@@ -85,10 +87,10 @@ public class ReinforcementScreen extends AbstractScrollableScreen<ReinforcementM
         int tutorialY = super.topPos + 122;
         List<Component> replacerButtonsTutorial = new ArrayList<>();
 
-        Component tutorialArrow = Component.literal(" /\\").withStyle(ChatFormatting.GREEN);
+        Component tutorialArrow = new TextComponent(" /\\").withStyle(ChatFormatting.GREEN);
         replacerButtonsTutorial.add(tutorialArrow);
 
-        MutableComponent tutorialText = Component.translatable(Caterpillar.MOD_ID + ".tutorial.reinforcement.replacer_buttons").withStyle(ChatFormatting.WHITE);
+        MutableComponent tutorialText = new TranslatableComponent(Caterpillar.MOD_ID + ".tutorial.reinforcement.replacer_buttons").withStyle(ChatFormatting.WHITE);
         replacerButtonsTutorial.add(tutorialText);
 
         this.renderComponentTooltip(stack, replacerButtonsTutorial, tutorialX, tutorialY);
@@ -99,10 +101,10 @@ public class ReinforcementScreen extends AbstractScrollableScreen<ReinforcementM
         int tutorialY = super.topPos - 17;
         List<Component> replacerBlocksTutorial = new ArrayList<>();
 
-        MutableComponent tutorialText = Component.translatable(Caterpillar.MOD_ID + ".tutorial.reinforcement.replacer_blocks");
+        MutableComponent tutorialText = new TranslatableComponent(Caterpillar.MOD_ID + ".tutorial.reinforcement.replacer_blocks");
         replacerBlocksTutorial.add(tutorialText);
 
-        Component tutorialArrow = Component.literal("  \\/").withStyle(ChatFormatting.GREEN);
+        Component tutorialArrow = new TextComponent("  \\/").withStyle(ChatFormatting.GREEN);
         replacerBlocksTutorial.add(tutorialArrow);
 
         this.renderComponentTooltip(stack, replacerBlocksTutorial, tutorialX, tutorialY);
@@ -123,7 +125,7 @@ public class ReinforcementScreen extends AbstractScrollableScreen<ReinforcementM
             default -> "floor";
         };
 
-        Component textOfCurrentReplacement = Component.translatable("gui." + Caterpillar.MOD_ID + ".replacement." + currentReplacementText);
+        Component textOfCurrentReplacement = new TranslatableComponent("gui." + Caterpillar.MOD_ID + ".replacement." + currentReplacementText);
         int textX = super.leftPos + (super.imageWidth - super.font.width(textOfCurrentReplacement)) / 2;
         int textY = super.topPos + 58;
 
@@ -167,11 +169,11 @@ public class ReinforcementScreen extends AbstractScrollableScreen<ReinforcementM
                 List<Component> replacerComponents = new ArrayList<>();
                 MutableComponent replacerText;
                 if (this.menu.getSelectedReplacers()[replacement.INDEX] == 1) {
-                    replacerText = Component.translatable("gui." + Caterpillar.MOD_ID + ".replacement.will_replace").append(" ");
+                    replacerText = new TranslatableComponent("gui." + Caterpillar.MOD_ID + ".replacement.will_replace").append(" ");
                     replacerText.append(replacement.NAME.withStyle(ChatFormatting.GREEN));
                     replacerComponents.add(replacerText);
                 } else {
-                    replacerText = Component.translatable("gui." + Caterpillar.MOD_ID + ".replacement.wont_replace").append(" ");
+                    replacerText = new TranslatableComponent("gui." + Caterpillar.MOD_ID + ".replacement.wont_replace").append(" ");
                     replacerText.append(replacement.NAME.withStyle(ChatFormatting.RED));
                     replacerComponents.add(replacerText);
                 }

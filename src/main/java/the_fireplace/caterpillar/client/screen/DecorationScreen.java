@@ -4,6 +4,8 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.ClickType;
@@ -67,7 +69,7 @@ public class DecorationScreen extends AbstractScrollableScreen<DecorationMenu> {
         int tutorialY = super.topPos - 16;
         List<Component> decorationTutorial = new ArrayList<>();
 
-        MutableComponent tutorialText = Component.translatable(Caterpillar.MOD_ID + ".tutorial.decoration");
+        MutableComponent tutorialText = new TranslatableComponent(Caterpillar.MOD_ID + ".tutorial.decoration");
         decorationTutorial.add(tutorialText);
 
         this.renderComponentTooltip(stack, decorationTutorial, tutorialX, tutorialY);
@@ -78,10 +80,10 @@ public class DecorationScreen extends AbstractScrollableScreen<DecorationMenu> {
         int tutorialY = super.topPos + 49;
         List<Component> decorationTutorial = new ArrayList<>();
 
-        Component tutorialArrow = Component.literal("         /\\").withStyle(ChatFormatting.GREEN);
+        Component tutorialArrow = new TextComponent("         /\\").withStyle(ChatFormatting.GREEN);
         decorationTutorial.add(tutorialArrow);
 
-        MutableComponent tutorialText = Component.translatable(Caterpillar.MOD_ID + ".tutorial.decoration.mouseWheel");
+        MutableComponent tutorialText = new TranslatableComponent(Caterpillar.MOD_ID + ".tutorial.decoration.mouseWheel");
         decorationTutorial.add(tutorialText);
 
         this.renderComponentTooltip(stack, decorationTutorial, tutorialX, tutorialY);
@@ -92,10 +94,10 @@ public class DecorationScreen extends AbstractScrollableScreen<DecorationMenu> {
         int tutorialY = super.topPos + 87;
         List<Component> decorationTutorial = new ArrayList<>();
 
-        Component tutorialArrow = Component.literal("/\\").withStyle(ChatFormatting.GREEN);
+        Component tutorialArrow = new TextComponent("/\\").withStyle(ChatFormatting.GREEN);
         decorationTutorial.add(tutorialArrow);
 
-        MutableComponent tutorialText = Component.translatable(Caterpillar.MOD_ID + ".tutorial.decoration.currentMap").withStyle(ChatFormatting.WHITE);
+        MutableComponent tutorialText = new TranslatableComponent(Caterpillar.MOD_ID + ".tutorial.decoration.currentMap").withStyle(ChatFormatting.WHITE);
         decorationTutorial.add(tutorialText);
 
         this.renderComponentTooltip(stack, decorationTutorial, tutorialX, tutorialY);
@@ -114,7 +116,7 @@ public class DecorationScreen extends AbstractScrollableScreen<DecorationMenu> {
                 mouseY <= super.topPos + 34 + SLOT_SIZE
         ) {
             if (this.menu.getSelectedMap() == this.menu.getCurrentMap()) {
-                Component currentMap = Component.translatable("gui." + Caterpillar.MOD_ID +".decoration.current_map");
+                Component currentMap = new TranslatableComponent("gui." + Caterpillar.MOD_ID +".decoration.current_map");
 
                 int currentMapTooltipX = -8;
                 int currentMapTooltipY = 32;
