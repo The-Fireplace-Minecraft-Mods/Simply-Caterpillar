@@ -30,10 +30,7 @@ import the_fireplace.caterpillar.config.CaterpillarConfig;
 import the_fireplace.caterpillar.core.init.BlockEntityInit;
 import the_fireplace.caterpillar.common.block.util.DrillHeadPart;
 import the_fireplace.caterpillar.core.network.PacketHandler;
-import the_fireplace.caterpillar.core.network.packet.server.DrillHeadParticlesS2CPacket;
-import the_fireplace.caterpillar.core.network.packet.server.DrillHeadSyncLitS2CPacket;
-import the_fireplace.caterpillar.core.network.packet.server.DrillHeadSyncPowerS2CPacket;
-import the_fireplace.caterpillar.core.network.packet.server.CaterpillarSyncInventoryS2CPacket;
+import the_fireplace.caterpillar.core.network.packet.server.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -95,24 +92,21 @@ public class DrillHeadBlockEntity extends AbstractCaterpillarBlockEntity {
 
         boolean needsUpdate = false;
 
-        if (blockEntity.isPowered() && blockEntity.isLit() || blockEntity.isMoving()) {
+        if (blockEntity.isPowered() && blockEntity.isLit()) {
             blockEntity.timer++;
-            blockEntity.setChanged();
-        }
 
-        if (blockEntity.isLit() && blockEntity.isMoving() && blockEntity.timer % DRILL_PARTS_MOVEMENT_TICK == 0) {
-            int movementLitTimeNeeded = FUEL_CONSUMPTION;
+            Direction direction = state.getValue(DrillHeadBlock.FACING);
+            List<AbstractCaterpillarBlockEntity> connectedCaterpillarBlockEntities = CaterpillarBlockUtil.getConnectedCaterpillarBlockEntities(level, pos, new ArrayList<>());
+            AbstractCaterpillarBlockEntity lastBlockEntity = connectedCaterpillarBlockEntities.get(connectedCaterpillarBlockEntities.size() - 1);
+            connectedCaterpillarBlockEntities.addAll(CaterpillarBlockUtil.getConnectedCaterpillarBlockEntities(level, lastBlockEntity.getBlockPos().relative(direction, 2), new ArrayList<>()));
 
-            if (blockEntity.getLitTime() - movementLitTimeNeeded < 0) {
-                blockEntity.setPower(false);
-                blockEntity.setChanged();
-                return;
-            }
-
-            blockEntity.litTime -= movementLitTimeNeeded;
-            blockEntity.setChanged();
+            blockEntity.litTime -= connectedCaterpillarBlockEntities.size();
             PacketHandler.sendToClients(new DrillHeadSyncLitS2CPacket(blockEntity.getLitTime(), blockEntity.getLitDuration(), blockEntity.getBlockPos()));
 
+            needsUpdate = true;
+        }
+
+        if (blockEntity.isMoving() && blockEntity.timer % DRILL_PARTS_MOVEMENT_TICK == 0) {
             Direction direction = state.getValue(DrillHeadBlock.FACING);
 
             List<AbstractCaterpillarBlockEntity> connectedCaterpillarBlockEntities = CaterpillarBlockUtil.getConnectedCaterpillarBlockEntities(level, pos, new ArrayList<>());
@@ -123,9 +117,12 @@ public class DrillHeadBlockEntity extends AbstractCaterpillarBlockEntity {
                 caterpillarBlockEntity.move();
             } else {
                 blockEntity.setMoving(false);
+                PacketHandler.sendToClients(new DrillHeadSyncMovingS2CPacket(blockEntity.isMoving(), blockEntity.getBlockPos()));
+
                 blockEntity.timer = 0;
-                blockEntity.setChanged();
             }
+
+            needsUpdate = true;
         }
 
         if (blockEntity.isPowered() && blockEntity.isLit() && !blockEntity.isMoving()) {
@@ -137,15 +134,7 @@ public class DrillHeadBlockEntity extends AbstractCaterpillarBlockEntity {
                 blockEntity.drill();
 
                 if (blockEntity.isPowered()) {
-                    int movementLitTimeNeeded = FUEL_CONSUMPTION;
-
-                    if (blockEntity.getLitTime() - movementLitTimeNeeded >= 0) {
-                        blockEntity.litTime -= movementLitTimeNeeded;
-                        blockEntity.setChanged();
-                        PacketHandler.sendToClients(new DrillHeadSyncLitS2CPacket(blockEntity.getLitTime(), blockEntity.getLitDuration(), blockEntity.getBlockPos()));
-
-                        blockEntity.move();
-                    }
+                    blockEntity.move();
                 }
             }
 
@@ -158,9 +147,11 @@ public class DrillHeadBlockEntity extends AbstractCaterpillarBlockEntity {
         if (blockEntity.isPowered() && blockEntity.getLitTime() <= 0 && !fuelSlotIsEmpty) {
             blockEntity.litTime = blockEntity.getBurnDuration(stack);
             blockEntity.litDuration = blockEntity.litTime;
-            blockEntity.setChanged();
+            PacketHandler.sendToClients(new DrillHeadSyncLitS2CPacket(blockEntity.getLitTime(), blockEntity.getLitDuration(), blockEntity.getBlockPos()));
 
             stack.shrink(1);
+
+            needsUpdate = true;
         }
 
         if (blockEntity.isPowered() && !blockEntity.isLit() && fuelSlotIsEmpty) {
@@ -334,12 +325,6 @@ public class DrillHeadBlockEntity extends AbstractCaterpillarBlockEntity {
             @Override
             protected void onContentsChanged(int slot) {
                 setChanged();
-
-                if(level != null && !level.isClientSide()) {
-                    PacketHandler.sendToClients(new DrillHeadSyncPowerS2CPacket(DrillHeadBlockEntity.this.isPowered(), worldPosition));
-                    PacketHandler.sendToClients(new DrillHeadSyncLitS2CPacket(DrillHeadBlockEntity.this.getLitTime(), DrillHeadBlockEntity.this.getLitDuration(), worldPosition));
-                    PacketHandler.sendToClients(new CaterpillarSyncInventoryS2CPacket(this, worldPosition));
-                }
             }
 
             @Override
@@ -391,6 +376,7 @@ public class DrillHeadBlockEntity extends AbstractCaterpillarBlockEntity {
         PacketHandler.sendToClients(new DrillHeadSyncLitS2CPacket(this.getLitTime(), this.getLitDuration(), this.getBlockPos()));
         PacketHandler.sendToClients(new DrillHeadSyncPowerS2CPacket(this.isPowered(), this.getBlockPos()));
         PacketHandler.sendToClients(new CaterpillarSyncInventoryS2CPacket(this.getInventory(), this.getBlockPos()));
+        PacketHandler.sendToClients(new DrillHeadSyncMovingS2CPacket(this.isMoving(), this.getBlockPos()));
         return new DrillHeadMenu(id, playerInventory, this, new DrillHeadContainerData(this, DrillHeadContainerData.SIZE));
     }
 }

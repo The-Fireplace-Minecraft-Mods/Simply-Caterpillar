@@ -4,6 +4,8 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.TranslatableComponent;
@@ -16,7 +18,9 @@ import the_fireplace.caterpillar.Caterpillar;
 import the_fireplace.caterpillar.client.screen.util.ScreenTabs;
 import the_fireplace.caterpillar.client.screen.widget.TabButton;
 import the_fireplace.caterpillar.client.screen.widget.TutorialButton;
+import the_fireplace.caterpillar.common.block.AbstractCaterpillarBlock;
 import the_fireplace.caterpillar.common.block.entity.*;
+import the_fireplace.caterpillar.common.block.util.CaterpillarBlockUtil;
 import the_fireplace.caterpillar.common.menu.AbstractCaterpillarMenu;
 import the_fireplace.caterpillar.core.network.PacketHandler;
 import the_fireplace.caterpillar.core.network.packet.client.CaterpillarSyncSelectedTabC2SPacket;
@@ -85,6 +89,23 @@ public abstract class AbstractCaterpillarScreen<T extends AbstractCaterpillarMen
     }
 
     @Override
+    protected void containerTick() {
+        super.containerTick();
+
+        this.updateTabButtons();
+    }
+
+    protected void updateTabButtons() {
+        Direction direction = this.menu.blockEntity.getBlockState().getValue(AbstractCaterpillarBlock.FACING);
+
+        BlockPos caterpillarHeadPos = CaterpillarBlockUtil.getCaterpillarHeadPos(this.menu.blockEntity.getLevel(), this.menu.blockEntity.getBlockPos(), direction);
+        List<AbstractCaterpillarBlockEntity> connectedCaterpillarBlockEntities = CaterpillarBlockUtil.getConnectedCaterpillarBlockEntities(this.menu.blockEntity.getLevel(), caterpillarHeadPos, new ArrayList<>());
+        this.menu.setConnectedCaterpillarBlockEntities(connectedCaterpillarBlockEntities);
+
+        this.addTabButtons();
+    }
+
+    @Override
     public void render(@NotNull PoseStack stack, int mouseX, int mouseY, float partialTicks) {
         this.renderBackground(stack);
 
@@ -131,12 +152,13 @@ public abstract class AbstractCaterpillarScreen<T extends AbstractCaterpillarMen
     private void addTutorialButton() {
         this.tutorialButton = new TutorialButton(false,super.leftPos + TUTORIAL_X, super.topPos + SELECTED_TAB.IMAGE_HEIGHT + TUTORIAL_Y, TUTORIAL_WIDTH, TUTORIAL_HEIGHT, TUTORIAL_BG_X, TUTORIAL_BG_Y, TUTORIAL_BG_Y_OFFSET, CATERPILLAR_GUI, (onPress) -> this.tutorialButton.setShowTutorial(!this.tutorialButton.showTutorial()));
 
-        this.addRenderableWidget(this.tutorialButton);
+        super.addRenderableWidget(this.tutorialButton);
     }
 
-    private void addTabButtons() {
+    protected void addTabButtons() {
         for (TabButton button : this.tabButtons) {
-            removeWidget(button);
+            button.visible = false;
+            super.removeWidget(button);
         }
 
         int incrementTabPos = 0;
@@ -148,7 +170,7 @@ public abstract class AbstractCaterpillarScreen<T extends AbstractCaterpillarMen
         }
 
         for (TabButton button : this.tabButtons) {
-            this.addRenderableWidget(button);
+            super.addRenderableWidget(button);
         }
     }
 

@@ -66,6 +66,12 @@ public final class PacketHandler {
                 .consumer(DrillHeadSyncPowerS2CPacket::handle)
                 .add();
 
+        CHANNEL.messageBuilder(DrillHeadSyncMovingS2CPacket.class, index++, NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(DrillHeadSyncMovingS2CPacket::new)
+                .encoder(DrillHeadSyncMovingS2CPacket::toBytes)
+                .consumer(DrillHeadSyncMovingS2CPacket::handle)
+                .add();
+
         CHANNEL.messageBuilder(DrillHeadParticlesS2CPacket.class, index++, NetworkDirection.PLAY_TO_CLIENT)
                 .decoder(DrillHeadParticlesS2CPacket::new)
                 .encoder(DrillHeadParticlesS2CPacket::toBytes)
