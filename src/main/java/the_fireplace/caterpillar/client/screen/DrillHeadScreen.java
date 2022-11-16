@@ -16,6 +16,7 @@ import the_fireplace.caterpillar.Caterpillar;
 import the_fireplace.caterpillar.client.screen.widget.PowerButton;
 import the_fireplace.caterpillar.client.screen.util.ScreenTabs;
 import the_fireplace.caterpillar.common.block.entity.DrillHeadBlockEntity;
+import the_fireplace.caterpillar.common.block.util.CaterpillarBlockUtil;
 import the_fireplace.caterpillar.common.menu.DrillHeadMenu;
 import the_fireplace.caterpillar.common.menu.slot.FakeSlot;
 
@@ -74,7 +75,17 @@ public class DrillHeadScreen extends AbstractScrollableScreen<DrillHeadMenu> {
     @Override
     protected void containerTick() {
         super.containerTick();
+
         this.updatePowerButton();
+    }
+
+    @Override
+    protected void updateTabButtons() {
+        if (this.menu.isMoving()) {
+            this.menu.setConnectedCaterpillarBlockEntities(CaterpillarBlockUtil.getConnectedCaterpillarBlockEntities(this.menu.blockEntity.getLevel(), this.menu.blockEntity.getBlockPos(), new ArrayList<>()));
+
+            super.addTabButtons();
+        }
     }
 
     @Override
@@ -187,13 +198,14 @@ public class DrillHeadScreen extends AbstractScrollableScreen<DrillHeadMenu> {
 
     @Override
     protected void renderScroller(PoseStack stack) {
-        super.renderScroller(stack);
+        int scrollbarYStart = this.topPos + SCROLLBAR_Y;
+        int scrollbarYEnd = scrollbarYStart + super.SCROLLBAR_HEIGHT;
 
+        int consumptionScrollbarX = this.leftPos + CONSUMPTION_SCROLLBAR_X;
         int gatheredScrollbarX = this.leftPos + GATHERED_SCROLLBAR_X;
-        int scrollbarY = this.topPos + SCROLLBAR_Y;
-        int scrollbarYEnd = scrollbarY + SCROLLBAR_HEIGHT;
 
-        blit(stack, gatheredScrollbarX, scrollbarY + (int)((float)(scrollbarYEnd - scrollbarY - SCROLLBAR_Y) * this.menu.getGatheredScrollOffs()), SCROLLER_BG_X + (this.menu.canScroll() ? 0 : SCROLLER_WIDTH), SCROLLER_BG_Y, SCROLLER_WIDTH, SCROLLER_HEIGHT);
+        blit(stack, consumptionScrollbarX, scrollbarYStart + (int)((float)(scrollbarYEnd - scrollbarYStart - SCROLLBAR_Y) * this.menu.getScrollOffs()), SCROLLER_BG_X + (this.menu.canScroll() ? 0 : SCROLLER_WIDTH), SCROLLER_BG_Y, SCROLLER_WIDTH, SCROLLER_HEIGHT);
+        blit(stack, gatheredScrollbarX, scrollbarYStart + (int)((float)(scrollbarYEnd - scrollbarYStart - SCROLLBAR_Y) * this.menu.getGatheredScrollOffs()), SCROLLER_BG_X + (this.menu.canScroll() ? 0 : SCROLLER_WIDTH), SCROLLER_BG_Y, SCROLLER_WIDTH, SCROLLER_HEIGHT);
     }
 
     @Override

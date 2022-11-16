@@ -326,6 +326,14 @@ public class DrillHeadMenu extends AbstractScrollableMenu {
         }
     }
 
+    public boolean isMoving() {
+        if (this.blockEntity instanceof DrillHeadBlockEntity drillHeadBlockEntity) {
+            return drillHeadBlockEntity.isMoving();
+        }
+
+        return false;
+    }
+
     public boolean fuelSlotIsEmpty() {
         return this.getSlot(BE_INVENTORY_FIRST_SLOT_INDEX + DrillHeadBlockEntity.FUEl_SLOT).getItem().isEmpty();
     }

@@ -26,7 +26,7 @@ public abstract class AbstractCaterpillarMenu extends AbstractContainerMenu {
 
     public final AbstractCaterpillarBlockEntity blockEntity;
 
-    private final List<AbstractCaterpillarBlockEntity> caterpillarBlockEntities;
+    private List<AbstractCaterpillarBlockEntity> caterpillarBlockEntities;
 
     public static final int SLOT_SIZE_PLUS_2 = 18;
 
@@ -130,5 +130,9 @@ public abstract class AbstractCaterpillarMenu extends AbstractContainerMenu {
 
     public List<AbstractCaterpillarBlockEntity> getConnectedCaterpillarBlockEntities() {
         return caterpillarBlockEntities;
+    }
+
+    public void setConnectedCaterpillarBlockEntities(List<AbstractCaterpillarBlockEntity> caterpillarBlockEntities) {
+        this.caterpillarBlockEntities = caterpillarBlockEntities;
     }
 }

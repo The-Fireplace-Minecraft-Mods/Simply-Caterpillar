@@ -17,10 +17,10 @@ public abstract class AbstractScrollableScreen<D extends AbstractScrollableMenu>
 
     private final int SCROLLER_HEIGHT;
 
-    private final int SCROLLBAR_X;
-    private final int SCROLLBAR_Y;
+    final int SCROLLBAR_X;
+    final int SCROLLBAR_Y;
 
-    private final int SCROLLBAR_HEIGHT;
+    final int SCROLLBAR_HEIGHT;
 
     public AbstractScrollableScreen(D menu, Inventory playerInventory, Component title, ScreenTabs selectedTab, int scrollerBgX, int scrollerBgY, int scrollerWidth, int scrollerHeight, int scrollbarX, int scrollbarY, int scrollbarHeight) {
         super(menu, playerInventory, title, selectedTab);
