@@ -6,7 +6,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
 import the_fireplace.caterpillar.common.block.entity.ReinforcementBlockEntity;
-import the_fireplace.caterpillar.common.menu.ReinforcementMenu;
 import the_fireplace.caterpillar.core.network.PacketHandler;
 import the_fireplace.caterpillar.core.network.packet.server.ReinforcementSyncStateReplacerS2CPacket;
 
@@ -53,14 +52,7 @@ public class ReinforcementSyncStateReplacerC2SPacket {
                 reinforcementBlockEntity.getReplacers(this.replacerIndex)[this.replacementIndex] = this.activated;
                 reinforcementBlockEntity.setChanged();
 
-                if(player.containerMenu instanceof ReinforcementMenu menu && menu.blockEntity.getBlockPos().equals(pos)) {
-                    if (menu.blockEntity instanceof ReinforcementBlockEntity menuBlockEntity) {
-                        menuBlockEntity.getReplacers(this.replacerIndex)[this.replacementIndex] = this.activated;
-                        menuBlockEntity.setChanged();
-                    }
-
-                    PacketHandler.sendToClients(new ReinforcementSyncStateReplacerS2CPacket(this.replacerIndex, this.replacementIndex, this.activated, reinforcementBlockEntity.getBlockPos()));
-                }
+                PacketHandler.sendToClients(new ReinforcementSyncStateReplacerS2CPacket(this.replacerIndex, this.replacementIndex, this.activated, reinforcementBlockEntity.getBlockPos()));
             }
         });
         context.setPacketHandled(true);
