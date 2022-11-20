@@ -1,0 +1,59 @@
+{
+  "block.simplycaterpillar.drill_head": "Tête de forage",
+  "block.simplycaterpillar.drill_head.noFuel": "Vous devez ajouter une source de carburant pour l'allumer.",
+  "block.simplycaterpillar.drill_head.powered_off": "La foreuse s'arrête.",
+  "block.simplycaterpillar.drill_head.powered_on": "La foreuse démarre.",
+  "block.simplycaterpillar.drill_head.not_found": "Vous devez connecter le bloc à la tête de forage.",
+  "block.simplycaterpillar.reinforcement": "Constructeur de renforts",
+  "block.simplycaterpillar.decoration": "Placeur de décoration",
+  "block.simplycaterpillar.collector": "Collecteur d'objets",
+  "block.simplycaterpillar.drill_base": "Segment de forage de base",
+  "block.simplycaterpillar.storage": "Stockage de la foreuse",
+  "block.simplycaterpillar.incinerator": "Incinérateur",
+  "block.simplycaterpillar.blocks.alreadyConnected": "Il y a déjà un %s connecté à la foreuse.",
+
+  "itemGroup.simplycaterpillar": "Foreuse",
+
+  "container.simplycaterpillar.drill_head": "Tête de forage",
+  "container.simplycaterpillar.reinforcement": "Constructeur de renforts",
+  "container.simplycaterpillar.decoration": "Placeur de décoration",
+  "container.simplycaterpillar.incinerator": "Incinérateur",
+
+  "gui.simplycaterpillar.drill_head.consumption": "Consommation",
+  "gui.simplycaterpillar.drill_head.gathered": "Collecté",
+  "gui.simplycaterpillar.drill_head.power": "Alimentation:",
+  "gui.simplycaterpillar.drill_head.power.on": "Allumé",
+  "gui.simplycaterpillar.drill_head.power.off": "Éteint",
+
+  "gui.simplycaterpillar.decoration.current_map": "Plan actuel",
+
+  "gui.simplycaterpillar.replacement.ceiling": "Plafond",
+  "gui.simplycaterpillar.replacement.leftwall": "Mur gauche",
+  "gui.simplycaterpillar.replacement.rightwall": "Mur droite",
+  "gui.simplycaterpillar.replacement.floor": "Plancher",
+
+  "gui.simplycaterpillar.replacement.wont_replace": "Ne remplacera pas",
+  "gui.simplycaterpillar.replacement.will_replace": "Remplacera",
+  "gui.simplycaterpillar.replacement.air": "Air",
+  "gui.simplycaterpillar.replacement.water": "Eau",
+  "gui.simplycaterpillar.replacement.lava": "Lave",
+  "gui.simplycaterpillar.replacement.falling_blocks": "Sable et gravier",
+  "gui.simplycaterpillar.replacement.all": "Tous",
+
+  "simplycaterpillar.config.firstUse": "Montrer le tutoriel en cas de première utilisation ?",
+  "simplycaterpillar.config.useParticles": "Utiliser des particules pour l'effet ?",
+  "simplycaterpillar.config.breakBedrock": "La foreuse peut-elle casser la bedrock ?",
+  "simplycaterpillar.config.enableSounds": "La perceuse fait-elle du bruit quand elle bouge ?",
+
+  "simplycaterpillar.tutorial.show": "Afficher le tutoriel",
+  "simplycaterpillar.tutorial.hide": "Masquer le tutoriel",
+  "simplycaterpillar.tutorial.drill_head.wheelStorage": "Utilisez la molette de la souris pour voir le stockage.",
+  "simplycaterpillar.tutorial.drill_head.fuelSlot": "Placez le carburant ici",
+  "simplycaterpillar.tutorial.drill_head.powerButton": "Cliquez sur le bouton d'alimentation pour allumer/éteindre",
+  "simplycaterpillar.tutorial.incinerator": "Placez les blocs que vous ne voulez pas garder dans la partie collecté de l'inventaire de la foreuse.",
+  "simplycaterpillar.tutorial.reinforcement.replacer_buttons": "Voici les options pour chaque côté\nPassez la souris dessus pour voir ce qu'elles sont\n\nCliquez pour basculer\nRouge = désactivé\nVert = activé",
+  "simplycaterpillar.tutorial.reinforcement.replacer_blocks": "Ce sont les blocs qu'il remplacera.\nL'absence de bloc signifie qu'il ne le remplacera pas.\nVous devez avoir les blocs dans la foreuse pour les placer.",
+  "simplycaterpillar.tutorial.decoration": "Le placeur de décoration placent les blocs selon un motif\nqui se répète tous les 10 blocs (0-9).",
+  "simplycaterpillar.tutorial.decoration.mouseWheel": "Utilisez la molette pour sélectionner la section.",
+  "simplycaterpillar.tutorial.decoration.currentMap": "Le chiffre bleu correspond à la position actuelle de la foreuse."
+}
