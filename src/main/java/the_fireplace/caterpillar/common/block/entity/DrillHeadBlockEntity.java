@@ -123,12 +123,18 @@ public class DrillHeadBlockEntity extends AbstractCaterpillarBlockEntity {
         }
 
         if (blockEntity.isPowered() && blockEntity.isLit() && !blockEntity.isMoving()) {
-            if (CaterpillarConfig.useParticles) {
-                PacketHandler.sendToClients(new DrillHeadParticlesS2CPacket(pos));
+            if (!state.getValue(DrillHeadBlock.DRILLING)) {
+                BlockState stateDrilling = state.setValue(DrillHeadBlock.DRILLING, Boolean.TRUE);
+                DrillHeadBlock.updateDrillingState(level, pos, stateDrilling);
             }
 
             if (blockEntity.timer != 0 && blockEntity.timer % DRILL_HEAD_MOVEMENT_TICK  == 0) {
                 blockEntity.drill();
+
+                if (state.getValue(DrillHeadBlock.DRILLING)) {
+                    BlockState stateDrilling = state.setValue(DrillHeadBlock.DRILLING, Boolean.FALSE);
+                    DrillHeadBlock.updateDrillingState(level, pos, stateDrilling);
+                }
 
                 if (blockEntity.isPowered()) {
                     blockEntity.move();
@@ -267,6 +273,11 @@ public class DrillHeadBlockEntity extends AbstractCaterpillarBlockEntity {
     public void setPowerOff() {
         this.powered = false;
         this.setChanged();
+
+        if (this.getBlockState().getValue(DrillHeadBlock.DRILLING)) {
+            BlockState stateDrilling = this.getBlockState().setValue(DrillHeadBlock.DRILLING, Boolean.FALSE);
+            DrillHeadBlock.updateDrillingState(level, this.getBlockPos(), stateDrilling);
+        }
     }
 
     public boolean isPowered() {

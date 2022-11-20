@@ -2,7 +2,7 @@
 	"ambientocclusion": false,
 	"render_type": "cutout",
 	"textures": {
-		"blades": "simplycaterpillar:block/drill_head/blades/blades",
+		"blades": "simplycaterpillar:block/drill_head/blades/blades_drilling",
 		"none_blades": "simplycaterpillar:block/drill_head/blades/none_blades",
 		"particle": "simplycaterpillar:block/drill_head/blades/blades"
 	},
