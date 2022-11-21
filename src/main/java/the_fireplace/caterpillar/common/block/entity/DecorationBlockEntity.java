@@ -348,12 +348,6 @@ public class DecorationBlockEntity extends AbstractCaterpillarBlockEntity {
             @Override
             protected void onContentsChanged(int slot) {
                 setChanged();
-
-                if(level != null && !level.isClientSide()) {
-                    PacketHandler.sendToClients(new DecorationSyncSelectedMapS2CPacket(DecorationBlockEntity.this.getSelectedMap(), worldPosition));
-                    PacketHandler.sendToClients(new DecorationSyncCurrentMapS2CPacket(DecorationBlockEntity.this.getCurrentMap(), worldPosition));
-                    PacketHandler.sendToClients(new DecorationSyncInventoryS2CPacket(DecorationBlockEntity.this.getSelectedMap(), DecorationBlockEntity.this.placementMap.get(DecorationBlockEntity.this.getSelectedMap()), worldPosition));
-                }
             }
         };
     }

@@ -72,7 +72,7 @@ public class IncineratorBlock extends AbstractCaterpillarBlock {
                 return super.getStateForPlacement(context);
             }
         } else {
-            context.getPlayer().displayClientMessage(new TranslatableComponent("block.simplycaterpillar.blocks.alreadyConnected", BlockInit.INCINERATOR.get().getName()), true);
+            context.getPlayer().displayClientMessage(new TranslatableComponent("block.simplycaterpillar.blocks.already_connected", BlockInit.INCINERATOR.get().getName()), true);
         }
 
         return null;

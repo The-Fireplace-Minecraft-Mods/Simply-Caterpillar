@@ -150,7 +150,7 @@ public class ReinforcementBlock extends AbstractCaterpillarBlock implements Simp
                     return defaultBlockState().setValue(FACING, direction.getOpposite()).setValue(ReinforcementBlock.PART, ReinforcementPart.BOTTOM).setValue(DrillHeadBlock.WATERLOGGED, context.getLevel().getFluidState(context.getClickedPos()).getType() == Fluids.WATER);
                 }
             } else {
-                context.getPlayer().displayClientMessage(new TranslatableComponent("block.simplycaterpillar.blocks.alreadyConnected", BlockInit.REINFORCEMENT.get().getName()), true);
+                context.getPlayer().displayClientMessage(new TranslatableComponent("block.simplycaterpillar.blocks.already_connected", BlockInit.REINFORCEMENT.get().getName()), true);
             }
         }
 

@@ -6,7 +6,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
 import the_fireplace.caterpillar.common.block.entity.DrillHeadBlockEntity;
-import the_fireplace.caterpillar.common.menu.DrillHeadMenu;
 import the_fireplace.caterpillar.core.network.PacketHandler;
 import the_fireplace.caterpillar.core.network.packet.server.DrillHeadSyncPowerS2CPacket;
 
@@ -42,13 +41,7 @@ public class DrillHeadSyncPowerC2SPacket {
             if(level.getBlockEntity(pos) instanceof DrillHeadBlockEntity drillHeadBlockEntity) {
                 drillHeadBlockEntity.setPower(powered);
 
-                if(player.containerMenu instanceof DrillHeadMenu menu && menu.blockEntity.getBlockPos().equals(pos)) {
-                    if (menu.blockEntity instanceof DrillHeadBlockEntity menuBlockEntity) {
-                        menuBlockEntity.setPower(powered);
-                    }
-
-                    PacketHandler.sendToClients(new DrillHeadSyncPowerS2CPacket(drillHeadBlockEntity.isPowered(), menu.blockEntity.getBlockPos()));
-                }
+                PacketHandler.sendToClients(new DrillHeadSyncPowerS2CPacket(drillHeadBlockEntity.isPowered(), drillHeadBlockEntity.getBlockPos()));
             }
         });
         context.setPacketHandled(true);

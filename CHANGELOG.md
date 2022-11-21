@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.18.2-7.0.0-beta.3] - 2022-11-20
+
+### Added
+
+- Rotating blades animation when caterpillar is drilling.
+
 ## [1.18.2-7.0.0-beta.2] - 2022-11-16
 
 ### Fixed

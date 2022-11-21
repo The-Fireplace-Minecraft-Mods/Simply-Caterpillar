@@ -2,6 +2,7 @@ package the_fireplace.caterpillar.common.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -30,16 +31,16 @@ import the_fireplace.caterpillar.common.block.entity.AbstractCaterpillarBlockEnt
 import the_fireplace.caterpillar.common.block.entity.DrillHeadBlockEntity;
 import the_fireplace.caterpillar.common.block.util.CaterpillarBlockUtil;
 import the_fireplace.caterpillar.common.block.util.DrillHeadPart;
+import the_fireplace.caterpillar.config.CaterpillarConfig;
 import the_fireplace.caterpillar.core.init.BlockEntityInit;
 import the_fireplace.caterpillar.core.init.BlockInit;
 
-import java.util.ArrayList;
-import java.util.EnumMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Stream;
 
 public class DrillHeadBlock extends AbstractCaterpillarBlock implements SimpleWaterloggedBlock {
+
+    public static final BooleanProperty DRILLING = BooleanProperty.create("drilling");
 
     public static final EnumProperty<DrillHeadPart> PART = EnumProperty.create("part", DrillHeadPart.class);
 
@@ -65,7 +66,7 @@ public class DrillHeadBlock extends AbstractCaterpillarBlock implements SimpleWa
 
     public DrillHeadBlock(Properties properties) {
         super(properties);
-        super.registerDefaultState(defaultBlockState().setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_BOTTOM).setValue(DrillHeadBlock.WATERLOGGED, true));
+        super.registerDefaultState(defaultBlockState().setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_BOTTOM).setValue(DrillHeadBlock.WATERLOGGED, Boolean.TRUE).setValue(DrillHeadBlock.DRILLING, Boolean.FALSE));
         super.runCalculation(DrillHeadBlock.SHAPES_BLADES, DrillHeadBlock.SHAPE_BLADES.get());
         super.runCalculation(DrillHeadBlock.SHAPES_BASE, DrillHeadBlock.SHAPE_BASE.get());
     }
@@ -73,7 +74,7 @@ public class DrillHeadBlock extends AbstractCaterpillarBlock implements SimpleWa
     @Override
     protected void createBlockStateDefinition(StateDefinition.@NotNull Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
-        builder.add(DrillHeadBlock.PART, DrillHeadBlock.WATERLOGGED);
+        builder.add(DrillHeadBlock.PART, DrillHeadBlock.WATERLOGGED, DrillHeadBlock.DRILLING);
     }
 
     @Override
@@ -91,15 +92,15 @@ public class DrillHeadBlock extends AbstractCaterpillarBlock implements SimpleWa
         Direction direction = context.getHorizontalDirection();
 
         if (
-                blockPos.getY() < level.getMaxBuildHeight() - 1 &&
-                level.getBlockState(blockPos.relative(direction.getClockWise())).canBeReplaced(context) &&
-                level.getBlockState(blockPos.relative(direction.getCounterClockWise())).canBeReplaced(context) &&
-                level.getBlockState(blockPos.above().relative(direction.getClockWise())).canBeReplaced(context) &&
-                level.getBlockState(blockPos.above().relative(direction.getCounterClockWise())).canBeReplaced(context) &&
-                level.getBlockState(blockPos.above()).canBeReplaced(context) &&
-                level.getBlockState(blockPos.above(2)).canBeReplaced(context) &&
-                level.getBlockState(blockPos.above(2).relative(direction.getClockWise())).canBeReplaced(context) &&
-                level.getBlockState(blockPos.above(2).relative(direction.getCounterClockWise())).canBeReplaced(context)
+            blockPos.getY() < level.getMaxBuildHeight() - 1 &&
+            level.getBlockState(blockPos.relative(direction.getClockWise())).canBeReplaced(context) &&
+            level.getBlockState(blockPos.relative(direction.getCounterClockWise())).canBeReplaced(context) &&
+            level.getBlockState(blockPos.above().relative(direction.getClockWise())).canBeReplaced(context) &&
+            level.getBlockState(blockPos.above().relative(direction.getCounterClockWise())).canBeReplaced(context) &&
+            level.getBlockState(blockPos.above()).canBeReplaced(context) &&
+            level.getBlockState(blockPos.above(2)).canBeReplaced(context) &&
+            level.getBlockState(blockPos.above(2).relative(direction.getClockWise())).canBeReplaced(context) &&
+            level.getBlockState(blockPos.above(2).relative(direction.getCounterClockWise())).canBeReplaced(context)
         ) {
             BlockPos caterpillarHeadPos = CaterpillarBlockUtil.getCaterpillarHeadPos(level, blockPos.above().relative(direction), direction.getOpposite());
 
@@ -108,7 +109,7 @@ public class DrillHeadBlock extends AbstractCaterpillarBlock implements SimpleWa
                     return defaultBlockState().setValue(FACING, direction.getOpposite()).setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_BOTTOM).setValue(DrillHeadBlock.WATERLOGGED, context.getLevel().getFluidState(context.getClickedPos()).getType() == Fluids.WATER);
                 }
             } else {
-                context.getPlayer().displayClientMessage(new TranslatableComponent("block.simplycaterpillar.blocks.alreadyConnected", BlockInit.DRILL_HEAD.get().getName()), true);
+                context.getPlayer().displayClientMessage(new TranslatableComponent("block.simplycaterpillar.blocks.already_connected", BlockInit.DRILL_HEAD.get().getName()), true);
             }
 
         }
@@ -215,6 +216,46 @@ public class DrillHeadBlock extends AbstractCaterpillarBlock implements SimpleWa
             case BLADE_RIGHT_BOTTOM -> pos.above().relative(direction.getCounterClockWise());
             default -> pos;
         };
+    }
+
+    public static void updateDrillingState(Level level, BlockPos pos, BlockState state) {
+        Direction direction = state.getValue(FACING);
+
+        level.setBlockAndUpdate(pos.below(), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_BOTTOM));
+        level.setBlockAndUpdate(pos.below().relative(direction.getCounterClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_LEFT_BOTTOM));
+        level.setBlockAndUpdate(pos.below().relative(direction.getClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_RIGHT_BOTTOM));
+        level.setBlockAndUpdate(pos, state);
+        level.setBlockAndUpdate(pos.relative(direction.getCounterClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_LEFT));
+        level.setBlockAndUpdate(pos.relative(direction.getClockWise()), state.setValue(PART, DrillHeadPart.BLADE_RIGHT));
+        level.setBlockAndUpdate(pos.above(), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_TOP));
+        level.setBlockAndUpdate(pos.above().relative(direction.getCounterClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_LEFT_TOP));
+        level.setBlockAndUpdate(pos.above().relative(direction.getClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_RIGHT_TOP));
+    }
+
+    @Override
+    public void animateTick(BlockState state, Level level, BlockPos pos, Random random) {
+        if (state.getValue(PART) == DrillHeadPart.BASE &&
+                state.getValue(DRILLING) &&
+                CaterpillarConfig.useParticles
+        ) {
+            Direction direction = level.getBlockEntity(pos).getBlockState().getValue(DrillHeadBlock.FACING).getOpposite();
+            Direction.Axis direction$axis = direction.getAxis();
+
+            double x = direction$axis == Direction.Axis.X ? pos.getX() + 0.55D : pos.getX();
+            double y = pos.getY();
+            double z = direction$axis == Direction.Axis.Z ? pos.getZ() + 0.55D : pos.getZ();
+
+            for (int i = 0; i < 10; i++) {
+                double randomDefault = level.getRandom().nextDouble() * (2.0D + 1.0D) - 1.0D;
+                double randomX = direction$axis == Direction.Axis.X ? (double)direction.getStepX() * 0.44D : randomDefault;
+                double randomY = level.getRandom().nextDouble() * (2.0D + 1.0D) - 1.0D;
+                double randomZ = direction$axis == Direction.Axis.Z ? (double)direction.getStepZ() * 0.44D : randomDefault;
+
+                level.addParticle(ParticleTypes.SMOKE, x + randomX, y + randomY, z + randomZ, 0.0D, 0.0D, 0.0D);
+            }
+        }
+
+        super.animateTick(state, level, pos, random);
     }
 
     @Nullable

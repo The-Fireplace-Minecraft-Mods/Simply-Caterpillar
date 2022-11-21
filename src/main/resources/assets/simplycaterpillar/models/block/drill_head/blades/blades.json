@@ -1,6 +1,6 @@
 {
     "parent": "simplycaterpillar:block/drill_head",
     "textures": {
-      "change": "simplycaterpillar:block/blades/blades"
+        "change": "simplycaterpillar:block/blades/blades"
     }
 }
