@@ -118,8 +118,8 @@ public class ReinforcementScreen extends AbstractScrollableScreen<ReinforcementM
 
         String currentReplacementText = switch (scrollIndex) {
             case 0 -> "ceiling";
-            case 1 -> "leftwall";
-            case 2 -> "rightwall";
+            case 1 -> "left_wall";
+            case 2 -> "right_wall";
             default -> "floor";
         };
 

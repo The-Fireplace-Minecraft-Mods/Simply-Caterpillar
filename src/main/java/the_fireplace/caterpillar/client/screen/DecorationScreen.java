@@ -81,7 +81,7 @@ public class DecorationScreen extends AbstractScrollableScreen<DecorationMenu> {
         Component tutorialArrow = Component.literal("         /\\").withStyle(ChatFormatting.GREEN);
         decorationTutorial.add(tutorialArrow);
 
-        MutableComponent tutorialText = Component.translatable(Caterpillar.MOD_ID + ".tutorial.decoration.mouseWheel");
+        MutableComponent tutorialText = Component.translatable(Caterpillar.MOD_ID + ".tutorial.decoration.mouse_wheel");
         decorationTutorial.add(tutorialText);
 
         this.renderComponentTooltip(stack, decorationTutorial, tutorialX, tutorialY);
@@ -95,7 +95,7 @@ public class DecorationScreen extends AbstractScrollableScreen<DecorationMenu> {
         Component tutorialArrow = Component.literal("/\\").withStyle(ChatFormatting.GREEN);
         decorationTutorial.add(tutorialArrow);
 
-        MutableComponent tutorialText = Component.translatable(Caterpillar.MOD_ID + ".tutorial.decoration.currentMap").withStyle(ChatFormatting.WHITE);
+        MutableComponent tutorialText = Component.translatable(Caterpillar.MOD_ID + ".tutorial.decoration.current_map").withStyle(ChatFormatting.WHITE);
         decorationTutorial.add(tutorialText);
 
         this.renderComponentTooltip(stack, decorationTutorial, tutorialX, tutorialY);

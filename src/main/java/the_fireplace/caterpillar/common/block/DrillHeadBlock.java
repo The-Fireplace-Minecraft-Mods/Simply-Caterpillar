@@ -113,7 +113,7 @@ public class DrillHeadBlock extends AbstractCaterpillarBlock implements SimpleWa
                     return defaultBlockState().setValue(FACING, direction.getOpposite()).setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_BOTTOM).setValue(DrillHeadBlock.WATERLOGGED, context.getLevel().getFluidState(context.getClickedPos()).getType() == Fluids.WATER);
                 }
             } else {
-                context.getPlayer().displayClientMessage(Component.translatable("block.simplycaterpillar.blocks.alreadyConnected", BlockInit.DRILL_HEAD.get().getName()), true);
+                context.getPlayer().displayClientMessage(Component.translatable("block.simplycaterpillar.blocks.already_connected", BlockInit.DRILL_HEAD.get().getName()), true);
             }
 
         }

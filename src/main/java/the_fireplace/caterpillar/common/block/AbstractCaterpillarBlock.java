@@ -40,7 +40,7 @@ public abstract class AbstractCaterpillarBlock extends BaseEntityBlock {
     }
 
     @Override
-    public @NotNull VoxelShape getShape(BlockState state, @NotNull BlockGetter level, @NotNull BlockPos pos, @NotNull CollisionContext context) {
+    public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         return AbstractCaterpillarBlock.SHAPES.get(state.getValue(FACING));
     }
 

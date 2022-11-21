@@ -132,7 +132,7 @@ public class DrillHeadScreen extends AbstractScrollableScreen<DrillHeadMenu> {
         List<Component> powerButtonTutorial = new ArrayList<>();
 
         MutableComponent tutorialText =  Component.literal("<").withStyle(ChatFormatting.GREEN).append(" ");
-        tutorialText.append(Component.translatable(Caterpillar.MOD_ID + ".tutorial.drill_head.powerButton").withStyle(ChatFormatting.WHITE).append(""));
+        tutorialText.append(Component.translatable(Caterpillar.MOD_ID + ".tutorial.drill_head.power_button").withStyle(ChatFormatting.WHITE).append(""));
         powerButtonTutorial.add(tutorialText);
 
         this.renderComponentTooltip(stack, powerButtonTutorial, tutorialX, tutorialY);
@@ -144,7 +144,7 @@ public class DrillHeadScreen extends AbstractScrollableScreen<DrillHeadMenu> {
         List<Component> fuelSlotTutorial = new ArrayList<>();
 
         MutableComponent tutorialText = Component.literal("<").withStyle(ChatFormatting.GREEN).append(" ");
-        tutorialText.append(Component.translatable(Caterpillar.MOD_ID + ".tutorial.drill_head.fuelSlot").withStyle(ChatFormatting.WHITE).append(""));
+        tutorialText.append(Component.translatable(Caterpillar.MOD_ID + ".tutorial.drill_head.fuel_slot").withStyle(ChatFormatting.WHITE).append(""));
         fuelSlotTutorial.add(tutorialText);
 
         this.renderComponentTooltip(stack, fuelSlotTutorial, tutorialX, tutorialY);
@@ -158,7 +158,7 @@ public class DrillHeadScreen extends AbstractScrollableScreen<DrillHeadMenu> {
         Component tutorialArrow = Component.literal("             /\\        /\\").withStyle(ChatFormatting.GREEN);
         storageWheelTutorial.add(tutorialArrow);
 
-        MutableComponent tutorialText = Component.translatable(Caterpillar.MOD_ID + ".tutorial.drill_head.wheelStorage");
+        MutableComponent tutorialText = Component.translatable(Caterpillar.MOD_ID + ".tutorial.drill_head.wheel_storage");
         storageWheelTutorial.add(tutorialText);
 
         this.renderComponentTooltip(stack, storageWheelTutorial, tutorialX, tutorialY);

@@ -120,7 +120,7 @@ public class DecorationBlock extends AbstractCaterpillarBlock {
                     return super.defaultBlockState().setValue(FACING, direction.getOpposite()).setValue(PART, DecorationPart.BASE);
                 }
             } else {
-                context.getPlayer().displayClientMessage(Component.translatable("block.simplycaterpillar.blocks.alreadyConnected", BlockInit.DECORATION.get().getName()), true);
+                context.getPlayer().displayClientMessage(Component.translatable("block.simplycaterpillar.blocks.already_connected", BlockInit.DECORATION.get().getName()), true);
             }
         }
 

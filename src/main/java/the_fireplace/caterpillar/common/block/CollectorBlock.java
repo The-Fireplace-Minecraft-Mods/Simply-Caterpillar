@@ -112,7 +112,7 @@ public class CollectorBlock extends AbstractCaterpillarBlock {
                     return super.defaultBlockState().setValue(FACING, direction.getOpposite()).setValue(CollectorBlock.HALF, DoubleBlockHalf.LOWER);
                 }
             } else {
-                context.getPlayer().displayClientMessage(Component.translatable("block.simplycaterpillar.blocks.alreadyConnected", BlockInit.COLLECTOR.get().getName()), true);
+                context.getPlayer().displayClientMessage(Component.translatable("block.simplycaterpillar.blocks.already_connected", BlockInit.COLLECTOR.get().getName()), true);
             }
         }
 

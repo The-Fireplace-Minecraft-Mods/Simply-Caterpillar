@@ -103,7 +103,7 @@ public class StorageBlock extends AbstractCaterpillarBlock {
                     return defaultBlockState().setValue(FACING, direction.getOpposite()).setValue(StorageBlock.PART, StoragePart.BASE);
                 }
             } else {
-                context.getPlayer().displayClientMessage(Component.translatable("block.simplycaterpillar.blocks.alreadyConnected", BlockInit.STORAGE.get().getName()), true);
+                context.getPlayer().displayClientMessage(Component.translatable("block.simplycaterpillar.blocks.already_connected", BlockInit.STORAGE.get().getName()), true);
             }
         }
 
