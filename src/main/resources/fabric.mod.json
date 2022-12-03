@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "id": "${modId}",
+  "version": "${modVersion}",
+
+  "name": "${modDisplayName}",
+  "description": "${modDescription}",
+  "authors": [
+    "${modAuthors}"
+  ],
+  "contact": {
+    "homepage": "https://fabricmc.net/",
+    "sources": "${modDisplayURL}"
+  },
+
+  "license": "${modLicense}",
+  "icon": "assets/simplycaterpillar/${modLogoFile}",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "${modGroup}.Caterpillar"
+    ],
+    "client": [
+      "${modGroup}.CaterpillarClient"
+    ]
+  },
+  "mixins": [
+    "${modId}.mixins.json"
+  ],
+
+  "depends": {
+    "fabricloader": ">=${fabricLoaderVersion}",
+    "fabric-api": "*",
+    "minecraft": "~1.19",
+    "java": ">=${minecraftJavaVersion}"
+  },
+  "suggests": {
+    "another-mod": "*"
+  }
+}

@@ -12,7 +12,7 @@
   "block.simplycaterpillar.incinerator": "Incinérateur",
   "block.simplycaterpillar.blocks.already_connected": "Il y a déjà un %s connecté à la foreuse.",
 
-  "itemGroup.simplycaterpillar": "Foreuse",
+  "itemGroup.simplycaterpillar.caterpillar": "Foreuse",
 
   "container.simplycaterpillar.drill_head": "Tête de forage",
   "container.simplycaterpillar.reinforcement": "Constructeur de renforts",
