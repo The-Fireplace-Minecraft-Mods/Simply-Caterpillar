@@ -30,7 +30,6 @@ import dev.the_fireplace.caterpillar.init.BlockInit;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Stream;
 
 public class StorageBlock extends AbstractCaterpillarBlock {
@@ -42,32 +41,32 @@ public class StorageBlock extends AbstractCaterpillarBlock {
 
     private static final Map<Direction, VoxelShape> SHAPES_RIGHT = new EnumMap<>(Direction.class);
 
-    private static final Optional<VoxelShape> SHAPE_LEFT = Stream.of(
-        Block.box(1, 10, 1, 16, 14, 15),
-        Block.box(1, 0, 1, 16, 10, 15),
-        Block.box(7.5, 7, 15, 9.5, 11, 16)
-    ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR));
-
-    private static final Optional<VoxelShape> SHAPE_BASE = Stream.of(
-        Block.box(0, 0, 0, 6, 16, 16),
-        Block.box(6, 6, -14, 10, 10, 1),
-        Block.box(10, 0, 0, 16, 16, 16),
-        Block.box(6, 10, 0, 10, 16, 16),
-        Block.box(6, 0, 0, 10, 6, 16)
-    ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR));
-
-    private static final Optional<VoxelShape> SHAPE_RIGHT = Stream.of(
+    private static final VoxelShape SHAPE_LEFT = Stream.of(
         Block.box(0, 10, 1, 15, 14, 15),
         Block.box(0, 0, 1, 15, 10, 15),
-        Block.box(6.5, 7, 15, 8.5, 11, 16)
-    ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR));
+        Block.box(6.5, 7, 0, 8.5, 11, 1)
+    ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
+
+    private static final VoxelShape SHAPE_BASE = Stream.of(
+        Block.box(6, 0, 0, 10, 6, 16),
+        Block.box(10, 0, 0, 16, 16, 16),
+        Block.box(0, 0, 0, 6, 16, 16),
+        Block.box(6, 10, 0, 10, 16, 16),
+        Block.box(6, 6, 16, 10, 10, 31)
+    ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
+
+    private static final VoxelShape SHAPE_RIGHT = Stream.of(
+        Block.box(1, 10, 1, 16, 14, 15),
+        Block.box(1, 0, 1, 16, 10, 15),
+        Block.box(7.5, 7, 0, 9.5, 11, 1)
+    ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
 
     public StorageBlock(Properties properties) {
         super(properties);
         super.registerDefaultState(super.defaultBlockState().setValue(StorageBlock.PART, StoragePart.BASE));
-        super.runCalculation(StorageBlock.SHAPES_LEFT, StorageBlock.SHAPE_LEFT.get());
-        super.runCalculation(StorageBlock.SHAPES_BASE, StorageBlock.SHAPE_BASE.get());
-        super.runCalculation(StorageBlock.SHAPES_RIGHT, StorageBlock.SHAPE_RIGHT.get());
+        super.runCalculation(StorageBlock.SHAPES_LEFT, StorageBlock.SHAPE_LEFT);
+        super.runCalculation(StorageBlock.SHAPES_BASE, StorageBlock.SHAPE_BASE);
+        super.runCalculation(StorageBlock.SHAPES_RIGHT, StorageBlock.SHAPE_RIGHT);
     }
 
     @Override
@@ -100,7 +99,7 @@ public class StorageBlock extends AbstractCaterpillarBlock {
 
             if (CaterpillarBlockUtil.getConnectedCaterpillarBlockEntities(level, caterpillarHeadPos, new ArrayList<>()).stream().noneMatch(blockEntity -> blockEntity instanceof StorageBlockEntity)) {
                 if (CaterpillarBlockUtil.isConnectedCaterpillarSameDirection(level, pos, direction.getOpposite())) {
-                    return defaultBlockState().setValue(FACING, direction.getOpposite()).setValue(StorageBlock.PART, StoragePart.BASE);
+                    return defaultBlockState().setValue(FACING, direction).setValue(StorageBlock.PART, StoragePart.BASE);
                 }
             } else {
                 context.getPlayer().displayClientMessage(Component.translatable("block.simplycaterpillar.blocks.already_connected", BlockInit.STORAGE.get().getName()), true);

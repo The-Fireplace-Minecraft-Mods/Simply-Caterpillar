@@ -34,7 +34,6 @@ import dev.the_fireplace.caterpillar.init.BlockInit;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Stream;
 
 public class DecorationBlock extends AbstractCaterpillarBlock {
@@ -47,30 +46,30 @@ public class DecorationBlock extends AbstractCaterpillarBlock {
 
     private static final Map<Direction, VoxelShape> SHAPES_RIGHT = new EnumMap<>(Direction.class);
 
-    private static final Optional<VoxelShape> SHAPE_LEFT = Stream.of(
+    private static final VoxelShape SHAPE_LEFT = Stream.of(
         Block.box(0, 0, 0, 6, 16, 16),
         Block.box(6, 6, 6, 16, 10, 10)
-    ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR));
+    ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
 
-    private static final Optional<VoxelShape> SHAPE_BASE = Stream.of(
-        Block.box(6, 6, -15, 10, 10, 0),
-        Block.box(0, 0, 0, 6, 16, 16),
+    private static final VoxelShape SHAPE_BASE = Stream.of(
+        Block.box(6, 0, 0, 10, 6, 16),
         Block.box(10, 0, 0, 16, 16, 16),
+        Block.box(0, 0, 0, 6, 16, 16),
         Block.box(6, 10, 0, 10, 16, 16),
-        Block.box(6, 0, 0, 10, 6, 16)
-    ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR));
+        Block.box(6, 6, 16, 10, 10, 31)
+    ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
 
-    private static final Optional<VoxelShape> SHAPE_RIGHT = Stream.of(
+    private static final VoxelShape SHAPE_RIGHT = Stream.of(
         Block.box(0, 6, 6, 10, 10, 10),
         Block.box(10, 0, 0, 16, 16, 16)
-    ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR));
+    ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
 
     public DecorationBlock(Properties properties) {
         super(properties);
         super.registerDefaultState(defaultBlockState().setValue(DecorationBlock.PART, DecorationPart.BASE));
-        super.runCalculation(DecorationBlock.SHAPES_LEFT, DecorationBlock.SHAPE_LEFT.get());
-        super.runCalculation(DecorationBlock.SHAPES_BASE, DecorationBlock.SHAPE_BASE.get());
-        super.runCalculation(DecorationBlock.SHAPES_RIGHT, DecorationBlock.SHAPE_RIGHT.get());
+        super.runCalculation(DecorationBlock.SHAPES_LEFT, DecorationBlock.SHAPE_LEFT);
+        super.runCalculation(DecorationBlock.SHAPES_BASE, DecorationBlock.SHAPE_BASE);
+        super.runCalculation(DecorationBlock.SHAPES_RIGHT, DecorationBlock.SHAPE_RIGHT);
     }
 
     @Override
@@ -117,7 +116,7 @@ public class DecorationBlock extends AbstractCaterpillarBlock {
 
             if (CaterpillarBlockUtil.getConnectedCaterpillarBlockEntities(level, caterpillarHeadPos, new ArrayList<>()).stream().noneMatch(blockEntity -> blockEntity instanceof DecorationBlockEntity)) {
                 if (CaterpillarBlockUtil.isConnectedCaterpillarSameDirection(level, blockPos, direction.getOpposite())) {
-                    return super.defaultBlockState().setValue(FACING, direction.getOpposite()).setValue(PART, DecorationPart.BASE);
+                    return super.defaultBlockState().setValue(FACING, direction).setValue(PART, DecorationPart.BASE);
                 }
             } else {
                 context.getPlayer().displayClientMessage(Component.translatable("block.simplycaterpillar.blocks.already_connected", BlockInit.DECORATION.get().getName()), true);

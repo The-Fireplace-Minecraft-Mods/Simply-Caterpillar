@@ -25,21 +25,20 @@ import dev.the_fireplace.caterpillar.init.BlockEntityInit;
 import dev.the_fireplace.caterpillar.init.BlockInit;
 
 import java.util.ArrayList;
-import java.util.Optional;
 import java.util.stream.Stream;
 
 public class IncineratorBlock extends AbstractCaterpillarBlock {
-    private static final Optional<VoxelShape> SHAPE = Stream.of(
+    private static final VoxelShape SHAPE = Stream.of(
         Block.box(6, 0, 0, 10, 6, 16),
-        Block.box(0, 0, 0, 6, 16, 16),
-        Block.box(6, 6, -15, 10, 10, 0),
         Block.box(10, 0, 0, 16, 16, 16),
-        Block.box(6, 10, 0, 10, 16, 16)
-    ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR));
+        Block.box(0, 0, 0, 6, 16, 16),
+        Block.box(6, 10, 0, 10, 16, 16),
+        Block.box(6, 6, 16, 10, 10, 31)
+    ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
 
     public IncineratorBlock(Properties properties) {
         super(properties);
-        super.runCalculation(SHAPES, IncineratorBlock.SHAPE.get());
+        super.runCalculation(SHAPES, IncineratorBlock.SHAPE);
     }
 
     @Override
@@ -68,7 +67,7 @@ public class IncineratorBlock extends AbstractCaterpillarBlock {
         BlockPos caterpillarHeadPos = CaterpillarBlockUtil.getCaterpillarHeadPos(level, blockPos.relative(direction), direction.getOpposite());
 
         if (CaterpillarBlockUtil.getConnectedCaterpillarBlockEntities(level, caterpillarHeadPos, new ArrayList<>()).stream().noneMatch(blockEntity -> blockEntity instanceof IncineratorBlockEntity)) {
-            if (CaterpillarBlockUtil.isConnectedCaterpillarSameDirection(level, blockPos, direction.getOpposite())) {
+            if (CaterpillarBlockUtil.isConnectedCaterpillarSameDirection(level, blockPos, direction)) {
                 return super.getStateForPlacement(context);
             }
         } else {

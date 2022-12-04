@@ -38,7 +38,6 @@ import dev.the_fireplace.caterpillar.init.BlockInit;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Stream;
 
 public class ReinforcementBlock extends AbstractCaterpillarBlock implements SimpleWaterloggedBlock {
@@ -57,42 +56,42 @@ public class ReinforcementBlock extends AbstractCaterpillarBlock implements Simp
 
     private static final Map<Direction, VoxelShape> SHAPES_BOTTOM = new EnumMap<>(Direction.class);
 
-    private static final Optional<VoxelShape> SHAPE_LEFT = Stream.of(
+    private static final VoxelShape SHAPE_LEFT = Stream.of(
         Block.box(0, 0, 0, 1, 16, 16),
         Block.box(1, 6, 6, 16, 10, 10)
-    ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR));
+    ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
 
-    private static final Optional<VoxelShape> SHAPE_BASE = Stream.of(
-        Block.box(6, 6, -15, 10, 10, 0),
-        Block.box(0, 0, 0, 6, 16, 16),
+    private static final VoxelShape SHAPE_BASE = Stream.of(
+        Block.box(6, 0, 0, 10, 6, 16),
         Block.box(10, 0, 0, 16, 16, 16),
+        Block.box(0, 0, 0, 6, 16, 16),
         Block.box(6, 10, 0, 10, 16, 16),
-        Block.box(6, 0, 0, 10, 6, 16)
-    ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR));
+        Block.box(6, 6, 16, 10, 10, 31)
+    ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
 
-    private static final Optional<VoxelShape> SHAPE_RIGHT = Stream.of(
+    private static final VoxelShape SHAPE_RIGHT = Stream.of(
         Block.box(0, 6, 6, 15, 10, 10),
         Block.box(15, 0, 0, 16, 16, 16)
-    ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR));
+    ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
 
-    private static final Optional<VoxelShape> SHAPE_TOP = Stream.of(
+    private static final VoxelShape SHAPE_TOP = Stream.of(
         Block.box(6, 0, 6, 10, 15, 10),
         Block.box(0, 15, 0, 16, 16, 16)
-    ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR));
+    ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
 
-    private static final Optional<VoxelShape> SHAPE_BOTTOM = Stream.of(
+    private static final VoxelShape SHAPE_BOTTOM = Stream.of(
         Block.box(6, 1, 6, 10, 16, 10),
         Block.box(0, 0, 0, 16, 1, 16)
-    ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR));
+    ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
 
     public ReinforcementBlock(Properties properties) {
         super(properties);
         super.registerDefaultState(super.defaultBlockState().setValue(ReinforcementBlock.PART, ReinforcementPart.BOTTOM).setValue(ReinforcementBlock.WATERLOGGED, true));
-        super.runCalculation(ReinforcementBlock.SHAPES_LEFT, ReinforcementBlock.SHAPE_LEFT.get());
-        super.runCalculation(ReinforcementBlock.SHAPES_BASE, ReinforcementBlock.SHAPE_BASE.get());
-        super.runCalculation(ReinforcementBlock.SHAPES_RIGHT, ReinforcementBlock.SHAPE_RIGHT.get());
-        super.runCalculation(ReinforcementBlock.SHAPES_TOP, ReinforcementBlock.SHAPE_TOP.get());
-        super.runCalculation(ReinforcementBlock.SHAPES_BOTTOM, ReinforcementBlock.SHAPE_BOTTOM.get());
+        super.runCalculation(ReinforcementBlock.SHAPES_LEFT, ReinforcementBlock.SHAPE_LEFT);
+        super.runCalculation(ReinforcementBlock.SHAPES_BASE, ReinforcementBlock.SHAPE_BASE);
+        super.runCalculation(ReinforcementBlock.SHAPES_RIGHT, ReinforcementBlock.SHAPE_RIGHT);
+        super.runCalculation(ReinforcementBlock.SHAPES_TOP, ReinforcementBlock.SHAPE_TOP);
+        super.runCalculation(ReinforcementBlock.SHAPES_BOTTOM, ReinforcementBlock.SHAPE_BOTTOM);
     }
 
     @Override
@@ -147,7 +146,7 @@ public class ReinforcementBlock extends AbstractCaterpillarBlock implements Simp
 
             if (CaterpillarBlockUtil.getConnectedCaterpillarBlockEntities(level, caterpillarHeadPos, new ArrayList<>()).stream().noneMatch(blockEntity -> blockEntity instanceof ReinforcementBlockEntity)) {
                 if (CaterpillarBlockUtil.isConnectedCaterpillarSameDirection(level, blockPos.above(), direction.getOpposite())) {
-                    return defaultBlockState().setValue(FACING, direction.getOpposite()).setValue(ReinforcementBlock.PART, ReinforcementPart.BOTTOM).setValue(DrillHeadBlock.WATERLOGGED, context.getLevel().getFluidState(context.getClickedPos()).getType() == Fluids.WATER);
+                    return defaultBlockState().setValue(FACING, direction).setValue(ReinforcementBlock.PART, ReinforcementPart.BOTTOM).setValue(DrillHeadBlock.WATERLOGGED, context.getLevel().getFluidState(context.getClickedPos()).getType() == Fluids.WATER);
                 }
             } else {
                 context.getPlayer().displayClientMessage(Component.translatable("block.simplycaterpillar.blocks.already_connected", BlockInit.REINFORCEMENT.get().getName()), true);
@@ -184,7 +183,7 @@ public class ReinforcementBlock extends AbstractCaterpillarBlock implements Simp
     }
 
     public BlockPos getBasePos(BlockState state, BlockPos pos) {
-        Direction direction = state.getValue(FACING);
+        Direction direction = state.getValue(FACING).getOpposite();
         ReinforcementPart part = state.getValue(ReinforcementBlock.PART);
 
         return switch (part) {
@@ -196,9 +195,8 @@ public class ReinforcementBlock extends AbstractCaterpillarBlock implements Simp
         };
     }
 
-    @Nullable
     @Override
-    public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
+    public @Nullable BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
         return BlockEntityInit.REINFORCEMENT.get().create(pos, state);
     }
 }

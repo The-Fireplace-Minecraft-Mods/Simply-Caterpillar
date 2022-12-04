@@ -54,25 +54,25 @@ public class DrillHeadBlock extends AbstractCaterpillarBlock implements SimpleWa
 
     private static final Map<Direction, VoxelShape> SHAPES_BLADES = new EnumMap<>(Direction.class);
 
-    private static final Optional<VoxelShape> SHAPE_BASE = Stream.of(
-        Block.box(0, 10, 0, 16, 16, 15),
-        Block.box(0, 6, 0, 16, 10, 15),
-        Block.box(0, 0, 0, 16, 6, 15),
-        Block.box(6, 6, -15, 10, 10, 0),
-        Block.box(0, 0, 16, 16, 16, 16),
-        Block.box(0, 0, 16, 16, 16, 16)
-    ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR));
+    private static final VoxelShape SHAPE_BASE =  Stream.of(
+        Block.box(0, 10, 1, 16, 16, 16),
+        Block.box(0, 6, 1, 16, 10, 16),
+        Block.box(0, 0, 1, 16, 6, 16),
+        Block.box(6, 6, 16, 10, 10, 31),
+        Block.box(0, 0, 0.5, 16, 16, 0.5),
+        Block.box(0, 0, 0, 16, 16, 1)
+    ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
 
-    private static final Optional<VoxelShape> SHAPE_BLADES = Stream.of(
-        Block.box(0, 0, 15, 16, 16, 16),
-        Block.box(0, 0, 15.5, 16, 16, 15.5)
-    ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR));
+    private static final VoxelShape SHAPE_BLADES = Stream.of(
+        Block.box(0, 0, 0, 16, 16, 1),
+        Block.box(0, 0, 0.5, 16, 16, 0.5)
+    ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
 
     public DrillHeadBlock(Properties properties) {
         super(properties);
         super.registerDefaultState(defaultBlockState().setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_BOTTOM).setValue(DrillHeadBlock.WATERLOGGED, Boolean.TRUE).setValue(DrillHeadBlock.DRILLING, Boolean.FALSE));
-        super.runCalculation(DrillHeadBlock.SHAPES_BLADES, DrillHeadBlock.SHAPE_BLADES.get());
-        super.runCalculation(DrillHeadBlock.SHAPES_BASE, DrillHeadBlock.SHAPE_BASE.get());
+        super.runCalculation(DrillHeadBlock.SHAPES_BLADES, DrillHeadBlock.SHAPE_BLADES);
+        super.runCalculation(DrillHeadBlock.SHAPES_BASE, DrillHeadBlock.SHAPE_BASE);
     }
 
     @Override
@@ -110,7 +110,7 @@ public class DrillHeadBlock extends AbstractCaterpillarBlock implements SimpleWa
 
             if (CaterpillarBlockUtil.getConnectedCaterpillarBlockEntities(level, caterpillarHeadPos, new ArrayList<>()).stream().noneMatch(blockEntity -> blockEntity instanceof DrillHeadBlockEntity)) {
                 if (CaterpillarBlockUtil.isConnectedCaterpillarSameDirection(level, blockPos.above(), direction.getOpposite())) {
-                    return defaultBlockState().setValue(FACING, direction.getOpposite()).setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_BOTTOM).setValue(DrillHeadBlock.WATERLOGGED, context.getLevel().getFluidState(context.getClickedPos()).getType() == Fluids.WATER);
+                    return defaultBlockState().setValue(FACING, direction).setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_BOTTOM).setValue(DrillHeadBlock.WATERLOGGED, context.getLevel().getFluidState(context.getClickedPos()).getType() == Fluids.WATER);
                 }
             } else {
                 context.getPlayer().displayClientMessage(Component.translatable("block.simplycaterpillar.blocks.already_connected", BlockInit.DRILL_HEAD.get().getName()), true);

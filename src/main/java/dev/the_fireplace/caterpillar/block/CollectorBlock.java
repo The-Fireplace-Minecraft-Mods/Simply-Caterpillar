@@ -30,7 +30,6 @@ import dev.the_fireplace.caterpillar.init.BlockInit;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Stream;
 
 
@@ -42,29 +41,29 @@ public class CollectorBlock extends AbstractCaterpillarBlock {
 
     private static final Map<Direction, VoxelShape> SHAPES_LOWER = new EnumMap<>(Direction.class);
 
-    private static final Optional<VoxelShape> SHAPE_UPPER = Stream.of(
+    private static final VoxelShape SHAPE_UPPER = Stream.of(
         Block.box(6, 0, 0, 10, 6, 16),
-        Block.box(0, 0, 0, 6, 16, 16),
         Block.box(10, 0, 0, 16, 16, 16),
+        Block.box(0, 0, 0, 6, 16, 16),
         Block.box(6, 10, 0, 10, 16, 16),
-        Block.box(6, 6, -15, 10, 10, 0)
-    ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR));
+        Block.box(6, 6, 16, 10, 10, 31)
+    ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
 
-    private static final Optional<VoxelShape> SHAPE_LOWER = Stream.of(
-        Block.box(0, 0, 12, 16, 4, 16),
-        Block.box(0, 4, 12, 4, 12, 16),
-        Block.box(0, 12, 12, 16, 16, 16),
+    private static final VoxelShape SHAPE_LOWER = Stream.of(
+        Block.box(0, 0, 0, 16, 4, 4),
+        Block.box(12, 4, 0, 16, 12, 4),
+        Block.box(0, 12, 0, 16, 16, 4),
         Block.box(3, 3, 5, 13, 13, 11),
-        Block.box(6, 6, 1, 10, 16, 5),
-        Block.box(0, 0, 11, 16, 16, 12),
-        Block.box(12, 4, 12, 16, 12, 16)
-    ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR));
+        Block.box(6, 6, 11, 10, 16, 15),
+        Block.box(0, 0, 4, 16, 16, 5),
+        Block.box(0, 4, 0, 4, 12, 4)
+    ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
 
     public CollectorBlock(Properties properties) {
         super(properties);
         super.registerDefaultState(defaultBlockState().setValue(CollectorBlock.HALF, DoubleBlockHalf.LOWER));
-        super.runCalculation(CollectorBlock.SHAPES_UPPER, CollectorBlock.SHAPE_UPPER.get());
-        super.runCalculation(CollectorBlock.SHAPES_LOWER, CollectorBlock.SHAPE_LOWER.get());
+        super.runCalculation(CollectorBlock.SHAPES_UPPER, CollectorBlock.SHAPE_UPPER);
+        super.runCalculation(CollectorBlock.SHAPES_LOWER, CollectorBlock.SHAPE_LOWER);
     }
 
     @Override
@@ -109,7 +108,7 @@ public class CollectorBlock extends AbstractCaterpillarBlock {
 
             if (CaterpillarBlockUtil.getConnectedCaterpillarBlockEntities(level, caterpillarHeadPos, new ArrayList<>()).stream().noneMatch(blockEntity -> blockEntity instanceof CollectorBlockEntity)) {
                 if (CaterpillarBlockUtil.isConnectedCaterpillarSameDirection(level, blockPos.above(), direction.getOpposite())) {
-                    return super.defaultBlockState().setValue(FACING, direction.getOpposite()).setValue(CollectorBlock.HALF, DoubleBlockHalf.LOWER);
+                    return super.defaultBlockState().setValue(FACING, direction).setValue(CollectorBlock.HALF, DoubleBlockHalf.LOWER);
                 }
             } else {
                 context.getPlayer().displayClientMessage(Component.translatable("block.simplycaterpillar.blocks.already_connected", BlockInit.COLLECTOR.get().getName()), true);

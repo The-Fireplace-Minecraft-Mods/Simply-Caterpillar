@@ -52,7 +52,7 @@ public abstract class AbstractCaterpillarBlock extends BaseEntityBlock {
         Direction direction = context.getHorizontalDirection();
 
         if (CaterpillarBlockUtil.isConnectedCaterpillarSameDirection(level, pos, direction.getOpposite())) {
-            return defaultBlockState().setValue(FACING, direction.getOpposite());
+            return defaultBlockState().setValue(FACING, direction);
         }
 
         return null;
@@ -84,7 +84,7 @@ public abstract class AbstractCaterpillarBlock extends BaseEntityBlock {
         if (level.isClientSide) {
             return InteractionResult.SUCCESS;
         } else {
-            Direction direction = state.getValue(FACING);
+            Direction direction = state.getValue(FACING).getOpposite();
             BlockPos basePos = getBasePos(state, pos);
             BlockPos caterpillarHeadPos = CaterpillarBlockUtil.getCaterpillarHeadPos(level, basePos, direction);
 
