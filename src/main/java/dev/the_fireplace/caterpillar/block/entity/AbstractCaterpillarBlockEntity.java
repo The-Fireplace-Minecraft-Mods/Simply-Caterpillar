@@ -15,6 +15,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import dev.the_fireplace.caterpillar.block.entity.util.InventoryBlockEntity;
 
+import java.util.List;
+
 public abstract class AbstractCaterpillarBlockEntity extends InventoryBlockEntity implements MenuProvider {
 
     public AbstractCaterpillarBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state, int inventorySize) {
@@ -34,26 +36,16 @@ public abstract class AbstractCaterpillarBlockEntity extends InventoryBlockEntit
         return null;
     }
 
-    protected boolean takeItemFromDrillHead(DrillHeadBlockEntity drillHeadBlockEntity, StorageBlockEntity storageBlockEntity, Item item, int startIndex, int endIndex) {
+    protected boolean takeItem(List<AbstractCaterpillarBlockEntity> blockEntities, Item item, int startIndex, int endIndex) {
         if (item.equals(Items.AIR)) {
             return true;
         }
 
-        if (drillHeadBlockEntity != null) {
+        for (AbstractCaterpillarBlockEntity blockEntity : blockEntities) {
             for (int i = startIndex; i <= endIndex; i++) {
-                ItemStack drillHeadStack = drillHeadBlockEntity.getStackInSlot(i);
-                if (!drillHeadStack.isEmpty() && ItemStack.isSame(drillHeadStack, new ItemStack(item))) {
-                    drillHeadStack.shrink(1);
-                    return true;
-                }
-            }
-        }
-
-        if (storageBlockEntity != null) {
-            for (int i = startIndex - 1; i <= endIndex - 1; i++) {
-                ItemStack storageStack = storageBlockEntity.getStackInSlot(i);
-                if (!storageStack.isEmpty() && ItemStack.isSame(storageStack, new ItemStack(item))) {
-                    storageStack.shrink(1);
+                ItemStack blockEntityItemStack = blockEntity.getStackInSlot(i);
+                if (!blockEntityItemStack.isEmpty() && ItemStack.isSame(blockEntityItemStack, new ItemStack(item))) {
+                    blockEntityItemStack.shrink(1);
                     return true;
                 }
             }
@@ -62,70 +54,35 @@ public abstract class AbstractCaterpillarBlockEntity extends InventoryBlockEntit
         return false;
     }
 
-    public ItemStack insertItemStackToDrillHead(DrillHeadBlockEntity drillHeadBlockEntity, StorageBlockEntity storageBlockEntity, ItemStack stack, int startIndex, int endIndex) {
-        // Check if drill head has same item in gathered slot
-        if (drillHeadBlockEntity != null) {
+    public ItemStack insertItemStack(List<AbstractCaterpillarBlockEntity> blockEntities, ItemStack stack, int startIndex, int endIndex) {
+
+        // Check if blockEntity has same item in gathered slot
+        for (AbstractCaterpillarBlockEntity blockEntity : blockEntities) {
             for (int i = startIndex; i <= endIndex; i++) {
-                ItemStack drillHeadStack = drillHeadBlockEntity.getStackInSlot(i);
-                if (!drillHeadStack.isEmpty() && ItemStack.isSameItemSameTags(stack, drillHeadStack)) {
-                    int j = drillHeadStack.getCount() + stack.getCount();
-                    int maxSize = Math.min(drillHeadStack.getMaxStackSize(), stack.getMaxStackSize());
+                ItemStack blockEntityItemStack = blockEntity.getStackInSlot(i);
+                if (!blockEntityItemStack.isEmpty() && ItemStack.isSameItemSameTags(stack, blockEntityItemStack)) {
+                    int j = blockEntityItemStack.getCount() + stack.getCount();
+                    int maxSize = Math.min(blockEntityItemStack.getMaxStackSize(), stack.getMaxStackSize());
                     if (j <= maxSize) {
                         stack.setCount(0);
-                        drillHeadStack.setCount(j);
+                        blockEntityItemStack.setCount(j);
 
                         return stack;
-                    } else if (drillHeadStack.getCount() < maxSize) {
-                        stack.shrink(maxSize - drillHeadStack.getCount());
-                        drillHeadStack.setCount(maxSize);
+                    } else if (blockEntityItemStack.getCount() < maxSize) {
+                        stack.shrink(maxSize - blockEntityItemStack.getCount());
+                        blockEntityItemStack.setCount(maxSize);
                     }
                 }
             }
         }
 
-        // Check if storage has same item in gathered slot
-        if (storageBlockEntity != null) {
-            if (!stack.isEmpty()) {
-                for (int i = startIndex - 1; i <= endIndex - 1; i++) {
-                    ItemStack storageStack = storageBlockEntity.getStackInSlot(i);
-                    if (!storageStack.isEmpty() && ItemStack.isSameItemSameTags(stack, storageStack)) {
-                        int j = storageStack.getCount() + stack.getCount();
-                        int maxSize = Math.min(storageStack.getMaxStackSize(), stack.getMaxStackSize());
-                        if (j <= maxSize) {
-                            stack.setCount(0);
-                            storageStack.setCount(j);
-
-                            return stack;
-                        } else if (storageStack.getCount() < maxSize) {
-                            stack.shrink(maxSize - storageStack.getCount());
-                            storageStack.setCount(maxSize);
-                        }
-                    }
-                }
-            }
-        }
-
-        // Check if drill head has empty space
-        if (drillHeadBlockEntity != null) {
+        // Check if blockEntity has empty space
+        for (AbstractCaterpillarBlockEntity blockEntity : blockEntities) {
             if (!stack.isEmpty()) {
                 for (int i = startIndex; i <= endIndex; i++) {
-                    ItemStack drillHeadStack = drillHeadBlockEntity.getStackInSlot(i);
-                    if (drillHeadStack.isEmpty()) {
-                        drillHeadBlockEntity.setStackInSlot(i, stack.split(stack.getCount()));
-
-                        return stack;
-                    }
-                }
-            }
-        }
-
-        // Check if storage has empty space
-        if (storageBlockEntity != null) {
-            if (!stack.isEmpty()) {
-                for (int i = startIndex - 1; i <= endIndex - 1; i++) {
-                    ItemStack storageStack = storageBlockEntity.getStackInSlot(i);
-                    if (storageStack.isEmpty()) {
-                        storageBlockEntity.setStackInSlot(i, stack.split(stack.getCount()));
+                    ItemStack blockEntityItemStack = blockEntity.getStackInSlot(i);
+                    if (blockEntityItemStack.isEmpty()) {
+                        blockEntity.setStackInSlot(i, stack.split(stack.getCount()));
 
                         return stack;
                     }
@@ -134,5 +91,20 @@ public abstract class AbstractCaterpillarBlockEntity extends InventoryBlockEntit
         }
 
         return stack;
+    }
+
+    public void removeItem(List<AbstractCaterpillarBlockEntity> blockEntities, Item item, int startIndex, int endIndex) {
+        if (item.equals(Items.AIR)) {
+            return;
+        }
+
+        for (AbstractCaterpillarBlockEntity blockEntity : blockEntities) {
+            for (int slotId = startIndex; slotId <= endIndex; slotId++) {
+                ItemStack stack = blockEntity.getStackInSlot(slotId);
+                if (stack.getItem().equals(item)) {
+                    blockEntity.removeStackInSlot(slotId);
+                }
+            }
+        }
     }
 }

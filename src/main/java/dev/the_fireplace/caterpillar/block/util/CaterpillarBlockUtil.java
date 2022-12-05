@@ -14,6 +14,7 @@ import dev.the_fireplace.caterpillar.block.entity.DrillHeadBlockEntity;
 import dev.the_fireplace.caterpillar.block.entity.StorageBlockEntity;
 import dev.the_fireplace.caterpillar.init.BlockInit;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CaterpillarBlockUtil {
@@ -32,10 +33,10 @@ public class CaterpillarBlockUtil {
         BlockState state = level.getBlockState(pos);
 
         if (!CaterpillarBlockUtil.isCaterpillarBlock(state.getBlock())) {
-            return pos.relative(direction);
+            return pos.relative(direction.getOpposite());
         }
 
-        return getCaterpillarHeadPos(level, pos.relative(direction.getOpposite()), direction);
+        return getCaterpillarHeadPos(level, pos.relative(direction), direction);
     }
 
     public static boolean canBreakBlock(Block block) {
@@ -57,8 +58,8 @@ public class CaterpillarBlockUtil {
         }
 
         if (blockEntity != null) {
-            Direction direction = blockEntity.getBlockState().getValue(HorizontalDirectionalBlock.FACING);
-            return getConnectedCaterpillarBlockEntities(level, pos.relative(direction), caterpillarBlockEntities);
+            Direction direction = blockState.getValue(HorizontalDirectionalBlock.FACING);
+            return getConnectedCaterpillarBlockEntities(level, pos.relative(direction.getOpposite()), caterpillarBlockEntities);
         }
 
         return caterpillarBlockEntities;
@@ -103,6 +104,26 @@ public class CaterpillarBlockUtil {
         }
 
         return true;
+    }
+
+    public static List<AbstractCaterpillarBlockEntity> getConnectedDrillHeadAndStorageBlockEntities(Level level, BlockPos pos, Direction direction) {
+        BlockPos caterpillarHeadPos = CaterpillarBlockUtil.getCaterpillarHeadPos(level, pos, direction);
+        List<AbstractCaterpillarBlockEntity> caterpillarBlockEntities = CaterpillarBlockUtil.getConnectedCaterpillarBlockEntities(level, caterpillarHeadPos, new ArrayList<>(0));
+        DrillHeadBlockEntity drillHeadBlockEntity = CaterpillarBlockUtil.getDrillHeadBlockEntity(caterpillarBlockEntities);
+        StorageBlockEntity storageBlockEntity = CaterpillarBlockUtil.getStorageBlockEntity(caterpillarBlockEntities);
+        // Because caterpillar is moving, it can have a space between the caterpillar blocks
+        if (storageBlockEntity == null) {
+            caterpillarBlockEntities = CaterpillarBlockUtil.getConnectedCaterpillarBlockEntities(level, caterpillarBlockEntities.get(caterpillarBlockEntities.size() - 1).getBlockPos().relative(direction, 2), new ArrayList<>(0));
+            storageBlockEntity = CaterpillarBlockUtil.getStorageBlockEntity(caterpillarBlockEntities);
+        }
+
+        if (drillHeadBlockEntity != null && storageBlockEntity != null) {
+            return List.of(drillHeadBlockEntity, storageBlockEntity);
+        } else if (drillHeadBlockEntity != null) {
+            return List.of(drillHeadBlockEntity);
+        }
+
+        return null;
     }
 
     public static DrillHeadBlockEntity getDrillHeadBlockEntity(List<AbstractCaterpillarBlockEntity> caterpillarBlockEntities) {

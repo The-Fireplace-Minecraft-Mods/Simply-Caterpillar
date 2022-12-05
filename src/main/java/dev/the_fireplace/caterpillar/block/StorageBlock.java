@@ -95,10 +95,10 @@ public class StorageBlock extends AbstractCaterpillarBlock {
             level.getBlockState(pos.relative(direction.getClockWise())).canBeReplaced(context) &&
             level.getBlockState(pos.relative(direction.getCounterClockWise())).canBeReplaced(context)
         ) {
-            BlockPos caterpillarHeadPos = CaterpillarBlockUtil.getCaterpillarHeadPos(level, pos.relative(direction), direction.getOpposite());
+            BlockPos caterpillarHeadPos = CaterpillarBlockUtil.getCaterpillarHeadPos(level, pos.relative(direction), direction);
 
             if (CaterpillarBlockUtil.getConnectedCaterpillarBlockEntities(level, caterpillarHeadPos, new ArrayList<>()).stream().noneMatch(blockEntity -> blockEntity instanceof StorageBlockEntity)) {
-                if (CaterpillarBlockUtil.isConnectedCaterpillarSameDirection(level, pos, direction.getOpposite())) {
+                if (CaterpillarBlockUtil.isConnectedCaterpillarSameDirection(level, pos, direction)) {
                     return defaultBlockState().setValue(FACING, direction).setValue(StorageBlock.PART, StoragePart.BASE);
                 }
             } else {

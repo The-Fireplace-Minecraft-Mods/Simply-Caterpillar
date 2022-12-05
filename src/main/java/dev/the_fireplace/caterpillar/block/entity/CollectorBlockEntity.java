@@ -1,11 +1,13 @@
 package dev.the_fireplace.caterpillar.block.entity;
 
+import dev.the_fireplace.caterpillar.block.IncineratorBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.phys.AABB;
@@ -14,7 +16,6 @@ import dev.the_fireplace.caterpillar.block.util.CaterpillarBlockUtil;
 import dev.the_fireplace.caterpillar.config.CaterpillarConfig;
 import dev.the_fireplace.caterpillar.init.BlockEntityInit;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class CollectorBlockEntity extends AbstractCaterpillarBlockEntity {
@@ -26,38 +27,37 @@ public class CollectorBlockEntity extends AbstractCaterpillarBlockEntity {
     }
 
     public void move() {
-        BlockPos nextPos = this.getBlockPos().relative(this.getBlockState().getValue(CollectorBlock.FACING).getOpposite());
+        BlockPos basePos = this.getBlockPos();
+        BlockPos nextPos = basePos.relative(this.getBlockState().getValue(IncineratorBlock.FACING));
 
         this.getLevel().setBlockAndUpdate(nextPos, this.getBlockState());
         this.getLevel().setBlockAndUpdate(nextPos.below(), this.getBlockState().setValue(CollectorBlock.HALF, DoubleBlockHalf.LOWER));
 
-        this.getLevel().removeBlock(this.getBlockPos(), false);
-        this.getLevel().removeBlock(this.getBlockPos().below(), false);
-
         if (CaterpillarConfig.enableSounds) {
-            this.getLevel().playSound(null, this.getBlockPos(), SoundEvents.PISTON_EXTEND, SoundSource.BLOCKS, 1.0F, 1.0F);
+            this.getLevel().playSound(null, basePos, SoundEvents.PISTON_EXTEND, SoundSource.BLOCKS, 1.0F, 1.0F);
         }
 
-        this.suckInItems(nextPos);
+        BlockEntity nextBlockEntity = this.getLevel().getBlockEntity(nextPos);
+        if (nextBlockEntity instanceof CollectorBlockEntity nextCollectorBlockEntity) {
+            this.getLevel().removeBlock(basePos, false);
+            this.getLevel().removeBlock(basePos.below(), false);
+
+            nextCollectorBlockEntity.suckInItems();
+        }
     }
 
-    public void suckInItems(BlockPos nextPos) {
+    private void suckInItems() {
         Direction direction = this.getBlockState().getValue(CollectorBlock.FACING);
-        BlockPos caterpillarHeadPos = CaterpillarBlockUtil.getCaterpillarHeadPos(this.getLevel(), nextPos, direction);
-        List<AbstractCaterpillarBlockEntity> caterpillarBlockEntities = CaterpillarBlockUtil.getConnectedCaterpillarBlockEntities(this.getLevel(), caterpillarHeadPos, new ArrayList<>());
-        DrillHeadBlockEntity drillHeadBlockEntity = CaterpillarBlockUtil.getDrillHeadBlockEntity(caterpillarBlockEntities);
-        StorageBlockEntity storageBlockEntity = CaterpillarBlockUtil.getStorageBlockEntity(caterpillarBlockEntities);
-        // Because caterpillar is moving, it can have a space between the caterpillar blocks
-        if (storageBlockEntity == null) {
-            caterpillarBlockEntities = CaterpillarBlockUtil.getConnectedCaterpillarBlockEntities(this.getLevel(), caterpillarBlockEntities.get(caterpillarBlockEntities.size() - 1).getBlockPos().relative(direction, 2), new ArrayList<>());
-            storageBlockEntity = CaterpillarBlockUtil.getStorageBlockEntity(caterpillarBlockEntities);
+
+        List<AbstractCaterpillarBlockEntity> drillHeadAndStorageBlockEntities = CaterpillarBlockUtil.getConnectedDrillHeadAndStorageBlockEntities(level, this.getBlockPos(), direction);
+
+        if (drillHeadAndStorageBlockEntities == null) {
+            return;
         }
 
-        if (drillHeadBlockEntity != null) {
-            for(ItemEntity itemEntity : getItemsAround()) {
-                ItemStack remainderStack = super.insertItemStackToDrillHead(drillHeadBlockEntity, storageBlockEntity, itemEntity.getItem(), DrillHeadBlockEntity.GATHERED_SLOT_START, DrillHeadBlockEntity.GATHERED_SLOT_END);
-                itemEntity.setItem(remainderStack);
-            }
+        for(ItemEntity itemEntity : getItemsAround()) {
+            ItemStack remainderStack = super.insertItemStack(drillHeadAndStorageBlockEntities, itemEntity.getItem(), DrillHeadBlockEntity.GATHERED_SLOT_START, DrillHeadBlockEntity.GATHERED_SLOT_END);
+            itemEntity.setItem(remainderStack);
         }
     }
 

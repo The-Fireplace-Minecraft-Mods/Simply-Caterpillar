@@ -109,7 +109,7 @@ public class DrillHeadBlockEntity extends AbstractCaterpillarBlockEntity {
 
             List<AbstractCaterpillarBlockEntity> connectedCaterpillarBlockEntities = CaterpillarBlockUtil.getConnectedCaterpillarBlockEntities(level, pos, new ArrayList<>());
             AbstractCaterpillarBlockEntity lastBlockEntity = connectedCaterpillarBlockEntities.get(connectedCaterpillarBlockEntities.size() - 1);
-            BlockEntity splitBlockEntity = level.getBlockEntity(lastBlockEntity.getBlockPos().relative(direction, 2));
+            BlockEntity splitBlockEntity = level.getBlockEntity(lastBlockEntity.getBlockPos().relative(direction.getOpposite(), 2));
 
             if (splitBlockEntity instanceof AbstractCaterpillarBlockEntity caterpillarBlockEntity) {
                 caterpillarBlockEntity.move();
@@ -174,7 +174,7 @@ public class DrillHeadBlockEntity extends AbstractCaterpillarBlockEntity {
     public void move() {
         BlockPos basePos = this.getBlockPos();
         Direction direction = this.getBlockState().getValue(DrillHeadBlock.FACING);
-        BlockPos nextBasePos = this.getBlockPos().relative(direction.getOpposite());
+        BlockPos nextBasePos = this.getBlockPos().relative(direction);
         BlockEntity blockEntity = this.getLevel().getBlockEntity(basePos);
 
         if (blockEntity instanceof DrillHeadBlockEntity drillHeadBlockEntity) {
@@ -215,11 +215,10 @@ public class DrillHeadBlockEntity extends AbstractCaterpillarBlockEntity {
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
                 destroyPos = switch (direction) {
-                    case EAST -> this.getBlockPos().offset(-1, i, j);
-                    case WEST -> this.getBlockPos().offset(1, i, j);
-                    case SOUTH -> this.getBlockPos().offset(j, i, -1);
-                    case NORTH -> this.getBlockPos().offset(j, i, 1);
-                    default -> this.getBlockPos().offset(j, i, 1);
+                    case EAST -> this.getBlockPos().offset(1, i, j);
+                    case WEST -> this.getBlockPos().offset(-1, i, j);
+                    case SOUTH -> this.getBlockPos().offset(j, i, 1);
+                    default -> this.getBlockPos().offset(j, i, -1);
                 };
 
                 BlockState blockState = this.getLevel().getBlockState(destroyPos);

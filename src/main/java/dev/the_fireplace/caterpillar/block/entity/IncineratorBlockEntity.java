@@ -2,6 +2,7 @@ package dev.the_fireplace.caterpillar.block.entity;
 
 import dev.the_fireplace.caterpillar.Caterpillar;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
@@ -12,7 +13,6 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -24,7 +24,6 @@ import dev.the_fireplace.caterpillar.menu.IncineratorMenu;
 import dev.the_fireplace.caterpillar.config.CaterpillarConfig;
 import dev.the_fireplace.caterpillar.init.BlockEntityInit;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class IncineratorBlockEntity extends AbstractCaterpillarBlockEntity {
@@ -51,7 +50,7 @@ public class IncineratorBlockEntity extends AbstractCaterpillarBlockEntity {
 
     public void move() {
         BlockPos basePos = this.getBlockPos();
-        BlockPos nextPos = basePos.relative(this.getBlockState().getValue(IncineratorBlock.FACING).getOpposite());
+        BlockPos nextPos = basePos.relative(this.getBlockState().getValue(IncineratorBlock.FACING));
 
         CompoundTag oldTag = this.saveWithFullMetadata();
         oldTag.remove("x");
@@ -76,54 +75,17 @@ public class IncineratorBlockEntity extends AbstractCaterpillarBlockEntity {
     }
 
     private void incinerate() {
-        BlockPos caterpillarHeadPos = CaterpillarBlockUtil.getCaterpillarHeadPos(this.getLevel(), this.getBlockPos(), this.getBlockState().getValue(IncineratorBlock.FACING));
-        if (caterpillarHeadPos != null) {
-            List<AbstractCaterpillarBlockEntity> caterpillarBlockEntities = CaterpillarBlockUtil.getConnectedCaterpillarBlockEntities(this.getLevel(), caterpillarHeadPos, new ArrayList<>());
+        Direction direction = this.getBlockState().getValue(IncineratorBlock.FACING);
+        List<AbstractCaterpillarBlockEntity> drillHeadAndStorageBlockEntities = CaterpillarBlockUtil.getConnectedDrillHeadAndStorageBlockEntities(level, this.getBlockPos(), direction);
 
-            DrillHeadBlockEntity drillHeadBlockEntity = (DrillHeadBlockEntity) caterpillarBlockEntities.stream().filter(blockEntity -> blockEntity instanceof DrillHeadBlockEntity).findFirst().orElse(null);
-            if (drillHeadBlockEntity != null) {
-                for (int i = 0; i < INVENTORY_SIZE; i++) {
-                    Item itemToIncinerate = this.getStackInSlot(i).getItem();
-
-                    this.removeItemFromDrillHead(drillHeadBlockEntity, itemToIncinerate, DrillHeadBlockEntity.GATHERED_SLOT_START, DrillHeadBlockEntity.GATHERED_SLOT_END);
-                }
-            }
-
-            StorageBlockEntity storageBlockEntity = (StorageBlockEntity) caterpillarBlockEntities.stream().filter(blockEntity -> blockEntity instanceof StorageBlockEntity).findFirst().orElse(null);
-            if (storageBlockEntity != null) {
-                for (int i = 0; i < INVENTORY_SIZE; i++) {
-                    Item itemToIncinerate = this.getStackInSlot(i).getItem();
-
-                    this.removeItemFromStorage(storageBlockEntity, itemToIncinerate, StorageBlockEntity.GATHERED_SLOT_START, StorageBlockEntity.GATHERED_SLOT_END);
-                }
-            }
-        }
-
-    }
-
-    private void removeItemFromDrillHead(DrillHeadBlockEntity drillHead, Item item, int startIndex, int endIndex) {
-        if (item.equals(Items.AIR)) {
+        if (drillHeadAndStorageBlockEntities == null) {
             return;
         }
 
-        for (int slotId = startIndex; slotId <= endIndex; slotId++) {
-            ItemStack stack = drillHead.getStackInSlot(slotId);
-            if (stack.getItem().equals(item)) {
-                drillHead.removeStackInSlot(slotId);
-            }
-        }
-    }
+        for (int i = 0; i < INVENTORY_SIZE; i++) {
+            Item itemToIncinerate = this.getStackInSlot(i).getItem();
 
-    private void removeItemFromStorage(StorageBlockEntity blockEntity, Item item, int startIndex, int endIndex) {
-        if (item.equals(Items.AIR)) {
-            return;
-        }
-
-        for (int slotId = startIndex; slotId <= endIndex; slotId++) {
-            ItemStack stack = blockEntity.getStackInSlot(slotId);
-            if (stack.getItem().equals(item)) {
-                blockEntity.removeStackInSlot(slotId);
-            }
+            super.removeItem(drillHeadAndStorageBlockEntities, itemToIncinerate, DrillHeadBlockEntity.GATHERED_SLOT_START, DrillHeadBlockEntity.GATHERED_SLOT_END);
         }
     }
 

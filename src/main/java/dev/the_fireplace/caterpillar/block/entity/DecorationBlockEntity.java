@@ -108,7 +108,7 @@ public class DecorationBlockEntity extends AbstractCaterpillarBlockEntity {
     public void move() {
         BlockPos basePos = this.getBlockPos();
         Direction direction = this.getBlockState().getValue(DecorationBlock.FACING);
-        BlockPos nextPos = basePos.relative(direction.getOpposite());
+        BlockPos nextPos = basePos.relative(direction);
 
         CompoundTag oldTag = this.saveWithFullMetadata();
         oldTag.remove("x");
@@ -148,17 +148,12 @@ public class DecorationBlockEntity extends AbstractCaterpillarBlockEntity {
         int placementSlotId = INVENTORY_MAX_SLOTS;
         ItemStackHandler currentPlacementMap =  this.placementMap.get(this.currentMap);
 
-        BlockPos basePos = this.getBlockPos();
-        Direction direction = this.getBlockState().getValue(DecorationBlock.FACING).getOpposite();
+        Direction direction = this.getBlockState().getValue(DecorationBlock.FACING);
 
-        BlockPos caterpillarHeadPos = CaterpillarBlockUtil.getCaterpillarHeadPos(this.getLevel(), basePos, direction.getOpposite());
-        List<AbstractCaterpillarBlockEntity> caterpillarBlockEntities = CaterpillarBlockUtil.getConnectedCaterpillarBlockEntities(this.getLevel(), caterpillarHeadPos, new ArrayList<>());
-        DrillHeadBlockEntity drillHeadBlockEntity = CaterpillarBlockUtil.getDrillHeadBlockEntity(caterpillarBlockEntities);
-        StorageBlockEntity storageBlockEntity = CaterpillarBlockUtil.getStorageBlockEntity(caterpillarBlockEntities);
-        // Because caterpillar is moving, it can have a space between the caterpillar blocks
-        if (storageBlockEntity == null) {
-            caterpillarBlockEntities = CaterpillarBlockUtil.getConnectedCaterpillarBlockEntities(this.getLevel(), caterpillarBlockEntities.get(caterpillarBlockEntities.size() - 1).getBlockPos().relative(direction.getOpposite(), 2), new ArrayList<>());
-            storageBlockEntity = CaterpillarBlockUtil.getStorageBlockEntity(caterpillarBlockEntities);
+        List<AbstractCaterpillarBlockEntity> drillHeadAndStorageBlockEntities = CaterpillarBlockUtil.getConnectedDrillHeadAndStorageBlockEntities(level, this.getBlockPos(), direction);
+
+        if (drillHeadAndStorageBlockEntities == null) {
+            return;
         }
 
         for (int i = -1; i <= 1; i++) {
@@ -168,16 +163,16 @@ public class DecorationBlockEntity extends AbstractCaterpillarBlockEntity {
                 }
 
                 BlockPos decoratePos = switch (direction) {
-                    case EAST -> basePos.offset(-1, i, -j);
-                    case WEST -> basePos.offset(1, i, j);
-                    case SOUTH -> basePos.offset(j, i, -1);
-                    default -> basePos.offset(-j, i, 1);
+                    case EAST -> this.getBlockPos().offset(-1, i, -j);
+                    case WEST -> this.getBlockPos().offset(1, i, j);
+                    case SOUTH -> this.getBlockPos().offset(j, i, -1);
+                    default -> this.getBlockPos().offset(-j, i, 1);
                 };
 
                 Item itemToPlace = currentPlacementMap.getStackInSlot(--placementSlotId).getItem();
                 Block blockToPlace = Block.byItem(itemToPlace);
 
-                if (blockToPlace != null && blockToPlace.defaultBlockState() != null && blockToPlace != Blocks.AIR) {
+                if (blockToPlace != Blocks.AIR) {
                     BlockState blockState = blockToPlace.defaultBlockState();
 
                     if (!blockState.canSurvive(level, decoratePos)) {
@@ -192,21 +187,10 @@ public class DecorationBlockEntity extends AbstractCaterpillarBlockEntity {
                         }
 
                         if (j == -1) {
-                            switch (direction) {
-                                case NORTH, EAST :
-                                    if (level.getBlockState(decoratePos.relative(direction.getCounterClockWise())).isFaceSturdy(level, decoratePos.relative(direction.getCounterClockWise()), direction.getOpposite())) {
-                                        blockState = blockState.setValue(DecorationBlock.FACING, direction.getClockWise());
-                                    } else {
-                                        continue;
-                                    }
-                                    break;
-                                case SOUTH, WEST :
-                                    if (level.getBlockState(decoratePos.relative(direction.getClockWise())).isFaceSturdy(level, decoratePos.relative(direction.getClockWise()), direction.getOpposite())) {
-                                        blockState = blockState.setValue(DecorationBlock.FACING, direction.getCounterClockWise());
-                                    } else {
-                                        continue;
-                                    }
-                                    break;
+                            if (level.getBlockState(decoratePos.relative(direction.getClockWise())).isFaceSturdy(level, decoratePos.relative(direction.getClockWise()), direction.getOpposite())) {
+                                blockState = blockState.setValue(DecorationBlock.FACING, direction.getCounterClockWise());
+                            } else {
+                                continue;
                             }
                         } else if (j == 0) {
                             if (level.getBlockState(decoratePos.relative(direction.getOpposite())).isFaceSturdy(level, decoratePos.relative(direction.getOpposite()), direction.getOpposite())) {
@@ -215,21 +199,10 @@ public class DecorationBlockEntity extends AbstractCaterpillarBlockEntity {
                                 continue;
                             }
                         } else if (j == 1) {
-                            switch (direction) {
-                                case NORTH, EAST :
-                                    if (level.getBlockState(decoratePos.relative(direction.getCounterClockWise())).isFaceSturdy(level, decoratePos.relative(direction.getCounterClockWise()), direction.getOpposite())) {
-                                        blockState = blockState.setValue(DecorationBlock.FACING, direction.getCounterClockWise());
-                                    } else {
-                                        continue;
-                                    }
-                                    break;
-                                case SOUTH, WEST :
-                                    if (level.getBlockState(decoratePos.relative(direction.getCounterClockWise())).isFaceSturdy(level, decoratePos.relative(direction.getCounterClockWise()), direction.getOpposite())) {
-                                        blockState = blockState.setValue(DecorationBlock.FACING, direction.getClockWise());
-                                    } else {
-                                        continue;
-                                    }
-                                    break;
+                            if (level.getBlockState(decoratePos.relative(direction.getCounterClockWise())).isFaceSturdy(level, decoratePos.relative(direction.getCounterClockWise()), direction.getOpposite())) {
+                                blockState = blockState.setValue(DecorationBlock.FACING, direction.getClockWise());
+                            } else {
+                                continue;
                             }
                         }
                     }
@@ -294,7 +267,7 @@ public class DecorationBlockEntity extends AbstractCaterpillarBlockEntity {
                         // TODO: Implement connection walls
                     }
 
-                    if (takeItemFromDrillHead(drillHeadBlockEntity, storageBlockEntity, itemToPlace, DrillHeadBlockEntity.CONSUMPTION_SLOT_START, DrillHeadBlockEntity.CONSUMPTION_SLOT_END)) {
+                    if (super.takeItem(drillHeadAndStorageBlockEntities, itemToPlace, DrillHeadBlockEntity.CONSUMPTION_SLOT_START, DrillHeadBlockEntity.CONSUMPTION_SLOT_END)) {
                         this.getLevel().setBlockAndUpdate(decoratePos, blockState);
                     }
                 }

@@ -29,7 +29,7 @@ public class StorageBlockEntity extends AbstractCaterpillarBlockEntity {
 
     public void move() {
         BlockPos basePos = this.getBlockPos();
-        BlockPos nextPos = this.getBlockPos().relative(this.getBlockState().getValue(StorageBlock.FACING).getOpposite());
+        BlockPos nextPos = this.getBlockPos().relative(this.getBlockState().getValue(StorageBlock.FACING));
         BlockEntity blockEntity = this.getLevel().getBlockEntity(basePos);
 
         CompoundTag oldTag = this.saveWithFullMetadata();

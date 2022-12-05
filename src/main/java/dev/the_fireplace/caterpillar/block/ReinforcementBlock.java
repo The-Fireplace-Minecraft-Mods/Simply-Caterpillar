@@ -142,10 +142,10 @@ public class ReinforcementBlock extends AbstractCaterpillarBlock implements Simp
             level.getBlockState(blockPos.above()).canBeReplaced(context) &&
             level.getBlockState(blockPos.above(2)).canBeReplaced(context)
         ){
-            BlockPos caterpillarHeadPos = CaterpillarBlockUtil.getCaterpillarHeadPos(level, blockPos.above().relative(direction), direction.getOpposite());
+            BlockPos caterpillarHeadPos = CaterpillarBlockUtil.getCaterpillarHeadPos(level, blockPos.above().relative(direction), direction);
 
             if (CaterpillarBlockUtil.getConnectedCaterpillarBlockEntities(level, caterpillarHeadPos, new ArrayList<>()).stream().noneMatch(blockEntity -> blockEntity instanceof ReinforcementBlockEntity)) {
-                if (CaterpillarBlockUtil.isConnectedCaterpillarSameDirection(level, blockPos.above(), direction.getOpposite())) {
+                if (CaterpillarBlockUtil.isConnectedCaterpillarSameDirection(level, blockPos.above(), direction)) {
                     return defaultBlockState().setValue(FACING, direction).setValue(ReinforcementBlock.PART, ReinforcementPart.BOTTOM).setValue(DrillHeadBlock.WATERLOGGED, context.getLevel().getFluidState(context.getClickedPos()).getType() == Fluids.WATER);
                 }
             } else {
@@ -183,7 +183,7 @@ public class ReinforcementBlock extends AbstractCaterpillarBlock implements Simp
     }
 
     public BlockPos getBasePos(BlockState state, BlockPos pos) {
-        Direction direction = state.getValue(FACING).getOpposite();
+        Direction direction = state.getValue(FACING);
         ReinforcementPart part = state.getValue(ReinforcementBlock.PART);
 
         return switch (part) {

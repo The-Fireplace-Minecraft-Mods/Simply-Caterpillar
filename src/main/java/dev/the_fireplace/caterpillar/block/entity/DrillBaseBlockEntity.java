@@ -17,7 +17,7 @@ public class DrillBaseBlockEntity extends AbstractCaterpillarBlockEntity {
     }
 
     public void move() {
-        BlockPos nextPos = this.getBlockPos().relative(this.getBlockState().getValue(DrillBaseBlock.FACING).getOpposite());
+        BlockPos nextPos = this.getBlockPos().relative(this.getBlockState().getValue(DrillBaseBlock.FACING));
 
         this.getLevel().setBlockAndUpdate(nextPos, this.getBlockState());
         this.getLevel().removeBlock(this.getBlockPos(), false);

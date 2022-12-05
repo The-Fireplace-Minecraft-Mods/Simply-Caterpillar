@@ -106,10 +106,10 @@ public class DrillHeadBlock extends AbstractCaterpillarBlock implements SimpleWa
             level.getBlockState(blockPos.above(2).relative(direction.getClockWise())).canBeReplaced(context) &&
             level.getBlockState(blockPos.above(2).relative(direction.getCounterClockWise())).canBeReplaced(context)
         ) {
-            BlockPos caterpillarHeadPos = CaterpillarBlockUtil.getCaterpillarHeadPos(level, blockPos.above().relative(direction), direction.getOpposite());
+            BlockPos caterpillarHeadPos = CaterpillarBlockUtil.getCaterpillarHeadPos(level, blockPos.above().relative(direction), direction);
 
             if (CaterpillarBlockUtil.getConnectedCaterpillarBlockEntities(level, caterpillarHeadPos, new ArrayList<>()).stream().noneMatch(blockEntity -> blockEntity instanceof DrillHeadBlockEntity)) {
-                if (CaterpillarBlockUtil.isConnectedCaterpillarSameDirection(level, blockPos.above(), direction.getOpposite())) {
+                if (CaterpillarBlockUtil.isConnectedCaterpillarSameDirection(level, blockPos.above(), direction)) {
                     return defaultBlockState().setValue(FACING, direction).setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_BOTTOM).setValue(DrillHeadBlock.WATERLOGGED, context.getLevel().getFluidState(context.getClickedPos()).getType() == Fluids.WATER);
                 }
             } else {
@@ -242,7 +242,7 @@ public class DrillHeadBlock extends AbstractCaterpillarBlock implements SimpleWa
             state.getValue(DRILLING) &&
             CaterpillarConfig.useParticles
         ) {
-            Direction direction = level.getBlockEntity(pos).getBlockState().getValue(DrillHeadBlock.FACING).getOpposite();
+            Direction direction = level.getBlockEntity(pos).getBlockState().getValue(DrillHeadBlock.FACING);
             Direction.Axis direction$axis = direction.getAxis();
 
             double x = direction$axis == Direction.Axis.X ? pos.getX() + 0.55D : pos.getX();
