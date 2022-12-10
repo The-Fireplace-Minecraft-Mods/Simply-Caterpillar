@@ -93,7 +93,7 @@ public abstract class AbstractCaterpillarMenu extends AbstractContainerMenu {
 
     @Override
     public boolean stillValid(@NotNull Player player) {
-        return stillValid(this.access, player, this.blockEntity.getBlockState().getBlock());
+        return this.access.evaluate((level, pos) -> level.getBlockEntity(pos) == this.blockEntity, true);
     }
 
     @Override
