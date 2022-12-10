@@ -16,6 +16,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
@@ -96,19 +97,19 @@ public class CollectorBlock extends AbstractCaterpillarBlock {
 
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
-        BlockPos blockPos = context.getClickedPos();
+        BlockPos pos = context.getClickedPos();
         Level level = context.getLevel();
         Direction direction = context.getHorizontalDirection();
 
         if (
-            blockPos.getY() < level.getMaxBuildHeight() - 1 &&
-            level.getBlockState(blockPos.above()).canBeReplaced(context)
+                pos.getY() < level.getMaxBuildHeight() - 1 &&
+            level.getBlockState(pos.above()).canBeReplaced(context)
         ) {
-            BlockPos caterpillarHeadPos = CaterpillarBlockUtil.getCaterpillarHeadPos(level, blockPos.above().relative(direction), direction);
+            BlockPos caterpillarHeadPos = CaterpillarBlockUtil.getCaterpillarHeadPos(level, pos.above().relative(direction), direction);
 
             if (CaterpillarBlockUtil.getConnectedCaterpillarBlockEntities(level, caterpillarHeadPos, new ArrayList<>()).stream().noneMatch(blockEntity -> blockEntity instanceof CollectorBlockEntity)) {
-                if (CaterpillarBlockUtil.isConnectedCaterpillarSameDirection(level, blockPos.above(), direction)) {
-                    return super.defaultBlockState().setValue(FACING, direction).setValue(CollectorBlock.HALF, DoubleBlockHalf.LOWER);
+                if (CaterpillarBlockUtil.isConnectedCaterpillarSameDirection(level, pos.above(), direction)) {
+                    return super.defaultBlockState().setValue(FACING, direction).setValue(CollectorBlock.HALF, DoubleBlockHalf.LOWER).setValue(WATERLOGGED, level.getFluidState(pos).getType() == Fluids.WATER);
                 }
             } else {
                 context.getPlayer().displayClientMessage(Component.translatable("block.simplycaterpillar.blocks.already_connected", BlockInit.COLLECTOR.get().getName()), true);
@@ -127,10 +128,10 @@ public class CollectorBlock extends AbstractCaterpillarBlock {
     }
 
     @Override
-    public void setPlacedBy(Level level, BlockPos blockPos, BlockState blockState, @Nullable LivingEntity livingEntity, @NotNull ItemStack stack) {
-        level.setBlockAndUpdate(blockPos.above(), blockState.setValue(CollectorBlock.HALF, DoubleBlockHalf.UPPER));
+    public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity livingEntity, @NotNull ItemStack stack) {
+        level.setBlockAndUpdate(pos.above(), state.setValue(CollectorBlock.HALF, DoubleBlockHalf.UPPER).setValue(WATERLOGGED, level.getFluidState(pos.above()).getType() == Fluids.WATER));
 
-        super.setPlacedBy(level, blockPos, blockState, livingEntity, stack);
+        super.setPlacedBy(level, pos, state, livingEntity, stack);
     }
 
     protected void runCalculation(Map<Direction, VoxelShape> shapes, VoxelShape shape) {

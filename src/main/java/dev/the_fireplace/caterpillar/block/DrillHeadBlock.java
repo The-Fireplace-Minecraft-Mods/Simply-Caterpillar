@@ -12,15 +12,14 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -39,16 +38,13 @@ import dev.the_fireplace.caterpillar.init.BlockInit;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Stream;
 
-public class DrillHeadBlock extends AbstractCaterpillarBlock implements SimpleWaterloggedBlock {
+public class DrillHeadBlock extends AbstractCaterpillarBlock {
 
     public static final BooleanProperty DRILLING = BooleanProperty.create("drilling");
 
     public static final EnumProperty<DrillHeadPart> PART = EnumProperty.create("part", DrillHeadPart.class);
-
-    public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
     private static final Map<Direction, VoxelShape> SHAPES_BASE = new EnumMap<>(Direction.class);
 
@@ -70,7 +66,7 @@ public class DrillHeadBlock extends AbstractCaterpillarBlock implements SimpleWa
 
     public DrillHeadBlock(Properties properties) {
         super(properties);
-        super.registerDefaultState(defaultBlockState().setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_BOTTOM).setValue(DrillHeadBlock.WATERLOGGED, Boolean.TRUE).setValue(DrillHeadBlock.DRILLING, Boolean.FALSE));
+        super.registerDefaultState(defaultBlockState().setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_BOTTOM).setValue(DrillHeadBlock.WATERLOGGED, Boolean.FALSE).setValue(DrillHeadBlock.DRILLING, Boolean.FALSE));
         super.runCalculation(DrillHeadBlock.SHAPES_BLADES, DrillHeadBlock.SHAPE_BLADES);
         super.runCalculation(DrillHeadBlock.SHAPES_BASE, DrillHeadBlock.SHAPE_BASE);
     }
@@ -78,7 +74,7 @@ public class DrillHeadBlock extends AbstractCaterpillarBlock implements SimpleWa
     @Override
     protected void createBlockStateDefinition(StateDefinition.@NotNull Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
-        builder.add(DrillHeadBlock.PART, DrillHeadBlock.WATERLOGGED, DrillHeadBlock.DRILLING);
+        builder.add(DrillHeadBlock.PART, DrillHeadBlock.DRILLING);
     }
 
     @Override
@@ -94,6 +90,7 @@ public class DrillHeadBlock extends AbstractCaterpillarBlock implements SimpleWa
         BlockPos blockPos = context.getClickedPos();
         Level level = context.getLevel();
         Direction direction = context.getHorizontalDirection();
+        FluidState fluidState = context.getLevel().getFluidState(context.getClickedPos());
 
         if (
             blockPos.getY() < level.getMaxBuildHeight() - 1 &&
@@ -110,7 +107,7 @@ public class DrillHeadBlock extends AbstractCaterpillarBlock implements SimpleWa
 
             if (CaterpillarBlockUtil.getConnectedCaterpillarBlockEntities(level, caterpillarHeadPos, new ArrayList<>()).stream().noneMatch(blockEntity -> blockEntity instanceof DrillHeadBlockEntity)) {
                 if (CaterpillarBlockUtil.isConnectedCaterpillarSameDirection(level, blockPos.above(), direction)) {
-                    return defaultBlockState().setValue(FACING, direction).setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_BOTTOM).setValue(DrillHeadBlock.WATERLOGGED, context.getLevel().getFluidState(context.getClickedPos()).getType() == Fluids.WATER);
+                    return defaultBlockState().setValue(FACING, direction).setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_BOTTOM).setValue(DrillHeadBlock.WATERLOGGED, fluidState.getType() == Fluids.WATER);
                 }
             } else {
                 context.getPlayer().displayClientMessage(Component.translatable("block.simplycaterpillar.blocks.already_connected", BlockInit.DRILL_HEAD.get().getName()), true);
@@ -183,14 +180,14 @@ public class DrillHeadBlock extends AbstractCaterpillarBlock implements SimpleWa
     public static void buildStructure(Level level, BlockPos pos, BlockState state) {
         Direction direction = state.getValue(FACING);
 
-        level.setBlockAndUpdate(pos.relative(direction.getCounterClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_LEFT_BOTTOM));
-        level.setBlockAndUpdate(pos.relative(direction.getClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_RIGHT_BOTTOM));
-        level.setBlockAndUpdate(pos.above().relative(direction.getCounterClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_LEFT));
-        level.setBlockAndUpdate(pos.above().relative(direction.getClockWise()), state.setValue(PART, DrillHeadPart.BLADE_RIGHT));
-        level.setBlockAndUpdate(pos.above(2), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_TOP));
-        level.setBlockAndUpdate(pos.above(2).relative(direction.getCounterClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_LEFT_TOP));
-        level.setBlockAndUpdate(pos.above(2).relative(direction.getClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_RIGHT_TOP));
-        level.setBlockAndUpdate(pos.above(), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BASE));
+        level.setBlockAndUpdate(pos.relative(direction.getCounterClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_LEFT_BOTTOM).setValue(DrillHeadBlock.WATERLOGGED, level.getFluidState(pos.relative(direction.getCounterClockWise())).getType() == Fluids.WATER));
+        level.setBlockAndUpdate(pos.relative(direction.getClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_RIGHT_BOTTOM).setValue(DrillHeadBlock.WATERLOGGED, level.getFluidState(pos.relative(direction.getClockWise())).getType() == Fluids.WATER));
+        level.setBlockAndUpdate(pos.above().relative(direction.getCounterClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_LEFT).setValue(DrillHeadBlock.WATERLOGGED, level.getFluidState(pos.above().relative(direction.getCounterClockWise())).getType() == Fluids.WATER));
+        level.setBlockAndUpdate(pos.above().relative(direction.getClockWise()), state.setValue(PART, DrillHeadPart.BLADE_RIGHT).setValue(DrillHeadBlock.WATERLOGGED, level.getFluidState(pos.above().relative(direction.getClockWise())).getType() == Fluids.WATER));
+        level.setBlockAndUpdate(pos.above(2), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_TOP).setValue(DrillHeadBlock.WATERLOGGED, level.getFluidState(pos.above(2)).getType() == Fluids.WATER));
+        level.setBlockAndUpdate(pos.above(2).relative(direction.getCounterClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_LEFT_TOP).setValue(DrillHeadBlock.WATERLOGGED, level.getFluidState(pos.above(2).relative(direction.getCounterClockWise())).getType() == Fluids.WATER));
+        level.setBlockAndUpdate(pos.above(2).relative(direction.getClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_RIGHT_TOP).setValue(DrillHeadBlock.WATERLOGGED, level.getFluidState(pos.above(2).relative(direction.getClockWise())).getType() == Fluids.WATER));
+        level.setBlockAndUpdate(pos.above(), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BASE).setValue(WATERLOGGED, level.getFluidState(pos.above()).getType() == Fluids.WATER));
     }
 
     public static void moveStructure(Level level, BlockPos pos, BlockState state) {

@@ -12,6 +12,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -20,6 +21,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.BooleanOp;
@@ -40,11 +42,9 @@ import java.util.EnumMap;
 import java.util.Map;
 import java.util.stream.Stream;
 
-public class ReinforcementBlock extends AbstractCaterpillarBlock implements SimpleWaterloggedBlock {
+public class ReinforcementBlock extends AbstractCaterpillarBlock {
 
     public static final EnumProperty<ReinforcementPart> PART = EnumProperty.create("part", ReinforcementPart.class);
-
-    public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
     private static final Map<Direction, VoxelShape> SHAPES_LEFT = new EnumMap<>(Direction.class);
 
@@ -86,7 +86,7 @@ public class ReinforcementBlock extends AbstractCaterpillarBlock implements Simp
 
     public ReinforcementBlock(Properties properties) {
         super(properties);
-        super.registerDefaultState(super.defaultBlockState().setValue(ReinforcementBlock.PART, ReinforcementPart.BOTTOM).setValue(ReinforcementBlock.WATERLOGGED, true));
+        super.registerDefaultState(super.defaultBlockState().setValue(ReinforcementBlock.PART, ReinforcementPart.BOTTOM).setValue(ReinforcementBlock.WATERLOGGED, false));
         super.runCalculation(ReinforcementBlock.SHAPES_LEFT, ReinforcementBlock.SHAPE_LEFT);
         super.runCalculation(ReinforcementBlock.SHAPES_BASE, ReinforcementBlock.SHAPE_BASE);
         super.runCalculation(ReinforcementBlock.SHAPES_RIGHT, ReinforcementBlock.SHAPE_RIGHT);
@@ -115,7 +115,7 @@ public class ReinforcementBlock extends AbstractCaterpillarBlock implements Simp
     @Override
     protected void createBlockStateDefinition(StateDefinition.@NotNull Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
-        builder.add(ReinforcementBlock.PART, ReinforcementBlock.WATERLOGGED);
+        builder.add(ReinforcementBlock.PART);
     }
 
     @Override
@@ -134,6 +134,7 @@ public class ReinforcementBlock extends AbstractCaterpillarBlock implements Simp
         BlockPos blockPos = context.getClickedPos();
         Level level = context.getLevel();
         Direction direction = context.getHorizontalDirection();
+        FluidState fluidState = context.getLevel().getFluidState(context.getClickedPos());
 
         if (
             blockPos.getY() < level.getMaxBuildHeight() - 1 &&
@@ -146,7 +147,7 @@ public class ReinforcementBlock extends AbstractCaterpillarBlock implements Simp
 
             if (CaterpillarBlockUtil.getConnectedCaterpillarBlockEntities(level, caterpillarHeadPos, new ArrayList<>()).stream().noneMatch(blockEntity -> blockEntity instanceof ReinforcementBlockEntity)) {
                 if (CaterpillarBlockUtil.isConnectedCaterpillarSameDirection(level, blockPos.above(), direction)) {
-                    return defaultBlockState().setValue(FACING, direction).setValue(ReinforcementBlock.PART, ReinforcementPart.BOTTOM).setValue(DrillHeadBlock.WATERLOGGED, context.getLevel().getFluidState(context.getClickedPos()).getType() == Fluids.WATER);
+                    return defaultBlockState().setValue(FACING, direction).setValue(ReinforcementBlock.PART, ReinforcementPart.BOTTOM).setValue(DrillHeadBlock.WATERLOGGED, fluidState.getType() == Fluids.WATER);
                 }
             } else {
                 context.getPlayer().displayClientMessage(Component.translatable("block.simplycaterpillar.blocks.already_connected", BlockInit.REINFORCEMENT.get().getName()), true);
@@ -157,15 +158,15 @@ public class ReinforcementBlock extends AbstractCaterpillarBlock implements Simp
     }
 
     @Override
-    public void setPlacedBy(Level level, BlockPos blockPos, BlockState blockState, @Nullable LivingEntity livingEntity, @NotNull ItemStack stack) {
-        Direction direction = blockState.getValue(FACING);
+    public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity livingEntity, @NotNull ItemStack stack) {
+        Direction direction = state.getValue(FACING);
 
-        level.setBlockAndUpdate(blockPos.above().relative(direction.getCounterClockWise()), blockState.setValue(PART, ReinforcementPart.LEFT));
-        level.setBlockAndUpdate(blockPos.above().relative(direction.getClockWise()), blockState.setValue(ReinforcementBlock.PART, ReinforcementPart.RIGHT));
-        level.setBlockAndUpdate(blockPos.above(), blockState.setValue(ReinforcementBlock.PART, ReinforcementPart.BASE));
-        level.setBlockAndUpdate(blockPos.above(2), blockState.setValue(ReinforcementBlock.PART, ReinforcementPart.TOP));
+        level.setBlockAndUpdate(pos.above().relative(direction.getCounterClockWise()), state.setValue(PART, ReinforcementPart.LEFT).setValue(ReinforcementBlock.WATERLOGGED, level.getFluidState(pos.above().relative(direction.getCounterClockWise())).getType() == Fluids.WATER));
+        level.setBlockAndUpdate(pos.above().relative(direction.getClockWise()), state.setValue(ReinforcementBlock.PART, ReinforcementPart.RIGHT).setValue(ReinforcementBlock.WATERLOGGED, level.getFluidState(pos.above().relative(direction.getClockWise())).getType() == Fluids.WATER));
+        level.setBlockAndUpdate(pos.above(), state.setValue(ReinforcementBlock.PART, ReinforcementPart.BASE).setValue(ReinforcementBlock.WATERLOGGED, level.getFluidState(pos.above()).getType() == Fluids.WATER));
+        level.setBlockAndUpdate(pos.above(2), state.setValue(ReinforcementBlock.PART, ReinforcementPart.TOP).setValue(ReinforcementBlock.WATERLOGGED, level.getFluidState(pos.above(2)).getType() == Fluids.WATER));
 
-        super.setPlacedBy(level, blockPos, blockState, livingEntity, stack);
+        super.setPlacedBy(level, pos, state, livingEntity, stack);
     }
 
     @Override

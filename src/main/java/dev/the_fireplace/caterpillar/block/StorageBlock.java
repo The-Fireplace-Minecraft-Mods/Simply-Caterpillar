@@ -14,6 +14,8 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
@@ -89,6 +91,7 @@ public class StorageBlock extends AbstractCaterpillarBlock {
         BlockPos pos = context.getClickedPos();
         Level level = context.getLevel();
         Direction direction = context.getHorizontalDirection();
+        FluidState fluidState = context.getLevel().getFluidState(context.getClickedPos());
 
         if (
             pos.getY() < level.getMaxBuildHeight() - 1 &&
@@ -99,7 +102,7 @@ public class StorageBlock extends AbstractCaterpillarBlock {
 
             if (CaterpillarBlockUtil.getConnectedCaterpillarBlockEntities(level, caterpillarHeadPos, new ArrayList<>()).stream().noneMatch(blockEntity -> blockEntity instanceof StorageBlockEntity)) {
                 if (CaterpillarBlockUtil.isConnectedCaterpillarSameDirection(level, pos, direction)) {
-                    return defaultBlockState().setValue(FACING, direction).setValue(StorageBlock.PART, StoragePart.BASE);
+                    return defaultBlockState().setValue(FACING, direction).setValue(StorageBlock.PART, StoragePart.BASE).setValue(DrillHeadBlock.WATERLOGGED, fluidState.getType() == Fluids.WATER);
                 }
             } else {
                 context.getPlayer().displayClientMessage(Component.translatable("block.simplycaterpillar.blocks.already_connected", BlockInit.STORAGE.get().getName()), true);
@@ -110,13 +113,13 @@ public class StorageBlock extends AbstractCaterpillarBlock {
     }
 
     @Override
-    public void setPlacedBy(Level level, BlockPos blockPos, BlockState blockState, @Nullable LivingEntity livingEntity, @NotNull ItemStack stack) {
-        Direction direction = blockState.getValue(FACING);
+    public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity livingEntity, @NotNull ItemStack stack) {
+        Direction direction = state.getValue(FACING);
 
-        level.setBlockAndUpdate(blockPos.relative(direction.getCounterClockWise()), blockState.setValue(StorageBlock.PART, StoragePart.LEFT));
-        level.setBlockAndUpdate(blockPos.relative(direction.getClockWise()), blockState.setValue(StorageBlock.PART, StoragePart.RIGHT));
+        level.setBlockAndUpdate(pos.relative(direction.getCounterClockWise()), state.setValue(StorageBlock.PART, StoragePart.LEFT).setValue(WATERLOGGED, level.getFluidState(pos.relative(direction.getCounterClockWise())).getType() == Fluids.WATER));
+        level.setBlockAndUpdate(pos.relative(direction.getClockWise()), state.setValue(StorageBlock.PART, StoragePart.RIGHT).setValue(WATERLOGGED, level.getFluidState(pos.relative(direction.getClockWise())).getType() == Fluids.WATER));
 
-        super.setPlacedBy(level, blockPos, blockState, livingEntity, stack);
+        super.setPlacedBy(level, pos, state, livingEntity, stack);
     }
     private void dropContents(Level level, BlockPos pos) {
         BlockEntity blockEntity = level.getBlockEntity(pos);

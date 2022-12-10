@@ -17,6 +17,8 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -110,13 +112,14 @@ public class DecorationBlock extends AbstractCaterpillarBlock {
         BlockPos blockPos = context.getClickedPos();
         Level level = context.getLevel();
         Direction direction = context.getHorizontalDirection();
+        FluidState fluidState = context.getLevel().getFluidState(context.getClickedPos());
 
         if (blockPos.getY() < level.getMaxBuildHeight() - 1 && level.getBlockState(blockPos.relative(direction.getClockWise())).canBeReplaced(context) && level.getBlockState(blockPos.relative(direction.getCounterClockWise())).canBeReplaced(context)) {
             BlockPos caterpillarHeadPos = CaterpillarBlockUtil.getCaterpillarHeadPos(level, blockPos.relative(direction), direction);
 
             if (CaterpillarBlockUtil.getConnectedCaterpillarBlockEntities(level, caterpillarHeadPos, new ArrayList<>()).stream().noneMatch(blockEntity -> blockEntity instanceof DecorationBlockEntity)) {
                 if (CaterpillarBlockUtil.isConnectedCaterpillarSameDirection(level, blockPos, direction)) {
-                    return super.defaultBlockState().setValue(FACING, direction).setValue(PART, DecorationPart.BASE);
+                    return super.defaultBlockState().setValue(FACING, direction).setValue(PART, DecorationPart.BASE).setValue(WATERLOGGED, fluidState.getType() == Fluids.WATER);
                 }
             } else {
                 context.getPlayer().displayClientMessage(Component.translatable("block.simplycaterpillar.blocks.already_connected", BlockInit.DECORATION.get().getName()), true);
@@ -130,8 +133,8 @@ public class DecorationBlock extends AbstractCaterpillarBlock {
     public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity livingEntity, @NotNull ItemStack stack) {
         Direction direction = state.getValue(FACING);
 
-        level.setBlockAndUpdate(pos.relative(direction.getCounterClockWise()), state.setValue(DecorationBlock.PART, DecorationPart.LEFT));
-        level.setBlockAndUpdate(pos.relative(direction.getClockWise()), state.setValue(DecorationBlock.PART, DecorationPart.RIGHT));
+        level.setBlockAndUpdate(pos.relative(direction.getCounterClockWise()), state.setValue(DecorationBlock.PART, DecorationPart.LEFT).setValue(WATERLOGGED, level.getFluidState(pos.relative(direction.getCounterClockWise())).getType() == Fluids.WATER));
+        level.setBlockAndUpdate(pos.relative(direction.getClockWise()), state.setValue(DecorationBlock.PART, DecorationPart.RIGHT).setValue(WATERLOGGED, level.getFluidState(pos.relative(direction.getClockWise())).getType() == Fluids.WATER));
 
         super.setPlacedBy(level, pos, state, livingEntity, stack);
     }
