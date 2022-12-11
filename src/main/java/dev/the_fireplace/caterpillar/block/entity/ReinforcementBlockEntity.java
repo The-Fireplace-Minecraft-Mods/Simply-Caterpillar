@@ -21,7 +21,6 @@ import net.minecraft.world.level.material.Fluids;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import dev.the_fireplace.caterpillar.block.ReinforcementBlock;
-import dev.the_fireplace.caterpillar.block.util.CaterpillarBlockUtil;
 import dev.the_fireplace.caterpillar.block.util.ReinforcementPart;
 import dev.the_fireplace.caterpillar.block.util.Replacement;
 import dev.the_fireplace.caterpillar.menu.ReinforcementMenu;
@@ -113,6 +112,7 @@ public class ReinforcementBlockEntity extends AbstractCaterpillarBlockEntity {
     public void move() {
         BlockPos basePos = this.getBlockPos();
         BlockPos nextPos = basePos.relative(this.getBlockState().getValue(ReinforcementBlock.FACING));
+        Direction direction = this.getBlockState().getValue(ReinforcementBlock.FACING);
 
         CompoundTag oldTag = this.saveWithFullMetadata();
         oldTag.remove("x");
@@ -129,19 +129,19 @@ public class ReinforcementBlockEntity extends AbstractCaterpillarBlockEntity {
             reinforcementBlockEntity.replacers.addAll(this.replacers);
             reinforcementBlockEntity.setChanged();
 
-            this.getLevel().setBlockAndUpdate(nextPos.relative(reinforcementBlockEntity.getBlockState().getValue(ReinforcementBlock.FACING).getCounterClockWise()), nextBlockEntity.getBlockState().setValue(ReinforcementBlock.PART, ReinforcementPart.LEFT));
-            this.getLevel().setBlockAndUpdate(nextPos.relative(reinforcementBlockEntity.getBlockState().getValue(ReinforcementBlock.FACING).getClockWise()), nextBlockEntity.getBlockState().setValue(ReinforcementBlock.PART, ReinforcementPart.RIGHT));
-            this.getLevel().setBlockAndUpdate(nextPos.above(), reinforcementBlockEntity.getBlockState().setValue(ReinforcementBlock.PART, ReinforcementPart.TOP));
-            this.getLevel().setBlockAndUpdate(nextPos.below(), reinforcementBlockEntity.getBlockState().setValue(ReinforcementBlock.PART, ReinforcementPart.BOTTOM));
+            level.setBlockAndUpdate(nextPos.relative(direction.getCounterClockWise()), level.getBlockState(basePos.relative(direction.getCounterClockWise())));
+            level.setBlockAndUpdate(nextPos.relative(direction.getClockWise()), level.getBlockState(basePos.relative(direction.getClockWise())));
+            level.setBlockAndUpdate(nextPos.above(), level.getBlockState(basePos.above()));
+            level.setBlockAndUpdate(nextPos.below(), level.getBlockState(basePos.below()));
 
-            this.getLevel().removeBlock(basePos,false);
-            this.getLevel().removeBlock(basePos.relative(this.getBlockState().getValue(ReinforcementBlock.FACING).getCounterClockWise()), false);
-            this.getLevel().removeBlock(basePos.relative(this.getBlockState().getValue(ReinforcementBlock.FACING).getClockWise()), false);
-            this.getLevel().removeBlock(basePos.above(), false);
-            this.getLevel().removeBlock(basePos.below(), false);
+            level.removeBlock(basePos,true);
+            level.removeBlock(basePos.relative(direction.getCounterClockWise()), true);
+            level.removeBlock(basePos.relative(direction.getClockWise()), true);
+            level.removeBlock(basePos.above(), true);
+            level.removeBlock(basePos.below(), true);
 
             if (CaterpillarConfig.enableSounds) {
-                this.getLevel().playSound(null, basePos, SoundEvents.PISTON_EXTEND, SoundSource.BLOCKS, 1.0F, 1.0F);
+                level.playSound(null, basePos, SoundEvents.PISTON_EXTEND, SoundSource.BLOCKS, 1.0F, 1.0F);
             }
 
             reinforcementBlockEntity.reinforce();
@@ -150,103 +150,75 @@ public class ReinforcementBlockEntity extends AbstractCaterpillarBlockEntity {
 
     private void reinforce() {
         Direction direction = this.getBlockState().getValue(ReinforcementBlock.FACING);
-        BlockPos basePos = this.getBlockPos();
-        BlockPos reinforcePos;
-
-        List<AbstractCaterpillarBlockEntity> drillHeadAndStorageBlockEntities = CaterpillarBlockUtil.getConnectedDrillHeadAndStorageBlockEntities(level, basePos, direction);
-
-        if (drillHeadAndStorageBlockEntities == null) {
-            return;
-        }
 
         for (int i = -2; i <= 2; i++) {
             for (int j = -2; j <= 2; j++) {
                 for (int k = -2; k <= 2; k++) {
-                    reinforcePos = switch (direction) {
-                        case EAST -> basePos.offset(-k, i, -j);
-                        case WEST -> basePos.offset(k, i, j);
-                        case SOUTH -> basePos.offset(j, i, -k);
-                        default -> basePos.offset(-j, i, k);
+                    BlockPos reinforcePos = switch (direction) {
+                        case EAST -> this.getBlockPos().offset(-i, j, k);
+                        case WEST -> this.getBlockPos().offset(i, j, -k);
+                        case SOUTH -> this.getBlockPos().offset(-k, j, -i);
+                        default -> this.getBlockPos().offset(k, j, i);
                     };
 
-                    if (i == 2) { // CEILING
-                        int slotId = REINFORCEMENT_SLOT_CEILING_START + j + 2;
-
-                        if (direction == Direction.NORTH || direction == Direction.EAST) {
-                            slotId = REINFORCEMENT_SLOT_CEILING_START + (-1 * j) + 2;
-                        }
+                    if (j == 2) { // CEILING
+                        int slotId = REINFORCEMENT_SLOT_CEILING_START + k + 2;
 
                         Item reinforceItem = this.getStackInSlot(slotId).getItem();
                         Block reinforceBlock = Block.byItem(reinforceItem);
 
-                        if (checkIfReinforcementIsNeeded(REPLACER_CEILING, reinforcePos, reinforceBlock) && super.takeItem(drillHeadAndStorageBlockEntities, reinforceItem, DrillHeadBlockEntity.CONSUMPTION_SLOT_START, DrillHeadBlockEntity.CONSUMPTION_SLOT_END)) {
+                        if (isReinforcementNeeded(REPLACER_CEILING, reinforcePos, reinforceBlock) && super.takeItemFromCaterpillarConsumption(reinforceItem)) {
                             this.level.setBlockAndUpdate(reinforcePos, reinforceBlock.defaultBlockState());
                         }
-                    } else if (i == -2) { // FLOOR
-                        int slotId = REINFORCEMENT_SLOT_FLOOR_START + j + 2;
-
-                        if (direction == Direction.NORTH || direction == Direction.EAST) {
-                            slotId = REINFORCEMENT_SLOT_FLOOR_START + (-1 * j) + 2;
-                        }
+                    } else if (j == -2) { // FLOOR
+                        int slotId = REINFORCEMENT_SLOT_FLOOR_START + k + 2;
 
                         Item reinforceItem = this.getStackInSlot(slotId).getItem();
                         Block reinforceBlock = Block.byItem(reinforceItem);
 
-                        if (checkIfReinforcementIsNeeded(REPLACER_FLOOR, reinforcePos, reinforceBlock) && super.takeItem(drillHeadAndStorageBlockEntities, reinforceItem, DrillHeadBlockEntity.CONSUMPTION_SLOT_START, DrillHeadBlockEntity.CONSUMPTION_SLOT_END)) {
+                        if (isReinforcementNeeded(REPLACER_FLOOR, reinforcePos, reinforceBlock) && super.takeItemFromCaterpillarConsumption(reinforceItem)) {
                             this.level.setBlockAndUpdate(reinforcePos, reinforceBlock.defaultBlockState());
                         }
-                    } else if (
-                            (j == -2 && (direction == Direction.NORTH || direction == Direction.EAST)) ||
-                            (j == 2 && (direction == Direction.SOUTH || direction == Direction.WEST))
-                    ) { // RIGHT
-                        int slotId = REINFORCEMENT_SLOT_RIGHT_START + (-1 * i) + 1;
+                    } else if (k == -2) { // LEFT
+                        int slotId = REINFORCEMENT_SLOT_LEFT_START + (-1 * j) + 1;
 
                         Item reinforceItem = this.getStackInSlot(slotId).getItem();
                         Block reinforceBlock = Block.byItem(reinforceItem);
 
-                        if (checkIfReinforcementIsNeeded(REPLACER_RIGHT, reinforcePos, reinforceBlock) && super.takeItem(drillHeadAndStorageBlockEntities, reinforceItem, DrillHeadBlockEntity.CONSUMPTION_SLOT_START, DrillHeadBlockEntity.CONSUMPTION_SLOT_END)) {
+                        if (isReinforcementNeeded(REPLACER_LEFT, reinforcePos, reinforceBlock) && super.takeItemFromCaterpillarConsumption(reinforceItem)) {
                             this.level.setBlockAndUpdate(reinforcePos, reinforceBlock.defaultBlockState());
                         }
-                    } else if (
-                            (j == -2 && (direction == Direction.SOUTH || direction == Direction.WEST)) ||
-                            (j == 2 && (direction == Direction.NORTH || direction == Direction.EAST))
-                    ) { // LEFT
-                        int slotId = REINFORCEMENT_SLOT_LEFT_START + (-1 * i) + 1;
+                    } else if (k == 2) { // RIGHT
+                        int slotId = REINFORCEMENT_SLOT_RIGHT_START + (-1 * j) + 1;
 
                         Item reinforceItem = this.getStackInSlot(slotId).getItem();
                         Block reinforceBlock = Block.byItem(reinforceItem);
 
-                        if (checkIfReinforcementIsNeeded(REPLACER_LEFT, reinforcePos, reinforceBlock) && super.takeItem(drillHeadAndStorageBlockEntities, reinforceItem, DrillHeadBlockEntity.CONSUMPTION_SLOT_START, DrillHeadBlockEntity.CONSUMPTION_SLOT_END)) {
+                        if (isReinforcementNeeded(REPLACER_RIGHT, reinforcePos, reinforceBlock) && super.takeItemFromCaterpillarConsumption(reinforceItem)) {
                             this.level.setBlockAndUpdate(reinforcePos, reinforceBlock.defaultBlockState());
                         }
-                    } else if (i != -2 && i != 2 && j != -2 && j != 2) {
-                        if (this.level.getFluidState(reinforcePos).getType().equals(Fluids.FLOWING_LAVA) ||
-                            this.level.getFluidState(reinforcePos).getType().equals(Fluids.FLOWING_WATER) ||
-                            this.level.getBlockState(reinforcePos).equals(Blocks.SAND.defaultBlockState()) ||
-                            this.level.getBlockState(reinforcePos).equals(Blocks.GRAVEL.defaultBlockState()) ||
-                            this.level.getBlockState(reinforcePos).equals(Blocks.LAVA.defaultBlockState()) ||
-                            this.level.getBlockState(reinforcePos).equals(Blocks.WATER.defaultBlockState())
-                        ) {
-                            // this.level.setBlockAndUpdate(reinforcePos, Blocks.AIR.defaultBlockState());
-                        }
-                    } else {
                     }
                 }
             }
         }
     }
 
-    private boolean checkIfReinforcementIsNeeded(int side, BlockPos reinforcePos, Block reinforceBlock) {
+    private boolean isReinforcementNeeded(int side, BlockPos reinforcePos, Block reinforceBlock) {
         Block block = this.level.getBlockState(reinforcePos).getBlock();
 
         int replacerIndex = 0;
         for(byte replacer : this.replacers.get(side)) {
             if (replacer == (byte) 1) {
+                // If replace all is enabled
+                if (replacerIndex == Replacement.ALL.INDEX) {
+                    if (!block.equals(reinforceBlock)) {
+                        return true;
+                    }
+                }
+
                 for (Block replacementBlock : Replacement.values()[replacerIndex].BLOCKS) {
-                    if (replacementBlock.equals(block)) {
-                        if (replacementBlock.equals(block) && !replacementBlock.equals(reinforceBlock)) {
-                            return true;
-                        }
+                    if (replacementBlock.equals(block) && !replacementBlock.equals(reinforceBlock)) {
+                        return true;
                     }
                 }
             }
