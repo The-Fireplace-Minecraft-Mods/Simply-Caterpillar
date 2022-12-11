@@ -2,7 +2,6 @@ package dev.the_fireplace.caterpillar.block.entity;
 
 import dev.the_fireplace.caterpillar.Caterpillar;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
@@ -19,12 +18,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import dev.the_fireplace.caterpillar.block.IncineratorBlock;
-import dev.the_fireplace.caterpillar.block.util.CaterpillarBlockUtil;
 import dev.the_fireplace.caterpillar.menu.IncineratorMenu;
 import dev.the_fireplace.caterpillar.config.CaterpillarConfig;
 import dev.the_fireplace.caterpillar.init.BlockEntityInit;
-
-import java.util.List;
 
 public class IncineratorBlockEntity extends AbstractCaterpillarBlockEntity {
 
@@ -75,17 +71,10 @@ public class IncineratorBlockEntity extends AbstractCaterpillarBlockEntity {
     }
 
     private void incinerate() {
-        Direction direction = this.getBlockState().getValue(IncineratorBlock.FACING);
-        List<AbstractCaterpillarBlockEntity> drillHeadAndStorageBlockEntities = CaterpillarBlockUtil.getConnectedDrillHeadAndStorageBlockEntities(level, this.getBlockPos(), direction);
-
-        if (drillHeadAndStorageBlockEntities == null) {
-            return;
-        }
-
         for (int i = 0; i < INVENTORY_SIZE; i++) {
             Item itemToIncinerate = this.getStackInSlot(i).getItem();
 
-            super.removeItem(drillHeadAndStorageBlockEntities, itemToIncinerate, DrillHeadBlockEntity.GATHERED_SLOT_START, DrillHeadBlockEntity.GATHERED_SLOT_END);
+            super.removeItemFromCaterpillarGathered(itemToIncinerate);
         }
     }
 
