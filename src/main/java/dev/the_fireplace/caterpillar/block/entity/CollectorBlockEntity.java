@@ -42,21 +42,13 @@ public class CollectorBlockEntity extends AbstractCaterpillarBlockEntity {
             this.getLevel().removeBlock(basePos, false);
             this.getLevel().removeBlock(basePos.below(), false);
 
-            nextCollectorBlockEntity.suckInItems();
+            nextCollectorBlockEntity.collect();
         }
     }
 
-    private void suckInItems() {
-        Direction direction = this.getBlockState().getValue(CollectorBlock.FACING);
-
-        List<AbstractCaterpillarBlockEntity> drillHeadAndStorageBlockEntities = CaterpillarBlockUtil.getConnectedDrillHeadAndStorageBlockEntities(level, this.getBlockPos(), direction);
-
-        if (drillHeadAndStorageBlockEntities == null) {
-            return;
-        }
-
+    private void collect() {
         for(ItemEntity itemEntity : getItemsAround()) {
-            ItemStack remainderStack = super.insertItemStack(drillHeadAndStorageBlockEntities, itemEntity.getItem(), DrillHeadBlockEntity.GATHERED_SLOT_START, DrillHeadBlockEntity.GATHERED_SLOT_END);
+            ItemStack remainderStack = super.insertItemStackToCaterpillarGathered(itemEntity.getItem());
             itemEntity.setItem(remainderStack);
         }
     }
