@@ -45,7 +45,7 @@ public class CaterpillarBlockUtil {
                 !block.equals(Blocks.LAVA);
     }
 
-    public static List<AbstractCaterpillarBlockEntity> getConnectedCaterpillarBlockEntities(Level level, BlockPos pos, @Nullable List<AbstractCaterpillarBlockEntity> caterpillarBlockEntities) {
+    public static List<AbstractCaterpillarBlockEntity> getConnectedCaterpillarBlockEntities(Level level, BlockPos pos, List<AbstractCaterpillarBlockEntity> caterpillarBlockEntities) {
         BlockState blockState = level.getBlockState(pos);
 
         if (!isCaterpillarBlock(blockState.getBlock())) {

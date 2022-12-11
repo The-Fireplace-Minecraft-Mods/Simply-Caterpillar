@@ -103,24 +103,20 @@ public abstract class AbstractCaterpillarBlock extends BaseEntityBlock implement
 
     @Override
     public @NotNull InteractionResult use(@NotNull BlockState state, Level level, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult hit) {
-        if (level.isClientSide) {
-            return InteractionResult.SUCCESS;
-        } else {
+        if (!level.isClientSide()) {
             Direction direction = state.getValue(FACING);
             BlockPos basePos = getBasePos(state, pos);
             BlockPos caterpillarHeadPos = CaterpillarBlockUtil.getCaterpillarHeadPos(level, basePos, direction);
 
-            if (caterpillarHeadPos != null) {
-                BlockEntity blockEntity = level.getBlockEntity(caterpillarHeadPos);
-                if (blockEntity instanceof DrillHeadBlockEntity drillHeadBlockEntity) {
-                    NetworkHooks.openScreen((ServerPlayer) player, drillHeadBlockEntity, caterpillarHeadPos);
-                } else {
-                    player.displayClientMessage(Component.translatable("block.simplycaterpillar.drill_head.not_found"), true);
-                }
+            BlockEntity blockEntity = level.getBlockEntity(caterpillarHeadPos);
+            if (blockEntity instanceof DrillHeadBlockEntity drillHeadBlockEntity) {
+                NetworkHooks.openScreen((ServerPlayer) player, drillHeadBlockEntity, caterpillarHeadPos);
+            } else {
+                player.displayClientMessage(Component.translatable("block.simplycaterpillar.drill_head.not_found"), true);
             }
-
-            return InteractionResult.CONSUME;
         }
+
+        return InteractionResult.sidedSuccess(level.isClientSide());
     }
 
     public BlockPos getBasePos(BlockState state, BlockPos pos) {
