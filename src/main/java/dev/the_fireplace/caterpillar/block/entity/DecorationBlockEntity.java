@@ -9,14 +9,18 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
@@ -25,7 +29,6 @@ import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import dev.the_fireplace.caterpillar.block.DecorationBlock;
-import dev.the_fireplace.caterpillar.block.util.CaterpillarBlockUtil;
 import dev.the_fireplace.caterpillar.block.util.DecorationPart;
 import dev.the_fireplace.caterpillar.menu.DecorationMenu;
 import dev.the_fireplace.caterpillar.menu.syncdata.DecorationContainerData;
@@ -145,16 +148,9 @@ public class DecorationBlockEntity extends AbstractCaterpillarBlockEntity {
         }
         this.setChanged();
 
-        int placementSlotId = INVENTORY_MAX_SLOTS;
+        int placementSlotId = INVENTORY_MAX_SLOTS - 1;
         ItemStackHandler currentPlacementMap =  this.placementMap.get(this.currentMap);
-
         Direction direction = this.getBlockState().getValue(DecorationBlock.FACING);
-
-        List<AbstractCaterpillarBlockEntity> drillHeadAndStorageBlockEntities = CaterpillarBlockUtil.getConnectedDrillHeadAndStorageBlockEntities(level, this.getBlockPos(), direction);
-
-        if (drillHeadAndStorageBlockEntities == null) {
-            return;
-        }
 
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
@@ -169,107 +165,60 @@ public class DecorationBlockEntity extends AbstractCaterpillarBlockEntity {
                     default -> this.getBlockPos().offset(-j, i, 1);
                 };
 
-                Item itemToPlace = currentPlacementMap.getStackInSlot(--placementSlotId).getItem();
-                Block blockToPlace = Block.byItem(itemToPlace);
+                ItemStack itemStackToPlace = currentPlacementMap.getStackInSlot(placementSlotId--);
+                Block blockToPlace = Block.byItem(itemStackToPlace.getItem());
 
-                if (blockToPlace != Blocks.AIR) {
-                    BlockState blockState = blockToPlace.defaultBlockState();
+                blockToPlace.defaultBlockState().getMaterial().isReplaceable();
 
-                    if (!blockState.canSurvive(level, decoratePos)) {
-                        if (blockToPlace.equals(Blocks.TORCH)) {
-                            blockState = Blocks.WALL_TORCH.defaultBlockState();
-                        } else if (blockToPlace.equals(Blocks.REDSTONE_TORCH)) {
-                            blockState = Blocks.REDSTONE_WALL_TORCH.defaultBlockState();
-                        } else if (blockToPlace.equals(Blocks.SOUL_TORCH)) {
-                            blockState = Blocks.SOUL_WALL_TORCH.defaultBlockState();
-                        } else {
-                            continue;
-                        }
+                if (blockToPlace == Blocks.AIR) {
+                    continue;
+                }
 
-                        if (j == -1) {
-                            if (level.getBlockState(decoratePos.relative(direction.getClockWise())).isFaceSturdy(level, decoratePos.relative(direction.getClockWise()), direction.getOpposite())) {
-                                blockState = blockState.setValue(DecorationBlock.FACING, direction.getCounterClockWise());
-                            } else {
-                                continue;
-                            }
-                        } else if (j == 0) {
-                            if (level.getBlockState(decoratePos.relative(direction.getOpposite())).isFaceSturdy(level, decoratePos.relative(direction.getOpposite()), direction.getOpposite())) {
-                                blockState = blockState.setValue(DecorationBlock.FACING, direction);
-                            } else {
-                                continue;
-                            }
-                        } else if (j == 1) {
-                            if (level.getBlockState(decoratePos.relative(direction.getCounterClockWise())).isFaceSturdy(level, decoratePos.relative(direction.getCounterClockWise()), direction.getOpposite())) {
-                                blockState = blockState.setValue(DecorationBlock.FACING, direction.getClockWise());
-                            } else {
-                                continue;
-                            }
-                        }
+                Direction directionToPlace = switch (j) {
+                    case -1 -> direction.getCounterClockWise();
+                    case 1 -> direction.getClockWise();
+                    default -> direction;
+                };
+
+                BlockState blockStateToPlace;
+
+                if (!blockToPlace.defaultBlockState().canSurvive(this.getLevel(), decoratePos) ) {
+                    if (blockToPlace.equals(Blocks.TORCH)) {
+                        blockStateToPlace = Blocks.WALL_TORCH.defaultBlockState().setValue(WallTorchBlock.FACING, directionToPlace);
+                    } else if (blockToPlace.equals(Blocks.REDSTONE_TORCH)) {
+                        blockStateToPlace = Blocks.REDSTONE_WALL_TORCH.defaultBlockState().setValue(WallTorchBlock.FACING, directionToPlace);
+                    } else if (blockToPlace.equals(Blocks.SOUL_TORCH)) {
+                        blockStateToPlace = Blocks.SOUL_WALL_TORCH.defaultBlockState().setValue(WallTorchBlock.FACING, directionToPlace);
+                    } else {
+                        continue;
                     }
 
-                    if (blockToPlace instanceof FenceBlock) {
-                        if (j == 1) {
-                            switch (direction) {
-                                case NORTH : {
-                                    if (level.getBlockState(decoratePos.relative(direction.getCounterClockWise())).isFaceSturdy(level, decoratePos.relative(direction.getCounterClockWise()), direction.getOpposite())) {
-                                        blockState = blockState.setValue(FenceBlock.WEST, true);
-                                    }
-                                    break;
-                                }
-                                case SOUTH : {
-                                    if (level.getBlockState(decoratePos.relative(direction.getCounterClockWise())).isFaceSturdy(level, decoratePos.relative(direction.getCounterClockWise()), direction.getOpposite())) {
-                                        blockState = blockState.setValue(FenceBlock.EAST, true);
-                                    }
-                                    break;
-                                }
-                                case EAST : {
-                                    if (level.getBlockState(decoratePos.relative(direction.getCounterClockWise())).isFaceSturdy(level, decoratePos.relative(direction.getCounterClockWise()), direction.getOpposite())) {
-                                        blockState = blockState.setValue(FenceBlock.NORTH, true);
-                                    }
-                                    break;
-                                }
-                                case WEST : {
-                                    if (level.getBlockState(decoratePos.relative(direction.getCounterClockWise())).isFaceSturdy(level, decoratePos.relative(direction.getCounterClockWise()), direction.getOpposite())) {
-                                        blockState = blockState.setValue(FenceBlock.SOUTH, true);
-                                    }
-                                    break;
-                                }
+                    switch (j) {
+                        case -1 : {
+                            if (!level.getBlockState(decoratePos.relative(direction.getClockWise())).isFaceSturdy(level, decoratePos, directionToPlace.getOpposite())) {
+                                continue;
                             }
-                        } else if (j == -1) {
-                            switch (direction) {
-                                case NORTH : {
-                                    if (level.getBlockState(decoratePos.relative(direction.getClockWise())).isFaceSturdy(level, decoratePos.relative(direction.getClockWise()), direction.getOpposite())) {
-                                        blockState = blockState.setValue(FenceBlock.EAST, true);
-                                    }
-                                    break;
-                                }
-                                case SOUTH : {
-                                    if (level.getBlockState(decoratePos.relative(direction.getClockWise())).isFaceSturdy(level, decoratePos.relative(direction.getClockWise()), direction.getOpposite())) {
-                                        blockState = blockState.setValue(FenceBlock.WEST, true);
-                                    }
-                                    break;
-                                }
-                                case EAST : {
-                                    if (level.getBlockState(decoratePos.relative(direction.getClockWise())).isFaceSturdy(level, decoratePos.relative(direction.getClockWise()), direction.getOpposite())) {
-                                        blockState = blockState.setValue(FenceBlock.SOUTH, true);
-                                    }
-                                    break;
-                                }
-                                case WEST : {
-                                    if (level.getBlockState(decoratePos.relative(direction.getClockWise())).isFaceSturdy(level, decoratePos.relative(direction.getClockWise()), direction.getOpposite())) {
-                                        blockState = blockState.setValue(FenceBlock.NORTH, true);
-                                    }
-                                    break;
-                                }
-                            }
+                            break;
                         }
-                    } else if (blockToPlace instanceof WallBlock wallBlock) {
-                        // TODO: Implement connection walls
+                        case 1 : {
+                            if (!level.getBlockState(decoratePos.relative(direction.getCounterClockWise())).isFaceSturdy(level, decoratePos, directionToPlace.getOpposite())) {
+                                continue;
+                            }
+                            break;
+                        }
+                        default : {
+                            if (!level.getBlockState(decoratePos.relative(direction)).isFaceSturdy(level, decoratePos, directionToPlace.getOpposite())) {
+                                continue;
+                            }
+                            break;
+                        }
                     }
+                } else {
+                    blockStateToPlace = blockToPlace.getStateForPlacement(new BlockPlaceContext(new UseOnContext(this.level, null, InteractionHand.MAIN_HAND, itemStackToPlace, new BlockHitResult(new Vec3(0, 0, 0), directionToPlace, decoratePos, false))));
+                }
 
-                    if (super.takeItem(drillHeadAndStorageBlockEntities, itemToPlace, DrillHeadBlockEntity.CONSUMPTION_SLOT_START, DrillHeadBlockEntity.CONSUMPTION_SLOT_END)) {
-                        this.getLevel().setBlockAndUpdate(decoratePos, blockState);
-                    }
+                if (super.takeItemFromCaterpillarConsumption(itemStackToPlace.getItem())) {
+                    this.getLevel().setBlockAndUpdate(decoratePos, blockStateToPlace);
                 }
             }
         }
