@@ -102,7 +102,7 @@ public abstract class AbstractCaterpillarBlock extends BaseEntityBlock implement
     }
 
     @Override
-    public @NotNull InteractionResult use(@NotNull BlockState state, Level level, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult hit) {
+    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         if (!level.isClientSide()) {
             Direction direction = state.getValue(FACING);
             BlockPos basePos = getBasePos(state, pos);

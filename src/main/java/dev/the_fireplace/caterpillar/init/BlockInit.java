@@ -31,6 +31,12 @@ public class BlockInit {
             new Item.Properties().tab(Caterpillar.CATERPILLAR_CREATIVE_MODE_TAB)
     );
 
+    public static final RegistryObject<DrillSeatBlock> DRILL_SEAT = register(
+            "drill_seat",
+            () -> new DrillSeatBlock(BlockBehaviour.Properties.of(Material.STONE).strength(1.5F, 6.0F).sound(SoundType.STONE).requiresCorrectToolForDrops()),
+            new Item.Properties().tab(Caterpillar.CATERPILLAR_CREATIVE_MODE_TAB)
+    );
+
     public static final RegistryObject<CollectorBlock> COLLECTOR = register(
             "collector",
             () -> new CollectorBlock(BlockBehaviour.Properties.of(Material.STONE).strength(1.5F, 6.0F).sound(SoundType.STONE).requiresCorrectToolForDrops()),

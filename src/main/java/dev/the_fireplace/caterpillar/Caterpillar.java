@@ -2,6 +2,7 @@ package dev.the_fireplace.caterpillar;
 
 import com.mojang.logging.LogUtils;
 import dev.the_fireplace.caterpillar.config.ConfigHolder;
+import dev.the_fireplace.caterpillar.init.*;
 import dev.the_fireplace.caterpillar.network.PacketHandler;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
@@ -14,10 +15,6 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
-import dev.the_fireplace.caterpillar.init.BlockEntityInit;
-import dev.the_fireplace.caterpillar.init.BlockInit;
-import dev.the_fireplace.caterpillar.init.ItemInit;
-import dev.the_fireplace.caterpillar.init.MenuInit;
 
 @Mod(dev.the_fireplace.caterpillar.Caterpillar.MOD_ID)
 @Mod.EventBusSubscriber(modid = dev.the_fireplace.caterpillar.Caterpillar.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
@@ -45,6 +42,7 @@ public class Caterpillar {
         BlockEntityInit.BLOCK_ENTITY_TYPES.register(bus);
         ItemInit.ITEMS.register(bus);
         MenuInit.MENU_TYPES.register(bus);
+        EntityInit.ENTITY_TYPES.register(bus);
 
         bus.addListener(this::commonSetup);
 
