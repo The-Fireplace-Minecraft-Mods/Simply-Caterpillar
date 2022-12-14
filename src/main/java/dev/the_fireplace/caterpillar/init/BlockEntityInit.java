@@ -14,6 +14,9 @@ public class BlockEntityInit {
     // Block entities
     public static final RegistryObject<BlockEntityType<DrillBaseBlockEntity>> DRILL_BASE = BLOCK_ENTITY_TYPES.register("drill_base", () -> BlockEntityType.Builder.of(DrillBaseBlockEntity::new, BlockInit.DRILL_BASE.get()).build(null));
 
+    public static final RegistryObject<BlockEntityType<DrillSeatBlockEntity>> DRILL_SEAT = BLOCK_ENTITY_TYPES.register("drill_seat", () -> BlockEntityType.Builder.of(DrillSeatBlockEntity::new, BlockInit.DRILL_SEAT.get()).build(null));
+
+
     public static final RegistryObject<BlockEntityType<DrillHeadBlockEntity>> DRILL_HEAD = BLOCK_ENTITY_TYPES.register("drill_head", () -> BlockEntityType.Builder.of(DrillHeadBlockEntity::new, BlockInit.DRILL_HEAD.get()).build(null));
 
     public static final RegistryObject<BlockEntityType<IncineratorBlockEntity>> INCINERATOR = BLOCK_ENTITY_TYPES.register("incinerator", () -> BlockEntityType.Builder.of(IncineratorBlockEntity::new, BlockInit.INCINERATOR.get()).build(null));

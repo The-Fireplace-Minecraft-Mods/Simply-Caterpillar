@@ -87,12 +87,19 @@ public class SeatEntity extends Entity {
         Direction[] offsets = {original, original.getClockWise(), original.getCounterClockWise(), original.getOpposite()};
 
         for(Direction dir : offsets) {
-            Vec3 safeVec = DismountHelper.findSafeDismountLocation(entity.getType(), this.level, this.blockPosition().relative(dir), false);
+            Vec3 safeVec = DismountHelper.findSafeDismountLocation(entity.getType(), this.level, this.blockPosition().below().relative(dir), true);
 
             if(safeVec != null) {
-                return safeVec.add(0, 0.25, 0);
+                return safeVec;
             }
         }
+
         return super.getDismountLocationForPassenger(entity);
+    }
+
+    @Override
+    protected void addPassenger(Entity passenger) {
+        super.addPassenger(passenger);
+        passenger.setYRot(this.getVisualRotationYInDegrees() - 180F);
     }
 }
