@@ -38,7 +38,7 @@ public class IncineratorBlock extends AbstractCaterpillarBlock {
 
     public IncineratorBlock(Properties properties) {
         super(properties);
-        super.runCalculation(SHAPES, IncineratorBlock.SHAPE);
+        super.runCalculation(SHAPES, SHAPE);
     }
 
     @Override

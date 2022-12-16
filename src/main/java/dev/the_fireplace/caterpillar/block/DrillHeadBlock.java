@@ -50,7 +50,7 @@ public class DrillHeadBlock extends AbstractCaterpillarBlock {
 
     private static final Map<Direction, VoxelShape> SHAPES_BLADES = new EnumMap<>(Direction.class);
 
-    private static final VoxelShape SHAPE_BASE =  Stream.of(
+    private static final VoxelShape SHAPE_BASE = Stream.of(
         Block.box(0, 10, 1, 16, 16, 16),
         Block.box(0, 6, 1, 16, 10, 16),
         Block.box(0, 0, 1, 16, 6, 16),

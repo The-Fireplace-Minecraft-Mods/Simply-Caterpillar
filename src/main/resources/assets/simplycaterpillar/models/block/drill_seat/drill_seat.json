@@ -1,5 +1,6 @@
 {
 	"ambientocclusion": false,
+	"render_type": "cutout",
 	"textures": {
 		"4": "simplycaterpillar:block/pieces/wood_piece",
 		"top": "simplycaterpillar:block/drill_seat/drill_seat_top",
@@ -168,19 +169,6 @@
 			}
 		},
 		{
-			"from": [6, 6, 16],
-			"to": [10, 10, 31],
-			"rotation": {"angle": 0, "axis": "y", "origin": [8, 0, 8]},
-			"faces": {
-				"north": {"uv": [0, 12, 4, 16], "texture": "#4", "tintindex": 0},
-				"east": {"uv": [0, 0, 15, 4], "texture": "#4"},
-				"south": {"uv": [0, 12, 4, 16], "texture": "#4"},
-				"west": {"uv": [0, 0, 15, 4], "texture": "#4"},
-				"up": {"uv": [0, 0, 15, 4], "rotation": 270, "texture": "#4"},
-				"down": {"uv": [0, 0, 15, 4], "rotation": 270, "texture": "#4"}
-			}
-		},
-		{
 			"from": [2, 3, 14],
 			"to": [6, 16, 16],
 			"faces": {
@@ -221,6 +209,59 @@
 				"up": {"uv": [10, 13, 14, 15], "texture": "#top", "cullface": "up"},
 				"down": {"uv": [10, 0, 14, 2], "texture": "#inside"}
 			}
+		},
+		{
+			"from": [6, 6, 16],
+			"to": [10, 10, 31],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 0, 8]},
+			"faces": {
+				"north": {"uv": [0, 12, 4, 16], "texture": "#4", "tintindex": 0},
+				"east": {"uv": [0, 0, 15, 4], "texture": "#4"},
+				"south": {"uv": [0, 12, 4, 16], "texture": "#4"},
+				"west": {"uv": [0, 0, 15, 4], "texture": "#4"},
+				"up": {"uv": [0, 0, 15, 4], "rotation": 270, "texture": "#4"},
+				"down": {"uv": [0, 0, 15, 4], "rotation": 270, "texture": "#4"}
+			}
+		}
+	],
+	"gui_light": "front",
+	"display": {
+		"thirdperson_righthand": {
+			"scale": [0.4, 0.4, 0.4]
+		},
+		"thirdperson_lefthand": {
+			"scale": [0.4, 0.4, 0.4]
+		},
+		"firstperson_righthand": {
+			"scale": [0.4, 0.4, 0.4]
+		},
+		"firstperson_lefthand": {
+			"scale": [0.4, 0.4, 0.4]
+		},
+		"ground": {
+			"scale": [0.4, 0.4, 0.4]
+		},
+		"gui": {
+			"rotation": [36, 44, 0],
+			"translation": [-1.5, 0, 0],
+			"scale": [0.5, 0.5, 0.5]
+		},
+		"head": {
+			"rotation": [-180, 180, 0],
+			"translation": [0, 8.25, 0]
+		},
+		"fixed": {
+			"rotation": [0, 90, 0],
+			"translation": [-0.75, 0, -2.25],
+			"scale": [0.4, 0.4, 0.4]
+		}
+	},
+	"groups": [
+		{
+			"name": "VoxelShapes",
+			"origin": [8, 8, 8],
+			"color": 0,
+			"children": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
 		}
 	]
 }

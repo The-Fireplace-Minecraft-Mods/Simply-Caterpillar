@@ -1,6 +1,7 @@
 package dev.the_fireplace.caterpillar.block.entity;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.level.block.state.BlockState;
@@ -17,7 +18,8 @@ public class DrillBaseBlockEntity extends AbstractCaterpillarBlockEntity {
     }
 
     public void move() {
-        BlockPos nextPos = this.getBlockPos().relative(this.getBlockState().getValue(DrillBaseBlock.FACING));
+        Direction direction = this.getBlockState().getValue(DrillBaseBlock.FACING);
+        BlockPos nextPos = this.getBlockPos().relative(direction);
 
         this.getLevel().setBlockAndUpdate(nextPos, this.getBlockState());
         this.getLevel().removeBlock(this.getBlockPos(), false);

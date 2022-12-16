@@ -21,18 +21,26 @@ import java.util.stream.Stream;
 public class DrillSeatBlock extends AbstractCaterpillarBlock {
 
     private static final VoxelShape SHAPE = Stream.of(
-        Block.box(6, 0, 0, 10, 6, 16),
-        Block.box(13, 0, 0, 16, 16, 16),
-        Block.box(10, 0, 13, 13, 16, 16),
-        Block.box(10, 0, 0, 13, 10, 3),
-        Block.box(10, 0, 3, 13, 10, 13),
-        Block.box(6, 10, 0, 10, 10, 13),
-        Block.box(6, 10, 13, 10, 16, 16),
-        Block.box(6, 6, 16, 10, 10, 31),
-        Block.box(0, 0, 0, 3, 16, 16),
-        Block.box(3, 0, 0, 6, 10, 3),
-        Block.box(3, 0, 3, 6, 10, 13),
-        Block.box(3, 0, 13, 6, 16, 16)
+        Block.box(0, 3, 0, 2, 16, 16),
+        Block.box(2, 3, 2, 14, 4, 14),
+        Block.box(14, 3, 0, 16, 16, 16),
+        Block.box(6, 10, 0, 10, 16, 2),
+        Block.box(6, 3, 0, 10, 6, 2),
+        Block.box(10, 3, 0, 14, 16, 2),
+        Block.box(10, 3, 14, 14, 16, 16),
+        Block.box(0, 0, 0, 4, 3, 2),
+        Block.box(0, 0, 2, 2, 3, 4),
+        Block.box(12, 0, 0, 16, 3, 2),
+        Block.box(14, 0, 2, 16, 3, 4),
+        Block.box(0, 0, 14, 4, 3, 16),
+        Block.box(0, 0, 12, 2, 3, 14),
+        Block.box(12, 0, 14, 16, 3, 16),
+        Block.box(14, 0, 12, 16, 3, 14),
+        Block.box(2, 3, 14, 6, 16, 16),
+        Block.box(2, 3, 0, 6, 16, 2),
+        Block.box(6, 10, 14, 10, 16, 16),
+        Block.box(6, 3, 14, 10, 6, 16),
+        Block.box(6, 6, 16, 10, 10, 31)
     ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
 
     public DrillSeatBlock(Properties properties) {

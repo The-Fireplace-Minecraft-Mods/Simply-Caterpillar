@@ -90,7 +90,7 @@ public class SeatEntity extends Entity {
             Vec3 safeVec = DismountHelper.findSafeDismountLocation(entity.getType(), this.level, this.blockPosition().below().relative(dir), true);
 
             if(safeVec != null) {
-                return safeVec;
+                return safeVec.add(0.0D, 0.25D, 0.0D);
             }
         }
 

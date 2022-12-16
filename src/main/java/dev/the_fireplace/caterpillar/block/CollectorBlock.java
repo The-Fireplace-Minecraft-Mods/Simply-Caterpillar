@@ -102,7 +102,7 @@ public class CollectorBlock extends AbstractCaterpillarBlock {
         Direction direction = context.getHorizontalDirection();
 
         if (
-                pos.getY() < level.getMaxBuildHeight() - 1 &&
+            pos.getY() < level.getMaxBuildHeight() - 1 &&
             level.getBlockState(pos.above()).canBeReplaced(context)
         ) {
             BlockPos caterpillarHeadPos = CaterpillarBlockUtil.getCaterpillarHeadPos(level, pos.above().relative(direction), direction);
@@ -132,11 +132,6 @@ public class CollectorBlock extends AbstractCaterpillarBlock {
         level.setBlockAndUpdate(pos.above(), state.setValue(CollectorBlock.HALF, DoubleBlockHalf.UPPER).setValue(WATERLOGGED, level.getFluidState(pos.above()).getType() == Fluids.WATER));
 
         super.setPlacedBy(level, pos, state, livingEntity, stack);
-    }
-
-    protected void runCalculation(Map<Direction, VoxelShape> shapes, VoxelShape shape) {
-        for (Direction direction : Direction.values())
-            shapes.put(direction, calculateShapes(direction, shape));
     }
 
     @Nullable
