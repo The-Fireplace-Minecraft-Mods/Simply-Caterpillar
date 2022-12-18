@@ -1,7 +1,6 @@
 {
-	"ambientocclusion": false,
 	"textures": {
-		"3": "simplycaterpillar:block/rock_side",
+		"side": "simplycaterpillar:block/rock_side",
 		"particle": "simplycaterpillar:block/decoration/rock_face",
 		"front": "simplycaterpillar:block/decoration/rock_face",
 		"rod": "simplycaterpillar:block/pieces/wood_piece",
@@ -13,7 +12,7 @@
 			"to": [6, 16, 16],
 			"faces": {
 				"north": {"uv": [0, 0, 6, 16], "texture": "#side_small"},
-				"east": {"uv": [0, 0, 16, 16], "texture": "#3"},
+				"east": {"uv": [0, 0, 16, 16], "texture": "#side"},
 				"south": {"uv": [0, 0, 6, 16], "texture": "#side_small", "tintindex": 0},
 				"west": {"uv": [0, 0, 16, 16], "texture": "#front"},
 				"up": {"uv": [0, 0, 6, 16], "texture": "#side_small"},

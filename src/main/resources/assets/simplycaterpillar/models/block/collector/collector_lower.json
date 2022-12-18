@@ -1,5 +1,4 @@
 {
-	"ambientocclusion": false,
 	"textures": {
 		"particle": "simplycaterpillar:block/rock_side",
 		"side": "simplycaterpillar:block/rock_side"

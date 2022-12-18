@@ -1,5 +1,5 @@
 {
-	"ambientocclusion": false,
+	"parent": "simplycaterpillar:block/caterpillar",
 	"textures": {
 		"rod": "simplycaterpillar:block/pieces/wood_piece",
 		"particle": "simplycaterpillar:block/rock_side",
@@ -69,40 +69,6 @@
 			}
 		}
 	],
-	"gui_light": "front",
-	"display": {
-		"thirdperson_righthand": {
-			"rotation": [40, 0, 0],
-			"translation": [0, 0.25, 0],
-			"scale": [0.3, 0.3, 0.3]
-		},
-		"thirdperson_lefthand": {
-			"rotation": [40, 0, 0],
-			"scale": [0.3, 0.3, 0.3]
-		},
-		"firstperson_righthand": {
-			"scale": [0.4, 0.4, 0.4]
-		},
-		"firstperson_lefthand": {
-			"scale": [0.4, 0.4, 0.4]
-		},
-		"ground": {
-			"scale": [0.4, 0.4, 0.4]
-		},
-		"gui": {
-			"rotation": [-145, 135, -180],
-			"translation": [-1.5, 0, 0],
-			"scale": [0.5, 0.5, 0.5]
-		},
-		"head": {
-			"rotation": [-180, 90, -180]
-		},
-		"fixed": {
-			"rotation": [0, 90, 0],
-			"translation": [0, 0, -3.25],
-			"scale": [0.4, 0.4, 0.4]
-		}
-	},
 	"groups": [
 		{
 			"name": "VoxelShapes",
