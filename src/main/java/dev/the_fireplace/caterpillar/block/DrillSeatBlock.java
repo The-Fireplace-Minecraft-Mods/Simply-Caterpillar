@@ -1,11 +1,17 @@
 package dev.the_fireplace.caterpillar.block;
 
+import dev.the_fireplace.caterpillar.block.entity.DrillSeatBlockEntity;
+import dev.the_fireplace.caterpillar.block.util.CaterpillarBlockUtil;
 import dev.the_fireplace.caterpillar.entity.SeatEntity;
 import dev.the_fireplace.caterpillar.init.BlockEntityInit;
+import dev.the_fireplace.caterpillar.init.BlockInit;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -16,6 +22,7 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.stream.Stream;
 
 public class DrillSeatBlock extends AbstractCaterpillarBlock {
@@ -45,12 +52,31 @@ public class DrillSeatBlock extends AbstractCaterpillarBlock {
 
     public DrillSeatBlock(Properties properties) {
         super(properties);
-        super.runCalculation(SHAPES, SHAPE);
+        super.runCalculation(SHAPES, DrillSeatBlock.SHAPE);
     }
 
     @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         return SeatEntity.create(level, pos, 0.4, player, state.getValue(FACING));
+    }
+
+    @Override
+    public @Nullable BlockState getStateForPlacement(BlockPlaceContext context) {
+        BlockPos blockPos = context.getClickedPos();
+        Level level = context.getLevel();
+        Direction direction = context.getHorizontalDirection();
+
+        BlockPos caterpillarHeadPos = CaterpillarBlockUtil.getCaterpillarHeadPos(level, blockPos.relative(direction), direction);
+
+        if (CaterpillarBlockUtil.getConnectedCaterpillarBlockEntities(level, caterpillarHeadPos, new ArrayList<>()).stream().noneMatch(blockEntity -> blockEntity instanceof DrillSeatBlockEntity)) {
+            if (CaterpillarBlockUtil.isConnectedCaterpillarSameDirection(level, blockPos, direction)) {
+                return super.getStateForPlacement(context);
+            }
+        } else {
+            context.getPlayer().displayClientMessage(Component.translatable("block.simplycaterpillar.blocks.already_connected", BlockInit.DRILL_SEAT.get().getName()), true);
+        }
+
+        return null;
     }
 
     @Override

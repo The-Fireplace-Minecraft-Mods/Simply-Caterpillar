@@ -39,7 +39,7 @@ public abstract class AbstractCaterpillarBlock extends BaseEntityBlock implement
 
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 
-    protected static final Map<Direction, VoxelShape> SHAPES = new EnumMap<>(Direction.class);
+    protected final Map<Direction, VoxelShape> SHAPES = new EnumMap<>(Direction.class);
 
     protected AbstractCaterpillarBlock(Properties properties) {
         super(properties);
@@ -48,7 +48,7 @@ public abstract class AbstractCaterpillarBlock extends BaseEntityBlock implement
 
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-        return AbstractCaterpillarBlock.SHAPES.get(state.getValue(FACING));
+        return SHAPES.get(state.getValue(FACING));
     }
 
     @Nullable
