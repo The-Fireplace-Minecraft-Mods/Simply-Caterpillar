@@ -1,5 +1,5 @@
 {
-	"parent": "simplycaterpillar:block/caterpillar",
+	"parent": "simplycaterpillar:block/drill_base/drill_base",
 	"textures": {
 		"rod": "simplycaterpillar:block/pieces/wood_piece",
 		"particle": "simplycaterpillar:block/rock_side",

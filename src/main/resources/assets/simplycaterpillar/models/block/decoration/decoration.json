@@ -1,5 +1,5 @@
 {
-	"parent": "simplycaterpillar:block/caterpillar",
+	"parent": "simplycaterpillar:block/drill_base/drill_base",
 	"textures": {
 		"side_small": "simplycaterpillar:block/decoration/rock_side_small",
 		"rod": "simplycaterpillar:block/pieces/wood_piece",
@@ -125,6 +125,16 @@
 			}
 		}
 	],
+	"display": {
+		"gui": {
+			"rotation": [30, 45, 0],
+			"translation": [0, 0.25, 0],
+			"scale": [0.33, 0.33, 0.33]
+		},
+		"fixed": {
+			"scale": [0.4, 0.4, 0.4]
+		}
+	},
 	"groups": [
 		{
 			"name": "VoxelShapes",

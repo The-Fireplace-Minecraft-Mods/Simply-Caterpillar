@@ -1,5 +1,5 @@
 {
-	"parent": "simplycaterpillar:block/caterpillar",
+	"parent": "minecraft:block/orientable",
 	"textures": {
 		"rod": "simplycaterpillar:block/pieces/wood_piece",
 		"particle": "simplycaterpillar:block/rock_side",
@@ -72,6 +72,17 @@
 			}
 		}
 	],
+	"display": {
+		"firstperson_righthand": {
+			"rotation": [0, -45, 0],
+			"scale": [0.4, 0.4, 0.4]
+		},
+		"gui": {
+			"rotation": [30, 45, 0],
+			"translation": [-1.6, 0, 0],
+			"scale": [0.52, 0.52, 0.52]
+		}
+	},
 	"groups": [
 		{
 			"name": "VoxelShapes",

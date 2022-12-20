@@ -1,5 +1,5 @@
 {
-	"parent": "simplycaterpillar:block/caterpillar",
+	"parent": "simplycaterpillar:block/drill_base/drill_base",
 	"textures": {
 		"side": "simplycaterpillar:block/rock_side",
 		"chest": "entity/chest/normal",
@@ -150,6 +150,16 @@
 			}
 		}
 	],
+	"display": {
+		"gui": {
+			"rotation": [30, 45, 0],
+			"translation": [0, 0.25, 0],
+			"scale": [0.35, 0.35, 0.35]
+		},
+		"fixed": {
+			"scale": [0.4, 0.4, 0.4]
+		}
+	},
 	"groups": [
 		{
 			"name": "VoxelShapes",
