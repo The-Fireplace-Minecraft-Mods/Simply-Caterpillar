@@ -38,7 +38,7 @@ import java.util.EnumMap;
 import java.util.Map;
 import java.util.stream.Stream;
 
-public class DecorationBlock extends AbstractCaterpillarBlock {
+public class DecorationBlock extends DrillBaseBlock {
 
     public static final EnumProperty<DecorationPart> PART = EnumProperty.create("part", DecorationPart.class);
 

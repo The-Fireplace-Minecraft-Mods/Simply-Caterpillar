@@ -17,11 +17,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Fluids;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import dev.the_fireplace.caterpillar.block.ReinforcementBlock;
-import dev.the_fireplace.caterpillar.block.util.ReinforcementPart;
 import dev.the_fireplace.caterpillar.block.util.Replacement;
 import dev.the_fireplace.caterpillar.menu.ReinforcementMenu;
 import dev.the_fireplace.caterpillar.config.CaterpillarConfig;
@@ -32,7 +28,7 @@ import dev.the_fireplace.caterpillar.network.packet.server.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ReinforcementBlockEntity extends AbstractCaterpillarBlockEntity {
+public class ReinforcementBlockEntity extends DrillBaseBlockEntity {
 
     public static final Component TITLE = Component.translatable(
             "container." + Caterpillar.MOD_ID + ".reinforcement"
@@ -230,7 +226,7 @@ public class ReinforcementBlockEntity extends AbstractCaterpillarBlockEntity {
     }
 
     @Override
-    public void load(@NotNull CompoundTag tag) {
+    public void load(CompoundTag tag) {
         super.load(tag);
 
         ListTag replacersTagList = (ListTag) tag.get("Replacers");
@@ -262,13 +258,12 @@ public class ReinforcementBlockEntity extends AbstractCaterpillarBlockEntity {
     }
 
     @Override
-    public @NotNull Component getDisplayName() {
+    public Component getDisplayName() {
         return TITLE;
     }
 
-    @Nullable
     @Override
-    public AbstractContainerMenu createMenu(int id, @NotNull Inventory playerInventory, @NotNull Player player) {
+    public AbstractContainerMenu createMenu(int id, Inventory playerInventory, Player player) {
         PacketHandler.sendToClients(new CaterpillarSyncInventoryS2CPacket(this.getInventory(), this.getBlockPos()));
         for (int replacerIndex = 0; replacerIndex < this.replacers.size(); replacerIndex++) {
             PacketHandler.sendToClients(new ReinforcementSyncReplacerS2CPacket(replacerIndex, this.replacers.get(replacerIndex), worldPosition));

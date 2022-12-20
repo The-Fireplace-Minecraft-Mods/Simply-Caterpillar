@@ -34,7 +34,7 @@ import dev.the_fireplace.caterpillar.network.packet.server.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DrillHeadBlockEntity extends AbstractCaterpillarBlockEntity {
+public class DrillHeadBlockEntity extends DrillBaseBlockEntity {
 
     public static final Component TITLE = Component.translatable(
             "container." + Caterpillar.MOD_ID + ".drill_head"
@@ -94,8 +94,8 @@ public class DrillHeadBlockEntity extends AbstractCaterpillarBlockEntity {
             blockEntity.timer++;
 
             Direction direction = state.getValue(DrillHeadBlock.FACING);
-            List<AbstractCaterpillarBlockEntity> connectedCaterpillarBlockEntities = CaterpillarBlockUtil.getConnectedCaterpillarBlockEntities(level, pos, new ArrayList<>());
-            AbstractCaterpillarBlockEntity lastBlockEntity = connectedCaterpillarBlockEntities.get(connectedCaterpillarBlockEntities.size() - 1);
+            List<DrillBaseBlockEntity> connectedCaterpillarBlockEntities = CaterpillarBlockUtil.getConnectedCaterpillarBlockEntities(level, pos, new ArrayList<>());
+            DrillBaseBlockEntity lastBlockEntity = connectedCaterpillarBlockEntities.get(connectedCaterpillarBlockEntities.size() - 1);
             connectedCaterpillarBlockEntities.addAll(CaterpillarBlockUtil.getConnectedCaterpillarBlockEntities(level, lastBlockEntity.getBlockPos().relative(direction, 2), new ArrayList<>()));
 
             blockEntity.litTime -= connectedCaterpillarBlockEntities.size();
@@ -107,11 +107,11 @@ public class DrillHeadBlockEntity extends AbstractCaterpillarBlockEntity {
         if (blockEntity.isMoving() && blockEntity.timer % DRILL_PARTS_MOVEMENT_TICK == 0) {
             Direction direction = state.getValue(DrillHeadBlock.FACING);
 
-            List<AbstractCaterpillarBlockEntity> connectedCaterpillarBlockEntities = CaterpillarBlockUtil.getConnectedCaterpillarBlockEntities(level, pos, new ArrayList<>());
-            AbstractCaterpillarBlockEntity lastBlockEntity = connectedCaterpillarBlockEntities.get(connectedCaterpillarBlockEntities.size() - 1);
+            List<DrillBaseBlockEntity> connectedCaterpillarBlockEntities = CaterpillarBlockUtil.getConnectedCaterpillarBlockEntities(level, pos, new ArrayList<>());
+            DrillBaseBlockEntity lastBlockEntity = connectedCaterpillarBlockEntities.get(connectedCaterpillarBlockEntities.size() - 1);
             BlockEntity splitBlockEntity = level.getBlockEntity(lastBlockEntity.getBlockPos().relative(direction.getOpposite(), 2));
 
-            if (splitBlockEntity instanceof AbstractCaterpillarBlockEntity caterpillarBlockEntity) {
+            if (splitBlockEntity instanceof DrillBaseBlockEntity caterpillarBlockEntity) {
                 caterpillarBlockEntity.move();
             } else {
                 blockEntity.setMoving(false);

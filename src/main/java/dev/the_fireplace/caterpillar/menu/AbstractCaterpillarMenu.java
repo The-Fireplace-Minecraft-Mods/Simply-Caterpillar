@@ -1,5 +1,6 @@
 package dev.the_fireplace.caterpillar.menu;
 
+import dev.the_fireplace.caterpillar.block.entity.DrillBaseBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
@@ -10,13 +11,12 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.items.IItemHandler;
 import org.jetbrains.annotations.NotNull;
-import dev.the_fireplace.caterpillar.block.entity.AbstractCaterpillarBlockEntity;
 import dev.the_fireplace.caterpillar.block.util.CaterpillarBlockUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static dev.the_fireplace.caterpillar.block.AbstractCaterpillarBlock.FACING;
+import static dev.the_fireplace.caterpillar.block.DrillBaseBlock.FACING;
 
 public abstract class AbstractCaterpillarMenu extends AbstractContainerMenu {
 
@@ -24,9 +24,9 @@ public abstract class AbstractCaterpillarMenu extends AbstractContainerMenu {
 
     public final ContainerData data;
 
-    public final AbstractCaterpillarBlockEntity blockEntity;
+    public final DrillBaseBlockEntity blockEntity;
 
-    private List<AbstractCaterpillarBlockEntity> caterpillarBlockEntities;
+    private List<DrillBaseBlockEntity> caterpillarBlockEntities;
 
     public static final int SLOT_SIZE_PLUS_2 = 18;
 
@@ -41,10 +41,10 @@ public abstract class AbstractCaterpillarMenu extends AbstractContainerMenu {
     public final int BE_INVENTORY_SLOT_COUNT;
 
     public AbstractCaterpillarMenu(MenuType<?> menuType, int id, Inventory playerInventory, FriendlyByteBuf extraData, int containerDataSize, int inventorySize) {
-        this(menuType, id, playerInventory, (AbstractCaterpillarBlockEntity) playerInventory.player.level.getBlockEntity(extraData.readBlockPos()), new SimpleContainerData(containerDataSize), inventorySize);
+        this(menuType, id, playerInventory, (DrillBaseBlockEntity) playerInventory.player.level.getBlockEntity(extraData.readBlockPos()), new SimpleContainerData(containerDataSize), inventorySize);
     }
 
-    public <T> AbstractCaterpillarMenu(MenuType<?> menuType, int id, Inventory playerInventory, AbstractCaterpillarBlockEntity blockEntity, ContainerData data, int inventorySize) {
+    public <T> AbstractCaterpillarMenu(MenuType<?> menuType, int id, Inventory playerInventory, DrillBaseBlockEntity blockEntity, ContainerData data, int inventorySize) {
         super(menuType, id);
         Level level = playerInventory.player.level;
         this.blockEntity = blockEntity;
@@ -132,11 +132,11 @@ public abstract class AbstractCaterpillarMenu extends AbstractContainerMenu {
         return net.minecraftforge.common.ForgeHooks.getBurnTime(stack, null) > 0;
     }
 
-    public List<AbstractCaterpillarBlockEntity> getConnectedCaterpillarBlockEntities() {
+    public List<DrillBaseBlockEntity> getConnectedCaterpillarBlockEntities() {
         return caterpillarBlockEntities;
     }
 
-    public void setConnectedCaterpillarBlockEntities(List<AbstractCaterpillarBlockEntity> caterpillarBlockEntities) {
+    public void setConnectedCaterpillarBlockEntities(List<DrillBaseBlockEntity> caterpillarBlockEntities) {
         this.caterpillarBlockEntities = caterpillarBlockEntities;
     }
 }

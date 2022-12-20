@@ -15,14 +15,12 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import dev.the_fireplace.caterpillar.block.IncineratorBlock;
 import dev.the_fireplace.caterpillar.menu.IncineratorMenu;
 import dev.the_fireplace.caterpillar.config.CaterpillarConfig;
 import dev.the_fireplace.caterpillar.init.BlockEntityInit;
 
-public class IncineratorBlockEntity extends AbstractCaterpillarBlockEntity {
+public class IncineratorBlockEntity extends DrillBaseBlockEntity {
 
     public static final Component TITLE = Component.translatable(
             "container." + Caterpillar.MOD_ID + ".incinerator"
@@ -79,13 +77,12 @@ public class IncineratorBlockEntity extends AbstractCaterpillarBlockEntity {
     }
 
     @Override
-    public @NotNull Component getDisplayName() {
+    public Component getDisplayName() {
         return TITLE;
     }
 
-    @Nullable
     @Override
-    public AbstractContainerMenu createMenu(int id, @NotNull Inventory playerInventory, @NotNull Player player) {
+    public AbstractContainerMenu createMenu(int id, Inventory playerInventory, Player player) {
         return new IncineratorMenu(id, playerInventory, this, new SimpleContainerData(0));
     }
 }

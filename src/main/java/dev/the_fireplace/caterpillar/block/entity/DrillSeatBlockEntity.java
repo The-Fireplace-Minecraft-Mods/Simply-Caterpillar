@@ -13,7 +13,7 @@ import net.minecraft.world.phys.AABB;
 
 import java.util.List;
 
-public class DrillSeatBlockEntity extends AbstractCaterpillarBlockEntity {
+public class DrillSeatBlockEntity extends DrillBaseBlockEntity {
 
     public static final int INVENTORY_SIZE = 0;
     public DrillSeatBlockEntity(BlockPos pos, BlockState state) {

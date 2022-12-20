@@ -1,5 +1,7 @@
 package dev.the_fireplace.caterpillar.network.packet.client;
 
+import dev.the_fireplace.caterpillar.block.DrillBaseBlock;
+import dev.the_fireplace.caterpillar.block.entity.DrillBaseBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.FriendlyByteBuf;
@@ -9,15 +11,13 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.network.NetworkEvent;
 import net.minecraftforge.network.NetworkHooks;
-import dev.the_fireplace.caterpillar.screen.util.ScreenTabs;
-import dev.the_fireplace.caterpillar.block.AbstractCaterpillarBlock;
-import dev.the_fireplace.caterpillar.block.entity.AbstractCaterpillarBlockEntity;
+import dev.the_fireplace.caterpillar.client.screen.util.ScreenTabs;
 import dev.the_fireplace.caterpillar.block.util.CaterpillarBlockUtil;
 
 import java.util.ArrayList;
 import java.util.function.Supplier;
 
-import static dev.the_fireplace.caterpillar.block.AbstractCaterpillarBlock.FACING;
+import static dev.the_fireplace.caterpillar.block.DrillBaseBlock.FACING;
 
 public class CaterpillarSyncSelectedTabC2SPacket {
 
@@ -47,9 +47,9 @@ public class CaterpillarSyncSelectedTabC2SPacket {
             assert player != null;
             ServerLevel level = player.getLevel();
 
-            if(level.getBlockEntity(pos) instanceof AbstractCaterpillarBlockEntity currentBlockEntity) {
+            if(level.getBlockEntity(pos) instanceof DrillBaseBlockEntity currentBlockEntity) {
                 BlockState state = currentBlockEntity.getBlockState();
-                AbstractCaterpillarBlock block = (AbstractCaterpillarBlock) currentBlockEntity.getBlockState().getBlock();
+                DrillBaseBlock block = (DrillBaseBlock) currentBlockEntity.getBlockState().getBlock();
                 Direction direction = state.getValue(FACING);
                 BlockPos basePos = block.getBasePos(state, pos);
                 BlockPos caterpillarHeadPos = CaterpillarBlockUtil.getCaterpillarHeadPos(level, basePos, direction);

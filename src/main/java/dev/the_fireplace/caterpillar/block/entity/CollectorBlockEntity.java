@@ -2,7 +2,6 @@ package dev.the_fireplace.caterpillar.block.entity;
 
 import dev.the_fireplace.caterpillar.block.IncineratorBlock;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -12,13 +11,12 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.phys.AABB;
 import dev.the_fireplace.caterpillar.block.CollectorBlock;
-import dev.the_fireplace.caterpillar.block.util.CaterpillarBlockUtil;
 import dev.the_fireplace.caterpillar.config.CaterpillarConfig;
 import dev.the_fireplace.caterpillar.init.BlockEntityInit;
 
 import java.util.List;
 
-public class CollectorBlockEntity extends AbstractCaterpillarBlockEntity {
+public class CollectorBlockEntity extends DrillBaseBlockEntity {
 
     public static final int INVENTORY_SIZE = 0;
 

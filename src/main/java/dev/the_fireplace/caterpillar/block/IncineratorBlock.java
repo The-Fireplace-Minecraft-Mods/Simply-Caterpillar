@@ -27,7 +27,7 @@ import dev.the_fireplace.caterpillar.init.BlockInit;
 import java.util.ArrayList;
 import java.util.stream.Stream;
 
-public class IncineratorBlock extends AbstractCaterpillarBlock {
+public class IncineratorBlock extends DrillBaseBlock {
     private static final VoxelShape SHAPE = Stream.of(
         Block.box(6, 0, 0, 10, 6, 16),
         Block.box(10, 0, 0, 16, 16, 16),

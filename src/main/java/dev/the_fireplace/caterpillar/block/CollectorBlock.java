@@ -34,7 +34,7 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 
-public class CollectorBlock extends AbstractCaterpillarBlock {
+public class CollectorBlock extends DrillBaseBlock {
 
     public static final EnumProperty<DoubleBlockHalf> HALF = BlockStateProperties.DOUBLE_BLOCK_HALF;
 

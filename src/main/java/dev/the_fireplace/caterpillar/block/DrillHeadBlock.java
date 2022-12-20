@@ -1,5 +1,6 @@
 package dev.the_fireplace.caterpillar.block;
 
+import dev.the_fireplace.caterpillar.block.entity.DrillBaseBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -27,7 +28,6 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import dev.the_fireplace.caterpillar.block.entity.AbstractCaterpillarBlockEntity;
 import dev.the_fireplace.caterpillar.block.entity.DrillHeadBlockEntity;
 import dev.the_fireplace.caterpillar.block.util.CaterpillarBlockUtil;
 import dev.the_fireplace.caterpillar.block.util.DrillHeadPart;
@@ -40,7 +40,7 @@ import java.util.EnumMap;
 import java.util.Map;
 import java.util.stream.Stream;
 
-public class DrillHeadBlock extends AbstractCaterpillarBlock {
+public class DrillHeadBlock extends DrillBaseBlock {
 
     public static final BooleanProperty DRILLING = BooleanProperty.create("drilling");
 
@@ -133,7 +133,7 @@ public class DrillHeadBlock extends AbstractCaterpillarBlock {
 
     private void dropContents(Level level, BlockPos pos) {
         BlockEntity blockEntity = level.getBlockEntity(pos);
-        if (blockEntity instanceof AbstractCaterpillarBlockEntity caterpillarBlockEntity) {
+        if (blockEntity instanceof DrillBaseBlockEntity caterpillarBlockEntity) {
             if (!level.isClientSide()) {
                 caterpillarBlockEntity.drops();
             }

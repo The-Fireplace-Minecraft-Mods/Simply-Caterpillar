@@ -11,7 +11,7 @@ import dev.the_fireplace.caterpillar.block.util.StoragePart;
 import dev.the_fireplace.caterpillar.config.CaterpillarConfig;
 import dev.the_fireplace.caterpillar.init.BlockEntityInit;
 
-public class StorageBlockEntity extends AbstractCaterpillarBlockEntity {
+public class StorageBlockEntity extends DrillBaseBlockEntity {
 
     public static final int INVENTORY_SIZE = 18;
 

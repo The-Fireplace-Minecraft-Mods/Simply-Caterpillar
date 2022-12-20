@@ -1,12 +1,12 @@
 package dev.the_fireplace.caterpillar.network.packet.client;
 
+import dev.the_fireplace.caterpillar.block.entity.DrillBaseBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.network.NetworkEvent;
-import dev.the_fireplace.caterpillar.block.entity.AbstractCaterpillarBlockEntity;
 
 import java.util.function.Supplier;
 
@@ -43,7 +43,7 @@ public class CaterpillarSyncSlotC2SPacket {
             ServerPlayer player = context.getSender();
             ServerLevel level = player.getLevel();
 
-            if(level.getBlockEntity(pos) instanceof AbstractCaterpillarBlockEntity blockEntity) {
+            if(level.getBlockEntity(pos) instanceof DrillBaseBlockEntity blockEntity) {
                 blockEntity.setStackInSlot(slotId, stack);
             }
         });

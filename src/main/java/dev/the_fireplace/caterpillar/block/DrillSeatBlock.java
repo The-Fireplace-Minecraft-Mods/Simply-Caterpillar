@@ -25,7 +25,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.stream.Stream;
 
-public class DrillSeatBlock extends AbstractCaterpillarBlock {
+public class DrillSeatBlock extends DrillBaseBlock {
 
     private static final VoxelShape SHAPE = Stream.of(
         Block.box(0, 3, 0, 2, 16, 16),

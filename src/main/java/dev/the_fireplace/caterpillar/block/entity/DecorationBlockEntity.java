@@ -26,8 +26,6 @@ import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import dev.the_fireplace.caterpillar.block.DecorationBlock;
 import dev.the_fireplace.caterpillar.block.util.DecorationPart;
 import dev.the_fireplace.caterpillar.menu.DecorationMenu;
@@ -42,7 +40,7 @@ import dev.the_fireplace.caterpillar.network.packet.server.DecorationSyncSelecte
 import java.util.ArrayList;
 import java.util.List;
 
-public class DecorationBlockEntity extends AbstractCaterpillarBlockEntity {
+public class DecorationBlockEntity extends DrillBaseBlockEntity {
 
     public static final Component TITLE = Component.translatable(
             "container." + Caterpillar.MOD_ID + ".decoration"
@@ -255,7 +253,7 @@ public class DecorationBlockEntity extends AbstractCaterpillarBlockEntity {
     }
 
     @Override
-    public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
+    public <T> LazyOptional<T> getCapability(Capability<T> cap, Direction side) {
         if(cap == ForgeCapabilities.ITEM_HANDLER) {
             return this.placementMapHandler.get(this.getSelectedMap()).cast();
         }
@@ -285,7 +283,7 @@ public class DecorationBlockEntity extends AbstractCaterpillarBlockEntity {
     }
 
     @Override
-    public void load(@NotNull CompoundTag tag) {
+    public void load(CompoundTag tag) {
         super.load(tag);
 
         this.placementMap.clear();
@@ -330,13 +328,12 @@ public class DecorationBlockEntity extends AbstractCaterpillarBlockEntity {
     }
 
     @Override
-    public @NotNull Component getDisplayName() {
+    public Component getDisplayName() {
         return TITLE;
     }
 
-    @Nullable
     @Override
-    public AbstractContainerMenu createMenu(int id, @NotNull Inventory playerInventory, @NotNull Player player) {
+    public AbstractContainerMenu createMenu(int id, Inventory playerInventory, Player player) {
         PacketHandler.sendToClients(new DecorationSyncSelectedMapS2CPacket(DecorationBlockEntity.this.selectedMap, worldPosition));
         PacketHandler.sendToClients(new DecorationSyncCurrentMapS2CPacket(DecorationBlockEntity.this.getCurrentMap(), worldPosition));
         for (int i = 0; i < this.placementMap.size(); i++) {

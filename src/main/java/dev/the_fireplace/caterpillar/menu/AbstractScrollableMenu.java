@@ -1,16 +1,16 @@
 package dev.the_fireplace.caterpillar.menu;
 
+import dev.the_fireplace.caterpillar.block.entity.DrillBaseBlockEntity;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.inventory.MenuType;
-import dev.the_fireplace.caterpillar.block.entity.AbstractCaterpillarBlockEntity;
 
 public abstract class AbstractScrollableMenu extends AbstractCaterpillarMenu {
     private float scrollOffs;
     private boolean scrolling;
 
-    public AbstractScrollableMenu(MenuType<?> menuType, int id, Inventory playerInventory, AbstractCaterpillarBlockEntity blockEntity, ContainerData data, int inventorySize) {
+    public AbstractScrollableMenu(MenuType<?> menuType, int id, Inventory playerInventory, DrillBaseBlockEntity blockEntity, ContainerData data, int inventorySize) {
         super(menuType, id, playerInventory, blockEntity, data, inventorySize);
     }
 
