@@ -53,6 +53,15 @@ You can add or not add any part to customize your drill.
 </details>
 
 <details>
+    <summary>
+        <h3>Drill Seat</h3>
+        <p>This is the part that allows you to ride the drill.</p>
+    </summary>
+    <h4>Recipe</h4>
+    <img src="https://raw.githubusercontent.com/The-Fireplace-Minecraft-Mods/Simply-Caterpillar/1.19.2/.github/sources/recipe-drill_seat.png" alt="Drill Seat Recipe" />
+</details>
+
+<details>
 	<summary>
 		<h3>Item Collector</h3>
 		<p>Collects fallen items as it moves, and puts them in the caterpillar's inventory. Pretty useful if you don't want to manually pick up all blocks the drill breaks.</p>

@@ -1,5 +1,4 @@
 {
-	"ambientocclusion": false,
 	"render_type": "cutout",
 	"textures": {
 		"blades": "simplycaterpillar:block/drill_head/blades/blades",
@@ -8,16 +7,16 @@
 	},
 	"elements": [
 		{
-			"from": [0, 0, 15],
-			"to": [16, 16, 16],
+			"from": [0, 0, 0],
+			"to": [16, 16, 1],
 			"faces": {
 				"north": {"uv": [5.33333, 0, 10.66667, 5.33333], "texture": "#none_blades"},
 				"south": {"uv": [5.33333, 0, 10.66667, 5.33333], "texture": "#none_blades", "tintindex": 0}
 			}
 		},
 		{
-			"from": [0, 0, 15.5],
-			"to": [16, 16, 15.5],
+			"from": [0, 0, 0.5],
+			"to": [16, 16, 0.5],
 			"faces": {
 				"north": {"uv": [0, 10.66667, 5.33333, 16], "texture": "#blades"},
 				"south": {"uv": [0, 10.66667, 5.33333, 16], "texture": "#blades", "tintindex": 0}

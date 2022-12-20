@@ -8,6 +8,7 @@
   "block.simplycaterpillar.decoration": "Decoration Placer",
   "block.simplycaterpillar.collector": "Item Collector",
   "block.simplycaterpillar.drill_base": "Basic Drill Segment",
+  "block.simplycaterpillar.drill_seat": "Drill Seat",
   "block.simplycaterpillar.storage": "Drill Storage",
   "block.simplycaterpillar.incinerator": "Incinerator",
   "block.simplycaterpillar.blocks.already_connected": "There is already a %s connected to the caterpillar.",
