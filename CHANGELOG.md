@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.19.2-7.1.0] - 2022-12-20
+
+### Added
+
+- Added a drill seat block, so you don't lose your caterpillar.
+
 ## [1.19.2-7.0.0-beta.3] - 2022-11-20
 
 ### Added
