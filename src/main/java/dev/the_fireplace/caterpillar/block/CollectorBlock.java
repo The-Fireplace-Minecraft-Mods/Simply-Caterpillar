@@ -2,7 +2,7 @@ package dev.the_fireplace.caterpillar.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -112,7 +112,7 @@ public class CollectorBlock extends DrillBaseBlock {
                     return super.defaultBlockState().setValue(FACING, direction).setValue(CollectorBlock.HALF, DoubleBlockHalf.LOWER).setValue(WATERLOGGED, level.getFluidState(pos).getType() == Fluids.WATER);
                 }
             } else {
-                context.getPlayer().displayClientMessage(Component.translatable("block.simplycaterpillar.blocks.already_connected", BlockInit.COLLECTOR.get().getName()), true);
+                context.getPlayer().displayClientMessage(new TranslatableComponent("block.simplycaterpillar.blocks.already_connected", BlockInit.COLLECTOR.get().getName()), true);
             }
         }
 

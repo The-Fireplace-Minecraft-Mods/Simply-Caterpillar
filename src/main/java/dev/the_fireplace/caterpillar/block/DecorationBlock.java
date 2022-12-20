@@ -2,7 +2,7 @@ package dev.the_fireplace.caterpillar.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -83,7 +83,7 @@ public class DecorationBlock extends DrillBaseBlock {
             BlockEntity blockEntity = level.getBlockEntity(basePos);
 
             if (blockEntity instanceof DecorationBlockEntity decorationBlockEntity) {
-                NetworkHooks.openScreen((ServerPlayer) player, decorationBlockEntity, basePos);
+                NetworkHooks.openGui((ServerPlayer) player, decorationBlockEntity, basePos);
 
                 return InteractionResult.CONSUME;
             } else {
@@ -122,7 +122,7 @@ public class DecorationBlock extends DrillBaseBlock {
                     return super.defaultBlockState().setValue(FACING, direction).setValue(PART, DecorationPart.BASE).setValue(WATERLOGGED, fluidState.getType() == Fluids.WATER);
                 }
             } else {
-                context.getPlayer().displayClientMessage(Component.translatable("block.simplycaterpillar.blocks.already_connected", BlockInit.DECORATION.get().getName()), true);
+                context.getPlayer().displayClientMessage(new TranslatableComponent("block.simplycaterpillar.blocks.already_connected", BlockInit.DECORATION.get().getName()), true);
             }
         }
 

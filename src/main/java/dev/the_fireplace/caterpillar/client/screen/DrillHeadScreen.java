@@ -7,6 +7,8 @@ import dev.the_fireplace.caterpillar.client.screen.widget.PowerButton;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.ClickType;
@@ -131,8 +133,8 @@ public class DrillHeadScreen extends AbstractScrollableScreen<DrillHeadMenu> {
         int tutorialY = super.topPos + 33;
         List<Component> powerButtonTutorial = new ArrayList<>();
 
-        MutableComponent tutorialText =  Component.literal("<").withStyle(ChatFormatting.GREEN).append(" ");
-        tutorialText.append(Component.translatable(Caterpillar.MOD_ID + ".tutorial.drill_head.power_button").withStyle(ChatFormatting.WHITE).append(""));
+        MutableComponent tutorialText = new TextComponent("<").withStyle(ChatFormatting.GREEN).append(" ");
+        tutorialText.append(new TranslatableComponent(Caterpillar.MOD_ID + ".tutorial.drill_head.power_button").withStyle(ChatFormatting.WHITE).append(""));
         powerButtonTutorial.add(tutorialText);
 
         this.renderComponentTooltip(stack, powerButtonTutorial, tutorialX, tutorialY);
@@ -143,8 +145,8 @@ public class DrillHeadScreen extends AbstractScrollableScreen<DrillHeadMenu> {
         int tutorialY = super.topPos + 69;
         List<Component> fuelSlotTutorial = new ArrayList<>();
 
-        MutableComponent tutorialText = Component.literal("<").withStyle(ChatFormatting.GREEN).append(" ");
-        tutorialText.append(Component.translatable(Caterpillar.MOD_ID + ".tutorial.drill_head.fuel_slot").withStyle(ChatFormatting.WHITE).append(""));
+        MutableComponent tutorialText = new TextComponent("<").withStyle(ChatFormatting.GREEN).append(" ");
+        tutorialText.append(new TranslatableComponent(Caterpillar.MOD_ID + ".tutorial.drill_head.fuel_slot").withStyle(ChatFormatting.WHITE).append(""));
         fuelSlotTutorial.add(tutorialText);
 
         this.renderComponentTooltip(stack, fuelSlotTutorial, tutorialX, tutorialY);
@@ -155,10 +157,10 @@ public class DrillHeadScreen extends AbstractScrollableScreen<DrillHeadMenu> {
         int tutorialY = super.topPos + 87;
         List<Component> storageWheelTutorial = new ArrayList<>();
 
-        Component tutorialArrow = Component.literal("             /\\        /\\").withStyle(ChatFormatting.GREEN);
+        Component tutorialArrow = new TextComponent("             /\\        /\\").withStyle(ChatFormatting.GREEN);
         storageWheelTutorial.add(tutorialArrow);
 
-        MutableComponent tutorialText = Component.translatable(Caterpillar.MOD_ID + ".tutorial.drill_head.wheel_storage");
+        MutableComponent tutorialText = new TranslatableComponent(Caterpillar.MOD_ID + ".tutorial.drill_head.wheel_storage");
         storageWheelTutorial.add(tutorialText);
 
         this.renderComponentTooltip(stack, storageWheelTutorial, tutorialX, tutorialY);
@@ -177,12 +179,12 @@ public class DrillHeadScreen extends AbstractScrollableScreen<DrillHeadMenu> {
                 mouseY <= super.topPos + 16 + 18
         ) {
             List<Component> powerStatusComponents = new ArrayList<>();
-            MutableComponent powerStatusComponent = Component.translatable("gui." + Caterpillar.MOD_ID +".drill_head.power").append(" ");
+            MutableComponent powerStatusComponent = new TranslatableComponent("gui." + Caterpillar.MOD_ID +".drill_head.power").append(" ");
             if (this.menu.isPowered()) {
-                powerStatusComponent.append(Component.translatable("gui." + Caterpillar.MOD_ID +".drill_head.power.on").withStyle(ChatFormatting.GREEN));
+                powerStatusComponent.append(new TranslatableComponent("gui." + Caterpillar.MOD_ID +".drill_head.power.on").withStyle(ChatFormatting.GREEN));
                 powerStatusComponents.add(powerStatusComponent);
             } else {
-                powerStatusComponent.append(Component.translatable("gui." + Caterpillar.MOD_ID +".drill_head.power.off").withStyle(ChatFormatting.RED));
+                powerStatusComponent.append(new TranslatableComponent("gui." + Caterpillar.MOD_ID +".drill_head.power.off").withStyle(ChatFormatting.RED));
                 powerStatusComponents.add(powerStatusComponent);
             }
 

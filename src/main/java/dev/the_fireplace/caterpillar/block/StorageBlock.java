@@ -3,7 +3,7 @@ package dev.the_fireplace.caterpillar.block;
 import dev.the_fireplace.caterpillar.block.entity.DrillBaseBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -105,7 +105,7 @@ public class StorageBlock extends DrillBaseBlock {
                     return defaultBlockState().setValue(FACING, direction).setValue(StorageBlock.PART, StoragePart.BASE).setValue(DrillHeadBlock.WATERLOGGED, fluidState.getType() == Fluids.WATER);
                 }
             } else {
-                context.getPlayer().displayClientMessage(Component.translatable("block.simplycaterpillar.blocks.already_connected", BlockInit.STORAGE.get().getName()), true);
+                context.getPlayer().displayClientMessage(new TranslatableComponent("block.simplycaterpillar.blocks.already_connected", BlockInit.STORAGE.get().getName()), true);
             }
         }
 

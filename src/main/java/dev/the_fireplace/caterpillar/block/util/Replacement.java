@@ -1,8 +1,8 @@
 package dev.the_fireplace.caterpillar.block.util;
 
 import dev.the_fireplace.caterpillar.Caterpillar;
-import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 
@@ -10,11 +10,11 @@ import java.util.Collections;
 import java.util.List;
 
 public enum Replacement {
-    WATER(0, Component.translatable("gui." + Caterpillar.MOD_ID + ".replacement.water"), List.of(Blocks.WATER)),
-    LAVA(1, Component.translatable("gui." + Caterpillar.MOD_ID + ".replacement.lava"), List.of(Blocks.LAVA)),
-    FALLING_BLOCKS(2, Component.translatable("gui." + Caterpillar.MOD_ID + ".replacement.falling_blocks"), List.of(Blocks.SAND, Blocks.RED_SAND, Blocks.GRAVEL)),
-    AIR(3, Component.translatable("gui."  + Caterpillar.MOD_ID + ".replacement.air"), List.of(Blocks.AIR)),
-    ALL(4, Component.translatable("gui." + Caterpillar.MOD_ID + ".replacement.all"), Collections.emptyList());
+    WATER(0, new TranslatableComponent("gui." + Caterpillar.MOD_ID + ".replacement.water"), List.of(Blocks.WATER)),
+    LAVA(1, new TranslatableComponent("gui." + Caterpillar.MOD_ID + ".replacement.lava"), List.of(Blocks.LAVA)),
+    FALLING_BLOCKS(2, new TranslatableComponent("gui." + Caterpillar.MOD_ID + ".replacement.falling_blocks"), List.of(Blocks.SAND, Blocks.RED_SAND, Blocks.GRAVEL)),
+    AIR(3, new TranslatableComponent("gui."  + Caterpillar.MOD_ID + ".replacement.air"), List.of(Blocks.AIR)),
+    ALL(4, new TranslatableComponent("gui." + Caterpillar.MOD_ID + ".replacement.all"), Collections.emptyList());
 
     public final int INDEX;
     public final MutableComponent NAME;

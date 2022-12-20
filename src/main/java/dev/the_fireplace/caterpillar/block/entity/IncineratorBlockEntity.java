@@ -4,6 +4,7 @@ import dev.the_fireplace.caterpillar.Caterpillar;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Inventory;
@@ -22,7 +23,7 @@ import dev.the_fireplace.caterpillar.init.BlockEntityInit;
 
 public class IncineratorBlockEntity extends DrillBaseBlockEntity {
 
-    public static final Component TITLE = Component.translatable(
+    public static final Component TITLE = new TranslatableComponent(
             "container." + Caterpillar.MOD_ID + ".incinerator"
     );
 

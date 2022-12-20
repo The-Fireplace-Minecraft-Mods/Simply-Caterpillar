@@ -100,6 +100,6 @@ public class SeatEntity extends Entity {
     @Override
     protected void addPassenger(Entity passenger) {
         super.addPassenger(passenger);
-        passenger.setYRot(this.getVisualRotationYInDegrees() - 180F);
+        passenger.setYRot(this.getYRot() - 180F);
     }
 }

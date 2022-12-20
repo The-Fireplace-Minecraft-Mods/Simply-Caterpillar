@@ -8,6 +8,7 @@
   "block.simplycaterpillar.decoration": "Placeur de décoration",
   "block.simplycaterpillar.collector": "Collecteur d'objets",
   "block.simplycaterpillar.drill_base": "Segment de forage de base",
+  "block.simplycaterpillar.drill_seat": "Siège de la foreuse",
   "block.simplycaterpillar.storage": "Stockage de la foreuse",
   "block.simplycaterpillar.incinerator": "Incinérateur",
   "block.simplycaterpillar.blocks.already_connected": "Il y a déjà un %s connecté à la foreuse.",

@@ -4,8 +4,7 @@ import dev.the_fireplace.caterpillar.block.entity.DrillBaseBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.network.chat.Component;
-import net.minecraft.util.RandomSource;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -38,6 +37,7 @@ import dev.the_fireplace.caterpillar.init.BlockInit;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.Map;
+import java.util.Random;
 import java.util.stream.Stream;
 
 public class DrillHeadBlock extends DrillBaseBlock {
@@ -110,7 +110,7 @@ public class DrillHeadBlock extends DrillBaseBlock {
                     return defaultBlockState().setValue(FACING, direction).setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_BOTTOM).setValue(DrillHeadBlock.WATERLOGGED, fluidState.getType() == Fluids.WATER);
                 }
             } else {
-                context.getPlayer().displayClientMessage(Component.translatable("block.simplycaterpillar.blocks.already_connected", BlockInit.DRILL_HEAD.get().getName()), true);
+                context.getPlayer().displayClientMessage(new TranslatableComponent("block.simplycaterpillar.blocks.already_connected", BlockInit.DRILL_HEAD.get().getName()), true);
             }
 
         }
@@ -234,7 +234,7 @@ public class DrillHeadBlock extends DrillBaseBlock {
     }
 
     @Override
-    public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
+    public void animateTick(BlockState state, Level level, BlockPos pos, Random random) {
         if (state.getValue(PART) == DrillHeadPart.BASE &&
             state.getValue(DRILLING) &&
             CaterpillarConfig.useParticles

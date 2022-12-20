@@ -5,6 +5,7 @@ import dev.the_fireplace.caterpillar.block.util.CaterpillarBlockUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.MenuProvider;
@@ -38,7 +39,7 @@ public class DrillBaseBlockEntity extends InventoryBlockEntity implements MenuPr
 
     @Override
     public Component getDisplayName() {
-        return Component.empty();
+        return TextComponent.EMPTY;
     }
 
     @Override

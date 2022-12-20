@@ -2,7 +2,7 @@ package dev.the_fireplace.caterpillar.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -49,7 +49,7 @@ public class IncineratorBlock extends DrillBaseBlock {
             BlockEntity blockEntity = level.getBlockEntity(pos);
 
             if (blockEntity instanceof IncineratorBlockEntity incineratorBlockEntity) {
-                NetworkHooks.openScreen((ServerPlayer) player, incineratorBlockEntity, pos);
+                NetworkHooks.openGui((ServerPlayer) player, incineratorBlockEntity, pos);
 
                 return InteractionResult.CONSUME;
             } else {
@@ -71,7 +71,7 @@ public class IncineratorBlock extends DrillBaseBlock {
                 return super.getStateForPlacement(context);
             }
         } else {
-            context.getPlayer().displayClientMessage(Component.translatable("block.simplycaterpillar.blocks.already_connected", BlockInit.INCINERATOR.get().getName()), true);
+            context.getPlayer().displayClientMessage(new TranslatableComponent("block.simplycaterpillar.blocks.already_connected", BlockInit.INCINERATOR.get().getName()), true);
         }
 
         return null;

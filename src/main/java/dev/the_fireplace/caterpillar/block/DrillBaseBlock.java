@@ -4,7 +4,7 @@ import dev.the_fireplace.caterpillar.block.entity.DrillHeadBlockEntity;
 import dev.the_fireplace.caterpillar.block.util.CaterpillarBlockUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -118,9 +118,9 @@ public class DrillBaseBlock extends BaseEntityBlock implements SimpleWaterlogged
 
             BlockEntity blockEntity = level.getBlockEntity(caterpillarHeadPos);
             if (blockEntity instanceof DrillHeadBlockEntity drillHeadBlockEntity) {
-                NetworkHooks.openScreen((ServerPlayer) player, drillHeadBlockEntity, caterpillarHeadPos);
+                NetworkHooks.openGui((ServerPlayer) player, drillHeadBlockEntity, caterpillarHeadPos);
             } else {
-                player.displayClientMessage(Component.translatable("block.simplycaterpillar.drill_head.not_found"), true);
+                player.displayClientMessage(new TranslatableComponent("block.simplycaterpillar.drill_head.not_found"), true);
             }
         }
 

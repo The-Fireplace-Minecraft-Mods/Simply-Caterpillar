@@ -7,6 +7,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -22,8 +23,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import dev.the_fireplace.caterpillar.block.DecorationBlock;
@@ -42,7 +43,7 @@ import java.util.List;
 
 public class DecorationBlockEntity extends DrillBaseBlockEntity {
 
-    public static final Component TITLE = Component.translatable(
+    public static final Component TITLE = new TranslatableComponent(
             "container." + Caterpillar.MOD_ID + ".decoration"
     );
 
@@ -254,7 +255,7 @@ public class DecorationBlockEntity extends DrillBaseBlockEntity {
 
     @Override
     public <T> LazyOptional<T> getCapability(Capability<T> cap, Direction side) {
-        if(cap == ForgeCapabilities.ITEM_HANDLER) {
+        if(cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
             return this.placementMapHandler.get(this.getSelectedMap()).cast();
         }
 
