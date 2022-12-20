@@ -2,7 +2,7 @@ package dev.the_fireplace.caterpillar.event;
 
 import dev.the_fireplace.caterpillar.Caterpillar;
 import dev.the_fireplace.caterpillar.init.EntityInit;
-import dev.the_fireplace.caterpillar.renderer.SeatRenderer;
+import dev.the_fireplace.caterpillar.client.renderer.entity.SeatEntityRenderer;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraftforge.api.distmarker.Dist;
@@ -12,10 +12,10 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import dev.the_fireplace.caterpillar.screen.DecorationScreen;
-import dev.the_fireplace.caterpillar.screen.DrillHeadScreen;
-import dev.the_fireplace.caterpillar.screen.IncineratorScreen;
-import dev.the_fireplace.caterpillar.screen.ReinforcementScreen;
+import dev.the_fireplace.caterpillar.client.screen.DecorationScreen;
+import dev.the_fireplace.caterpillar.client.screen.DrillHeadScreen;
+import dev.the_fireplace.caterpillar.client.screen.IncineratorScreen;
+import dev.the_fireplace.caterpillar.client.screen.ReinforcementScreen;
 import dev.the_fireplace.caterpillar.config.ConfigHelper;
 import dev.the_fireplace.caterpillar.config.ConfigHolder;
 import dev.the_fireplace.caterpillar.init.MenuInit;
@@ -33,7 +33,7 @@ public class ClientModEvents {
 
     @SubscribeEvent
     public static void onRegisterRenderers(EntityRenderersEvent.RegisterRenderers event) {
-        EntityRenderers.register(EntityInit.SEAT.get(), SeatRenderer::new);
+        EntityRenderers.register(EntityInit.SEAT.get(), SeatEntityRenderer::new);
     }
 
     /**

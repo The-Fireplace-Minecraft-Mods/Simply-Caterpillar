@@ -1,4 +1,4 @@
-package dev.the_fireplace.caterpillar.screen.util;
+package dev.the_fireplace.caterpillar.client.screen.util;
 
 import dev.the_fireplace.caterpillar.Caterpillar;
 import dev.the_fireplace.caterpillar.block.entity.DecorationBlockEntity;

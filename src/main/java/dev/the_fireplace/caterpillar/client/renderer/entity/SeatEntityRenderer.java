@@ -1,4 +1,4 @@
-package dev.the_fireplace.caterpillar.renderer;
+package dev.the_fireplace.caterpillar.client.renderer.entity;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import dev.the_fireplace.caterpillar.entity.SeatEntity;
@@ -8,8 +8,8 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
-public class SeatRenderer extends EntityRenderer<SeatEntity> {
-    public SeatRenderer(EntityRendererProvider.Context context) {
+public class SeatEntityRenderer extends EntityRenderer<SeatEntity> {
+    public SeatEntityRenderer(EntityRendererProvider.Context context) {
         super(context);
     }
 
