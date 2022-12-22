@@ -13,6 +13,6 @@ public class CaterpillarConfig {
     // Server
     public static boolean firstUse;
     public static boolean useParticles;
-    public static boolean breakBedrock;
+    public static boolean breakUnbreakableBlocks;
     public static boolean enableSounds;
 }

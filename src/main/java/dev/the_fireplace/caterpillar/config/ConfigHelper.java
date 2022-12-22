@@ -16,7 +16,7 @@ public class ConfigHelper {
     public static void bakeServer(final ModConfig config) {
         CaterpillarConfig.firstUse = ConfigHolder.SERVER.firstUse.get();
         CaterpillarConfig.useParticles = ConfigHolder.SERVER.useParticles.get();
-        CaterpillarConfig.breakBedrock = ConfigHolder.SERVER.breakBedrock.get();
+        CaterpillarConfig.breakUnbreakableBlocks = ConfigHolder.SERVER.breakUnbreakableBlocks.get();
         CaterpillarConfig.enableSounds = ConfigHolder.SERVER.enableSounds.get();
     }
 }

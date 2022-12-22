@@ -7,7 +7,7 @@ public class ServerConfig {
 
     final ForgeConfigSpec.BooleanValue firstUse;
     final ForgeConfigSpec.BooleanValue useParticles;
-    final ForgeConfigSpec.BooleanValue breakBedrock;
+    final ForgeConfigSpec.BooleanValue breakUnbreakableBlocks;
     final ForgeConfigSpec.BooleanValue enableSounds;
 
     ServerConfig(final ForgeConfigSpec.Builder builder) {
@@ -23,9 +23,9 @@ public class ServerConfig {
                 .translation(Caterpillar.MOD_ID + ".config.use_particles")
                 .define("useParticles", true);
 
-        breakBedrock = builder
-                .comment("Can the drill break bedrock ?")
-                .translation(Caterpillar.MOD_ID + ".config.break_bedrock")
+        breakUnbreakableBlocks = builder
+                .comment("Can the drill head break unbreakable blocks, like bedrock, end portal frame, etc ?")
+                .translation(Caterpillar.MOD_ID + ".config.break_unbreakable_blocks")
                 .define("breakBedrock", false);
 
         enableSounds = builder

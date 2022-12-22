@@ -43,7 +43,7 @@
 
   "simplycaterpillar.config.first_use": "Show the tutorial if first time use ?",
   "simplycaterpillar.config.use_particles": "Use particles for effect ?",
-  "simplycaterpillar.config.break_bedrock": "Can the drill break bedrock ?",
+  "simplycaterpillar.config.break_unbreakable_blocks": "Can the drill head break unbreakable blocks, like bedrock, end portal frame, etc ?",
   "simplycaterpillar.config.enable_sounds": "Does the drill make noise when it moves ?",
 
   "simplycaterpillar.tutorial.show": "Show Tutorial",
