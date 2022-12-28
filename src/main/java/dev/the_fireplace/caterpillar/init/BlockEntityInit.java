@@ -27,4 +27,6 @@ public class BlockEntityInit {
     public static final RegistryObject<BlockEntityType<CollectorBlockEntity>> COLLECTOR = BLOCK_ENTITY_TYPES.register("collector", () -> BlockEntityType.Builder.of(CollectorBlockEntity::new, BlockInit.COLLECTOR.get()).build(null));
 
     public static final RegistryObject<BlockEntityType<ReinforcementBlockEntity>> REINFORCEMENT = BLOCK_ENTITY_TYPES.register("reinforcement", () -> BlockEntityType.Builder.of(ReinforcementBlockEntity::new, BlockInit.REINFORCEMENT.get()).build(null));
+
+    public static final RegistryObject<BlockEntityType<TransporterBlockEntity>> TRANSPORTER = BLOCK_ENTITY_TYPES.register("transporter", () -> BlockEntityType.Builder.of(TransporterBlockEntity::new, BlockInit.TRANSPORTER.get()).build(null));
 }

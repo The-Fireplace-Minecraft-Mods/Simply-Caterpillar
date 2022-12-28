@@ -67,6 +67,12 @@ public class BlockInit {
             new Item.Properties().tab(Caterpillar.CATERPILLAR_CREATIVE_MODE_TAB)
     );
 
+    public static final RegistryObject<TransporterBlock> TRANSPORTER = register(
+            "transporter",
+            () -> new TransporterBlock(BlockBehaviour.Properties.of(Material.STONE).strength(1.5F, 6.0F).sound(SoundType.STONE).requiresCorrectToolForDrops()),
+            new Item.Properties().tab(Caterpillar.CATERPILLAR_CREATIVE_MODE_TAB)
+    );
+
     private static <T extends Block> RegistryObject<T> register(String name, Supplier<T> supplier, Item.Properties properties) {
         RegistryObject<T> block = BLOCKS.register(name, supplier);
         ItemInit.ITEMS.register(name, () -> new BlockItem(block.get(), properties));

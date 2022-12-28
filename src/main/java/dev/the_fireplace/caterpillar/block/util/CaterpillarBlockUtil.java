@@ -29,7 +29,8 @@ public class CaterpillarBlockUtil {
                 (block == BlockInit.COLLECTOR.get()) ||
                 (block == BlockInit.STORAGE.get()) ||
                 (block == BlockInit.DRILL_BASE.get()) ||
-                (block == BlockInit.DRILL_SEAT.get());
+                (block == BlockInit.DRILL_SEAT.get()) ||
+                (block == BlockInit.TRANSPORTER.get());
     }
 
     public static BlockPos getCaterpillarHeadPos(Level level, BlockPos pos, Direction direction) {

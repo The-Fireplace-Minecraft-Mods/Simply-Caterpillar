@@ -11,6 +11,7 @@
   "block.simplycaterpillar.drill_seat": "Drill Seat",
   "block.simplycaterpillar.storage": "Drill Storage",
   "block.simplycaterpillar.incinerator": "Incinerator",
+  "block.simplycaterpillar.transporter": "Transporter",
   "block.simplycaterpillar.blocks.already_connected": "There is already a %s connected to the caterpillar.",
 
   "itemGroup.simplycaterpillar": "Caterpillar",
@@ -19,6 +20,7 @@
   "container.simplycaterpillar.reinforcement": "Reinforcement Builder",
   "container.simplycaterpillar.decoration": "Decoration Placer",
   "container.simplycaterpillar.incinerator": "Incinerator",
+  "container.simplycaterpillar.transporter": "Transporter",
 
   "gui.simplycaterpillar.drill_head.consumption": "Consumption",
   "gui.simplycaterpillar.drill_head.gathered": "Gathered",

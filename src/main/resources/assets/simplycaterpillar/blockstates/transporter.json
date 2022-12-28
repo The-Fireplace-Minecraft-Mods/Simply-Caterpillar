@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "facing=north,half=upper": { "model": "simplycaterpillar:block/transporter/transporter" },
+    "facing=south,half=upper": { "model": "simplycaterpillar:block/transporter/transporter", "y": 180 },
+    "facing=west,half=upper":  { "model": "simplycaterpillar:block/transporter/transporter", "y": 270 },
+    "facing=east,half=upper":  { "model": "simplycaterpillar:block/transporter/transporter", "y": 90 },
+
+    "facing=north,half=lower": { "model": "simplycaterpillar:block/transporter/transporter_lower" },
+    "facing=south,half=lower": { "model": "simplycaterpillar:block/transporter/transporter_lower", "y": 180 },
+    "facing=west,half=lower":  { "model": "simplycaterpillar:block/transporter/transporter_lower", "y": 270 },
+    "facing=east,half=lower":  { "model": "simplycaterpillar:block/transporter/transporter_lower", "y": 90 }
+  }
+}
