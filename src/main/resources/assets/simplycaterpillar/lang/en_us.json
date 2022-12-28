@@ -1,9 +1,9 @@
 {
   "block.simplycaterpillar.drill_head": "Drill Head",
-  "block.simplycaterpillar.drill_head.no_fuel" : "You need to add a fuel source to power on.",
-  "block.simplycaterpillar.drill_head.powered_off" : "Drill is turning off.",
-  "block.simplycaterpillar.drill_head.powered_on" : "Drill is turning on.",
-  "block.simplycaterpillar.drill_head.not_found" : "You must connect the block to the drill head.",
+  "block.simplycaterpillar.drill_head.no_fuel": "You need to add a fuel source to power on.",
+  "block.simplycaterpillar.drill_head.powered_off": "Drill is turning off.",
+  "block.simplycaterpillar.drill_head.powered_on": "Drill is turning on.",
+  "block.simplycaterpillar.drill_head.not_found": "You must connect the block to the drill head.",
   "block.simplycaterpillar.reinforcement": "Reinforcement Builder",
   "block.simplycaterpillar.decoration": "Decoration Placer",
   "block.simplycaterpillar.collector": "Item Collector",
@@ -11,28 +11,24 @@
   "block.simplycaterpillar.drill_seat": "Drill Seat",
   "block.simplycaterpillar.storage": "Drill Storage",
   "block.simplycaterpillar.incinerator": "Incinerator",
+  "block.simplycaterpillar.transporter": "Transporter",
   "block.simplycaterpillar.blocks.already_connected": "There is already a %s connected to the caterpillar.",
-
   "itemGroup.simplycaterpillar": "Caterpillar",
-
   "container.simplycaterpillar.drill_head": "Drill Head",
   "container.simplycaterpillar.reinforcement": "Reinforcement Builder",
   "container.simplycaterpillar.decoration": "Decoration Placer",
   "container.simplycaterpillar.incinerator": "Incinerator",
-
+  "container.simplycaterpillar.transporter": "Transporter",
   "gui.simplycaterpillar.drill_head.consumption": "Consumption",
   "gui.simplycaterpillar.drill_head.gathered": "Gathered",
   "gui.simplycaterpillar.drill_head.power": "Power:",
   "gui.simplycaterpillar.drill_head.power.on": "On",
   "gui.simplycaterpillar.drill_head.power.off": "Off",
-
-  "gui.simplycaterpillar.decoration.current_map":  "Current Map",
-
+  "gui.simplycaterpillar.decoration.current_map": "Current Map",
   "gui.simplycaterpillar.replacement.ceiling": "Ceiling",
   "gui.simplycaterpillar.replacement.left_wall": "Left Wall",
   "gui.simplycaterpillar.replacement.right_wall": "Right Wall",
   "gui.simplycaterpillar.replacement.floor": "Floor",
-
   "gui.simplycaterpillar.replacement.wont_replace": "Will Not Replace",
   "gui.simplycaterpillar.replacement.will_replace": "Will Replace",
   "gui.simplycaterpillar.replacement.air": "Air",

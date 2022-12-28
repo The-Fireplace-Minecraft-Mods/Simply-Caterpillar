@@ -8,9 +8,9 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.Material;
-import net.minecraftforge.registries.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 
 import java.util.function.Supplier;
 
@@ -57,6 +57,11 @@ public class BlockInit {
     public static final RegistryObject<DecorationBlock> DECORATION = register(
             "decoration",
             () -> new DecorationBlock(BlockBehaviour.Properties.of(Material.STONE).strength(1.5F, 6.0F).sound(SoundType.STONE).requiresCorrectToolForDrops())
+    );
+
+    public static final RegistryObject<TransporterBlock> TRANSPORTER = register(
+            "transporter",
+            () -> new TransporterBlock(BlockBehaviour.Properties.of(Material.STONE).strength(1.5F, 6.0F).sound(SoundType.STONE).requiresCorrectToolForDrops())
     );
 
     private static <T extends Block> RegistryObject<T> register(String name, Supplier<T> supplier) {

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "cdc"
+  ],
+  "key": {
+    "c": {
+      "item": "minecraft:chain"
+    },
+    "d": {
+      "item": "simplycaterpillar:drill_base"
+    }
+  },
+  "result": {
+    "item": "simplycaterpillar:transporter"
+  }
+}
