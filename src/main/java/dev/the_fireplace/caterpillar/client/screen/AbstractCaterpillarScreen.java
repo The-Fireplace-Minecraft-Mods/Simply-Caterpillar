@@ -206,13 +206,15 @@ public abstract class AbstractCaterpillarScreen<T extends AbstractCaterpillarMen
         }
     }
     private boolean tabShouldBeDisplayed(ScreenTabs tab) {
-        if (this.menu.getConnectedCaterpillarBlockEntities().isEmpty()) {
+        List<DrillBaseBlockEntity> connectedCaterpillarBlockEntities = this.menu.getConnectedCaterpillarBlockEntities();
+
+        if (connectedCaterpillarBlockEntities.isEmpty()) {
             return false;
         }
 
         switch (tab) {
             case DECORATION -> {
-                for (DrillBaseBlockEntity entity : this.menu.getConnectedCaterpillarBlockEntities()) {
+                for (DrillBaseBlockEntity entity : connectedCaterpillarBlockEntities) {
                     if (entity instanceof DecorationBlockEntity) {
                         return true;
                     }
@@ -220,7 +222,7 @@ public abstract class AbstractCaterpillarScreen<T extends AbstractCaterpillarMen
                 return false;
             }
             case REINFORCEMENT -> {
-                for (DrillBaseBlockEntity entity : this.menu.getConnectedCaterpillarBlockEntities()) {
+                for (DrillBaseBlockEntity entity : connectedCaterpillarBlockEntities) {
                     if (entity instanceof ReinforcementBlockEntity) {
                         return true;
                     }
@@ -228,7 +230,7 @@ public abstract class AbstractCaterpillarScreen<T extends AbstractCaterpillarMen
                 return false;
             }
             case INCINERATOR -> {
-                for (DrillBaseBlockEntity entity : this.menu.getConnectedCaterpillarBlockEntities()) {
+                for (DrillBaseBlockEntity entity : connectedCaterpillarBlockEntities) {
                     if (entity instanceof IncineratorBlockEntity) {
                         return true;
                     }
@@ -236,8 +238,16 @@ public abstract class AbstractCaterpillarScreen<T extends AbstractCaterpillarMen
                 return false;
             }
             case DRILL_HEAD -> {
-                for (DrillBaseBlockEntity entity : this.menu.getConnectedCaterpillarBlockEntities()) {
+                for (DrillBaseBlockEntity entity : connectedCaterpillarBlockEntities) {
                     if (entity instanceof DrillHeadBlockEntity) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+            case TRANSPORTER -> {
+                for (DrillBaseBlockEntity entity : connectedCaterpillarBlockEntities) {
+                    if (entity instanceof TransporterBlockEntity) {
                         return true;
                     }
                 }

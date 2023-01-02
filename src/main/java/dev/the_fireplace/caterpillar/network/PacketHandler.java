@@ -132,6 +132,12 @@ public final class PacketHandler {
                 .consumerMainThread(ReinforcementSyncReplacerS2CPacket::handle)
                 .add();
 
+        CHANNEL.messageBuilder(TransporterSyncPreviousBlockS2CPacket.class, index++, NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(TransporterSyncPreviousBlockS2CPacket::new)
+                .encoder(TransporterSyncPreviousBlockS2CPacket::toBytes)
+                .consumerMainThread(TransporterSyncPreviousBlockS2CPacket::handle)
+                .add();
+
         Caterpillar.LOGGER.info("Registered {} packets!", index);
     }
 

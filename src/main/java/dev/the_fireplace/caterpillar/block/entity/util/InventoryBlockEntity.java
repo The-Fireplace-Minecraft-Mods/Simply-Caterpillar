@@ -62,6 +62,12 @@ public class InventoryBlockEntity extends BlockEntity {
         return this.inventory;
     }
 
+    public void clearInventory() {
+        for (int i = 0; i < this.size; i++) {
+            this.inventory.setStackInSlot(i, ItemStack.EMPTY);
+        }
+    }
+
     @Override
     public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
         if(cap == ForgeCapabilities.ITEM_HANDLER) {

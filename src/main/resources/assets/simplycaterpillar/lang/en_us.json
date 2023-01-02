@@ -58,5 +58,8 @@
   "simplycaterpillar.tutorial.reinforcement.replacer_blocks": "These are the blocks it will replace with.\nNo block means it will not replace it.\nYou must have the blocks in the drill to place them.",
   "simplycaterpillar.tutorial.decoration": "The decoration places blocks in a pattern\nthat repeats every 10 blocks (0-9).",
   "simplycaterpillar.tutorial.decoration.mouse_wheel": "Use the wheel to select which section.",
-  "simplycaterpillar.tutorial.decoration.current_map": "The blue number is where the drill is now."
+  "simplycaterpillar.tutorial.decoration.current_map": "The blue number is where the drill is now.",
+  "simplycaterpillar.tutorial.transporter": "The transporter will take items from\nthe drill head's gathered inventory\nand put them in the minecart chest.",
+  "simplycaterpillar.tutorial.transporter.inventory_is_full": "When the transporter is full,\nit will release the minecart chest.",
+  "simplycaterpillar.tutorial.transporter.need_minecart_chest": "To start transporting,\nyou need to put a minecart chest\nin the drill head's consumption inventory."
 }

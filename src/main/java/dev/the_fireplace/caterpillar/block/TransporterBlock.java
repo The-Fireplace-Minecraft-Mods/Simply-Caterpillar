@@ -1,16 +1,18 @@
 package dev.the_fireplace.caterpillar.block;
 
-import dev.the_fireplace.caterpillar.block.entity.DrillBaseBlockEntity;
 import dev.the_fireplace.caterpillar.block.entity.TransporterBlockEntity;
 import dev.the_fireplace.caterpillar.block.util.CaterpillarBlockUtil;
 import dev.the_fireplace.caterpillar.init.BlockEntityInit;
 import dev.the_fireplace.caterpillar.init.BlockInit;
+import dev.the_fireplace.caterpillar.network.PacketHandler;
+import dev.the_fireplace.caterpillar.network.packet.server.CaterpillarSyncInventoryS2CPacket;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -22,16 +24,16 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
-import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
@@ -76,6 +78,24 @@ public class TransporterBlock extends DrillBaseBlock {
     }
 
     @Override
+    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+        if (level.isClientSide) {
+            return InteractionResult.SUCCESS;
+        } else {
+            BlockPos basePos = getBasePos(state, pos);
+            BlockEntity blockEntity = level.getBlockEntity(basePos);
+
+            if (blockEntity instanceof TransporterBlockEntity transporterBlockEntity) {
+                NetworkHooks.openScreen((ServerPlayer) player, transporterBlockEntity, basePos);
+
+                return InteractionResult.CONSUME;
+            } else {
+                return InteractionResult.PASS;
+            }
+        }
+    }
+
+    @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
         builder.add(HALF);
@@ -92,15 +112,28 @@ public class TransporterBlock extends DrillBaseBlock {
 
     @Override
     public void playerWillDestroy(@NotNull Level level, @NotNull BlockPos pos, BlockState state, @NotNull Player player) {
+        TransporterBlockEntity blockEntity = (TransporterBlockEntity) level.getBlockEntity(pos);
+        if (blockEntity == null) {
+            return;
+        }
+
         DoubleBlockHalf half = state.getValue(HALF);
 
         if (half == DoubleBlockHalf.UPPER) {
-            level.destroyBlock(pos.below(), false);
+            if (level.getBlockState(pos.below()).getBlock() instanceof TransporterBlock) {
+                blockEntity.releaseMinecartChest();
+            }
         } else {
-            level.destroyBlock(pos.above(), false);
+            blockEntity.clearInventory();
+            PacketHandler.sendToClients(new CaterpillarSyncInventoryS2CPacket(blockEntity.getInventory(), blockEntity.getBlockPos()));
+
+            TransporterBlockEntity upperBlockEntity = (TransporterBlockEntity) level.getBlockEntity(pos.above());
+            if (upperBlockEntity.getPreviousBlock() != null) {
+                level.setBlockAndUpdate(pos, upperBlockEntity.getPreviousBlock().defaultBlockState());
+            }
         }
 
-        super.playerWillDestroy(level, pos, state, player);
+        // super.playerWillDestroy(level, pos, state, player);
     }
 
     @Override
@@ -109,15 +142,12 @@ public class TransporterBlock extends DrillBaseBlock {
         Level level = context.getLevel();
         Direction direction = context.getHorizontalDirection();
 
-        if (
-            pos.getY() < level.getMaxBuildHeight() - 1 &&
-            level.getBlockState(pos.above()).canBeReplaced(context)
-        ) {
-            BlockPos caterpillarHeadPos = CaterpillarBlockUtil.getCaterpillarHeadPos(level, pos.above().relative(direction), direction);
+        if (pos.getY() < level.getMaxBuildHeight() - 1) {
+            BlockPos caterpillarHeadPos = CaterpillarBlockUtil.getCaterpillarHeadPos(level, pos.relative(direction), direction);
 
             if (CaterpillarBlockUtil.getConnectedCaterpillarBlockEntities(level, caterpillarHeadPos, new ArrayList<>()).stream().noneMatch(blockEntity -> blockEntity instanceof TransporterBlockEntity)) {
-                if (CaterpillarBlockUtil.isConnectedCaterpillarSameDirection(level, pos.above(), direction)) {
-                    return super.defaultBlockState().setValue(FACING, direction).setValue(HALF, DoubleBlockHalf.LOWER).setValue(WATERLOGGED, level.getFluidState(pos).getType() == Fluids.WATER);
+                if (CaterpillarBlockUtil.isConnectedCaterpillarSameDirection(level, pos, direction)) {
+                    return super.defaultBlockState().setValue(FACING, direction).setValue(HALF, DoubleBlockHalf.UPPER).setValue(WATERLOGGED, level.getFluidState(pos).getType() == Fluids.WATER);
                 }
             } else {
                 context.getPlayer().displayClientMessage(Component.translatable("block.simplycaterpillar.blocks.already_connected", BlockInit.TRANSPORTER.get().getName()), true);
@@ -125,6 +155,15 @@ public class TransporterBlock extends DrillBaseBlock {
         }
 
         return null;
+    }
+
+    @Override
+    public BlockPos getBasePos(BlockState state, BlockPos pos) {
+        if (state.getValue(HALF) == DoubleBlockHalf.LOWER) {
+            return pos.above();
+        }
+
+        return pos;
     }
 
     @Override
