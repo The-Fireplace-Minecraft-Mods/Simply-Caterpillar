@@ -1,10 +1,13 @@
 package dev.the_fireplace.caterpillar.event;
 
 import dev.the_fireplace.caterpillar.Caterpillar;
-import dev.the_fireplace.caterpillar.init.BlockInit;
-import dev.the_fireplace.caterpillar.client.screen.*;
-import dev.the_fireplace.caterpillar.init.EntityInit;
 import dev.the_fireplace.caterpillar.client.renderer.entity.SeatEntityRenderer;
+import dev.the_fireplace.caterpillar.client.screen.*;
+import dev.the_fireplace.caterpillar.config.ConfigHelper;
+import dev.the_fireplace.caterpillar.config.ConfigHolder;
+import dev.the_fireplace.caterpillar.init.BlockInit;
+import dev.the_fireplace.caterpillar.init.EntityInit;
+import dev.the_fireplace.caterpillar.init.MenuInit;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.network.chat.Component;
@@ -18,9 +21,6 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import dev.the_fireplace.caterpillar.config.ConfigHelper;
-import dev.the_fireplace.caterpillar.config.ConfigHolder;
-import dev.the_fireplace.caterpillar.init.MenuInit;
 
 @Mod.EventBusSubscriber(modid = Caterpillar.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value =  Dist.CLIENT)
 public class ClientModEvents {
@@ -69,6 +69,7 @@ public class ClientModEvents {
                     output.accept(BlockInit.INCINERATOR.get());
                     output.accept(BlockInit.STORAGE.get());
                     output.accept(BlockInit.DECORATION.get());
+                    output.accept(BlockInit.TRANSPORTER.get());
                 })
         );
     }

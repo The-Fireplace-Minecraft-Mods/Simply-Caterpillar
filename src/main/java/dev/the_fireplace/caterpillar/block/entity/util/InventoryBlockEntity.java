@@ -1,5 +1,7 @@
 package dev.the_fireplace.caterpillar.block.entity.util;
 
+import dev.the_fireplace.caterpillar.network.PacketHandler;
+import dev.the_fireplace.caterpillar.network.packet.server.CaterpillarSyncInventoryS2CPacket;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -16,8 +18,6 @@ import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import dev.the_fireplace.caterpillar.network.PacketHandler;
-import dev.the_fireplace.caterpillar.network.packet.server.CaterpillarSyncInventoryS2CPacket;
 
 public class InventoryBlockEntity extends BlockEntity {
 
@@ -70,7 +70,7 @@ public class InventoryBlockEntity extends BlockEntity {
 
     @Override
     public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-        if(cap == ForgeCapabilities.ITEM_HANDLER) {
+        if (cap == ForgeCapabilities.ITEM_HANDLER) {
             return this.handler.cast();
         }
 
