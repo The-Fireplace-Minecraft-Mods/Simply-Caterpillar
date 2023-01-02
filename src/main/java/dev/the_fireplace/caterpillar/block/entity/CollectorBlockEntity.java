@@ -1,6 +1,5 @@
 package dev.the_fireplace.caterpillar.block.entity;
 
-import dev.the_fireplace.caterpillar.block.IncineratorBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -16,6 +15,8 @@ import dev.the_fireplace.caterpillar.init.BlockEntityInit;
 
 import java.util.List;
 
+import static dev.the_fireplace.caterpillar.block.DrillBaseBlock.FACING;
+
 public class CollectorBlockEntity extends DrillBaseBlockEntity {
 
     public static final int INVENTORY_SIZE = 0;
@@ -26,7 +27,7 @@ public class CollectorBlockEntity extends DrillBaseBlockEntity {
 
     public void move() {
         BlockPos basePos = this.getBlockPos();
-        BlockPos nextPos = basePos.relative(this.getBlockState().getValue(IncineratorBlock.FACING));
+        BlockPos nextPos = basePos.relative(this.getBlockState().getValue(FACING));
 
         this.getLevel().setBlockAndUpdate(nextPos, this.getBlockState());
         this.getLevel().setBlockAndUpdate(nextPos.below(), this.getBlockState().setValue(CollectorBlock.HALF, DoubleBlockHalf.LOWER));
