@@ -9,7 +9,6 @@ import dev.the_fireplace.caterpillar.init.BlockEntityInit;
 import dev.the_fireplace.caterpillar.menu.TransporterMenu;
 import dev.the_fireplace.caterpillar.network.PacketHandler;
 import dev.the_fireplace.caterpillar.network.packet.server.CaterpillarSyncInventoryS2CPacket;
-import dev.the_fireplace.caterpillar.network.packet.server.TransporterSyncPreviousBlockS2CPacket;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -27,10 +26,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
-import net.minecraft.world.level.material.Material;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 
@@ -184,7 +181,21 @@ public class TransporterBlockEntity extends DrillBaseBlockEntity {
             this.previousBlock == Blocks.DETECTOR_RAIL ||
             this.previousBlock == Blocks.POWERED_RAIL
         ) {
-            minecartChest.push(0.03D, 0.0D, 0.03D);
+            Direction direction = this.getBlockState().getValue(FACING).getOpposite();
+
+            if (direction.getAxis() == Direction.Axis.X) {
+                if (direction == Direction.EAST) {
+                    minecartChest.setDeltaMovement(0.5D, 0.0D, 0.0D);
+                } else {
+                    minecartChest.setDeltaMovement(-0.5D, 0.0D, 0.0D);
+                }
+            } else {
+                if (direction == Direction.SOUTH) {
+                    minecartChest.setDeltaMovement(0.0D, 0.0D, 0.5D);
+                } else {
+                    minecartChest.setDeltaMovement(0.0D, 0.0D, -0.5D);
+                }
+            }
         }
     }
 
@@ -221,9 +232,6 @@ public class TransporterBlockEntity extends DrillBaseBlockEntity {
 
     public void setPreviousBlock(Block previousBlock) {
         this.previousBlock = previousBlock;
-
-        Direction direction = this.getBlockState().getValue(FACING);
-        PacketHandler.sendToClients(new TransporterSyncPreviousBlockS2CPacket(this.getPreviousBlock(), this.getBlockPos(), direction));
     }
 
     @Override

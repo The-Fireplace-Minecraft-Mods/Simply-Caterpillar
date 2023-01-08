@@ -4,8 +4,6 @@ import dev.the_fireplace.caterpillar.block.entity.TransporterBlockEntity;
 import dev.the_fireplace.caterpillar.block.util.CaterpillarBlockUtil;
 import dev.the_fireplace.caterpillar.init.BlockEntityInit;
 import dev.the_fireplace.caterpillar.init.BlockInit;
-import dev.the_fireplace.caterpillar.network.PacketHandler;
-import dev.the_fireplace.caterpillar.network.packet.server.CaterpillarSyncInventoryS2CPacket;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -16,6 +14,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -111,29 +110,41 @@ public class TransporterBlock extends DrillBaseBlock {
     }
 
     @Override
-    public void playerWillDestroy(@NotNull Level level, @NotNull BlockPos pos, BlockState state, @NotNull Player player) {
-        TransporterBlockEntity blockEntity = (TransporterBlockEntity) level.getBlockEntity(pos);
-        if (blockEntity == null) {
+    public void playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
+        super.playerWillDestroy(level, pos, state, player);
+
+        if (state.getValue(HALF) == DoubleBlockHalf.LOWER) {
             return;
         }
 
-        DoubleBlockHalf half = state.getValue(HALF);
-
-        if (half == DoubleBlockHalf.UPPER) {
+        BlockEntity blockEntity = level.getBlockEntity(pos);
+        if (blockEntity instanceof TransporterBlockEntity transporterBlockEntity) {
             if (level.getBlockState(pos.below()).getBlock() instanceof TransporterBlock) {
-                blockEntity.releaseMinecartChest();
-            }
-        } else {
-            blockEntity.clearInventory();
-            PacketHandler.sendToClients(new CaterpillarSyncInventoryS2CPacket(blockEntity.getInventory(), blockEntity.getBlockPos()));
-
-            TransporterBlockEntity upperBlockEntity = (TransporterBlockEntity) level.getBlockEntity(pos.above());
-            if (upperBlockEntity.getPreviousBlock() != null) {
-                level.setBlockAndUpdate(pos, upperBlockEntity.getPreviousBlock().defaultBlockState());
+                transporterBlockEntity.releaseMinecartChest();
             }
         }
+    }
 
-        // super.playerWillDestroy(level, pos, state, player);
+    @Override
+    public void destroy(LevelAccessor level, BlockPos pos, BlockState state) {
+        super.destroy(level, pos, state);
+
+        if (state.getValue(HALF) == DoubleBlockHalf.UPPER) {
+            return;
+        }
+
+        BlockEntity blockEntity = level.getBlockEntity(pos.above());
+        if (blockEntity instanceof TransporterBlockEntity transporterBlockEntity) {
+            transporterBlockEntity.clearInventory();
+
+            Block previousBlock = transporterBlockEntity.getPreviousBlock();
+
+            if (previousBlock == null) {
+                return;
+            }
+
+            level.setBlock(pos, previousBlock.defaultBlockState(), 3);
+        }
     }
 
     @Override
