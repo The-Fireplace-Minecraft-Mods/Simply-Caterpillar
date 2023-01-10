@@ -1,13 +1,10 @@
 package dev.the_fireplace.caterpillar.menu;
 
-import dev.the_fireplace.caterpillar.block.TransporterBlock;
 import dev.the_fireplace.caterpillar.block.entity.TransporterBlockEntity;
 import dev.the_fireplace.caterpillar.init.MenuInit;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.ContainerData;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
@@ -38,9 +35,7 @@ public class TransporterMenu extends AbstractCaterpillarMenu {
 
     public boolean hasMinecartChest() {
         if (this.blockEntity instanceof TransporterBlockEntity transporterBlockEntity) {
-            if (transporterBlockEntity.hasMinecartChest()) {
-                return true;
-            }
+            return transporterBlockEntity.hasMinecartChest();
         }
 
         return false;

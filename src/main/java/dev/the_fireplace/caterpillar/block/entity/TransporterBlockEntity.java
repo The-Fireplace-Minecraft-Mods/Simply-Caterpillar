@@ -136,11 +136,7 @@ public class TransporterBlockEntity extends DrillBaseBlockEntity {
     public boolean hasMinecartChest() {
         BlockState belowState = level.getBlockState(this.getBlockPos().below());
 
-        if (belowState.getBlock() instanceof TransporterBlock && belowState.getValue(HALF) == DoubleBlockHalf.LOWER) {
-            return true;
-        }
-
-        return false;
+        return belowState.getBlock() instanceof TransporterBlock && belowState.getValue(HALF) == DoubleBlockHalf.LOWER;
     }
 
     private boolean hasInventoryFull() {
