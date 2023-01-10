@@ -2,7 +2,7 @@
 	"render_type": "cutout",
 	"parent": "simplycaterpillar:block/drill_base/drill_base",
 	"textures": {
-		"chain": "simplycaterpillar:block/transporter/chain",
+		"chain": "minecraft:block/chain",
 		"front": "simplycaterpillar:block/decoration/rock_face",
 		"rod": "simplycaterpillar:block/pieces/wood_piece",
 		"particle": "simplycaterpillar:block/rock_side",
