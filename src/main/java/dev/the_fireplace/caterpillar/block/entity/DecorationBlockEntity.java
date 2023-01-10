@@ -40,6 +40,8 @@ import dev.the_fireplace.caterpillar.network.packet.server.DecorationSyncSelecte
 import java.util.ArrayList;
 import java.util.List;
 
+import static dev.the_fireplace.caterpillar.block.DrillBaseBlock.FACING;
+
 public class DecorationBlockEntity extends DrillBaseBlockEntity {
 
     public static final Component TITLE = Component.translatable(
@@ -108,7 +110,7 @@ public class DecorationBlockEntity extends DrillBaseBlockEntity {
 
     public void move() {
         BlockPos basePos = this.getBlockPos();
-        Direction direction = this.getBlockState().getValue(DecorationBlock.FACING);
+        Direction direction = this.getBlockState().getValue(FACING);
         BlockPos nextPos = basePos.relative(direction);
 
         CompoundTag oldTag = this.saveWithFullMetadata();
@@ -148,7 +150,7 @@ public class DecorationBlockEntity extends DrillBaseBlockEntity {
 
         int placementSlotId = INVENTORY_MAX_SLOTS - 1;
         ItemStackHandler currentPlacementMap =  this.placementMap.get(this.currentMap);
-        Direction direction = this.getBlockState().getValue(DecorationBlock.FACING);
+        Direction direction = this.getBlockState().getValue(FACING);
 
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {

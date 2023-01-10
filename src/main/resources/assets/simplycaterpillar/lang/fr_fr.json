@@ -11,6 +11,7 @@
   "block.simplycaterpillar.drill_seat": "Siège de la foreuse",
   "block.simplycaterpillar.storage": "Stockage de la foreuse",
   "block.simplycaterpillar.incinerator": "Incinérateur",
+  "block.simplycaterpillar.transporter": "Transporteur",
   "block.simplycaterpillar.blocks.already_connected": "Il y a déjà un %s connecté à la foreuse.",
 
   "itemGroup.simplycaterpillar": "Foreuse",
@@ -19,6 +20,7 @@
   "container.simplycaterpillar.reinforcement": "Constructeur de renforts",
   "container.simplycaterpillar.decoration": "Placeur de décoration",
   "container.simplycaterpillar.incinerator": "Incinérateur",
+  "container.simplycaterpillar.transporter": "Transporteur",
 
   "gui.simplycaterpillar.drill_head.consumption": "Consommation",
   "gui.simplycaterpillar.drill_head.gathered": "Collecté",

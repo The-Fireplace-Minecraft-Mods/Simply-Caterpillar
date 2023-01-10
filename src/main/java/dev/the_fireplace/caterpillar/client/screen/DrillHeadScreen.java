@@ -131,7 +131,7 @@ public class DrillHeadScreen extends AbstractScrollableScreen<DrillHeadMenu> {
         int tutorialY = super.topPos + 33;
         List<Component> powerButtonTutorial = new ArrayList<>();
 
-        MutableComponent tutorialText =  Component.literal("<").withStyle(ChatFormatting.GREEN).append(" ");
+        MutableComponent tutorialText = Component.literal("<").withStyle(ChatFormatting.GREEN).append(" ");
         tutorialText.append(Component.translatable(Caterpillar.MOD_ID + ".tutorial.drill_head.power_button").withStyle(ChatFormatting.WHITE).append(""));
         powerButtonTutorial.add(tutorialText);
 
