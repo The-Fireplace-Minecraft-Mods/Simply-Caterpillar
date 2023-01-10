@@ -4,7 +4,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import dev.the_fireplace.caterpillar.Caterpillar;
 import dev.the_fireplace.caterpillar.client.screen.util.ScreenTabs;
 import dev.the_fireplace.caterpillar.menu.TransporterMenu;
-import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.entity.player.Inventory;
@@ -19,7 +18,7 @@ public class TransporterScreen extends AbstractCaterpillarScreen<TransporterMenu
 
     @Override
     protected void renderTutorial(PoseStack stack) {
-        if (super.tutorialButton != null && super.tutorialButton.showTutorial()) {
+        if (super.tutorialButton != null && super.tutorialButton.isTutorialShown()) {
             if (!this.menu.hasMinecartChest()) {
                 this.renderNeedMinecartChestTutorial(stack);
             }

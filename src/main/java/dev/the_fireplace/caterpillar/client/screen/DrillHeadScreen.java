@@ -2,8 +2,12 @@ package dev.the_fireplace.caterpillar.client.screen;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import dev.the_fireplace.caterpillar.Caterpillar;
+import dev.the_fireplace.caterpillar.block.entity.DrillHeadBlockEntity;
+import dev.the_fireplace.caterpillar.block.util.CaterpillarBlockUtil;
 import dev.the_fireplace.caterpillar.client.screen.util.ScreenTabs;
 import dev.the_fireplace.caterpillar.client.screen.widget.PowerButton;
+import dev.the_fireplace.caterpillar.menu.DrillHeadMenu;
+import dev.the_fireplace.caterpillar.menu.slot.FakeSlot;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -15,10 +19,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
-import dev.the_fireplace.caterpillar.block.entity.DrillHeadBlockEntity;
-import dev.the_fireplace.caterpillar.block.util.CaterpillarBlockUtil;
-import dev.the_fireplace.caterpillar.menu.DrillHeadMenu;
-import dev.the_fireplace.caterpillar.menu.slot.FakeSlot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -116,7 +116,7 @@ public class DrillHeadScreen extends AbstractScrollableScreen<DrillHeadMenu> {
 
     @Override
     protected void renderTutorial(PoseStack stack) {
-        if (super.tutorialButton != null && super.tutorialButton.showTutorial()) {
+        if (super.tutorialButton != null && super.tutorialButton.isTutorialShown()) {
             if (this.menu.canScroll()) {
                 this.renderWheelStorageTutorial(stack);
             }

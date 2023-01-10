@@ -1,23 +1,25 @@
 package dev.the_fireplace.caterpillar.event;
 
 import dev.the_fireplace.caterpillar.Caterpillar;
-import dev.the_fireplace.caterpillar.client.screen.*;
-import dev.the_fireplace.caterpillar.init.EntityInit;
+import dev.the_fireplace.caterpillar.client.KeyBinding;
 import dev.the_fireplace.caterpillar.client.renderer.entity.SeatEntityRenderer;
+import dev.the_fireplace.caterpillar.client.screen.*;
+import dev.the_fireplace.caterpillar.config.ConfigHelper;
+import dev.the_fireplace.caterpillar.config.ConfigHolder;
+import dev.the_fireplace.caterpillar.init.EntityInit;
+import dev.the_fireplace.caterpillar.init.MenuInit;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
+import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import dev.the_fireplace.caterpillar.config.ConfigHelper;
-import dev.the_fireplace.caterpillar.config.ConfigHolder;
-import dev.the_fireplace.caterpillar.init.MenuInit;
 
-@Mod.EventBusSubscriber(modid = Caterpillar.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value =  Dist.CLIENT)
+@Mod.EventBusSubscriber(modid = Caterpillar.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class ClientModEvents {
 
     @SubscribeEvent
@@ -48,5 +50,10 @@ public class ClientModEvents {
             ConfigHelper.bakeServer(config);
             Caterpillar.LOGGER.debug("Baked server config");
         }
+    }
+
+    @SubscribeEvent
+    public static void onKeyRegister(RegisterKeyMappingsEvent event) {
+        event.register(KeyBinding.TOGGLE_TUTORIAL_KEY);
     }
 }
