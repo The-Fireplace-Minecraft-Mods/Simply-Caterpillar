@@ -20,7 +20,7 @@
 ---
 
 <div align="center">
-	<img src="https://raw.githubusercontent.com/The-Fireplace-Minecraft-Mods/Simply-Caterpillar/1.19.2/.github/sources/simply-caterpillar-wallpaper.png" alt="Simply Caterpillar Wallpaper" />
+	<img src="https://raw.githubusercontent.com/The-Fireplace-Minecraft-Mods/Simply-Caterpillar/1.19.2/.github/sources/simply-caterpillar-wallpaper-blender.png" alt="Simply Caterpillar Wallpaper" />
 </div>
 
 **Simply Caterpillar** adds a drill that makes 3x3 mineshaft for you.
@@ -113,6 +113,18 @@ You can add or not add any part to customize your drill.
 	</summary>
 	<h4>Recipe</h4>
 	<img src="https://raw.githubusercontent.com/The-Fireplace-Minecraft-Mods/Simply-Caterpillar/1.19.2/.github/sources/recipe-storage.png" alt="Drill Storage Recipe" />
+</details>
+
+<details>
+	<summary>
+		<h3>Transporter</h3>
+		<p>Takes the gathered inventory items and puts them inside the minecart with chest, and releases it when it is full.</p>
+	</summary>
+    <h4>Screen</h4>
+    <p>Put any item inside the minecart with chest.</p>
+<img src="https://raw.githubusercontent.com/The-Fireplace-Minecraft-Mods/Simply-Caterpillar/1.19.2/.github/sources/screen-transporter.png" alt="Transporter Screen" width="480" />
+	<h4>Recipe</h4>
+	<img src="https://raw.githubusercontent.com/The-Fireplace-Minecraft-Mods/Simply-Caterpillar/1.19.2/.github/sources/recipe-transporter.png" alt="Transporter Recipe" />
 </details>
 
 ## Credits
