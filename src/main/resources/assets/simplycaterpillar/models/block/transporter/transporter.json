@@ -105,22 +105,87 @@
 			}
 		},
 		{
-			"from": [12.9, -7, 14.5],
-			"to": [15.9, 9, 14.5],
+			"from": [
+				12.9,
+				-7,
+				14.5
+			],
+			"to": [
+				15.9,
+				9,
+				14.5
+			],
 			"shade": false,
-			"rotation": {"angle": 45, "axis": "y", "origin": [8, -8, 8]},
+			"rotation": {
+				"angle": 45,
+				"axis": "y",
+				"origin": [
+					8,
+					-8,
+					8
+				]
+			},
 			"faces": {
-				"north": {"uv": [3, 0, 0, 16], "texture": "#chain"},
-				"south": {"uv": [0, 0, 3, 16], "texture": "#chain"}
+				"north": {
+					"uv": [
+						3,
+						0,
+						0,
+						16
+					],
+					"texture": "#chain"
+				},
+				"south": {
+					"uv": [
+						0,
+						0,
+						3,
+						16
+					],
+					"texture": "#chain"
+				}
 			}
 		}
 	],
+	"display": {
+		"gui": {
+			"rotation": [
+				30,
+				45,
+				0
+			],
+			"translation": [
+				-1.6,
+				1,
+				0
+			],
+			"scale": [
+				0.52,
+				0.52,
+				0.52
+			]
+		}
+	},
 	"groups": [
 		{
 			"name": "VoxelShapes",
-			"origin": [8, 8, 8],
+			"origin": [
+				8,
+				8,
+				8
+			],
 			"color": 0,
-			"children": [0, 1, 2, 3, 4, 5, 6, 7, 8]
+			"children": [
+				0,
+				1,
+				2,
+				3,
+				4,
+				5,
+				6,
+				7,
+				8
+			]
 		}
 	]
 }

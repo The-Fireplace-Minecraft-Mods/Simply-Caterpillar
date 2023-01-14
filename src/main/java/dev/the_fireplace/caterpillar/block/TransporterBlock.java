@@ -57,16 +57,18 @@ public class TransporterBlock extends DrillBaseBlock {
     ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
 
     private static final VoxelShape SHAPE_LOWER = Stream.of(
-        Block.box(0, 1, 0, 2, 3, 16),
-        Block.box(0, 3, 0, 2, 11, 16),
-        Block.box(14, 1, 0, 16, 3, 16),
-        Block.box(14, 3, 0, 16, 11, 16),
-        Block.box(0, 1, 16, 16, 11, 18),
-        Block.box(0, 1, -2, 16, 11, 0),
-        Block.box(2, 1, 0, 14, 2, 16),
-        Block.box(6.5, 8, 13, 8.5, 12, 14),
-        Block.box(3, 11, 3, 13, 15, 13),
-        Block.box(3, 3, 3, 13, 11, 13)
+            Block.box(0, 1, 0, 2, 3, 16),
+            Block.box(0, 3, 0, 2, 11, 16),
+            Block.box(14, 1, 0, 16, 3, 16),
+            Block.box(14, 3, 0, 16, 11, 16),
+            Block.box(0, 1, 16, 16, 11, 18),
+            Block.box(0, 1, -2, 16, 11, 0),
+            Block.box(2, 1, 0, 14, 2, 16),
+            Block.box(6.5, 8, 13, 8.5, 12, 14),
+            Block.box(3, 11, 3, 13, 15, 13),
+            Block.box(3, 3, 3, 13, 11, 13),
+            Block.box(6, 8, 1, 10, 16, 2),
+            Block.box(5, 7, 2, 11, 13, 3)
     ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
 
     public TransporterBlock(Properties properties) {
