@@ -181,15 +181,15 @@ public class TransporterBlockEntity extends DrillBaseBlockEntity {
 
             if (direction.getAxis() == Direction.Axis.X) {
                 if (direction == Direction.EAST) {
-                    minecartChest.setDeltaMovement(0.5D, 0.0D, 0.0D);
+                    minecartChest.setDeltaMovement(0.4D, 0.0D, 0.0D);
                 } else {
-                    minecartChest.setDeltaMovement(-0.5D, 0.0D, 0.0D);
+                    minecartChest.setDeltaMovement(-0.4D, 0.0D, 0.0D);
                 }
             } else {
                 if (direction == Direction.SOUTH) {
-                    minecartChest.setDeltaMovement(0.0D, 0.0D, 0.5D);
+                    minecartChest.setDeltaMovement(0.0D, 0.0D, 0.4D);
                 } else {
-                    minecartChest.setDeltaMovement(0.0D, 0.0D, -0.5D);
+                    minecartChest.setDeltaMovement(0.0D, 0.0D, -0.4D);
                 }
             }
         }
