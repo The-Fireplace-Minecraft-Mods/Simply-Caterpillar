@@ -4,6 +4,7 @@ on: workflow_dispatch
 
 jobs:
   publish:
+    runs-on: ubuntu-latest
     steps:
       - name: Download artifact JAR
         uses: actions/download-artifact@v3
