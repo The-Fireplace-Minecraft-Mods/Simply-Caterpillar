@@ -18,7 +18,7 @@ public class TransporterScreen extends AbstractCaterpillarScreen<TransporterMenu
 
     @Override
     protected void renderTutorial(PoseStack stack) {
-        if (super.tutorialButton != null && super.tutorialButton.showTutorial()) {
+        if (super.tutorialButton != null && super.tutorialButton.isTutorialShown()) {
             if (!this.menu.hasMinecartChest()) {
                 this.renderNeedMinecartChestTutorial(stack);
             }

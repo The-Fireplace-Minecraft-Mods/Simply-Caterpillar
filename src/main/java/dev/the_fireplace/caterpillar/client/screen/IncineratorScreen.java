@@ -2,7 +2,11 @@ package dev.the_fireplace.caterpillar.client.screen;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import dev.the_fireplace.caterpillar.Caterpillar;
+import dev.the_fireplace.caterpillar.block.entity.IncineratorBlockEntity;
 import dev.the_fireplace.caterpillar.client.screen.util.ScreenTabs;
+import dev.the_fireplace.caterpillar.menu.IncineratorMenu;
+import dev.the_fireplace.caterpillar.network.PacketHandler;
+import dev.the_fireplace.caterpillar.network.packet.client.CaterpillarSyncSlotC2SPacket;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -11,10 +15,6 @@ import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
-import dev.the_fireplace.caterpillar.block.entity.IncineratorBlockEntity;
-import dev.the_fireplace.caterpillar.menu.IncineratorMenu;
-import dev.the_fireplace.caterpillar.network.PacketHandler;
-import dev.the_fireplace.caterpillar.network.packet.client.CaterpillarSyncSlotC2SPacket;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,7 +73,7 @@ public class IncineratorScreen extends AbstractCaterpillarScreen<IncineratorMenu
 
     @Override
     protected void renderTutorial(PoseStack stack) {
-        if (super.tutorialButton != null && super.tutorialButton.showTutorial()) {
+        if (super.tutorialButton != null && super.tutorialButton.isTutorialShown()) {
             this.renderIncineratorTutorial(stack);
         }
     }

@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.19.2-7.2.0] - 2023-01-18
+
+### Added
+
+- Added a transporter block, which will release a minecart when the drill head's gathered inventory is full.
+- You can now toggle gui's tutorial by pressing 'i' by default.
+
+### Changed
+
+- Don't break bedrock option has changed to don't break unbreakable blocks like end portals, etc.
+
 ## [1.19.2-7.1.0] - 2022-12-20
 
 ### Added

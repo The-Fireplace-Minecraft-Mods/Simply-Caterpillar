@@ -62,5 +62,9 @@
   "simplycaterpillar.tutorial.transporter": "The transporter will take items from\nthe drill head's gathered inventory\nand put them in the minecart chest.",
   "simplycaterpillar.tutorial.transporter.inventory_is_full": "When the transporter is full,\nit will release the minecart chest.",
   "simplycaterpillar.tutorial.transporter.need_minecart_chest": "To start transporting,\nyou need to put a minecart chest\nin the drill head's consumption inventory.",
+
+  "key.simplycaterpillar.category": "Simply Caterpillar",
+  "key.simplycaterpillar.toggle_tutorial": "Toggle Tutorial"
+
   "pack.simplycaterpillar.description": "Adds a caterpillar drill to Minecraft."
 }

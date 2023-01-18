@@ -136,11 +136,7 @@ public class TransporterBlockEntity extends DrillBaseBlockEntity {
     public boolean hasMinecartChest() {
         BlockState belowState = level.getBlockState(this.getBlockPos().below());
 
-        if (belowState.getBlock() instanceof TransporterBlock && belowState.getValue(HALF) == DoubleBlockHalf.LOWER) {
-            return true;
-        }
-
-        return false;
+        return belowState.getBlock() instanceof TransporterBlock && belowState.getValue(HALF) == DoubleBlockHalf.LOWER;
     }
 
     private boolean hasInventoryFull() {
@@ -185,15 +181,15 @@ public class TransporterBlockEntity extends DrillBaseBlockEntity {
 
             if (direction.getAxis() == Direction.Axis.X) {
                 if (direction == Direction.EAST) {
-                    minecartChest.setDeltaMovement(0.5D, 0.0D, 0.0D);
+                    minecartChest.setDeltaMovement(0.4D, 0.0D, 0.0D);
                 } else {
-                    minecartChest.setDeltaMovement(-0.5D, 0.0D, 0.0D);
+                    minecartChest.setDeltaMovement(-0.4D, 0.0D, 0.0D);
                 }
             } else {
                 if (direction == Direction.SOUTH) {
-                    minecartChest.setDeltaMovement(0.0D, 0.0D, 0.5D);
+                    minecartChest.setDeltaMovement(0.0D, 0.0D, 0.4D);
                 } else {
-                    minecartChest.setDeltaMovement(0.0D, 0.0D, -0.5D);
+                    minecartChest.setDeltaMovement(0.0D, 0.0D, -0.4D);
                 }
             }
         }

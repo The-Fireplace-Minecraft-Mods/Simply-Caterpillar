@@ -4,12 +4,14 @@ on: workflow_dispatch
 
 jobs:
   publish:
+    runs-on: ubuntu-latest
     steps:
-      - name: Download artifact JAR
-        uses: actions/download-artifact@v3
+      - name: Download workflow artifact JAR
+        uses: dawidd6/action-download-artifact@v2
         with:
+          workflow: build.yml
           name: Simply-Caterpillar_JAR
-          path: build/libs/*.jar
+          path: build/libs/
       - uses: Kir-Antipov/mc-publish@v3.2
         with:
           modrinth-id: boPuyi2x
