@@ -7,8 +7,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Download artifact JAR
-        uses: actions/download-artifact@v3
+        uses: awidd6/action-download-artifact@v2
         with:
+          workflow: workflow_name.yml
           name: Simply-Caterpillar_JAR
           path: build/libs/*.jar
       - uses: Kir-Antipov/mc-publish@v3.2
