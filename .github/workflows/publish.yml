@@ -11,7 +11,7 @@ jobs:
         with:
           workflow: build.yml
           name: Simply-Caterpillar_JAR
-          path: build/libs/*.jar
+          path: build/libs/
       - uses: Kir-Antipov/mc-publish@v3.2
         with:
           modrinth-id: boPuyi2x
