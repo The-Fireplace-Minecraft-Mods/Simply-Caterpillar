@@ -9,7 +9,7 @@ jobs:
       - name: Download artifact JAR
         uses: awidd6/action-download-artifact@v2
         with:
-          workflow: workflow_name.yml
+          workflow: build.yml
           name: Simply-Caterpillar_JAR
           path: build/libs/*.jar
       - uses: Kir-Antipov/mc-publish@v3.2
