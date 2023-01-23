@@ -41,6 +41,8 @@ import dev.the_fireplace.caterpillar.network.packet.server.DecorationSyncSelecte
 import java.util.ArrayList;
 import java.util.List;
 
+import static dev.the_fireplace.caterpillar.block.DrillBaseBlock.FACING;
+
 public class DecorationBlockEntity extends DrillBaseBlockEntity {
 
     public static final Component TITLE = new TranslatableComponent(
@@ -58,17 +60,17 @@ public class DecorationBlockEntity extends DrillBaseBlockEntity {
     public static final int INVENTORY_SIZE = PLACEMENT_MAX_MAP * INVENTORY_MAX_SLOTS;
 
     /*
-            Placement 0 -> 0 - 7
-            Placement 1 -> 8 - 15
-            Placement 2 -> 16 - 23
-            Placement 3 -> 24 - 31
-            Placement 4 -> 32 - 39
-            Placement 5 -> 40 - 47
-            Placement 6 -> 48 - 55
-            Placement 7 -> 56 - 63
-            Placement 8 -> 64 - 71
-            Placement 9 -> 72 - 79
-         */
+        Placement 0 -> 0 - 7
+        Placement 1 -> 8 - 15
+        Placement 2 -> 16 - 23
+        Placement 3 -> 24 - 31
+        Placement 4 -> 32 - 39
+        Placement 5 -> 40 - 47
+        Placement 6 -> 48 - 55
+        Placement 7 -> 56 - 63
+        Placement 8 -> 64 - 71
+        Placement 9 -> 72 - 79
+     */
     private int selectedMap;
 
     private int currentMap;
@@ -109,7 +111,7 @@ public class DecorationBlockEntity extends DrillBaseBlockEntity {
 
     public void move() {
         BlockPos basePos = this.getBlockPos();
-        Direction direction = this.getBlockState().getValue(DecorationBlock.FACING);
+        Direction direction = this.getBlockState().getValue(FACING);
         BlockPos nextPos = basePos.relative(direction);
 
         CompoundTag oldTag = this.saveWithFullMetadata();
@@ -149,7 +151,7 @@ public class DecorationBlockEntity extends DrillBaseBlockEntity {
 
         int placementSlotId = INVENTORY_MAX_SLOTS - 1;
         ItemStackHandler currentPlacementMap =  this.placementMap.get(this.currentMap);
-        Direction direction = this.getBlockState().getValue(DecorationBlock.FACING);
+        Direction direction = this.getBlockState().getValue(FACING);
 
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {

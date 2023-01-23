@@ -39,14 +39,14 @@ public class TutorialButton extends ImageButton {
             yOffset += this.yDiffTex;
         }
 
-        super.blit(poseStack, super.x, super.y, this.xTexStart, yOffset, super.width, super.height);
+        super.blit(poseStack, super.getX(), super.getY(), this.xTexStart, yOffset, super.width, super.height);
     }
 
-    public void setShowTutorial(boolean showTutorial) {
-        this.showTutorial = showTutorial;
+    public void toggleTutorial() {
+        this.showTutorial = !this.showTutorial;
     }
 
-    public boolean showTutorial() {
+    public boolean isTutorialShown() {
         return this.showTutorial;
     }
 }

@@ -6,7 +6,6 @@ import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 
-import java.util.Collections;
 import java.util.List;
 
 public enum Replacement {
@@ -14,7 +13,7 @@ public enum Replacement {
     LAVA(1, new TranslatableComponent("gui." + Caterpillar.MOD_ID + ".replacement.lava"), List.of(Blocks.LAVA)),
     FALLING_BLOCKS(2, new TranslatableComponent("gui." + Caterpillar.MOD_ID + ".replacement.falling_blocks"), List.of(Blocks.SAND, Blocks.RED_SAND, Blocks.GRAVEL)),
     AIR(3, new TranslatableComponent("gui."  + Caterpillar.MOD_ID + ".replacement.air"), List.of(Blocks.AIR)),
-    ALL(4, new TranslatableComponent("gui." + Caterpillar.MOD_ID + ".replacement.all"), Collections.emptyList());
+    ALL(4, new TranslatableComponent("gui." + Caterpillar.MOD_ID + ".replacement.all"), , List.of(Blocks.BARRIER, Blocks.STRUCTURE_BLOCK, Blocks.BEDROCK, Blocks.END_PORTAL_FRAME));
 
     public final int INDEX;
     public final MutableComponent NAME;

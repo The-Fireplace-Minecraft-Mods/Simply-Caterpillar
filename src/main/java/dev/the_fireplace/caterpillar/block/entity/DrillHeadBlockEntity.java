@@ -1,6 +1,7 @@
 package dev.the_fireplace.caterpillar.block.entity;
 
 import dev.the_fireplace.caterpillar.Caterpillar;
+import dev.the_fireplace.caterpillar.block.util.Replacement;
 import dev.the_fireplace.caterpillar.menu.AbstractCaterpillarMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -15,7 +16,6 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.ForgeHooks;
@@ -224,7 +224,7 @@ public class DrillHeadBlockEntity extends DrillBaseBlockEntity {
 
                 BlockState blockState = this.getLevel().getBlockState(destroyPos);
 
-                if (blockState.getBlock() == Blocks.BEDROCK && !CaterpillarConfig.breakBedrock) {
+                if (Replacement.ALL.BLOCKS.contains(blockState.getBlock()) && !CaterpillarConfig.breakUnbreakableBlocks) {
                     setPowerOff();
                     PacketHandler.sendToClients(new DrillHeadSyncPowerS2CPacket(false, this.getBlockPos()));
                 } else if (CaterpillarBlockUtil.canBreakBlock(blockState.getBlock())) {

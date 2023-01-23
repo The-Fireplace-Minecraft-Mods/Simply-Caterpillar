@@ -2,6 +2,9 @@ package dev.the_fireplace.caterpillar.block.util;
 
 import dev.the_fireplace.caterpillar.block.DrillBaseBlock;
 import dev.the_fireplace.caterpillar.block.entity.DrillBaseBlockEntity;
+import dev.the_fireplace.caterpillar.block.entity.DrillHeadBlockEntity;
+import dev.the_fireplace.caterpillar.block.entity.StorageBlockEntity;
+import dev.the_fireplace.caterpillar.init.BlockInit;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
@@ -10,9 +13,6 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import dev.the_fireplace.caterpillar.block.entity.DrillHeadBlockEntity;
-import dev.the_fireplace.caterpillar.block.entity.StorageBlockEntity;
-import dev.the_fireplace.caterpillar.init.BlockInit;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,14 +22,15 @@ import static dev.the_fireplace.caterpillar.block.DrillBaseBlock.FACING;
 public class CaterpillarBlockUtil {
 
     public static boolean isCaterpillarBlock(Block block) {
-        return  (block == BlockInit.DRILL_HEAD.get()) ||
+        return (block == BlockInit.DRILL_HEAD.get()) ||
                 (block == BlockInit.DECORATION.get()) ||
                 (block == BlockInit.REINFORCEMENT.get()) ||
                 (block == BlockInit.INCINERATOR.get()) ||
                 (block == BlockInit.COLLECTOR.get()) ||
                 (block == BlockInit.STORAGE.get()) ||
                 (block == BlockInit.DRILL_BASE.get()) ||
-                (block == BlockInit.DRILL_SEAT.get());
+                (block == BlockInit.DRILL_SEAT.get()) ||
+                (block == BlockInit.TRANSPORTER.get());
     }
 
     public static BlockPos getCaterpillarHeadPos(Level level, BlockPos pos, Direction direction) {

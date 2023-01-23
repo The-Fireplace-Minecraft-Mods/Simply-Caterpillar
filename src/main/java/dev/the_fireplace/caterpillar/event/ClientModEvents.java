@@ -2,8 +2,14 @@ package dev.the_fireplace.caterpillar.event;
 
 import dev.the_fireplace.caterpillar.Caterpillar;
 import dev.the_fireplace.caterpillar.init.BlockInit;
-import dev.the_fireplace.caterpillar.init.EntityInit;
+import dev.the_fireplace.caterpillar.client.KeyBinding;
 import dev.the_fireplace.caterpillar.client.renderer.entity.SeatEntityRenderer;
+import dev.the_fireplace.caterpillar.client.screen.*;
+import dev.the_fireplace.caterpillar.config.ConfigHelper;
+import dev.the_fireplace.caterpillar.config.ConfigHolder;
+import dev.the_fireplace.caterpillar.init.BlockInit;
+import dev.the_fireplace.caterpillar.init.EntityInit;
+import dev.the_fireplace.caterpillar.init.MenuInit;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
@@ -15,15 +21,8 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import dev.the_fireplace.caterpillar.client.screen.DecorationScreen;
-import dev.the_fireplace.caterpillar.client.screen.DrillHeadScreen;
-import dev.the_fireplace.caterpillar.client.screen.IncineratorScreen;
-import dev.the_fireplace.caterpillar.client.screen.ReinforcementScreen;
-import dev.the_fireplace.caterpillar.config.ConfigHelper;
-import dev.the_fireplace.caterpillar.config.ConfigHolder;
-import dev.the_fireplace.caterpillar.init.MenuInit;
 
-@Mod.EventBusSubscriber(modid = Caterpillar.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value =  Dist.CLIENT)
+@Mod.EventBusSubscriber(modid = Caterpillar.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class ClientModEvents {
 
     @SubscribeEvent
@@ -32,6 +31,7 @@ public class ClientModEvents {
         MenuScreens.register(MenuInit.DRILL_HEAD.get(), DrillHeadScreen::new);
         MenuScreens.register(MenuInit.INCINERATOR.get(), IncineratorScreen::new);
         MenuScreens.register(MenuInit.REINFORCEMENT.get(), ReinforcementScreen::new);
+        MenuScreens.register(MenuInit.TRANSPORTER.get(), TransporterScreen::new);
 
         ItemBlockRenderTypes.setRenderLayer(BlockInit.DRILL_HEAD.get(), RenderType.cutoutMipped());
     }

@@ -4,7 +4,13 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import dev.the_fireplace.caterpillar.Caterpillar;
 import dev.the_fireplace.caterpillar.block.entity.*;
+import dev.the_fireplace.caterpillar.block.util.CaterpillarBlockUtil;
+import dev.the_fireplace.caterpillar.client.screen.util.ScreenTabs;
 import dev.the_fireplace.caterpillar.client.screen.widget.TabButton;
+import dev.the_fireplace.caterpillar.client.screen.widget.TutorialButton;
+import dev.the_fireplace.caterpillar.menu.AbstractCaterpillarMenu;
+import dev.the_fireplace.caterpillar.network.PacketHandler;
+import dev.the_fireplace.caterpillar.network.packet.client.CaterpillarSyncSelectedTabC2SPacket;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.core.BlockPos;
@@ -17,12 +23,6 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
-import dev.the_fireplace.caterpillar.client.screen.util.ScreenTabs;
-import dev.the_fireplace.caterpillar.client.screen.widget.TutorialButton;
-import dev.the_fireplace.caterpillar.block.util.CaterpillarBlockUtil;
-import dev.the_fireplace.caterpillar.menu.AbstractCaterpillarMenu;
-import dev.the_fireplace.caterpillar.network.PacketHandler;
-import dev.the_fireplace.caterpillar.network.packet.client.CaterpillarSyncSelectedTabC2SPacket;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,7 +70,7 @@ public abstract class AbstractCaterpillarScreen<T extends AbstractCaterpillarMen
 
     public final int TUTORIAL_BG_Y = 41;
 
-    TutorialButton tutorialButton;
+    public TutorialButton tutorialButton;
 
     public AbstractCaterpillarScreen(T menu, Inventory playerInventory, Component title, ScreenTabs selectedTab) {
         super(menu, playerInventory, title);
@@ -142,7 +142,7 @@ public abstract class AbstractCaterpillarScreen<T extends AbstractCaterpillarMen
             int tooltipY = super.topPos + this.SELECTED_TAB.IMAGE_HEIGHT - 7;
 
             List<Component> tooltip = new ArrayList<>();
-            MutableComponent tooltipText = new TranslatableComponent(Caterpillar.MOD_ID + ".tutorial." + (this.tutorialButton != null && this.tutorialButton.showTutorial() ? "hide" : "show"));
+            MutableComponent tooltipText = new TranslatableComponent(Caterpillar.MOD_ID + ".tutorial." + (this.tutorialButton != null && this.tutorialButton.isTutorialShown() ? "hide" : "show"));
             tooltip.add(tooltipText);
             this.renderComponentTooltip(stack, tooltip, tooltipX, tooltipY);
         }
@@ -151,7 +151,7 @@ public abstract class AbstractCaterpillarScreen<T extends AbstractCaterpillarMen
     protected abstract void renderTutorial(PoseStack stack);
 
     private void addTutorialButton() {
-        this.tutorialButton = new TutorialButton(false,super.leftPos + TUTORIAL_X, super.topPos + SELECTED_TAB.IMAGE_HEIGHT + TUTORIAL_Y, TUTORIAL_WIDTH, TUTORIAL_HEIGHT, TUTORIAL_BG_X, TUTORIAL_BG_Y, TUTORIAL_BG_Y_OFFSET, CATERPILLAR_GUI, (onPress) -> this.tutorialButton.setShowTutorial(!this.tutorialButton.showTutorial()));
+        this.tutorialButton = new TutorialButton(false, super.leftPos + TUTORIAL_X, super.topPos + SELECTED_TAB.IMAGE_HEIGHT + TUTORIAL_Y, TUTORIAL_WIDTH, TUTORIAL_HEIGHT, TUTORIAL_BG_X, TUTORIAL_BG_Y, TUTORIAL_BG_Y_OFFSET, CATERPILLAR_GUI, (onPress) -> this.tutorialButton.toggleTutorial());
 
         this.addRenderableWidget(this.tutorialButton);
     }
@@ -207,13 +207,15 @@ public abstract class AbstractCaterpillarScreen<T extends AbstractCaterpillarMen
         }
     }
     private boolean tabShouldBeDisplayed(ScreenTabs tab) {
-        if (this.menu.getConnectedCaterpillarBlockEntities().isEmpty()) {
+        List<DrillBaseBlockEntity> connectedCaterpillarBlockEntities = this.menu.getConnectedCaterpillarBlockEntities();
+
+        if (connectedCaterpillarBlockEntities.isEmpty()) {
             return false;
         }
 
         switch (tab) {
             case DECORATION -> {
-                for (DrillBaseBlockEntity entity : this.menu.getConnectedCaterpillarBlockEntities()) {
+                for (DrillBaseBlockEntity entity : connectedCaterpillarBlockEntities) {
                     if (entity instanceof DecorationBlockEntity) {
                         return true;
                     }
@@ -221,7 +223,7 @@ public abstract class AbstractCaterpillarScreen<T extends AbstractCaterpillarMen
                 return false;
             }
             case REINFORCEMENT -> {
-                for (DrillBaseBlockEntity entity : this.menu.getConnectedCaterpillarBlockEntities()) {
+                for (DrillBaseBlockEntity entity : connectedCaterpillarBlockEntities) {
                     if (entity instanceof ReinforcementBlockEntity) {
                         return true;
                     }
@@ -229,7 +231,7 @@ public abstract class AbstractCaterpillarScreen<T extends AbstractCaterpillarMen
                 return false;
             }
             case INCINERATOR -> {
-                for (DrillBaseBlockEntity entity : this.menu.getConnectedCaterpillarBlockEntities()) {
+                for (DrillBaseBlockEntity entity : connectedCaterpillarBlockEntities) {
                     if (entity instanceof IncineratorBlockEntity) {
                         return true;
                     }
@@ -237,8 +239,16 @@ public abstract class AbstractCaterpillarScreen<T extends AbstractCaterpillarMen
                 return false;
             }
             case DRILL_HEAD -> {
-                for (DrillBaseBlockEntity entity : this.menu.getConnectedCaterpillarBlockEntities()) {
+                for (DrillBaseBlockEntity entity : connectedCaterpillarBlockEntities) {
                     if (entity instanceof DrillHeadBlockEntity) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+            case TRANSPORTER -> {
+                for (DrillBaseBlockEntity entity : connectedCaterpillarBlockEntities) {
+                    if (entity instanceof TransporterBlockEntity) {
                         return true;
                     }
                 }

@@ -1,8 +1,10 @@
 {
     "pack": {
-        "description": "${modDescription}",
-        "pack_format": 9,
-        "forge:resource_pack_format": 9,
+        "pack_format": 12,
+        "description": {
+            "translate": "pack.simplycaterpillar.description"
+        },
+        "forge:resource_pack_format": 12,
         "forge:data_pack_format": 10
     }
 }

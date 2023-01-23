@@ -206,17 +206,24 @@ public class ReinforcementBlockEntity extends DrillBaseBlockEntity {
         int replacerIndex = 0;
         for(byte replacer : this.replacers.get(side)) {
             if (replacer == (byte) 1) {
-                // If replace all is enabled
                 if (replacerIndex == Replacement.ALL.INDEX) {
+                    if (Replacement.ALL.BLOCKS.contains(block)) {
+                        return false;
+                    }
+
                     if (!block.equals(reinforceBlock)) {
                         return true;
                     }
                 }
 
-                for (Block replacementBlock : Replacement.values()[replacerIndex].BLOCKS) {
-                    if (replacementBlock.equals(block) && !replacementBlock.equals(reinforceBlock)) {
+                if (replacerIndex == Replacement.AIR.INDEX) {
+                    if (block.defaultBlockState().getMaterial().isReplaceable()) {
                         return true;
                     }
+                }
+
+                if (Replacement.values()[replacerIndex].BLOCKS.contains(block) && !block.equals(reinforceBlock)) {
+                    return true;
                 }
             }
 

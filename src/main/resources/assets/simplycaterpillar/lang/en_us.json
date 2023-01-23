@@ -1,9 +1,9 @@
 {
   "block.simplycaterpillar.drill_head": "Drill Head",
-  "block.simplycaterpillar.drill_head.no_fuel" : "You need to add a fuel source to power on.",
-  "block.simplycaterpillar.drill_head.powered_off" : "Drill is turning off.",
-  "block.simplycaterpillar.drill_head.powered_on" : "Drill is turning on.",
-  "block.simplycaterpillar.drill_head.not_found" : "You must connect the block to the drill head.",
+  "block.simplycaterpillar.drill_head.no_fuel": "You need to add a fuel source to power on.",
+  "block.simplycaterpillar.drill_head.powered_off": "Drill is turning off.",
+  "block.simplycaterpillar.drill_head.powered_on": "Drill is turning on.",
+  "block.simplycaterpillar.drill_head.not_found": "You must connect the block to the drill head.",
   "block.simplycaterpillar.reinforcement": "Reinforcement Builder",
   "block.simplycaterpillar.decoration": "Decoration Placer",
   "block.simplycaterpillar.collector": "Item Collector",
@@ -11,6 +11,7 @@
   "block.simplycaterpillar.drill_seat": "Drill Seat",
   "block.simplycaterpillar.storage": "Drill Storage",
   "block.simplycaterpillar.incinerator": "Incinerator",
+  "block.simplycaterpillar.transporter": "Transporter",
   "block.simplycaterpillar.blocks.already_connected": "There is already a %s connected to the caterpillar.",
 
   "itemGroup.simplycaterpillar": "Caterpillar",
@@ -19,6 +20,7 @@
   "container.simplycaterpillar.reinforcement": "Reinforcement Builder",
   "container.simplycaterpillar.decoration": "Decoration Placer",
   "container.simplycaterpillar.incinerator": "Incinerator",
+  "container.simplycaterpillar.transporter": "Transporter",
 
   "gui.simplycaterpillar.drill_head.consumption": "Consumption",
   "gui.simplycaterpillar.drill_head.gathered": "Gathered",
@@ -43,7 +45,7 @@
 
   "simplycaterpillar.config.first_use": "Show the tutorial if first time use ?",
   "simplycaterpillar.config.use_particles": "Use particles for effect ?",
-  "simplycaterpillar.config.break_bedrock": "Can the drill break bedrock ?",
+  "simplycaterpillar.config.break_unbreakable_blocks": "Can the drill head break unbreakable blocks, like bedrock, end portal frame, etc ?",
   "simplycaterpillar.config.enable_sounds": "Does the drill make noise when it moves ?",
 
   "simplycaterpillar.tutorial.show": "Show Tutorial",
@@ -56,5 +58,11 @@
   "simplycaterpillar.tutorial.reinforcement.replacer_blocks": "These are the blocks it will replace with.\nNo block means it will not replace it.\nYou must have the blocks in the drill to place them.",
   "simplycaterpillar.tutorial.decoration": "The decoration places blocks in a pattern\nthat repeats every 10 blocks (0-9).",
   "simplycaterpillar.tutorial.decoration.mouse_wheel": "Use the wheel to select which section.",
-  "simplycaterpillar.tutorial.decoration.current_map": "The blue number is where the drill is now."
+  "simplycaterpillar.tutorial.decoration.current_map": "The blue number is where the drill is now.",
+  "simplycaterpillar.tutorial.transporter": "The transporter will take items from\nthe drill head's gathered inventory\nand put them in the minecart chest.",
+  "simplycaterpillar.tutorial.transporter.inventory_is_full": "When the transporter is full,\nit will release the minecart chest.",
+  "simplycaterpillar.tutorial.transporter.need_minecart_chest": "To start transporting,\nyou need to put a minecart chest\nin the drill head's consumption inventory.",
+  "key.simplycaterpillar.category": "Simply Caterpillar",
+  "key.simplycaterpillar.toggle_tutorial": "Toggle Tutorial",
+  "pack.simplycaterpillar.description": "Adds a caterpillar drill to Minecraft."
 }
