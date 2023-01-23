@@ -11,7 +11,7 @@ import net.minecraftforge.fml.common.Mod;
 @Mod.EventBusSubscriber(modid = Caterpillar.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class ClientForgeEvents {
     @SubscribeEvent
-    public static void onKeyInput(InputEvent.Key event) {
+    public static void onKeyInput(InputEvent.KeyInputEvent event) {
         if (Minecraft.getInstance().screen instanceof AbstractCaterpillarScreen screen) {
             if (event.getKey() == KeyBinding.TOGGLE_TUTORIAL_KEY.getKey().getValue() && event.getAction() == 0) {
                 screen.tutorialButton.toggleTutorial();

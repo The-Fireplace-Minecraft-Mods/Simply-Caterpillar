@@ -1,10 +1,8 @@
 {
     "pack": {
-        "pack_format": 12,
-        "description": {
-            "translate": "pack.simplycaterpillar.description"
-        },
-        "forge:resource_pack_format": 12,
-        "forge:data_pack_format": 10
+      "pack_format": 8,
+      "description": "Adds a caterpillar drill to Minecraft.",
+      "forge:resource_pack_format": 8,
+      "forge:data_pack_format": 9
     }
 }

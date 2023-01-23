@@ -6,7 +6,7 @@ import dev.the_fireplace.caterpillar.init.BlockEntityInit;
 import dev.the_fireplace.caterpillar.init.BlockInit;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -87,7 +87,7 @@ public class TransporterBlock extends DrillBaseBlock {
             BlockEntity blockEntity = level.getBlockEntity(basePos);
 
             if (blockEntity instanceof TransporterBlockEntity transporterBlockEntity) {
-                NetworkHooks.openScreen((ServerPlayer) player, transporterBlockEntity, basePos);
+                NetworkHooks.openGui((ServerPlayer) player, transporterBlockEntity, basePos);
 
                 return InteractionResult.CONSUME;
             } else {
@@ -163,7 +163,7 @@ public class TransporterBlock extends DrillBaseBlock {
                     return super.defaultBlockState().setValue(FACING, direction).setValue(HALF, DoubleBlockHalf.UPPER).setValue(WATERLOGGED, level.getFluidState(pos).getType() == Fluids.WATER);
                 }
             } else {
-                context.getPlayer().displayClientMessage(Component.translatable("block.simplycaterpillar.blocks.already_connected", BlockInit.TRANSPORTER.get().getName()), true);
+                context.getPlayer().displayClientMessage(new TranslatableComponent("block.simplycaterpillar.blocks.already_connected", BlockInit.TRANSPORTER.get().getName()), true);
             }
         }
 

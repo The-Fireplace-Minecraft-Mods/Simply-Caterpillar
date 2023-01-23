@@ -1,8 +1,6 @@
 package dev.the_fireplace.caterpillar.event;
 
 import dev.the_fireplace.caterpillar.Caterpillar;
-import dev.the_fireplace.caterpillar.init.BlockInit;
-import dev.the_fireplace.caterpillar.client.KeyBinding;
 import dev.the_fireplace.caterpillar.client.renderer.entity.SeatEntityRenderer;
 import dev.the_fireplace.caterpillar.client.screen.*;
 import dev.the_fireplace.caterpillar.config.ConfigHelper;
@@ -34,6 +32,7 @@ public class ClientModEvents {
         MenuScreens.register(MenuInit.TRANSPORTER.get(), TransporterScreen::new);
 
         ItemBlockRenderTypes.setRenderLayer(BlockInit.DRILL_HEAD.get(), RenderType.cutoutMipped());
+        ItemBlockRenderTypes.setRenderLayer(BlockInit.TRANSPORTER.get(), RenderType.cutoutMipped());
     }
 
     @SubscribeEvent

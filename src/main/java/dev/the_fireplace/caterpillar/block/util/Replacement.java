@@ -12,8 +12,8 @@ public enum Replacement {
     WATER(0, new TranslatableComponent("gui." + Caterpillar.MOD_ID + ".replacement.water"), List.of(Blocks.WATER)),
     LAVA(1, new TranslatableComponent("gui." + Caterpillar.MOD_ID + ".replacement.lava"), List.of(Blocks.LAVA)),
     FALLING_BLOCKS(2, new TranslatableComponent("gui." + Caterpillar.MOD_ID + ".replacement.falling_blocks"), List.of(Blocks.SAND, Blocks.RED_SAND, Blocks.GRAVEL)),
-    AIR(3, new TranslatableComponent("gui."  + Caterpillar.MOD_ID + ".replacement.air"), List.of(Blocks.AIR)),
-    ALL(4, new TranslatableComponent("gui." + Caterpillar.MOD_ID + ".replacement.all"), , List.of(Blocks.BARRIER, Blocks.STRUCTURE_BLOCK, Blocks.BEDROCK, Blocks.END_PORTAL_FRAME));
+    AIR(3, new TranslatableComponent("gui." + Caterpillar.MOD_ID + ".replacement.air"), List.of(Blocks.AIR)),
+    ALL(4, new TranslatableComponent("gui." + Caterpillar.MOD_ID + ".replacement.all"), List.of(Blocks.BARRIER, Blocks.STRUCTURE_BLOCK, Blocks.BEDROCK, Blocks.END_PORTAL_FRAME));
 
     public final int INDEX;
     public final MutableComponent NAME;

@@ -13,6 +13,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -38,7 +39,7 @@ import static dev.the_fireplace.caterpillar.block.TransporterBlock.HALF;
 
 public class TransporterBlockEntity extends DrillBaseBlockEntity {
 
-    public static final Component TITLE = Component.translatable(
+    public static final Component TITLE = new TranslatableComponent(
             "container." + Caterpillar.MOD_ID + ".transporter"
     );
 
@@ -156,7 +157,7 @@ public class TransporterBlockEntity extends DrillBaseBlockEntity {
         for (int i = 0; i < INVENTORY_SIZE; i++) {
             ItemStack stack = this.getStackInSlot(i);
             if (!stack.isEmpty()) {
-                minecartChest.setChestVehicleItem(i, stack);
+                minecartChest.setItem(i, stack);
             }
         }
 
