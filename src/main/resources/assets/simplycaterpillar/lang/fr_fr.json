@@ -61,6 +61,7 @@
   "simplycaterpillar.tutorial.transporter": "Le transporteur prendra des objets de\nl'inventaire collecté de la tête de forage\net les mettra dans le wagonnet de stockage.",
   "simplycaterpillar.tutorial.transporter.inventory_is_full": "Quand le transporteur est plein,\nil libérera le wagonnet de stockage.",
   "simplycaterpillar.tutorial.transporter.need_minecart_chest": "Pour commencer le transport,\nvous devez mettre un wagonnet de stockage\ndans l'inventaire de consommation de la tête de forage.",
+  
   "key.simplycaterpillar.category": "Simply Caterpillar",
   "key.simplycaterpillar.toggle_tutorial": "Afficher/Masquer Tutoriel"
 }
