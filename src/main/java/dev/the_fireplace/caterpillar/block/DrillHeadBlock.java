@@ -1,6 +1,6 @@
 package dev.the_fireplace.caterpillar.block;
 
-import dev.the_fireplace.caterpillar.block.entity.AbstractCaterpillarBlockEntity;
+import dev.the_fireplace.caterpillar.block.entity.DrillBaseBlockEntity;
 import dev.the_fireplace.caterpillar.block.entity.DrillHeadBlockEntity;
 import dev.the_fireplace.caterpillar.block.util.DrillHeadPart;
 import dev.the_fireplace.caterpillar.init.BlockEntityInit;
@@ -99,7 +99,7 @@ public class DrillHeadBlock extends AbstractCaterpillarBlock {
 
     private void dropContents(Level level, BlockPos pos) {
         BlockEntity blockEntity = level.getBlockEntity(pos);
-        if (blockEntity instanceof AbstractCaterpillarBlockEntity caterpillarBlockEntity) {
+        if (blockEntity instanceof DrillBaseBlockEntity caterpillarBlockEntity) {
             if (!level.isClientSide()) {
                 // caterpillarBlockEntity.drops();
             }
@@ -177,6 +177,6 @@ public class DrillHeadBlock extends AbstractCaterpillarBlock {
 
     @Override
     public @Nullable BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
-        return null;
+        return BlockEntityInit.DRILL_HEAD.create(pos, state);
     }
 }

@@ -22,9 +22,9 @@ processResources {
 
 	def buildProps = project.properties.clone()
 
-	filesMatching(["fabric.mod.json", '*.mixins.json', 'pack.mcmeta']) {
-		expand buildProps
-	}
+	filesMatching(["fabric.mod.json", '*.mixins.json']) {
+        expand buildProps
+    }
 }
 
 tasks.withType(JavaCompile).configureEach {

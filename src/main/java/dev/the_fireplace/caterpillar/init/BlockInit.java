@@ -20,7 +20,7 @@ public class BlockInit {
             new DrillBaseBlock(BlockBehaviour.Properties.of(Material.STONE).strength(1.5F, 6.0F).sound(SoundType.STONE).requiresCorrectToolForDrops()), Caterpillar.ITEM_GROUP);
 
     public static final Block DRILL_HEAD = registerBlock("drill_head",
-            new DrillHeadBlock(BlockBehaviour.Properties.of(Material.STONE).strength(1.5F, 6.0F).sound(SoundType.STONE).requiresCorrectToolForDrops()), Caterpillar.ITEM_GROUP);
+            new DrillHeadBlock(BlockBehaviour.Properties.of(Material.STONE).noOcclusion().strength(1.5F, 6.0F).sound(SoundType.STONE).requiresCorrectToolForDrops()), Caterpillar.ITEM_GROUP);
 
     public static final Block COLLECTOR = registerBlock("collector",
             new CollectorBlock(BlockBehaviour.Properties.of(Material.STONE).strength(1.5F, 6.0F).sound(SoundType.STONE).requiresCorrectToolForDrops()), Caterpillar.ITEM_GROUP);

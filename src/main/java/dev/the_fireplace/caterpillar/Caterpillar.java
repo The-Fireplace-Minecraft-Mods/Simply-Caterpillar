@@ -1,6 +1,8 @@
 package dev.the_fireplace.caterpillar;
 
+import dev.the_fireplace.caterpillar.init.BlockEntityInit;
 import dev.the_fireplace.caterpillar.init.BlockInit;
+import dev.the_fireplace.caterpillar.init.MenuInit;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
 import net.minecraft.resources.ResourceLocation;
@@ -20,5 +22,7 @@ public class Caterpillar implements ModInitializer {
     @Override
     public void onInitialize() {
         BlockInit.registerBlocks();
+        BlockEntityInit.registerBlockEntities();
+        MenuInit.registerMenus();
     }
 }

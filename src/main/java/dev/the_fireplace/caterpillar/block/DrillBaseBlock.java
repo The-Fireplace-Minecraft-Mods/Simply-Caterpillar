@@ -2,6 +2,7 @@ package dev.the_fireplace.caterpillar.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.BooleanOp;
@@ -26,6 +27,11 @@ public class DrillBaseBlock extends AbstractCaterpillarBlock {
     public DrillBaseBlock(Properties properties) {
         super(properties);
         super.runCalculation(SHAPES, SHAPE.get());
+    }
+
+    @Override
+    public @NotNull RenderShape getRenderShape(@NotNull BlockState state) {
+        return RenderShape.MODEL;
     }
 
     @Override
