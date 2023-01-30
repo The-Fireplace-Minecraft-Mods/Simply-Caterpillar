@@ -1,26 +1,26 @@
 package dev.the_fireplace.caterpillar.block;
 
 import dev.the_fireplace.caterpillar.block.util.ReinforcementPart;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.block.state.properties.EnumProperty;
-import net.minecraft.world.level.material.Fluids;
-import net.minecraft.world.phys.shapes.BooleanOp;
-import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.Shapes;
-import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.ShapeContext;
+import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.fluid.Fluids;
+import net.minecraft.item.ItemPlacementContext;
+import net.minecraft.item.ItemStack;
+import net.minecraft.state.StateManager;
+import net.minecraft.state.property.BooleanProperty;
+import net.minecraft.state.property.EnumProperty;
+import net.minecraft.state.property.Properties;
+import net.minecraft.util.function.BooleanBiFunction;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
+import net.minecraft.util.shape.VoxelShape;
+import net.minecraft.util.shape.VoxelShapes;
+import net.minecraft.world.BlockView;
+import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -30,9 +30,9 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 public class ReinforcementBlock extends AbstractCaterpillarBlock {
-    public static final EnumProperty<ReinforcementPart> PART = EnumProperty.create("part", ReinforcementPart.class);
+    public static final EnumProperty<ReinforcementPart> PART = EnumProperty.of("part", ReinforcementPart.class);
 
-    public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
+    public static final BooleanProperty WATERLOGGED = Properties.WATERLOGGED;
 
     private static final Map<Direction, VoxelShape> SHAPES_LEFT = new EnumMap<>(Direction.class);
 
@@ -45,36 +45,36 @@ public class ReinforcementBlock extends AbstractCaterpillarBlock {
     private static final Map<Direction, VoxelShape> SHAPES_BOTTOM = new EnumMap<>(Direction.class);
 
     private static final Optional<VoxelShape> SHAPE_LEFT = Stream.of(
-            Block.box(0, 0, 0, 1, 16, 16),
-            Block.box(1, 6, 6, 16, 10, 10)
-    ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR));
+            Block.createCuboidShape(0, 0, 0, 1, 16, 16),
+            Block.createCuboidShape(1, 6, 6, 16, 10, 10)
+    ).reduce((v1, v2) -> VoxelShapes.combineAndSimplify(v1, v2, BooleanBiFunction.OR));
 
     private static final Optional<VoxelShape> SHAPE_BASE = Stream.of(
-            Block.box(6, 6, -15, 10, 10, 0),
-            Block.box(0, 0, 0, 6, 16, 16),
-            Block.box(10, 0, 0, 16, 16, 16),
-            Block.box(6, 10, 0, 10, 16, 16),
-            Block.box(6, 0, 0, 10, 6, 16)
-    ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR));
+            Block.createCuboidShape(6, 6, -15, 10, 10, 0),
+            Block.createCuboidShape(0, 0, 0, 6, 16, 16),
+            Block.createCuboidShape(10, 0, 0, 16, 16, 16),
+            Block.createCuboidShape(6, 10, 0, 10, 16, 16),
+            Block.createCuboidShape(6, 0, 0, 10, 6, 16)
+    ).reduce((v1, v2) -> VoxelShapes.combineAndSimplify(v1, v2, BooleanBiFunction.OR));
 
     private static final Optional<VoxelShape> SHAPE_RIGHT = Stream.of(
-            Block.box(0, 6, 6, 15, 10, 10),
-            Block.box(15, 0, 0, 16, 16, 16)
-    ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR));
+            Block.createCuboidShape(0, 6, 6, 15, 10, 10),
+            Block.createCuboidShape(15, 0, 0, 16, 16, 16)
+    ).reduce((v1, v2) -> VoxelShapes.combineAndSimplify(v1, v2, BooleanBiFunction.OR));
 
     private static final Optional<VoxelShape> SHAPE_TOP = Stream.of(
-            Block.box(6, 0, 6, 10, 15, 10),
-            Block.box(0, 15, 0, 16, 16, 16)
-    ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR));
+            Block.createCuboidShape(6, 0, 6, 10, 15, 10),
+            Block.createCuboidShape(0, 15, 0, 16, 16, 16)
+    ).reduce((v1, v2) -> VoxelShapes.combineAndSimplify(v1, v2, BooleanBiFunction.OR));
 
     private static final Optional<VoxelShape> SHAPE_BOTTOM = Stream.of(
-            Block.box(6, 1, 6, 10, 16, 10),
-            Block.box(0, 0, 0, 16, 1, 16)
-    ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR));
+            Block.createCuboidShape(6, 1, 6, 10, 16, 10),
+            Block.createCuboidShape(0, 0, 0, 16, 1, 16)
+    ).reduce((v1, v2) -> VoxelShapes.combineAndSimplify(v1, v2, BooleanBiFunction.OR));
 
-    public ReinforcementBlock(Properties properties) {
+    public ReinforcementBlock(Settings properties) {
         super(properties);
-        super.registerDefaultState(super.defaultBlockState().setValue(ReinforcementBlock.PART, ReinforcementPart.BOTTOM).setValue(ReinforcementBlock.WATERLOGGED, true));
+        super.setDefaultState(super.getDefaultState().with(ReinforcementBlock.PART, ReinforcementPart.BOTTOM).with(ReinforcementBlock.WATERLOGGED, true));
         super.runCalculation(ReinforcementBlock.SHAPES_LEFT, ReinforcementBlock.SHAPE_LEFT.get());
         super.runCalculation(ReinforcementBlock.SHAPES_BASE, ReinforcementBlock.SHAPE_BASE.get());
         super.runCalculation(ReinforcementBlock.SHAPES_RIGHT, ReinforcementBlock.SHAPE_RIGHT.get());
@@ -83,73 +83,73 @@ public class ReinforcementBlock extends AbstractCaterpillarBlock {
     }
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.@NotNull Builder<Block, BlockState> builder) {
-        super.createBlockStateDefinition(builder);
+    protected void appendProperties(StateManager.@NotNull Builder<Block, BlockState> builder) {
+        super.appendProperties(builder);
         builder.add(ReinforcementBlock.PART, ReinforcementBlock.WATERLOGGED);
     }
 
     @Override
-    public @NotNull VoxelShape getShape(BlockState state, @NotNull BlockGetter level, @NotNull BlockPos pos, @NotNull CollisionContext context) {
-        return switch (state.getValue(ReinforcementBlock.PART)) {
-            case LEFT -> ReinforcementBlock.SHAPES_LEFT.get(state.getValue(FACING));
-            case RIGHT -> ReinforcementBlock.SHAPES_RIGHT.get(state.getValue(FACING));
-            case TOP -> ReinforcementBlock.SHAPES_TOP.get(state.getValue(FACING));
-            case BOTTOM -> ReinforcementBlock.SHAPES_BOTTOM.get(state.getValue(FACING));
-            default -> ReinforcementBlock.SHAPES_BASE.get(state.getValue(FACING));
+    public @NotNull VoxelShape getOutlineShape(BlockState state, @NotNull BlockView level, @NotNull BlockPos pos, @NotNull ShapeContext context) {
+        return switch (state.get(ReinforcementBlock.PART)) {
+            case LEFT -> ReinforcementBlock.SHAPES_LEFT.get(state.get(FACING));
+            case RIGHT -> ReinforcementBlock.SHAPES_RIGHT.get(state.get(FACING));
+            case TOP -> ReinforcementBlock.SHAPES_TOP.get(state.get(FACING));
+            case BOTTOM -> ReinforcementBlock.SHAPES_BOTTOM.get(state.get(FACING));
+            default -> ReinforcementBlock.SHAPES_BASE.get(state.get(FACING));
         };
     }
 
     @Override
-    public BlockState getStateForPlacement(BlockPlaceContext context) {
-        BlockPos blockPos = context.getClickedPos();
-        Level level = context.getLevel();
-        Direction direction = context.getHorizontalDirection();
+    public BlockState getPlacementState(ItemPlacementContext context) {
+        BlockPos blockPos = context.getBlockPos();
+        World level = context.getWorld();
+        Direction direction = context.getPlayerFacing();
 
-        return defaultBlockState().setValue(FACING, direction.getOpposite()).setValue(ReinforcementBlock.PART, ReinforcementPart.BOTTOM).setValue(DrillHeadBlock.WATERLOGGED, context.getLevel().getFluidState(context.getClickedPos()).getType() == Fluids.WATER);
+        return getDefaultState().with(FACING, direction.getOpposite()).with(ReinforcementBlock.PART, ReinforcementPart.BOTTOM).with(DrillHeadBlock.WATERLOGGED, context.getWorld().getFluidState(context.getBlockPos()).getFluid() == Fluids.WATER);
     }
 
     @Override
-    public void setPlacedBy(Level level, BlockPos blockPos, BlockState blockState, @Nullable LivingEntity livingEntity, @NotNull ItemStack stack) {
-        Direction direction = blockState.getValue(FACING);
+    public void onPlaced(World level, BlockPos blockPos, BlockState blockState, @Nullable LivingEntity livingEntity, @NotNull ItemStack stack) {
+        Direction direction = blockState.get(FACING);
 
-        level.setBlockAndUpdate(blockPos.above().relative(direction.getCounterClockWise()), blockState.setValue(PART, ReinforcementPart.LEFT));
-        level.setBlockAndUpdate(blockPos.above().relative(direction.getClockWise()), blockState.setValue(ReinforcementBlock.PART, ReinforcementPart.RIGHT));
-        level.setBlockAndUpdate(blockPos.above(), blockState.setValue(ReinforcementBlock.PART, ReinforcementPart.BASE));
-        level.setBlockAndUpdate(blockPos.above(2), blockState.setValue(ReinforcementBlock.PART, ReinforcementPart.TOP));
+        level.setBlockState(blockPos.up().offset(direction.rotateYCounterclockwise()), blockState.with(PART, ReinforcementPart.LEFT));
+        level.setBlockState(blockPos.up().offset(direction.rotateYClockwise()), blockState.with(ReinforcementBlock.PART, ReinforcementPart.RIGHT));
+        level.setBlockState(blockPos.up(), blockState.with(ReinforcementBlock.PART, ReinforcementPart.BASE));
+        level.setBlockState(blockPos.up(2), blockState.with(ReinforcementBlock.PART, ReinforcementPart.TOP));
 
-        super.setPlacedBy(level, blockPos, blockState, livingEntity, stack);
+        super.onPlaced(level, blockPos, blockState, livingEntity, stack);
     }
 
     @Override
-    public void playerWillDestroy(Level level, @NotNull BlockPos pos, BlockState state, Player player) {
-        Direction direction = state.getValue(FACING);
+    public void onBreak(World level, @NotNull BlockPos pos, BlockState state, PlayerEntity player) {
+        Direction direction = state.get(FACING);
         BlockPos basePos = getBasePos(state, pos);
 
-        level.destroyBlock(basePos, !player.isCreative());
-        level.destroyBlock(basePos.relative(direction.getCounterClockWise()), false);
-        level.destroyBlock(basePos.relative(direction.getClockWise()), false);
-        level.destroyBlock(basePos.above(), false);
-        level.destroyBlock(basePos.below(), false);
+        level.breakBlock(basePos, !player.isCreative());
+        level.breakBlock(basePos.offset(direction.rotateYCounterclockwise()), false);
+        level.breakBlock(basePos.offset(direction.rotateYClockwise()), false);
+        level.breakBlock(basePos.up(), false);
+        level.breakBlock(basePos.down(), false);
 
-        super.playerWillDestroy(level, pos, state, player);
+        super.onBreak(level, pos, state, player);
     }
 
     public BlockPos getBasePos(BlockState state, BlockPos pos) {
-        Direction direction = state.getValue(FACING);
-        ReinforcementPart part = state.getValue(ReinforcementBlock.PART);
+        Direction direction = state.get(FACING);
+        ReinforcementPart part = state.get(ReinforcementBlock.PART);
 
         return switch (part) {
-            case LEFT -> pos.relative(direction.getClockWise());
-            case RIGHT -> pos.relative(direction.getCounterClockWise());
-            case TOP -> pos.below();
-            case BOTTOM -> pos.above();
+            case LEFT -> pos.offset(direction.rotateYClockwise());
+            case RIGHT -> pos.offset(direction.rotateYCounterclockwise());
+            case TOP -> pos.down();
+            case BOTTOM -> pos.up();
             default -> pos;
         };
     }
 
     @Nullable
     @Override
-    public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
+    public BlockEntity createBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
         return null;
     }
 }

@@ -2,76 +2,85 @@ package dev.the_fireplace.caterpillar.block;
 
 import dev.the_fireplace.caterpillar.block.entity.DrillHeadBlockEntity;
 import dev.the_fireplace.caterpillar.block.util.CaterpillarBlockUtil;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.network.chat.Component;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.MenuProvider;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.*;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.Shapes;
-import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.block.*;
+import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemPlacementContext;
+import net.minecraft.screen.NamedScreenHandlerFactory;
+import net.minecraft.state.StateManager;
+import net.minecraft.state.property.DirectionProperty;
+import net.minecraft.state.property.Properties;
+import net.minecraft.text.Text;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.BlockMirror;
+import net.minecraft.util.BlockRotation;
+import net.minecraft.util.Hand;
+import net.minecraft.util.hit.BlockHitResult;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
+import net.minecraft.util.shape.VoxelShape;
+import net.minecraft.util.shape.VoxelShapes;
+import net.minecraft.world.BlockView;
+import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumMap;
 import java.util.Map;
 
-public abstract class AbstractCaterpillarBlock extends BaseEntityBlock {
-    public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
+public abstract class AbstractCaterpillarBlock extends BlockWithEntity implements BlockEntityProvider {
+    public static final DirectionProperty FACING = Properties.HORIZONTAL_FACING;
 
     protected static final Map<Direction, VoxelShape> SHAPES = new EnumMap<>(Direction.class);
 
-    protected AbstractCaterpillarBlock(Properties properties) {
+    protected AbstractCaterpillarBlock(Settings properties) {
         super(properties);
-        registerDefaultState(defaultBlockState().setValue(FACING, Direction.NORTH));
+        setDefaultState(getDefaultState().with(FACING, Direction.NORTH));
+    }
+
+    public static VoxelShape calculateShapes(Direction to, VoxelShape shape) {
+        final VoxelShape[] buffer = {shape, VoxelShapes.empty()};
+
+        final int times = (to.getHorizontal() - Direction.NORTH.getHorizontal() + 4) % 4;
+        for (int i = 0; i < times; i++) {
+            buffer[0].forEachBox((minX, minY, minZ, maxX, maxY,
+                                  maxZ) -> buffer[1] = VoxelShapes.union(buffer[1], VoxelShapes.cuboidUnchecked(1 - maxZ, minY, minX, 1 - minZ, maxY, maxX)));
+            buffer[0] = buffer[1];
+            buffer[1] = VoxelShapes.empty();
+        }
+
+        return buffer[0];
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-        return AbstractCaterpillarBlock.SHAPES.get(state.getValue(FACING));
+    public VoxelShape getOutlineShape(BlockState state, BlockView level, BlockPos pos, ShapeContext context) {
+        return AbstractCaterpillarBlock.SHAPES.get(state.get(FACING));
     }
 
     @Nullable
     @Override
-    public BlockState getStateForPlacement(BlockPlaceContext context) {
-        BlockPos pos = context.getClickedPos();
-        Level level = context.getLevel();
-        Direction direction = context.getHorizontalDirection();
+    public BlockState getPlacementState(ItemPlacementContext context) {
+        BlockPos pos = context.getBlockPos();
+        World level = context.getWorld();
+        Direction direction = context.getPlayerFacing();
 
-        return defaultBlockState().setValue(FACING, direction.getOpposite());
+        return getDefaultState().with(FACING, direction.getOpposite());
     }
 
     @Override
-    public @NotNull BlockState rotate(BlockState state, Rotation rotation) {
-        return state.setValue(FACING, rotation.rotate(state.getValue(FACING)));
+    public @NotNull BlockState rotate(BlockState state, BlockRotation rotation) {
+        return state.with(FACING, rotation.rotate(state.get(FACING)));
     }
 
     @Override
-    public @NotNull BlockState mirror(BlockState state, Mirror mirror) {
-        return state.rotate(mirror.getRotation(state.getValue(FACING)));
+    public @NotNull BlockState mirror(BlockState state, BlockMirror mirror) {
+        return state.rotate(mirror.getRotation(state.get(FACING)));
     }
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.@NotNull Builder<Block, BlockState> builder) {
-        super.createBlockStateDefinition(builder);
+    protected void appendProperties(StateManager.@NotNull Builder<Block, BlockState> builder) {
+        super.appendProperties(builder);
         builder.add(FACING);
-    }
-
-    @Override
-    public @NotNull RenderShape getRenderShape(@NotNull BlockState state) {
-        return RenderShape.MODEL;
     }
 
     public BlockPos getBasePos(BlockState state, BlockPos pos) {
@@ -83,44 +92,31 @@ public abstract class AbstractCaterpillarBlock extends BaseEntityBlock {
             shapes.put(direction, calculateShapes(direction, shape));
     }
 
-    public static VoxelShape calculateShapes(Direction to, VoxelShape shape) {
-        final VoxelShape[] buffer = { shape, Shapes.empty() };
-
-        final int times = (to.get2DDataValue() - Direction.NORTH.get2DDataValue() + 4) % 4;
-        for (int i = 0; i < times; i++) {
-            buffer[0].forAllBoxes((minX, minY, minZ, maxX, maxY,
-                                   maxZ) -> buffer[1] = Shapes.or(buffer[1], Shapes.create(1 - maxZ, minY, minX, 1 - minZ, maxY, maxX)));
-            buffer[0] = buffer[1];
-            buffer[1] = Shapes.empty();
-        }
-
-        return buffer[0];
+    @Override
+    public @NotNull BlockRenderType getRenderType(@NotNull BlockState state) {
+        return BlockRenderType.MODEL;
     }
 
     @Override
-    public InteractionResult use(BlockState blockState, Level level, BlockPos blockPos, Player player, InteractionHand interactionHand, BlockHitResult blockHitResult) {
-        if (!level.isClientSide) {
-            Direction direction = blockState.getValue(FACING);
+    public ActionResult onUse(BlockState blockState, World level, BlockPos blockPos, PlayerEntity player, Hand interactionHand, BlockHitResult blockHitResult) {
+        if (!level.isClient) {
+            Direction direction = blockState.get(FACING);
             BlockPos basePos = getBasePos(blockState, blockPos);
             BlockPos caterpillarHeadPos = CaterpillarBlockUtil.getCaterpillarHeadPos(level, basePos, direction);
 
             BlockEntity blockEntity = level.getBlockEntity(caterpillarHeadPos);
             if (blockEntity instanceof DrillHeadBlockEntity drillHeadBlockEntity) {
-                MenuProvider menuProvider = drillHeadBlockEntity.getBlockState().getMenuProvider(level, caterpillarHeadPos);
-
-                if (menuProvider != null) {
-                    player.openMenu(menuProvider);
-                }
+                player.openHandledScreen(drillHeadBlockEntity);
             } else {
-                player.displayClientMessage(Component.translatable("block.simplycaterpillar.drill_head.not_found"), true);
+                player.sendMessage(Text.translatable("block.simplycaterpillar.drill_head.not_found"), true);
             }
         }
 
-        return InteractionResult.SUCCESS;
+        return ActionResult.SUCCESS;
     }
 
     @Nullable
     @Override
-    public abstract BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state);
+    public abstract BlockEntity createBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state);
 
 }
