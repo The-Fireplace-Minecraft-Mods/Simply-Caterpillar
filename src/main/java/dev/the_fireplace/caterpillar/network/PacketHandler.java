@@ -19,7 +19,7 @@ public final class PacketHandler {
     public static final ResourceLocation DECORATION_SELECTED_MAP_SYNC = new ResourceLocation(Caterpillar.MOD_ID, "decoration.selected_map_sync");
     public static final ResourceLocation DECORATION_SLOT_SYNC = new ResourceLocation(Caterpillar.MOD_ID, "decoration.slot_sync");
 
-    public static final ResourceLocation DRILL_HEAD_POWER_SYNC = new ResourceLocation(Caterpillar.MOD_ID, "drill_head.power_sync");
+    public static final ResourceLocation DRILL_HEAD_POWER_SYNC_C2S = new ResourceLocation(Caterpillar.MOD_ID, "drill_head.power_sync_c2s");
 
     public static final ResourceLocation REINFORCEMENT_STATE_REPLACER_SYNC = new ResourceLocation(Caterpillar.MOD_ID, "reinforcement.state_replacer_sync");
 
@@ -34,7 +34,7 @@ public final class PacketHandler {
 
     public static final ResourceLocation DRILL_HEAD_LIT_SYNC = new ResourceLocation(Caterpillar.MOD_ID, "drill_head.lit_sync");
     public static final ResourceLocation DRILL_HEAD_MOVING_SYNC = new ResourceLocation(Caterpillar.MOD_ID, "drill_head.moving_sync");
-    // public static final ResourceLocation DRILL_HEAD_POWER_SYNC = new ResourceLocation(Caterpillar.MOD_ID, "drill_head.power_sync");
+    public static final ResourceLocation DRILL_HEAD_POWER_SYNC_S2C = new ResourceLocation(Caterpillar.MOD_ID, "drill_head.power_sync_s2c");
 
     public static final ResourceLocation REINFORCEMENT_REPLACER_SYNC = new ResourceLocation(Caterpillar.MOD_ID, "reinforcement.replacer_sync");
 
@@ -46,7 +46,7 @@ public final class PacketHandler {
         ServerPlayNetworking.registerGlobalReceiver(DECORATION_SELECTED_MAP_SYNC, DecorationSyncSelectedMapC2SPacket::receive);
         ServerPlayNetworking.registerGlobalReceiver(DECORATION_SLOT_SYNC, DecorationSyncSlotC2SPacket::receive);
 
-        ServerPlayNetworking.registerGlobalReceiver(DRILL_HEAD_POWER_SYNC, DrillHeadSyncPowerC2SPacket::receive);
+        ServerPlayNetworking.registerGlobalReceiver(DRILL_HEAD_POWER_SYNC_C2S, DrillHeadSyncPowerC2SPacket::receive);
 
         ServerPlayNetworking.registerGlobalReceiver(REINFORCEMENT_STATE_REPLACER_SYNC, ReinforcementSyncStateReplacerC2SPacket::receive);
 
@@ -62,7 +62,7 @@ public final class PacketHandler {
 
         ClientPlayNetworking.registerGlobalReceiver(DRILL_HEAD_LIT_SYNC, DrillHeadSyncLitS2CPacket::receive);
         ClientPlayNetworking.registerGlobalReceiver(DRILL_HEAD_MOVING_SYNC, DrillHeadSyncMovingS2CPacket::receive);
-        // ClientPlayNetworking.registerGlobalReceiver(DRILL_HEAD_POWER_SYNC, DrillHeadSyncPowerS2CPacket::receive);
+        ClientPlayNetworking.registerGlobalReceiver(DRILL_HEAD_POWER_SYNC_S2C, DrillHeadSyncPowerS2CPacket::receive);
 
         ClientPlayNetworking.registerGlobalReceiver(REINFORCEMENT_REPLACER_SYNC, ReinforcementSyncReplacerS2CPacket::receive);
     }

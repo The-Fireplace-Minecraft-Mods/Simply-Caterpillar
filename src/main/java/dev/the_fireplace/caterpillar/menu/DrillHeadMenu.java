@@ -308,13 +308,13 @@ public class DrillHeadMenu extends AbstractScrollableMenu {
 
     public void setPowerOn() {
         if (this.blockEntity instanceof DrillHeadBlockEntity drillHeadBlockEntity) {
-            // PacketHandler.sendToServer(new DrillHeadSyncPowerC2SPacket(true, drillHeadBlockEntity.getBlockPos()));
+            drillHeadBlockEntity.sendPowerPacketC2S(true, drillHeadBlockEntity.getBlockPos());
         }
     }
 
     public void setPowerOff() {
         if (this.blockEntity instanceof DrillHeadBlockEntity drillHeadBlockEntity) {
-            // PacketHandler.sendToServer(new DrillHeadSyncPowerC2SPacket(false, drillHeadBlockEntity.getBlockPos()));
+            drillHeadBlockEntity.sendPowerPacketC2S(false, drillHeadBlockEntity.getBlockPos());
         }
     }
 

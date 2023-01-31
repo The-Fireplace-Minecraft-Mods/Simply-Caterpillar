@@ -12,15 +12,17 @@ import net.minecraft.server.network.ServerGamePacketListenerImpl;
 public class DrillHeadSyncPowerC2SPacket {
 
     public static void receive(MinecraftServer server, ServerPlayer player, ServerGamePacketListenerImpl handler, FriendlyByteBuf buf, PacketSender responseSender) {
-        ServerLevel level = player.getLevel();
-
         boolean powered = buf.readBoolean();
         BlockPos pos = buf.readBlockPos();
 
-        if (level.getBlockEntity(pos) instanceof DrillHeadBlockEntity drillHeadBlockEntity) {
-            drillHeadBlockEntity.setPower(powered);
+        server.execute(() -> {
+            ServerLevel level = player.getLevel();
 
-            // PacketHandler.sendToClients(new DrillHeadSyncPowerS2CPacket(drillHeadBlockEntity.isPowered(), drillHeadBlockEntity.getBlockPos()));
-        }
+            if (level.getBlockEntity(pos) instanceof DrillHeadBlockEntity drillHeadBlockEntity) {
+                drillHeadBlockEntity.setPower(powered);
+
+                drillHeadBlockEntity.sendPowerPacketS2C(drillHeadBlockEntity.isPowered(), drillHeadBlockEntity.getBlockPos());
+            }
+        });
     }
 }

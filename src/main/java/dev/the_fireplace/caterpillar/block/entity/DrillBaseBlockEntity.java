@@ -4,6 +4,10 @@ import dev.the_fireplace.caterpillar.block.DrillBaseBlock;
 import dev.the_fireplace.caterpillar.block.entity.util.ImplementedInventory;
 import dev.the_fireplace.caterpillar.config.ConfigHolder;
 import dev.the_fireplace.caterpillar.init.BlockEntityInit;
+import dev.the_fireplace.caterpillar.network.PacketHandler;
+import io.netty.buffer.Unpooled;
+import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -11,6 +15,7 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -25,6 +30,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 public class DrillBaseBlockEntity extends BlockEntity implements ExtendedScreenHandlerFactory, ImplementedInventory {
 
@@ -90,6 +98,21 @@ public class DrillBaseBlockEntity extends BlockEntity implements ExtendedScreenH
     @Override
     public void writeScreenOpeningData(ServerPlayer player, FriendlyByteBuf buf) {
         buf.writeBlockPos(this.worldPosition);
+    }
+
+    public void sendInventoryPacketS2C(NonNullList<ItemStack> inventory, BlockPos pos) {
+        FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
+        Collection<ItemStack> list = new ArrayList<>();
+        for (int i = 0; i < inventory.size(); i++) {
+            list.add(inventory.get(i));
+        }
+
+        buf.writeCollection(list, FriendlyByteBuf::writeItem);
+        buf.writeBlockPos(pos);
+
+        for (ServerPlayer player : PlayerLookup.tracking((ServerLevel) this.level, this.getBlockPos())) {
+            ServerPlayNetworking.send(player, PacketHandler.CATERPILLAR_INVENTORY_SYNC, buf);
+        }
     }
 
     public void setInventory(NonNullList<ItemStack> inventory) {

@@ -262,6 +262,10 @@ public class DrillHeadBlock extends DrillBaseBlock {
     @Nullable
     @Override
     public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
-        return BlockEntityInit.DRILL_HEAD.create(pos, state);
+        if (state.getValue(PART) == DrillHeadPart.BASE) {
+            return BlockEntityInit.DRILL_HEAD.create(pos, state);
+        }
+
+        return null;
     }
 }
