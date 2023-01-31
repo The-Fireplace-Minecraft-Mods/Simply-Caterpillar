@@ -14,6 +14,7 @@ public class CaterpillarClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         BlockRenderLayerMap.INSTANCE.putBlock(BlockInit.DRILL_HEAD, RenderType.cutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(BlockInit.DRILL_SEAT, RenderType.cutout());
 
         MenuScreens.register(MenuInit.DRILL_HEAD, DrillHeadScreen::new);
 

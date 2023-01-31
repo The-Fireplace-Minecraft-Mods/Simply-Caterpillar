@@ -1,8 +1,13 @@
 package dev.the_fireplace.caterpillar.block.entity;
 
+import dev.the_fireplace.caterpillar.block.StorageBlock;
+import dev.the_fireplace.caterpillar.block.util.StoragePart;
+import dev.the_fireplace.caterpillar.config.ConfigHolder;
 import dev.the_fireplace.caterpillar.init.BlockEntityInit;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -50,7 +55,7 @@ public class StorageBlockEntity extends DrillBaseBlockEntity {
             this.getLevel().removeBlock(basePos.relative(blockEntity.getBlockState().getValue(StorageBlock.FACING).getCounterClockWise()), false);
             this.getLevel().removeBlock(basePos.relative(blockEntity.getBlockState().getValue(StorageBlock.FACING).getClockWise()), false);
 
-            if (CaterpillarConfig.enableSounds) {
+            if (ConfigHolder.enableSounds) {
                 this.getLevel().playSound(null, basePos, SoundEvents.PISTON_EXTEND, SoundSource.BLOCKS, 1.0F, 1.0F);
             }
         }

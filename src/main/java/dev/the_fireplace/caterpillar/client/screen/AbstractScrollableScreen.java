@@ -2,10 +2,10 @@ package dev.the_fireplace.caterpillar.client.screen;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import dev.the_fireplace.caterpillar.client.screen.util.ScreenTabs;
+import dev.the_fireplace.caterpillar.menu.AbstractScrollableMenu;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import org.jetbrains.annotations.NotNull;
-import dev.the_fireplace.caterpillar.menu.AbstractScrollableMenu;
 
 public abstract class AbstractScrollableScreen<D extends AbstractScrollableMenu> extends AbstractCaterpillarScreen<D> {
 

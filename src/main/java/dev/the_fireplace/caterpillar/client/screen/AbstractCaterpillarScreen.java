@@ -5,12 +5,14 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import dev.the_fireplace.caterpillar.Caterpillar;
 import dev.the_fireplace.caterpillar.block.entity.*;
 import dev.the_fireplace.caterpillar.block.util.CaterpillarBlockUtil;
+import dev.the_fireplace.caterpillar.client.screen.util.MouseUtil;
 import dev.the_fireplace.caterpillar.client.screen.util.ScreenTabs;
 import dev.the_fireplace.caterpillar.client.screen.widget.TabButton;
 import dev.the_fireplace.caterpillar.client.screen.widget.TutorialButton;
 import dev.the_fireplace.caterpillar.menu.AbstractCaterpillarMenu;
 import dev.the_fireplace.caterpillar.network.PacketHandler;
 import dev.the_fireplace.caterpillar.network.packet.client.CaterpillarSyncSelectedTabC2SPacket;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.core.BlockPos;
@@ -19,6 +21,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.Slot;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -247,6 +250,19 @@ public abstract class AbstractCaterpillarScreen<T extends AbstractCaterpillarMen
                 return false;
             }
         }
+    }
+
+    public Slot getSlotUnderMouse() {
+        double mouseX = Minecraft.getInstance().mouseHandler.xpos();
+        double mouseY = Minecraft.getInstance().mouseHandler.ypos();
+
+        for (Slot slot : Minecraft.getInstance().player.containerMenu.slots) {
+            if (MouseUtil.isMouseOverSlot(slot, mouseX, mouseY)) {
+                return slot;
+            }
+        }
+
+        return null;
     }
 
     private void bindTexture() {

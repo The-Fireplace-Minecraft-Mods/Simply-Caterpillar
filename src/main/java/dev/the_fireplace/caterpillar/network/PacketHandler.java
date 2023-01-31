@@ -4,24 +4,66 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraftforge.network.NetworkDirection;
-import net.minecraftforge.network.NetworkRegistry;
-import net.minecraftforge.network.PacketDistributor;
-import net.minecraftforge.network.simple.SimpleChannel;
 import dev.the_fireplace.caterpillar.Caterpillar;
 import dev.the_fireplace.caterpillar.network.packet.client.*;
 import dev.the_fireplace.caterpillar.network.packet.server.*;
 
 public final class PacketHandler {
 
-    public static final ResourceLocation ITEM_SYNC = new ResourceLocation(Caterpillar.MOD_ID, "item_sync");
-    public static final ResourceLocation INVENTORY_SYNC = new ResourceLocation(Caterpillar.MOD_ID, "inventory_sync");
+    // Client to server
+
+    public static final ResourceLocation CATERPILLAR_CARRIED_SYNC = new ResourceLocation(Caterpillar.MOD_ID, "caterpillar.carried_sync");
+    public static final ResourceLocation CATERPILLAR_SELECTED_TAB_SYNC = new ResourceLocation(Caterpillar.MOD_ID, "caterpillar.selected_tab_sync");
+    public static final ResourceLocation CATERPILLAR_SLOT_SYNC = new ResourceLocation(Caterpillar.MOD_ID, "caterpillar.slot_sync");
+
+    public static final ResourceLocation DECORATION_SELECTED_MAP_SYNC = new ResourceLocation(Caterpillar.MOD_ID, "decoration.selected_map_sync");
+    public static final ResourceLocation DECORATION_SLOT_SYNC = new ResourceLocation(Caterpillar.MOD_ID, "decoration.slot_sync");
+
+    public static final ResourceLocation DRILL_HEAD_POWER_SYNC = new ResourceLocation(Caterpillar.MOD_ID, "drill_head.power_sync");
+
+    public static final ResourceLocation REINFORCEMENT_STATE_REPLACER_SYNC = new ResourceLocation(Caterpillar.MOD_ID, "reinforcement.state_replacer_sync");
+
+    public static final ResourceLocation SLOT_SYNC = new ResourceLocation(Caterpillar.MOD_ID, "slot_sync");
+
+    // Server to client
+    public static final ResourceLocation CATERPILLAR_INVENTORY_SYNC = new ResourceLocation(Caterpillar.MOD_ID, "caterpillar.inventory_sync");
+
+    public static final ResourceLocation DECORATION_CURRENT_MAP_SYNC = new ResourceLocation(Caterpillar.MOD_ID, "decoration.current_map_sync");
+    public static final ResourceLocation DECORATION_INVENTORY_SYNC = new ResourceLocation(Caterpillar.MOD_ID, "decoration.inventory_sync");
+    // public static final ResourceLocation DECORATION_SELECTED_MAP_SYNC = new ResourceLocation(Caterpillar.MOD_ID, "decoration.selected_map_sync");
+
+    public static final ResourceLocation DRILL_HEAD_LIT_SYNC = new ResourceLocation(Caterpillar.MOD_ID, "drill_head.lit_sync");
+    public static final ResourceLocation DRILL_HEAD_MOVING_SYNC = new ResourceLocation(Caterpillar.MOD_ID, "drill_head.moving_sync");
+    // public static final ResourceLocation DRILL_HEAD_POWER_SYNC = new ResourceLocation(Caterpillar.MOD_ID, "drill_head.power_sync");
+
+    public static final ResourceLocation REINFORCEMENT_REPLACER_SYNC = new ResourceLocation(Caterpillar.MOD_ID, "reinforcement.replacer_sync");
 
     public static void registerC2SPackets() {
-        ServerPlayNetworking.registerGlobalReceiver(ITEM_SYNC, MinecraftSyncSlotC2SPacket::receive);
+        ServerPlayNetworking.registerGlobalReceiver(CATERPILLAR_CARRIED_SYNC, CaterpillarSyncCarriedC2SPacket::receive);
+        ServerPlayNetworking.registerGlobalReceiver(CATERPILLAR_SELECTED_TAB_SYNC, CaterpillarSyncSelectedTabC2SPacket::receive);
+        ServerPlayNetworking.registerGlobalReceiver(CATERPILLAR_SLOT_SYNC, CaterpillarSyncSlotC2SPacket::receive);
+
+        ServerPlayNetworking.registerGlobalReceiver(DECORATION_SELECTED_MAP_SYNC, DecorationSyncSelectedMapC2SPacket::receive);
+        ServerPlayNetworking.registerGlobalReceiver(DECORATION_SLOT_SYNC, DecorationSyncSlotC2SPacket::receive);
+
+        ServerPlayNetworking.registerGlobalReceiver(DRILL_HEAD_POWER_SYNC, DrillHeadSyncPowerC2SPacket::receive);
+
+        ServerPlayNetworking.registerGlobalReceiver(REINFORCEMENT_STATE_REPLACER_SYNC, ReinforcementSyncStateReplacerC2SPacket::receive);
+
+        ServerPlayNetworking.registerGlobalReceiver(SLOT_SYNC, MinecraftSyncSlotC2SPacket::receive);
     }
 
     public static void registerS2CPackets() {
-        ClientPlayNetworking.registerGlobalReceiver(INVENTORY_SYNC, CaterpillarSyncInventoryS2CPacket::receive);
+        ClientPlayNetworking.registerGlobalReceiver(CATERPILLAR_INVENTORY_SYNC, CaterpillarSyncInventoryS2CPacket::receive);
+
+        ClientPlayNetworking.registerGlobalReceiver(DECORATION_CURRENT_MAP_SYNC, DecorationSyncCurrentMapS2CPacket::receive);
+        ClientPlayNetworking.registerGlobalReceiver(DECORATION_INVENTORY_SYNC, DecorationSyncInventoryS2CPacket::receive);
+        // ClientPlayNetworking.registerGlobalReceiver(DECORATION_SELECTED_MAP_SYNC, DecorationSyncSelectedMapS2CPacket::receive);
+
+        ClientPlayNetworking.registerGlobalReceiver(DRILL_HEAD_LIT_SYNC, DrillHeadSyncLitS2CPacket::receive);
+        ClientPlayNetworking.registerGlobalReceiver(DRILL_HEAD_MOVING_SYNC, DrillHeadSyncMovingS2CPacket::receive);
+        // ClientPlayNetworking.registerGlobalReceiver(DRILL_HEAD_POWER_SYNC, DrillHeadSyncPowerS2CPacket::receive);
+
+        ClientPlayNetworking.registerGlobalReceiver(REINFORCEMENT_REPLACER_SYNC, ReinforcementSyncReplacerS2CPacket::receive);
     }
 }

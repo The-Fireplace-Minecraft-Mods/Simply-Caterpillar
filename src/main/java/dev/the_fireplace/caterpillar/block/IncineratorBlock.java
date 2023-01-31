@@ -1,8 +1,12 @@
 package dev.the_fireplace.caterpillar.block;
 
 import dev.the_fireplace.caterpillar.block.entity.IncineratorBlockEntity;
+import dev.the_fireplace.caterpillar.block.util.CaterpillarBlockUtil;
+import dev.the_fireplace.caterpillar.init.BlockEntityInit;
+import dev.the_fireplace.caterpillar.init.BlockInit;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -18,6 +22,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.stream.Stream;
 
 public class IncineratorBlock extends DrillBaseBlock {
@@ -64,7 +69,7 @@ public class IncineratorBlock extends DrillBaseBlock {
                 return super.getStateForPlacement(context);
             }
         } else {
-            context.getPlayer().displayClientMessage(Component.translatable("block.simplycaterpillar.blocks.already_connected", BlockInit.INCINERATOR.get().getName()), true);
+            context.getPlayer().displayClientMessage(Component.translatable("block.simplycaterpillar.blocks.already_connected", BlockInit.INCINERATOR.getName()), true);
         }
 
         return null;
@@ -73,6 +78,6 @@ public class IncineratorBlock extends DrillBaseBlock {
     @Nullable
     @Override
     public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
-        return BlockEntityInit.INCINERATOR.get().create(pos, state);
+        return BlockEntityInit.INCINERATOR.create(pos, state);
     }
 }

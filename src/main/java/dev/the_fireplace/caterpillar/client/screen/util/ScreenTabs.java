@@ -8,11 +8,11 @@ import net.minecraft.world.item.ItemStack;
 import dev.the_fireplace.caterpillar.init.BlockInit;
 
 public enum ScreenTabs {
-    DRILL_HEAD(0, DrillHeadBlockEntity.TITLE, new ResourceLocation(Caterpillar.MOD_ID, "textures/gui/drill_head.png"), 176, 166, BlockInit.DRILL_HEAD.get().asItem().getDefaultInstance()),
-    DECORATION(1, DecorationBlockEntity.TITLE, new ResourceLocation(Caterpillar.MOD_ID, "textures/gui/decoration.png"), 176, 166, BlockInit.DECORATION.get().asItem().getDefaultInstance()),
-    REINFORCEMENT(2, ReinforcementBlockEntity.TITLE, new ResourceLocation(Caterpillar.MOD_ID, "textures/gui/reinforcement.png"), 176, 202, BlockInit.REINFORCEMENT.get().asItem().getDefaultInstance()),
-    INCINERATOR(3, IncineratorBlockEntity.TITLE, new ResourceLocation(Caterpillar.MOD_ID, "textures/gui/incinerator.png"), 176, 166, BlockInit.INCINERATOR.get().asItem().getDefaultInstance()),
-    TRANSPORTER(4, TransporterBlockEntity.TITLE, new ResourceLocation(Caterpillar.MOD_ID, "textures/gui/transporter.png"), 176, 166, BlockInit.TRANSPORTER.get().asItem().getDefaultInstance());
+    DRILL_HEAD(0, DrillHeadBlockEntity.TITLE, new ResourceLocation(Caterpillar.MOD_ID, "textures/gui/drill_head.png"), 176, 166, BlockInit.DRILL_HEAD.asItem().getDefaultInstance()),
+    DECORATION(1, DecorationBlockEntity.TITLE, new ResourceLocation(Caterpillar.MOD_ID, "textures/gui/decoration.png"), 176, 166, BlockInit.DECORATION.asItem().getDefaultInstance()),
+    REINFORCEMENT(2, ReinforcementBlockEntity.TITLE, new ResourceLocation(Caterpillar.MOD_ID, "textures/gui/reinforcement.png"), 176, 202, BlockInit.REINFORCEMENT.asItem().getDefaultInstance()),
+    INCINERATOR(3, IncineratorBlockEntity.TITLE, new ResourceLocation(Caterpillar.MOD_ID, "textures/gui/incinerator.png"), 176, 166, BlockInit.INCINERATOR.asItem().getDefaultInstance()),
+    TRANSPORTER(4, TransporterBlockEntity.TITLE, new ResourceLocation(Caterpillar.MOD_ID, "textures/gui/transporter.png"), 176, 166, BlockInit.TRANSPORTER.asItem().getDefaultInstance());
 
     public final int INDEX;
 

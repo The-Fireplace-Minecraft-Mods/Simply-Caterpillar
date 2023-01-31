@@ -147,9 +147,13 @@ public class ReinforcementScreen extends AbstractScrollableScreen<ReinforcementM
         for (byte replacer : this.menu.getReplacers(scrollIndex)) {
             int finalReplacerIndex = replacerIndex;
             if (replacer == (byte) 1) {
-                this.replacerButtons.add(new ImageButton(super.leftPos + REPLACER_BTN_BG_X, super.topPos + REPLACER_BTN_BG_Y + replacerIndex * (REPLACER_BTN_BG_HEIGHT + 2), REPLACER_BTN_BG_WIDTH, REPLACER_BTN_BG_HEIGHT, 176, replacerIndex * REPLACER_BTN_BG_HEIGHT * 2, 0, ScreenTabs.REINFORCEMENT.TEXTURE, (onPress) -> PacketHandler.sendToServer(new ReinforcementSyncStateReplacerC2SPacket(scrollIndex, finalReplacerIndex, (byte) 0, this.menu.blockEntity.getBlockPos()))));
+                this.replacerButtons.add(new ImageButton(super.leftPos + REPLACER_BTN_BG_X, super.topPos + REPLACER_BTN_BG_Y + replacerIndex * (REPLACER_BTN_BG_HEIGHT + 2), REPLACER_BTN_BG_WIDTH, REPLACER_BTN_BG_HEIGHT, 176, replacerIndex * REPLACER_BTN_BG_HEIGHT * 2, 0, ScreenTabs.REINFORCEMENT.TEXTURE, (onPress) -> {
+                    // PacketHandler.sendToServer(new ReinforcementSyncStateReplacerC2SPacket(scrollIndex, finalReplacerIndex, (byte) 0, this.menu.blockEntity.getBlockPos()))
+                }));
             } else {
-                this.replacerButtons.add(new ImageButton(super.leftPos + REPLACER_BTN_BG_X, super.topPos + REPLACER_BTN_BG_Y + replacerIndex * (REPLACER_BTN_BG_HEIGHT + 2), REPLACER_BTN_BG_WIDTH, REPLACER_BTN_BG_HEIGHT, 176, replacerIndex * REPLACER_BTN_BG_HEIGHT * 2 + REPLACER_BTN_BG_HEIGHT, 0, ScreenTabs.REINFORCEMENT.TEXTURE, (onPress) -> PacketHandler.sendToServer(new ReinforcementSyncStateReplacerC2SPacket(scrollIndex, finalReplacerIndex, (byte) 1, this.menu.blockEntity.getBlockPos()))));
+                this.replacerButtons.add(new ImageButton(super.leftPos + REPLACER_BTN_BG_X, super.topPos + REPLACER_BTN_BG_Y + replacerIndex * (REPLACER_BTN_BG_HEIGHT + 2), REPLACER_BTN_BG_WIDTH, REPLACER_BTN_BG_HEIGHT, 176, replacerIndex * REPLACER_BTN_BG_HEIGHT * 2 + REPLACER_BTN_BG_HEIGHT, 0, ScreenTabs.REINFORCEMENT.TEXTURE, (onPress) -> {
+                    // PacketHandler.sendToServer(new ReinforcementSyncStateReplacerC2SPacket(scrollIndex, finalReplacerIndex, (byte) 1, this.menu.blockEntity.getBlockPos()))
+                }));
             }
 
             replacerIndex++;
@@ -190,7 +194,7 @@ public class ReinforcementScreen extends AbstractScrollableScreen<ReinforcementM
             return;
         }
 
-        int reinforcementSlotId = slot.getSlotIndex();
+        int reinforcementSlotId = slot.index;
         ItemStack reinforcementStack;
         ItemStack carried = this.menu.getCarried().copy();
 
@@ -205,9 +209,9 @@ public class ReinforcementScreen extends AbstractScrollableScreen<ReinforcementM
         this.menu.setCarried(carried);
 
         if (this.menu.blockEntity instanceof ReinforcementBlockEntity reinforcementBlockEntity) {
-            reinforcementBlockEntity.setStackInSlot(reinforcementSlotId, reinforcementStack);
+            reinforcementBlockEntity.setItem(reinforcementSlotId, reinforcementStack);
 
-            PacketHandler.sendToServer(new CaterpillarSyncSlotC2SPacket(reinforcementSlotId, reinforcementStack, reinforcementBlockEntity.getBlockPos()));
+            // PacketHandler.sendToServer(new CaterpillarSyncSlotC2SPacket(reinforcementSlotId, reinforcementStack, reinforcementBlockEntity.getBlockPos()));
         }
     }
 

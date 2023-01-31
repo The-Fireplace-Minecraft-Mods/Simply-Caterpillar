@@ -3,11 +3,11 @@ package dev.the_fireplace.caterpillar.client.screen;
 import com.mojang.blaze3d.vertex.PoseStack;
 import dev.the_fireplace.caterpillar.Caterpillar;
 import dev.the_fireplace.caterpillar.block.entity.DecorationBlockEntity;
+import dev.the_fireplace.caterpillar.client.screen.util.MouseUtil;
 import dev.the_fireplace.caterpillar.client.screen.util.ScreenTabs;
 import dev.the_fireplace.caterpillar.menu.DecorationMenu;
-import dev.the_fireplace.caterpillar.network.PacketHandler;
-import dev.the_fireplace.caterpillar.network.packet.client.DecorationSyncSlotC2SPacket;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.util.Mth;
@@ -145,9 +145,9 @@ public class DecorationScreen extends AbstractScrollableScreen<DecorationMenu> {
         this.menu.setCarried(carried);
 
         if (this.menu.blockEntity instanceof DecorationBlockEntity decorationBlockEntity) {
-            decorationBlockEntity.getSelectedPlacementMap().setStackInSlot(placementSlotId, placementStack);
+            decorationBlockEntity.getSelectedPlacementMap().set(placementSlotId, placementStack);
 
-            PacketHandler.sendToServer(new DecorationSyncSlotC2SPacket(placementSlotId, placementStack, decorationBlockEntity.getBlockPos()));
+            // PacketHandler.sendToServer(new DecorationSyncSlotC2SPacket(placementSlotId, placementStack, decorationBlockEntity.getBlockPos()));
         }
     }
 

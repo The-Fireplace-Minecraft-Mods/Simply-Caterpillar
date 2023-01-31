@@ -1,49 +1,26 @@
 package dev.the_fireplace.caterpillar.network.packet.client;
 
+import dev.the_fireplace.caterpillar.block.entity.DrillHeadBlockEntity;
+import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraftforge.network.NetworkEvent;
-import dev.the_fireplace.caterpillar.block.entity.DrillHeadBlockEntity;
-import dev.the_fireplace.caterpillar.network.PacketHandler;
-import dev.the_fireplace.caterpillar.network.packet.server.DrillHeadSyncPowerS2CPacket;
-
-import java.util.function.Supplier;
+import net.minecraft.server.network.ServerGamePacketListenerImpl;
 
 public class DrillHeadSyncPowerC2SPacket {
 
-    private final boolean powered;
+    public static void receive(MinecraftServer server, ServerPlayer player, ServerGamePacketListenerImpl handler, FriendlyByteBuf buf, PacketSender responseSender) {
+        ServerLevel level = player.getLevel();
 
-    private final BlockPos pos;
+        boolean powered = buf.readBoolean();
+        BlockPos pos = buf.readBlockPos();
 
-    public DrillHeadSyncPowerC2SPacket(boolean powered, BlockPos pos) {
-        this.powered = powered;
-        this.pos = pos;
-    }
+        if (level.getBlockEntity(pos) instanceof DrillHeadBlockEntity drillHeadBlockEntity) {
+            drillHeadBlockEntity.setPower(powered);
 
-    public DrillHeadSyncPowerC2SPacket(FriendlyByteBuf buf) {
-        this.powered = buf.readBoolean();
-        this.pos = buf.readBlockPos();
-    }
-
-    public void toBytes(FriendlyByteBuf buf) {
-        buf.writeBoolean(powered);
-        buf.writeBlockPos(pos);
-    }
-
-    public void handle(Supplier<NetworkEvent.Context> supplier) {
-        NetworkEvent.Context context = supplier.get();
-        context.enqueueWork(() -> {
-            ServerPlayer player = context.getSender();
-            ServerLevel level = player.getLevel();
-
-            if (level.getBlockEntity(pos) instanceof DrillHeadBlockEntity drillHeadBlockEntity) {
-                drillHeadBlockEntity.setPower(powered);
-
-                PacketHandler.sendToClients(new DrillHeadSyncPowerS2CPacket(drillHeadBlockEntity.isPowered(), drillHeadBlockEntity.getBlockPos()));
-            }
-        });
-        context.setPacketHandled(true);
+            // PacketHandler.sendToClients(new DrillHeadSyncPowerS2CPacket(drillHeadBlockEntity.isPowered(), drillHeadBlockEntity.getBlockPos()));
+        }
     }
 }

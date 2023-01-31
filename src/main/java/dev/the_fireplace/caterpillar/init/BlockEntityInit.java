@@ -10,6 +10,8 @@ public class BlockEntityInit {
 
     public static BlockEntityType<DrillBaseBlockEntity> DRILL_BASE;
 
+    public static BlockEntityType<DrillSeatBlockEntity> DRILL_SEAT;
+
     public static BlockEntityType<DrillHeadBlockEntity> DRILL_HEAD;
 
     public static BlockEntityType<IncineratorBlockEntity> INCINERATOR;
@@ -26,6 +28,8 @@ public class BlockEntityInit {
 
     public static void registerBlockEntities() {
         DRILL_BASE = Registry.register(Registry.BLOCK_ENTITY_TYPE, new ResourceLocation(Caterpillar.MOD_ID, "drill_base"), BlockEntityType.Builder.of(DrillBaseBlockEntity::new, BlockInit.DRILL_BASE).build(null));
+
+        DRILL_SEAT = Registry.register(Registry.BLOCK_ENTITY_TYPE, new ResourceLocation(Caterpillar.MOD_ID, "drill_seat"), BlockEntityType.Builder.of(DrillSeatBlockEntity::new, BlockInit.DRILL_SEAT).build(null));
 
         DRILL_HEAD = Registry.register(Registry.BLOCK_ENTITY_TYPE, new ResourceLocation(Caterpillar.MOD_ID, "drill_head"), BlockEntityType.Builder.of(DrillHeadBlockEntity::new, BlockInit.DRILL_HEAD).build(null));
 

@@ -4,6 +4,7 @@ import dev.the_fireplace.caterpillar.Caterpillar;
 import dev.the_fireplace.caterpillar.block.IncineratorBlock;
 import dev.the_fireplace.caterpillar.config.ConfigHolder;
 import dev.the_fireplace.caterpillar.init.BlockEntityInit;
+import dev.the_fireplace.caterpillar.menu.IncineratorMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;

@@ -13,7 +13,7 @@
   "block.simplycaterpillar.incinerator": "Incinerator",
   "block.simplycaterpillar.transporter": "Transporter",
   "block.simplycaterpillar.blocks.already_connected": "There is already a %s connected to the caterpillar.",
-  "itemGroup.simplycaterpillar": "Caterpillar",
+  "itemGroup.simplycaterpillar.caterpillar": "Caterpillar",
   "container.simplycaterpillar.drill_head": "Drill Head",
   "container.simplycaterpillar.reinforcement": "Reinforcement Builder",
   "container.simplycaterpillar.decoration": "Decoration Placer",

@@ -8,6 +8,7 @@ import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.DismountHelper;
@@ -19,14 +20,14 @@ import java.util.List;
 
 public class SeatEntity extends Entity {
 
-    public SeatEntity(Level level) {
-        super(EntityInit.SEAT, level);
+    public SeatEntity(EntityType<SeatEntity> entityType, Level level) {
+        super(entityType, level);
 
         this.noPhysics = true;
     }
 
     private SeatEntity(Level level, BlockPos source, double yOffset, Direction direction) {
-        this(level);
+        this(EntityInit.SEAT, level);
         this.setPos(source.getX() + 0.5, source.getY() + yOffset, source.getZ() + 0.5);
         this.setRot(direction.getOpposite().toYRot(), 0F);
     }

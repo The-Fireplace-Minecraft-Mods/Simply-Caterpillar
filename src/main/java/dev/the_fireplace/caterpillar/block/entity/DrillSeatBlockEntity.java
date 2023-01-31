@@ -1,6 +1,7 @@
 package dev.the_fireplace.caterpillar.block.entity;
 
 import dev.the_fireplace.caterpillar.block.DrillBaseBlock;
+import dev.the_fireplace.caterpillar.config.ConfigHolder;
 import dev.the_fireplace.caterpillar.entity.SeatEntity;
 import dev.the_fireplace.caterpillar.init.BlockEntityInit;
 import net.minecraft.core.BlockPos;
@@ -37,7 +38,7 @@ public class DrillSeatBlockEntity extends DrillBaseBlockEntity {
 
         level.removeBlock(basePos, false);
 
-        if (CaterpillarConfig.enableSounds) {
+        if (ConfigHolder.enableSounds) {
             level.playSound(null, basePos, SoundEvents.PISTON_EXTEND, SoundSource.BLOCKS, 1.0F, 1.0F);
         }
     }

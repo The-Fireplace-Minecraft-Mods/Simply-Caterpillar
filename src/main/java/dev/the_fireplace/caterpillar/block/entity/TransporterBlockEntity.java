@@ -10,6 +10,7 @@ import dev.the_fireplace.caterpillar.menu.TransporterMenu;
 import dev.the_fireplace.caterpillar.network.packet.server.CaterpillarSyncInventoryS2CPacket;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -158,7 +159,7 @@ public class TransporterBlockEntity extends DrillBaseBlockEntity {
             }
         }
 
-        this.clearInventory();
+        this.clearContent();
         // PacketHandler.sendToClients(new CaterpillarSyncInventoryS2CPacket(this.getInventory(), this.getBlockPos()));
 
         level.removeBlock(this.getBlockPos().below(), false);
@@ -211,12 +212,12 @@ public class TransporterBlockEntity extends DrillBaseBlockEntity {
     public void load(@NotNull CompoundTag tag) {
         super.load(tag);
 
-        this.previousBlock = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(tag.getString("PreviousBlock")));
+        this.previousBlock = Registry.BLOCK.get(new ResourceLocation(tag.getString("PreviousBlock")));
     }
 
     @Override
     protected void saveAdditional(CompoundTag tag) {
-        tag.putString("PreviousBlock", ForgeRegistries.BLOCKS.getKey(this.previousBlock).toString());
+        tag.putString("PreviousBlock", Registry.BLOCK.getKey(this.previousBlock).toString());
         super.saveAdditional(tag);
     }
 
