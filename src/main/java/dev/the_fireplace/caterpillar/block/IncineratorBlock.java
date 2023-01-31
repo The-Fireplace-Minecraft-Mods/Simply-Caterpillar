@@ -1,51 +1,78 @@
 package dev.the_fireplace.caterpillar.block;
 
-import dev.the_fireplace.caterpillar.init.BlockInit;
+import dev.the_fireplace.caterpillar.block.entity.IncineratorBlockEntity;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.BooleanOp;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Optional;
 import java.util.stream.Stream;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.util.function.BooleanBiFunction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.shape.VoxelShape;
-import net.minecraft.util.shape.VoxelShapes;
-import net.minecraft.world.World;
+public class IncineratorBlock extends DrillBaseBlock {
+    private static final VoxelShape SHAPE = Stream.of(
+            Block.box(6, 0, 0, 10, 6, 16),
+            Block.box(10, 0, 0, 16, 16, 16),
+            Block.box(0, 0, 0, 6, 16, 16),
+            Block.box(6, 10, 0, 10, 16, 16),
+            Block.box(6, 6, 16, 10, 10, 31)
+    ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
 
-public class IncineratorBlock extends AbstractCaterpillarBlock {
-
-    private static final Optional<VoxelShape> SHAPE = Stream.of(
-            Block.createCuboidShape(6, 0, 0, 10, 6, 16),
-            Block.createCuboidShape(0, 0, 0, 6, 16, 16),
-            Block.createCuboidShape(6, 6, -15, 10, 10, 0),
-            Block.createCuboidShape(10, 0, 0, 16, 16, 16),
-            Block.createCuboidShape(6, 10, 0, 10, 16, 16)
-    ).reduce((v1, v2) -> VoxelShapes.combineAndSimplify(v1, v2, BooleanBiFunction.OR));
-
-    public IncineratorBlock(Settings properties) {
+    public IncineratorBlock(Properties properties) {
         super(properties);
-        super.runCalculation(SHAPES, IncineratorBlock.SHAPE.get());
+        super.runCalculation(SHAPES, SHAPE);
     }
 
     @Override
-    public @Nullable BlockState getPlacementState(ItemPlacementContext context) {
-        BlockPos blockPos = context.getBlockPos();
-        World level = context.getWorld();
-        Direction direction = context.getPlayerFacing();
+    public @NotNull InteractionResult use(@NotNull BlockState state, Level level, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult hit) {
+        if (level.isClientSide) {
+            return InteractionResult.SUCCESS;
+        } else {
+            BlockEntity blockEntity = level.getBlockEntity(pos);
 
-        return super.getPlacementState(context);
+            if (blockEntity instanceof IncineratorBlockEntity incineratorBlockEntity) {
+                player.openMenu(incineratorBlockEntity);
+
+                return InteractionResult.CONSUME;
+            } else {
+                return InteractionResult.PASS;
+            }
+        }
+    }
+
+    @Override
+    public @Nullable BlockState getStateForPlacement(BlockPlaceContext context) {
+        BlockPos blockPos = context.getClickedPos();
+        Level level = context.getLevel();
+        Direction direction = context.getHorizontalDirection();
+
+        BlockPos caterpillarHeadPos = CaterpillarBlockUtil.getCaterpillarHeadPos(level, blockPos.relative(direction), direction);
+
+        if (CaterpillarBlockUtil.getConnectedCaterpillarBlockEntities(level, caterpillarHeadPos, new ArrayList<>()).stream().noneMatch(blockEntity -> blockEntity instanceof IncineratorBlockEntity)) {
+            if (CaterpillarBlockUtil.isConnectedCaterpillarSameDirection(level, blockPos, direction)) {
+                return super.getStateForPlacement(context);
+            }
+        } else {
+            context.getPlayer().displayClientMessage(Component.translatable("block.simplycaterpillar.blocks.already_connected", BlockInit.INCINERATOR.get().getName()), true);
+        }
+
+        return null;
     }
 
     @Nullable
     @Override
-    public BlockEntity createBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
-        return null;
+    public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
+        return BlockEntityInit.INCINERATOR.get().create(pos, state);
     }
 }

@@ -8,30 +8,27 @@
   "block.simplycaterpillar.decoration": "Placeur de décoration",
   "block.simplycaterpillar.collector": "Collecteur d'objets",
   "block.simplycaterpillar.drill_base": "Segment de forage de base",
+  "block.simplycaterpillar.drill_seat": "Siège de la foreuse",
   "block.simplycaterpillar.storage": "Stockage de la foreuse",
   "block.simplycaterpillar.incinerator": "Incinérateur",
+  "block.simplycaterpillar.transporter": "Transporteur",
   "block.simplycaterpillar.blocks.already_connected": "Il y a déjà un %s connecté à la foreuse.",
-
-  "itemGroup.simplycaterpillar.caterpillar": "Foreuse",
-
+  "itemGroup.simplycaterpillar": "Foreuse",
   "container.simplycaterpillar.drill_head": "Tête de forage",
   "container.simplycaterpillar.reinforcement": "Constructeur de renforts",
   "container.simplycaterpillar.decoration": "Placeur de décoration",
   "container.simplycaterpillar.incinerator": "Incinérateur",
-
+  "container.simplycaterpillar.transporter": "Transporteur",
   "gui.simplycaterpillar.drill_head.consumption": "Consommation",
   "gui.simplycaterpillar.drill_head.gathered": "Collecté",
   "gui.simplycaterpillar.drill_head.power": "Alimentation:",
   "gui.simplycaterpillar.drill_head.power.on": "Allumé",
   "gui.simplycaterpillar.drill_head.power.off": "Éteint",
-
   "gui.simplycaterpillar.decoration.current_map": "Plan actuel",
-
   "gui.simplycaterpillar.replacement.ceiling": "Plafond",
   "gui.simplycaterpillar.replacement.left_wall": "Mur de\ngauche",
   "gui.simplycaterpillar.replacement.right_wall": "Mur de\ndroite",
   "gui.simplycaterpillar.replacement.floor": "Plancher",
-
   "gui.simplycaterpillar.replacement.wont_replace": "Ne remplacera pas",
   "gui.simplycaterpillar.replacement.will_replace": "Remplacera",
   "gui.simplycaterpillar.replacement.air": "Air",
@@ -39,12 +36,10 @@
   "gui.simplycaterpillar.replacement.lava": "Lave",
   "gui.simplycaterpillar.replacement.falling_blocks": "Sable et gravier",
   "gui.simplycaterpillar.replacement.all": "Tous",
-
   "simplycaterpillar.config.first_use": "Montrer le tutoriel en cas de première utilisation ?",
   "simplycaterpillar.config.use_particles": "Utiliser des particules pour l'effet ?",
-  "simplycaterpillar.config.break_bedrock": "La foreuse peut-elle casser la bedrock ?",
+  "simplycaterpillar.config.break_unbreakable_blocks": "La tête de forage peut-elle briser des blocs incassables, comme la bedrock, le cadre de portail de l'End, etc ?",
   "simplycaterpillar.config.enable_sounds": "La perceuse fait-elle du bruit quand elle bouge ?",
-
   "simplycaterpillar.tutorial.show": "Afficher le tutoriel",
   "simplycaterpillar.tutorial.hide": "Masquer le tutoriel",
   "simplycaterpillar.tutorial.drill_head.wheel_storage": "Utilisez la molette\npour voir le stockage.",
@@ -55,5 +50,10 @@
   "simplycaterpillar.tutorial.reinforcement.replacer_blocks": "Ce sont les blocs qu'il remplacera.\nL'absence de bloc signifie qu'il ne le remplacera pas.\nVous devez avoir les blocs dans la foreuse pour les placer.",
   "simplycaterpillar.tutorial.decoration": "Le placeur de décoration placent les blocs\nselon un motif qui se répète tous les 10 blocs (0-9).",
   "simplycaterpillar.tutorial.decoration.mouse_wheel": "Utilisez la molette\npour sélectionner le plan.",
-  "simplycaterpillar.tutorial.decoration.current_map": "Le chiffre bleu correspond\nau plan actuelle de la foreuse."
+  "simplycaterpillar.tutorial.decoration.current_map": "Le chiffre bleu correspond\nau plan actuelle de la foreuse.",
+  "simplycaterpillar.tutorial.transporter": "Le transporteur prendra des objets de\nl'inventaire collecté de la tête de forage\net les mettra dans le wagonnet de stockage.",
+  "simplycaterpillar.tutorial.transporter.inventory_is_full": "Quand le transporteur est plein,\nil libérera le wagonnet de stockage.",
+  "simplycaterpillar.tutorial.transporter.need_minecart_chest": "Pour commencer le transport,\nvous devez mettre un wagonnet de stockage\ndans l'inventaire de consommation de la tête de forage.",
+  "key.simplycaterpillar.category": "Simply Caterpillar",
+  "key.simplycaterpillar.toggle_tutorial": "Afficher/Masquer Tutoriel"
 }

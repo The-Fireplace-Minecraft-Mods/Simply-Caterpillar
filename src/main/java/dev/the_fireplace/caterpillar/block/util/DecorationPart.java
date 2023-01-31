@@ -1,9 +1,9 @@
 package dev.the_fireplace.caterpillar.block.util;
 
-import net.minecraft.util.StringIdentifiable;
+import net.minecraft.util.StringRepresentable;
 import org.jetbrains.annotations.NotNull;
 
-public enum DecorationPart implements StringIdentifiable {
+public enum DecorationPart implements StringRepresentable {
 
     LEFT("left"),
     BASE("base"),
@@ -19,7 +19,7 @@ public enum DecorationPart implements StringIdentifiable {
         return this.name;
     }
 
-    public @NotNull String asString() {
+    public @NotNull String getSerializedName() {
         return this.name;
     }
 }

@@ -1,7 +1,7 @@
 package dev.the_fireplace.caterpillar.mixin;
 
 import dev.the_fireplace.caterpillar.Caterpillar;
-import net.minecraft.client.gui.screen.TitleScreen;
+import net.minecraft.client.gui.screens.TitleScreen;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

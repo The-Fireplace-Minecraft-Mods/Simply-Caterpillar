@@ -1,8 +1,8 @@
 package dev.the_fireplace.caterpillar.block.util;
 
-import net.minecraft.util.StringIdentifiable;
+import net.minecraft.util.StringRepresentable;
 
-public enum DrillHeadPart implements StringIdentifiable {
+public enum DrillHeadPart implements StringRepresentable {
     BASE("base"),
 
     BLADE_TOP("blade_top"),
@@ -32,7 +32,7 @@ public enum DrillHeadPart implements StringIdentifiable {
     }
 
     @Override
-    public String asString() {
+    public String getSerializedName() {
         return this.name;
     }
 }

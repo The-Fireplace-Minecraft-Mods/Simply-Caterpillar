@@ -9,14 +9,14 @@ import dev.the_fireplace.caterpillar.init.BlockInit;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.HorizontalFacingBlock;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.HorizontalDirectionalBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 
 import static dev.the_fireplace.caterpillar.block.DrillBaseBlock.FACING;
 
@@ -31,14 +31,14 @@ public class CaterpillarBlockUtil {
                 (block == BlockInit.DRILL_BASE);
     }
 
-    public static BlockPos getCaterpillarHeadPos(World level, BlockPos pos, Direction direction) {
+    public static BlockPos getCaterpillarHeadPos(Level level, BlockPos pos, Direction direction) {
         BlockState state = level.getBlockState(pos);
 
         if (!CaterpillarBlockUtil.isCaterpillarBlock(state.getBlock())) {
-            return pos.offset(direction.getOpposite());
+            return pos.relative(direction.getOpposite());
         }
 
-        return getCaterpillarHeadPos(level, pos.offset(direction), direction);
+        return getCaterpillarHeadPos(level, pos.relative(direction), direction);
     }
 
     public static boolean canBreakBlock(Block block) {
@@ -47,7 +47,7 @@ public class CaterpillarBlockUtil {
                 !block.equals(Blocks.LAVA);
     }
 
-    public static List<DrillBaseBlock> getConnectedCaterpillarBlocks(World level, BlockPos pos, List<DrillBaseBlock> caterpillarBlocks) {
+    public static List<DrillBaseBlock> getConnectedCaterpillarBlocks(Level level, BlockPos pos, List<DrillBaseBlock> caterpillarBlocks) {
         BlockState state = level.getBlockState(pos);
         Block block = state.getBlock();
 
@@ -56,15 +56,15 @@ public class CaterpillarBlockUtil {
                 caterpillarBlocks.add((DrillBaseBlock) block);
             }
 
-            Direction direction = state.get(FACING);
+            Direction direction = state.getValue(FACING);
 
-            getConnectedCaterpillarBlocks(level, pos.offset(direction.getOpposite()), caterpillarBlocks);
+            getConnectedCaterpillarBlocks(level, pos.relative(direction.getOpposite()), caterpillarBlocks);
         }
 
         return caterpillarBlocks;
     }
 
-    public static List<DrillBaseBlockEntity> getConnectedCaterpillarBlockEntities(World level, BlockPos pos, List<DrillBaseBlockEntity> caterpillarBlockEntities) {
+    public static List<DrillBaseBlockEntity> getConnectedCaterpillarBlockEntities(Level level, BlockPos pos, List<DrillBaseBlockEntity> caterpillarBlockEntities) {
         BlockState blockState = level.getBlockState(pos);
 
         if (!isCaterpillarBlock(blockState.getBlock())) {
@@ -77,37 +77,37 @@ public class CaterpillarBlockUtil {
         }
 
         if (blockEntity != null) {
-            Direction direction = blockState.get(FACING);
-            return getConnectedCaterpillarBlockEntities(level, pos.offset(direction.getOpposite()), caterpillarBlockEntities);
+            Direction direction = blockState.getValue(FACING);
+            return getConnectedCaterpillarBlockEntities(level, pos.relative(direction.getOpposite()), caterpillarBlockEntities);
         }
 
         return caterpillarBlockEntities;
     }
 
-    public static boolean isConnectedCaterpillarSameDirection(World level, BlockPos pos, Direction direction) {
+    public static boolean isConnectedCaterpillarSameDirection(Level level, BlockPos pos, Direction direction) {
         boolean isTheBlockInTheSameDirection = true;
         BlockEntity blockEntity;
 
         // Block in front
-        blockEntity = level.getBlockEntity(pos.offset(direction));
+        blockEntity = level.getBlockEntity(pos.relative(direction));
         if (blockEntity != null) {
             isTheBlockInTheSameDirection = isBlockEntitySameDirection(blockEntity, direction);
         }
 
         // Block in back
-        blockEntity = level.getBlockEntity(pos.offset(direction.getOpposite()));
+        blockEntity = level.getBlockEntity(pos.relative(direction.getOpposite()));
         if (blockEntity != null) {
             isTheBlockInTheSameDirection = isBlockEntitySameDirection(blockEntity, direction);
         }
 
         // Block in left
-        blockEntity = level.getBlockEntity(pos.offset(direction.rotateYClockwise()));
+        blockEntity = level.getBlockEntity(pos.relative(direction.getClockWise()));
         if (blockEntity != null) {
             isTheBlockInTheSameDirection = isBlockEntitySameDirection(blockEntity, direction);
         }
 
         // Block in right
-        blockEntity = level.getBlockEntity(pos.offset(direction.rotateYCounterclockwise()));
+        blockEntity = level.getBlockEntity(pos.relative(direction.getCounterClockWise()));
         if (blockEntity != null) {
             isTheBlockInTheSameDirection = isBlockEntitySameDirection(blockEntity, direction);
         }
@@ -116,23 +116,23 @@ public class CaterpillarBlockUtil {
     }
 
     private static boolean isBlockEntitySameDirection(BlockEntity blockEntity, Direction direction) {
-        if (isCaterpillarBlock(blockEntity.getCachedState().getBlock())) {
+        if (isCaterpillarBlock(blockEntity.getBlockState().getBlock())) {
             DrillBaseBlockEntity caterpillarBlockEntity = (DrillBaseBlockEntity) blockEntity;
 
-            return caterpillarBlockEntity.getCachedState().get(HorizontalFacingBlock.FACING) == direction;
+            return caterpillarBlockEntity.getBlockState().getValue(HorizontalDirectionalBlock.FACING) == direction;
         }
 
         return true;
     }
 
-    public static List<DrillBaseBlockEntity> getConnectedDrillHeadAndStorageBlockEntities(World level, BlockPos pos, Direction direction) {
+    public static List<DrillBaseBlockEntity> getConnectedDrillHeadAndStorageBlockEntities(Level level, BlockPos pos, Direction direction) {
         BlockPos caterpillarHeadPos = CaterpillarBlockUtil.getCaterpillarHeadPos(level, pos, direction);
         List<DrillBaseBlockEntity> caterpillarBlockEntities = CaterpillarBlockUtil.getConnectedCaterpillarBlockEntities(level, caterpillarHeadPos, new ArrayList<>(0));
         DrillHeadBlockEntity drillHeadBlockEntity = CaterpillarBlockUtil.getDrillHeadBlockEntity(caterpillarBlockEntities);
         StorageBlockEntity storageBlockEntity = CaterpillarBlockUtil.getStorageBlockEntity(caterpillarBlockEntities);
         // Because caterpillar is moving, it can have a space between the caterpillar blocks
         if (storageBlockEntity == null) {
-            caterpillarBlockEntities = CaterpillarBlockUtil.getConnectedCaterpillarBlockEntities(level, caterpillarBlockEntities.get(caterpillarBlockEntities.size() - 1).getPos().offset(direction, 2), new ArrayList<>(0));
+            caterpillarBlockEntities = CaterpillarBlockUtil.getConnectedCaterpillarBlockEntities(level, caterpillarBlockEntities.get(caterpillarBlockEntities.size() - 1).getBlockPos().relative(direction, 2), new ArrayList<>(0));
             storageBlockEntity = CaterpillarBlockUtil.getStorageBlockEntity(caterpillarBlockEntities);
         }
 
