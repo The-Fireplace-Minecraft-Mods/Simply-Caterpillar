@@ -1,7 +1,7 @@
 package dev.the_fireplace.caterpillar;
 
 import dev.the_fireplace.caterpillar.client.renderer.entity.SeatEntityRenderer;
-import dev.the_fireplace.caterpillar.client.screen.DrillHeadScreen;
+import dev.the_fireplace.caterpillar.client.screen.*;
 import dev.the_fireplace.caterpillar.event.KeyInputHandler;
 import dev.the_fireplace.caterpillar.init.BlockInit;
 import dev.the_fireplace.caterpillar.init.EntityInit;
@@ -21,6 +21,10 @@ public class CaterpillarClient implements ClientModInitializer {
         BlockRenderLayerMap.INSTANCE.putBlock(BlockInit.TRANSPORTER, RenderType.cutout());
 
         MenuScreens.register(MenuInit.DRILL_HEAD, DrillHeadScreen::new);
+        MenuScreens.register(MenuInit.DECORATION, DecorationScreen::new);
+        MenuScreens.register(MenuInit.INCINERATOR, IncineratorScreen::new);
+        MenuScreens.register(MenuInit.REINFORCEMENT, ReinforcementScreen::new);
+        MenuScreens.register(MenuInit.TRANSPORTER, TransporterScreen::new);
 
         KeyInputHandler.register();
         PacketHandler.registerS2CPackets();

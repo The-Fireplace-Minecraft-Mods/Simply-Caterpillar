@@ -7,13 +7,25 @@ import dev.the_fireplace.caterpillar.config.ConfigHolder;
 import dev.the_fireplace.caterpillar.init.BlockEntityInit;
 import dev.the_fireplace.caterpillar.menu.DecorationMenu;
 import dev.the_fireplace.caterpillar.menu.syncdata.DecorationContainerData;
+import dev.the_fireplace.caterpillar.network.PacketHandler;
+import dev.the_fireplace.caterpillar.network.packet.client.DecorationSyncSelectedMapC2SPacket;
+import dev.the_fireplace.caterpillar.network.packet.server.DecorationSyncCurrentMapS2CPacket;
+import dev.the_fireplace.caterpillar.network.packet.server.DecorationSyncInventoryS2CPacket;
+import dev.the_fireplace.caterpillar.network.packet.server.DecorationSyncSelectedMapS2CPacket;
+import io.netty.buffer.Unpooled;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.ContainerHelper;
@@ -261,14 +273,10 @@ public class DecorationBlockEntity extends DrillBaseBlockEntity {
         this.placementMap.clear();
         for (int i = 0; i < PLACEMENT_MAX_MAP; i++) {
             this.placementMap.add(NonNullList.withSize(INVENTORY_MAX_SLOTS, ItemStack.EMPTY));
-        }
 
-        ListTag tagList = tag.getList("PlacementMap", Tag.TAG_COMPOUND);
-
-        for (int i = 0; i < tagList.size(); i++) {
-            CompoundTag itemTags = tagList.getCompound(i);
-
-            ContainerHelper.loadAllItems(itemTags, this.placementMap.get(i));
+            if (tag.contains("PlacementMap" + i)) {
+                ContainerHelper.loadAllItems(tag.getCompound("PlacementMap" + i), this.placementMap.get(i));
+            }
         }
 
         this.selectedMap = tag.getInt("SelectedMap");
@@ -277,13 +285,10 @@ public class DecorationBlockEntity extends DrillBaseBlockEntity {
 
     @Override
     protected void saveAdditional(CompoundTag tag) {
-        ListTag listTag = new ListTag();
-
-        for (NonNullList<ItemStack> inventory : this.placementMap) {
-            listTag.add(ContainerHelper.saveAllItems(tag, inventory));
+        for (int i = 0; i < this.placementMap.size(); i++) {
+            tag.put("PlacementMap" + i, ContainerHelper.saveAllItems(new CompoundTag(), this.placementMap.get(i), true));
         }
 
-        tag.put("PlacementMap", listTag);
         tag.putInt("SelectedMap", this.selectedMap);
         tag.putInt("CurrentMap", this.currentMap);
 
@@ -297,12 +302,11 @@ public class DecorationBlockEntity extends DrillBaseBlockEntity {
 
     @Override
     public AbstractContainerMenu createMenu(int id, Inventory playerInventory, Player player) {
-        /*
-        PacketHandler.sendToClients(new DecorationSyncSelectedMapS2CPacket(DecorationBlockEntity.this.selectedMap, worldPosition));
-        PacketHandler.sendToClients(new DecorationSyncCurrentMapS2CPacket(DecorationBlockEntity.this.getCurrentMap(), worldPosition));
+        DecorationSyncSelectedMapS2CPacket.send((ServerLevel) this.level, this.selectedMap, this.getBlockPos());
+        DecorationSyncCurrentMapS2CPacket.send((ServerLevel) this.level, this.getCurrentMap(), this.getBlockPos());
         for (int i = 0; i < this.placementMap.size(); i++) {
-            PacketHandler.sendToClients(new DecorationSyncInventoryS2CPacket(i, this.placementMap.get(i), this.getBlockPos()));
-        }*/
+            DecorationSyncInventoryS2CPacket.send((ServerLevel) this.level, i, this.placementMap.get(i), this.getBlockPos());
+        }
 
         return new DecorationMenu(id, playerInventory, this, new DecorationContainerData(this, DecorationContainerData.SIZE));
     }

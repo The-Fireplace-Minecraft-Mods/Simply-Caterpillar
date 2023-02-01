@@ -6,6 +6,8 @@ import dev.the_fireplace.caterpillar.block.entity.DecorationBlockEntity;
 import dev.the_fireplace.caterpillar.client.screen.util.MouseUtil;
 import dev.the_fireplace.caterpillar.client.screen.util.ScreenTabs;
 import dev.the_fireplace.caterpillar.menu.DecorationMenu;
+import dev.the_fireplace.caterpillar.network.packet.client.DecorationSyncSlotC2SPacket;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
@@ -41,8 +43,6 @@ public class DecorationScreen extends AbstractScrollableScreen<DecorationMenu> {
 
     public DecorationScreen(DecorationMenu menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title, ScreenTabs.DECORATION, SCROLLER_BG_X, SCROLLER_BG_Y, SCROLLER_WIDTH, SCROLLER_HEIGHT, SCROLLBAR_X, SCROLLBAR_Y, SCROLLBAR_HEIGHT);
-
-        this.scrollTo(0.0F);
     }
 
     @Override
@@ -107,11 +107,10 @@ public class DecorationScreen extends AbstractScrollableScreen<DecorationMenu> {
     }
 
     private void renderTooltipCurrentMap(PoseStack stack, int mouseX, int mouseY) {
-        if (
-                mouseX >= super.leftPos + 25 &&
-                        mouseY >= super.topPos + 34 &&
-                        mouseX <= super.leftPos + 25 + SLOT_SIZE &&
-                        mouseY <= super.topPos + 34 + SLOT_SIZE
+        if (mouseX >= super.leftPos + 25 &&
+                mouseY >= super.topPos + 34 &&
+                mouseX <= super.leftPos + 25 + SLOT_SIZE &&
+                mouseY <= super.topPos + 34 + SLOT_SIZE
         ) {
             if (this.menu.getSelectedMap() == this.menu.getCurrentMap()) {
                 Component currentMap = Component.translatable("gui." + Caterpillar.MOD_ID + ".decoration.current_map");
@@ -147,7 +146,7 @@ public class DecorationScreen extends AbstractScrollableScreen<DecorationMenu> {
         if (this.menu.blockEntity instanceof DecorationBlockEntity decorationBlockEntity) {
             decorationBlockEntity.getSelectedPlacementMap().set(placementSlotId, placementStack);
 
-            // PacketHandler.sendToServer(new DecorationSyncSlotC2SPacket(placementSlotId, placementStack, decorationBlockEntity.getBlockPos()));
+            DecorationSyncSlotC2SPacket.send(placementSlotId, placementStack, decorationBlockEntity.getBlockPos());
         }
     }
 

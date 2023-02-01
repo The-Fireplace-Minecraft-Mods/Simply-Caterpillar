@@ -6,7 +6,13 @@ import dev.the_fireplace.caterpillar.init.MenuInit;
 import dev.the_fireplace.caterpillar.menu.slot.CaterpillarFuelSlot;
 import dev.the_fireplace.caterpillar.menu.slot.FakeSlot;
 import dev.the_fireplace.caterpillar.menu.syncdata.DrillHeadContainerData;
+import dev.the_fireplace.caterpillar.network.packet.client.CaterpillarSyncCarriedC2SPacket;
+import dev.the_fireplace.caterpillar.network.packet.client.CaterpillarSyncSlotC2SPacket;
+import dev.the_fireplace.caterpillar.network.packet.client.DrillHeadSyncPowerC2SPacket;
+import dev.the_fireplace.caterpillar.network.packet.client.MinecraftSyncSlotC2SPacket;
+import dev.the_fireplace.caterpillar.network.packet.server.CaterpillarSyncInventoryS2CPacket;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -44,6 +50,9 @@ public class DrillHeadMenu extends AbstractScrollableMenu {
 
     public DrillHeadMenu(int id, Inventory playerInventory, FriendlyByteBuf extraData) {
         super(MenuInit.DRILL_HEAD, id, playerInventory, extraData, DrillHeadContainerData.SIZE, DrillHeadBlockEntity.INVENTORY_SIZE);
+
+        this.consumptionScrollTo(0);
+        this.gatheredScrollTo(0);
     }
 
     public DrillHeadMenu(int id, Inventory playerInventory, DrillHeadBlockEntity entity, DrillHeadContainerData data) {
@@ -51,7 +60,7 @@ public class DrillHeadMenu extends AbstractScrollableMenu {
 
         StorageBlockEntity storageBlockEntity = this.getStorageBlockEntity();
         if (storageBlockEntity != null && !storageBlockEntity.getLevel().isClientSide()) {
-            // PacketHandler.sendToClients(new CaterpillarSyncInventoryS2CPacket(storageBlockEntity.inventory, storageBlockEntity.getBlockPos()));
+            CaterpillarSyncInventoryS2CPacket.send((ServerLevel) storageBlockEntity.getLevel(), storageBlockEntity.inventory, storageBlockEntity.getBlockPos());
         }
     }
 
@@ -112,7 +121,7 @@ public class DrillHeadMenu extends AbstractScrollableMenu {
         if (sourceStack.getCount() == 0) {
             sourceSlot.set(ItemStack.EMPTY);
             if (this.blockEntity.getLevel().isClientSide()) {
-                // PacketHandler.sendToServer(new MinecraftSyncSlotC2SPacket(index, ItemStack.EMPTY));
+                MinecraftSyncSlotC2SPacket.send(index, ItemStack.EMPTY);
             }
         } else {
             sourceSlot.setChanged();
@@ -157,7 +166,7 @@ public class DrillHeadMenu extends AbstractScrollableMenu {
                             this.syncDrillHeadSlot(i, itemstack);
                         } else {
                             slot.setChanged();
-                            //PacketHandler.sendToServer(new MinecraftSyncSlotC2SPacket(i, itemstack));
+                            MinecraftSyncSlotC2SPacket.send(i, itemstack);
                         }
                         flag = true;
                     } else if (itemstack.getCount() < maxSize) {
@@ -167,7 +176,7 @@ public class DrillHeadMenu extends AbstractScrollableMenu {
                             this.syncDrillHeadSlot(i, itemstack);
                         } else {
                             slot.setChanged();
-                            // PacketHandler.sendToServer(new MinecraftSyncSlotC2SPacket(i, itemstack));
+                            MinecraftSyncSlotC2SPacket.send(i, itemstack);
                         }
                         flag = true;
                     }
@@ -246,7 +255,7 @@ public class DrillHeadMenu extends AbstractScrollableMenu {
                         this.syncDrillHeadSlot(i, fakeSlot.getItem());
                     } else {
                         slot1.setChanged();
-                        // PacketHandler.sendToServer(new MinecraftSyncSlotC2SPacket(i, slot1.getItem()));
+                        MinecraftSyncSlotC2SPacket.send(i, slot1.getItem());
                     }
                     flag = true;
                     break;
@@ -308,13 +317,13 @@ public class DrillHeadMenu extends AbstractScrollableMenu {
 
     public void setPowerOn() {
         if (this.blockEntity instanceof DrillHeadBlockEntity drillHeadBlockEntity) {
-            drillHeadBlockEntity.sendPowerPacketC2S(true, drillHeadBlockEntity.getBlockPos());
+            DrillHeadSyncPowerC2SPacket.send(true, drillHeadBlockEntity.getBlockPos());
         }
     }
 
     public void setPowerOff() {
         if (this.blockEntity instanceof DrillHeadBlockEntity drillHeadBlockEntity) {
-            drillHeadBlockEntity.sendPowerPacketC2S(false, drillHeadBlockEntity.getBlockPos());
+            DrillHeadSyncPowerC2SPacket.send(false, drillHeadBlockEntity.getBlockPos());
         }
     }
 
@@ -410,7 +419,7 @@ public class DrillHeadMenu extends AbstractScrollableMenu {
     public void syncCarried(ItemStack carried) {
         this.setCarried(carried);
 
-        // PacketHandler.sendToServer(new CaterpillarSyncCarriedC2SPacket(carried));
+        CaterpillarSyncCarriedC2SPacket.send(carried);
     }
 
     public void syncDrillHeadSlot(int slotId, ItemStack stack) {
@@ -457,7 +466,7 @@ public class DrillHeadMenu extends AbstractScrollableMenu {
     public void setSlot(int slotId, ItemStack stack) {
         if (this.blockEntity instanceof DrillHeadBlockEntity drillHeadBlockEntity) {
             drillHeadBlockEntity.setItem(slotId, stack);
-            //PacketHandler.sendToServer(new CaterpillarSyncSlotC2SPacket(slotId, stack, drillHeadBlockEntity.getBlockPos()));
+            CaterpillarSyncSlotC2SPacket.send(slotId, stack, drillHeadBlockEntity.getBlockPos());
         }
     }
 
@@ -466,7 +475,7 @@ public class DrillHeadMenu extends AbstractScrollableMenu {
 
         if (storageBlockEntity != null) {
             storageBlockEntity.setItem(slotId, stack);
-            //PacketHandler.sendToServer(new CaterpillarSyncSlotC2SPacket(slotId, stack, storageBlockEntity.getBlockPos()));
+            CaterpillarSyncSlotC2SPacket.send(slotId, stack, storageBlockEntity.getBlockPos());
         }
     }
 
@@ -503,6 +512,6 @@ public class DrillHeadMenu extends AbstractScrollableMenu {
         super.setCarried(stack);
         super.setRemoteCarried(stack);
 
-        // PacketHandler.sendToServer(new CaterpillarSyncCarriedC2SPacket(stack, this.blockEntity.getBlockPos()));
+        CaterpillarSyncCarriedC2SPacket.send(stack);
     }
 }

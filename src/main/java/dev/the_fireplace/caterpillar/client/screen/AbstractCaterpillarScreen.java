@@ -12,6 +12,7 @@ import dev.the_fireplace.caterpillar.client.screen.widget.TutorialButton;
 import dev.the_fireplace.caterpillar.menu.AbstractCaterpillarMenu;
 import dev.the_fireplace.caterpillar.network.PacketHandler;
 import dev.the_fireplace.caterpillar.network.packet.client.CaterpillarSyncSelectedTabC2SPacket;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
@@ -155,7 +156,7 @@ public abstract class AbstractCaterpillarScreen<T extends AbstractCaterpillarMen
         for (ScreenTabs tab : ScreenTabs.values()) {
             if (tabShouldBeDisplayed(tab)) {
                 this.tabButtons.add(new TabButton(this.SELECTED_TAB.equals(tab), super.leftPos + TAB_X_SELECTED, super.topPos + TAB_Y + incrementTabPos * TAB_HEIGHT, TAB_WIDTH, TAB_HEIGHT, TAB_BG_X, TAB_BG_Y, TAB_BG_X_OFFSET, TAB_BG_Y_OFFSET, CATERPILLAR_GUI, (onPress) -> {
-                    // PacketHandler.sendToServer(new CaterpillarSyncSelectedTabC2SPacket(tab, this.menu.blockEntity.getBlockPos()))
+                    CaterpillarSyncSelectedTabC2SPacket.send(tab, this.menu.blockEntity.getBlockPos());
                 }));
                 incrementTabPos++;
             }

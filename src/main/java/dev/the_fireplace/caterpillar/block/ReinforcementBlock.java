@@ -192,6 +192,10 @@ public class ReinforcementBlock extends DrillBaseBlock {
 
     @Override
     public @Nullable BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
-        return BlockEntityInit.REINFORCEMENT.create(pos, state);
+        if (state.getValue(ReinforcementBlock.PART) == ReinforcementPart.BASE) {
+            return BlockEntityInit.REINFORCEMENT.create(pos, state);
+        }
+
+        return null;
     }
 }

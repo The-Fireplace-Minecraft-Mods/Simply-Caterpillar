@@ -57,9 +57,6 @@ public class DrillHeadScreen extends AbstractScrollableScreen<DrillHeadMenu> {
 
     public DrillHeadScreen(DrillHeadMenu menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title, ScreenTabs.DRILL_HEAD, SCROLLER_BG_X + (menu.canScroll() ? 0 : SCROLLER_WIDTH), SCROLLER_BG_Y, SCROLLER_WIDTH, SCROLLER_HEIGHT, CONSUMPTION_SCROLLBAR_X, SCROLLBAR_Y, SCROLLBAR_HEIGHT);
-
-        this.consumptionScrollTo(0.0F);
-        this.gatheredScrollTo(0.0F);
     }
 
     @Override

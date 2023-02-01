@@ -10,6 +10,10 @@ import dev.the_fireplace.caterpillar.init.BlockEntityInit;
 import dev.the_fireplace.caterpillar.menu.DrillHeadMenu;
 import dev.the_fireplace.caterpillar.menu.syncdata.DrillHeadContainerData;
 import dev.the_fireplace.caterpillar.network.PacketHandler;
+import dev.the_fireplace.caterpillar.network.packet.server.CaterpillarSyncInventoryS2CPacket;
+import dev.the_fireplace.caterpillar.network.packet.server.DrillHeadSyncLitS2CPacket;
+import dev.the_fireplace.caterpillar.network.packet.server.DrillHeadSyncMovingS2CPacket;
+import dev.the_fireplace.caterpillar.network.packet.server.DrillHeadSyncPowerS2CPacket;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
@@ -102,7 +106,7 @@ public class DrillHeadBlockEntity extends DrillBaseBlockEntity {
             connectedCaterpillarBlockEntities.addAll(CaterpillarBlockUtil.getConnectedCaterpillarBlockEntities(level, lastBlockEntity.getBlockPos().relative(direction, 2), new ArrayList<>()));
 
             blockEntity.litTime -= connectedCaterpillarBlockEntities.size();
-            // PacketHandler.sendToClients(new DrillHeadSyncLitS2CPacket(blockEntity.getLitTime(), blockEntity.getLitDuration(), blockEntity.getBlockPos()));
+            DrillHeadSyncLitS2CPacket.send((ServerLevel) blockEntity.level, blockEntity.getLitTime(), blockEntity.getLitDuration(), blockEntity.getBlockPos());
 
             needsUpdate = true;
         }
@@ -118,7 +122,7 @@ public class DrillHeadBlockEntity extends DrillBaseBlockEntity {
                 caterpillarBlockEntity.move();
             } else {
                 blockEntity.setMoving(false);
-                blockEntity.sendMovingPacketS2C(blockEntity.isMoving(), blockEntity.getBlockPos());
+                DrillHeadSyncMovingS2CPacket.send((ServerLevel) blockEntity.level, blockEntity.isMoving(), blockEntity.getBlockPos());
 
                 blockEntity.timer = 0;
             }
@@ -154,7 +158,7 @@ public class DrillHeadBlockEntity extends DrillBaseBlockEntity {
         if (blockEntity.isPowered() && blockEntity.getLitTime() <= 0 && !fuelSlotIsEmpty) {
             blockEntity.litTime = blockEntity.getBurnDuration(stack);
             blockEntity.litDuration = blockEntity.litTime;
-            blockEntity.sendLitPacketS2C(blockEntity.getLitTime(), blockEntity.getLitDuration(), blockEntity.getBlockPos());
+            DrillHeadSyncLitS2CPacket.send((ServerLevel) blockEntity.level, blockEntity.getLitTime(), blockEntity.getLitDuration(), blockEntity.getBlockPos());
 
             stack.shrink(1);
 
@@ -163,7 +167,7 @@ public class DrillHeadBlockEntity extends DrillBaseBlockEntity {
 
         if (blockEntity.isPowered() && !blockEntity.isLit() && fuelSlotIsEmpty) {
             blockEntity.setPowerOff();
-            blockEntity.sendPowerPacketS2C(false, blockEntity.getBlockPos());
+            DrillHeadSyncPowerS2CPacket.send((ServerLevel) blockEntity.level, false, blockEntity.getBlockPos());
 
             needsUpdate = true;
         }
@@ -228,7 +232,7 @@ public class DrillHeadBlockEntity extends DrillBaseBlockEntity {
 
                 if (Replacement.ALL.BLOCKS.contains(blockState.getBlock()) && !ConfigHolder.breakUnbreakableBlocks) {
                     setPowerOff();
-                    sendPowerPacketS2C(false, this.getBlockPos());
+                    DrillHeadSyncPowerS2CPacket.send((ServerLevel) this.level, false, this.getBlockPos());
                 } else if (CaterpillarBlockUtil.canBreakBlock(blockState.getBlock())) {
                     this.getLevel().destroyBlock(destroyPos, true);
                 }
@@ -327,45 +331,6 @@ public class DrillHeadBlockEntity extends DrillBaseBlockEntity {
         setChanged();
     }
 
-    public void sendPowerPacketC2S(Boolean powered, BlockPos pos) {
-        FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
-        buf.writeBoolean(powered);
-        buf.writeBlockPos(pos);
-
-        ClientPlayNetworking.send(PacketHandler.DRILL_HEAD_POWER_SYNC_C2S, buf);
-    }
-
-    public void sendPowerPacketS2C(Boolean powered, BlockPos pos) {
-        FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
-        buf.writeBoolean(powered);
-        buf.writeBlockPos(pos);
-
-        for (ServerPlayer player : PlayerLookup.tracking((ServerLevel) this.level, this.getBlockPos())) {
-            ServerPlayNetworking.send(player, PacketHandler.DRILL_HEAD_POWER_SYNC_S2C, buf);
-        }
-    }
-
-    public void sendLitPacketS2C(int litTime, int litDuration, BlockPos pos) {
-        FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
-        buf.writeInt(litTime);
-        buf.writeInt(litDuration);
-        buf.writeBlockPos(pos);
-
-        for (ServerPlayer player : PlayerLookup.tracking((ServerLevel) this.level, this.getBlockPos())) {
-            ServerPlayNetworking.send(player, PacketHandler.DRILL_HEAD_LIT_SYNC, buf);
-        }
-    }
-
-    public void sendMovingPacketS2C(boolean moving, BlockPos pos) {
-        FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
-        buf.writeBoolean(moving);
-        buf.writeBlockPos(pos);
-
-        for (ServerPlayer player : PlayerLookup.tracking((ServerLevel) this.level, this.getBlockPos())) {
-            ServerPlayNetworking.send(player, PacketHandler.DRILL_HEAD_MOVING_SYNC, buf);
-        }
-    }
-
     @Override
     public void load(@NotNull CompoundTag tag) {
         super.load(tag);
@@ -378,11 +343,11 @@ public class DrillHeadBlockEntity extends DrillBaseBlockEntity {
 
     @Override
     protected void saveAdditional(CompoundTag tag) {
+        super.saveAdditional(tag);
+
         tag.putInt("BurnTime", this.litTime);
         tag.putBoolean("Powered", this.powered);
         tag.putBoolean("Moving", this.moving);
-
-        super.saveAdditional(tag);
     }
 
     @Override
@@ -393,10 +358,11 @@ public class DrillHeadBlockEntity extends DrillBaseBlockEntity {
     @Nullable
     @Override
     public AbstractContainerMenu createMenu(int id, @NotNull Inventory playerInventory, @NotNull Player player) {
-        sendLitPacketS2C(this.getLitTime(), this.getLitDuration(), this.getBlockPos());
-        sendPowerPacketS2C(this.isPowered(), this.getBlockPos());
-        sendMovingPacketS2C(this.isMoving(), this.getBlockPos());
-        // sendInventoryPacketS2C(this.inventory, this.getBlockPos());
+        DrillHeadSyncLitS2CPacket.send((ServerLevel) this.level, this.getLitTime(), this.getLitDuration(), this.getBlockPos());
+        DrillHeadSyncPowerS2CPacket.send((ServerLevel) this.level, this.isPowered(), this.getBlockPos());
+        DrillHeadSyncMovingS2CPacket.send((ServerLevel) this.level, this.isMoving(), this.getBlockPos());
+        CaterpillarSyncInventoryS2CPacket.send((ServerLevel) this.level, this.inventory, this.getBlockPos());
+
         return new DrillHeadMenu(id, playerInventory, this, new DrillHeadContainerData(this, DrillHeadContainerData.SIZE));
     }
 }

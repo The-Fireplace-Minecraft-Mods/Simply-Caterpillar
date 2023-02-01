@@ -179,6 +179,10 @@ public class TransporterBlock extends DrillBaseBlock {
 
     @Override
     public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
-        return BlockEntityInit.TRANSPORTER.create(pos, state);
+        if (state.getValue(HALF) == DoubleBlockHalf.UPPER) {
+            return BlockEntityInit.TRANSPORTER.create(pos, state);
+        }
+
+        return null;
     }
 }

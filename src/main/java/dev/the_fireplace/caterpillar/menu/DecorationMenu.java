@@ -3,6 +3,7 @@ package dev.the_fireplace.caterpillar.menu;
 import dev.the_fireplace.caterpillar.block.entity.DecorationBlockEntity;
 import dev.the_fireplace.caterpillar.init.MenuInit;
 import dev.the_fireplace.caterpillar.menu.syncdata.DecorationContainerData;
+import dev.the_fireplace.caterpillar.network.packet.client.DecorationSyncSelectedMapC2SPacket;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
@@ -20,10 +21,14 @@ public class DecorationMenu extends AbstractScrollableMenu {
 
     public DecorationMenu(int id, Inventory playerInventory, FriendlyByteBuf extraData) {
         super(MenuInit.DECORATION, id, playerInventory, extraData, DecorationContainerData.SIZE, DecorationBlockEntity.INVENTORY_SIZE);
+
+        this.scrollTo(0);
     }
 
     public DecorationMenu(int id, Inventory playerInventory, DecorationBlockEntity blockEntity, ContainerData data) {
         super(MenuInit.DECORATION, id, playerInventory, blockEntity, data, DecorationBlockEntity.INVENTORY_SIZE);
+
+        this.scrollTo(0);
     }
 
     @Override
@@ -66,7 +71,7 @@ public class DecorationMenu extends AbstractScrollableMenu {
                 this.slots.get(BE_INVENTORY_FIRST_SLOT_INDEX + i).set(decorationBlockEntity.getSelectedPlacementMap().get(i));
             }
 
-            // PacketHandler.sendToServer(new DecorationSyncSelectedMapC2SPacket(decorationBlockEntity.getSelectedMap(), decorationBlockEntity.getBlockPos()));
+            DecorationSyncSelectedMapC2SPacket.send(decorationBlockEntity.getSelectedMap(), decorationBlockEntity.getBlockPos());
         }
     }
 }

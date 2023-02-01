@@ -136,6 +136,10 @@ public class CollectorBlock extends DrillBaseBlock {
     @Nullable
     @Override
     public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
-        return BlockEntityInit.COLLECTOR.create(pos, state);
+        if (state.getValue(CollectorBlock.HALF) == DoubleBlockHalf.UPPER) {
+            BlockEntityInit.COLLECTOR.create(pos, state);
+        }
+
+        return null;
     }
 }

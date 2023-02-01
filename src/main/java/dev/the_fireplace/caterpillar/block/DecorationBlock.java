@@ -3,6 +3,7 @@ package dev.the_fireplace.caterpillar.block;
 import dev.the_fireplace.caterpillar.block.entity.DecorationBlockEntity;
 import dev.the_fireplace.caterpillar.block.util.CaterpillarBlockUtil;
 import dev.the_fireplace.caterpillar.block.util.DecorationPart;
+import dev.the_fireplace.caterpillar.block.util.DrillHeadPart;
 import dev.the_fireplace.caterpillar.init.BlockEntityInit;
 import dev.the_fireplace.caterpillar.init.BlockInit;
 import net.minecraft.core.BlockPos;
@@ -172,6 +173,10 @@ public class DecorationBlock extends DrillBaseBlock {
     @Nullable
     @Override
     public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
-        return BlockEntityInit.DECORATION.create(pos, state);
+        if (state.getValue(PART) == DecorationPart.BASE) {
+            BlockEntityInit.DECORATION.create(pos, state);
+        }
+
+        return null;
     }
 }

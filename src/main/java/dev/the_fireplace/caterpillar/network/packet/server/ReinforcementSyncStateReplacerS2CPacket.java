@@ -18,9 +18,11 @@ public class ReinforcementSyncStateReplacerS2CPacket {
         byte enabled = buf.readByte();
         BlockPos pos = buf.readBlockPos();
 
-        if (level.getBlockEntity(pos) instanceof ReinforcementBlockEntity reinforcementBlockEntity) {
-            reinforcementBlockEntity.getReplacers(replacerIndex)[replacementIndex] = enabled;
-            reinforcementBlockEntity.setChanged();
-        }
+        client.execute(() -> {
+            if (level.getBlockEntity(pos) instanceof ReinforcementBlockEntity reinforcementBlockEntity) {
+                reinforcementBlockEntity.getReplacers(replacerIndex)[replacementIndex] = enabled;
+                reinforcementBlockEntity.setChanged();
+            }
+        });
     }
 }

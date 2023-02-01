@@ -27,8 +27,9 @@ public abstract class AbstractCaterpillarMenu extends AbstractContainerMenu {
     public final DrillBaseBlockEntity blockEntity;
 
     private final Container inventory;
-    public final int BE_INVENTORY_SLOT_COUNT;
+    private final ContainerLevelAccess access;
 
+    public final int BE_INVENTORY_SLOT_COUNT;
     public static final int SLOT_SIZE_PLUS_2 = 18;
     public static final int HOTBAR_SLOT_COUNT = 9;
     public static final int PLAYER_INVENTORY_ROW_COUNT = 3;
@@ -36,7 +37,6 @@ public abstract class AbstractCaterpillarMenu extends AbstractContainerMenu {
     public static final int PLAYER_INVENTORY_SLOT_COUNT = PLAYER_INVENTORY_COLUMN_COUNT * PLAYER_INVENTORY_ROW_COUNT;
     public static final int VANILLA_SLOT_COUNT = HOTBAR_SLOT_COUNT + PLAYER_INVENTORY_SLOT_COUNT;
     public static final int VANILLA_FIRST_SLOT_INDEX = 0;
-    private final ContainerLevelAccess access;
     private List<DrillBaseBlockEntity> caterpillarBlockEntities;
 
     public AbstractCaterpillarMenu(MenuType<?> menuType, int id, Inventory playerInventory, FriendlyByteBuf extraData, int containerDataSize, int inventorySize) {
