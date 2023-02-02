@@ -82,9 +82,9 @@ public class DrillBaseBlockEntity extends BlockEntity implements ExtendedScreenH
 
     @Override
     protected void saveAdditional(CompoundTag compoundTag) {
-        super.saveAdditional(compoundTag);
-
         ContainerHelper.saveAllItems(compoundTag, this.inventory);
+
+        super.saveAdditional(compoundTag);
     }
 
     @Override

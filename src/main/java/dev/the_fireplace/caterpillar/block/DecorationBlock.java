@@ -174,7 +174,7 @@ public class DecorationBlock extends DrillBaseBlock {
     @Override
     public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
         if (state.getValue(PART) == DecorationPart.BASE) {
-            BlockEntityInit.DECORATION.create(pos, state);
+            return BlockEntityInit.DECORATION.create(pos, state);
         }
 
         return null;

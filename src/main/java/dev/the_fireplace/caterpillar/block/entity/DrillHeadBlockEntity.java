@@ -343,11 +343,11 @@ public class DrillHeadBlockEntity extends DrillBaseBlockEntity {
 
     @Override
     protected void saveAdditional(CompoundTag tag) {
-        super.saveAdditional(tag);
-
         tag.putInt("BurnTime", this.litTime);
         tag.putBoolean("Powered", this.powered);
         tag.putBoolean("Moving", this.moving);
+
+        super.saveAdditional(tag);
     }
 
     @Override

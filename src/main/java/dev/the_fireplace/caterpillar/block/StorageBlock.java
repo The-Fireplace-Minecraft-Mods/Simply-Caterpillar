@@ -163,7 +163,7 @@ public class StorageBlock extends DrillBaseBlock {
     @Override
     public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
         if (state.getValue(PART) == StoragePart.BASE) {
-            BlockEntityInit.STORAGE.create(pos, state);
+            return BlockEntityInit.STORAGE.create(pos, state);
         }
 
         return null;
