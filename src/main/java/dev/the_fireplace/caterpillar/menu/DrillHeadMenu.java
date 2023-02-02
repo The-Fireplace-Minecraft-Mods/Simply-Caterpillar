@@ -511,7 +511,5 @@ public class DrillHeadMenu extends AbstractScrollableMenu {
     public void setCarried(ItemStack stack) {
         super.setCarried(stack);
         super.setRemoteCarried(stack);
-
-        CaterpillarSyncCarriedC2SPacket.send(stack);
     }
 }
