@@ -239,7 +239,7 @@ public class DrillBaseBlockEntity extends BlockEntity implements ExtendedScreenH
         for (int slotId = DrillHeadBlockEntity.GATHERED_SLOT_START; slotId <= DrillHeadBlockEntity.GATHERED_SLOT_END; slotId++) {
             ItemStack drillHeadStack = drillHeadAndStorageBlockEntities.get(0).getItem(slotId);
             if (drillHeadStack.getItem().equals(item)) {
-                drillHeadAndStorageBlockEntities.get(0).removeItem(slotId, 1);
+                drillHeadAndStorageBlockEntities.get(0).removeItemNoUpdate(slotId);
             }
         }
 
@@ -251,7 +251,7 @@ public class DrillBaseBlockEntity extends BlockEntity implements ExtendedScreenH
         for (int slotId = StorageBlockEntity.GATHERED_SLOT_START; slotId <= StorageBlockEntity.GATHERED_SLOT_END; slotId++) {
             ItemStack storageStack = drillHeadAndStorageBlockEntities.get(1).getItem(slotId);
             if (storageStack.getItem().equals(item)) {
-                drillHeadAndStorageBlockEntities.get(1).removeItem(slotId, 1);
+                drillHeadAndStorageBlockEntities.get(1).removeItemNoUpdate(slotId);
             }
         }
     }

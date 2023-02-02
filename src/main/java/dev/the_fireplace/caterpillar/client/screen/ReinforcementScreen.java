@@ -6,7 +6,6 @@ import dev.the_fireplace.caterpillar.block.entity.ReinforcementBlockEntity;
 import dev.the_fireplace.caterpillar.block.util.Replacement;
 import dev.the_fireplace.caterpillar.client.screen.util.ScreenTabs;
 import dev.the_fireplace.caterpillar.menu.ReinforcementMenu;
-import dev.the_fireplace.caterpillar.network.PacketHandler;
 import dev.the_fireplace.caterpillar.network.packet.client.CaterpillarSyncSlotC2SPacket;
 import dev.the_fireplace.caterpillar.network.packet.client.ReinforcementSyncStateReplacerC2SPacket;
 import net.minecraft.ChatFormatting;
@@ -148,11 +147,11 @@ public class ReinforcementScreen extends AbstractScrollableScreen<ReinforcementM
             int finalReplacerIndex = replacerIndex;
             if (replacer == (byte) 1) {
                 this.replacerButtons.add(new ImageButton(super.leftPos + REPLACER_BTN_BG_X, super.topPos + REPLACER_BTN_BG_Y + replacerIndex * (REPLACER_BTN_BG_HEIGHT + 2), REPLACER_BTN_BG_WIDTH, REPLACER_BTN_BG_HEIGHT, 176, replacerIndex * REPLACER_BTN_BG_HEIGHT * 2, 0, ScreenTabs.REINFORCEMENT.TEXTURE, (onPress) -> {
-                    // PacketHandler.sendToServer(new ReinforcementSyncStateReplacerC2SPacket(scrollIndex, finalReplacerIndex, (byte) 0, this.menu.blockEntity.getBlockPos()))
+                    ReinforcementSyncStateReplacerC2SPacket.send(scrollIndex, finalReplacerIndex, (byte) 0, this.menu.blockEntity.getBlockPos());
                 }));
             } else {
                 this.replacerButtons.add(new ImageButton(super.leftPos + REPLACER_BTN_BG_X, super.topPos + REPLACER_BTN_BG_Y + replacerIndex * (REPLACER_BTN_BG_HEIGHT + 2), REPLACER_BTN_BG_WIDTH, REPLACER_BTN_BG_HEIGHT, 176, replacerIndex * REPLACER_BTN_BG_HEIGHT * 2 + REPLACER_BTN_BG_HEIGHT, 0, ScreenTabs.REINFORCEMENT.TEXTURE, (onPress) -> {
-                    // PacketHandler.sendToServer(new ReinforcementSyncStateReplacerC2SPacket(scrollIndex, finalReplacerIndex, (byte) 1, this.menu.blockEntity.getBlockPos()))
+                    ReinforcementSyncStateReplacerC2SPacket.send(scrollIndex, finalReplacerIndex, (byte) 1, this.menu.blockEntity.getBlockPos());
                 }));
             }
 
@@ -194,7 +193,7 @@ public class ReinforcementScreen extends AbstractScrollableScreen<ReinforcementM
             return;
         }
 
-        int reinforcementSlotId = slot.index;
+        int reinforcementSlotId = slot.getContainerSlot();
         ItemStack reinforcementStack;
         ItemStack carried = this.menu.getCarried().copy();
 
@@ -210,8 +209,9 @@ public class ReinforcementScreen extends AbstractScrollableScreen<ReinforcementM
 
         if (this.menu.blockEntity instanceof ReinforcementBlockEntity reinforcementBlockEntity) {
             reinforcementBlockEntity.setItem(reinforcementSlotId, reinforcementStack);
+            reinforcementBlockEntity.setChanged();
 
-            // PacketHandler.sendToServer(new CaterpillarSyncSlotC2SPacket(reinforcementSlotId, reinforcementStack, reinforcementBlockEntity.getBlockPos()));
+            CaterpillarSyncSlotC2SPacket.send(reinforcementSlotId, reinforcementStack, reinforcementBlockEntity.getBlockPos());
         }
     }
 
@@ -231,6 +231,11 @@ public class ReinforcementScreen extends AbstractScrollableScreen<ReinforcementM
                 this.menu.setScrolling(true);
                 return true;
             }
+        }
+
+        if (getSlotUnderMouse() != null && this.isReinforcementSlot(getSlotUnderMouse().index)) {
+            slotClicked(getSlotUnderMouse(), getSlotUnderMouse().index, 0, ClickType.PICKUP);
+            return true;
         }
 
         return super.mouseClicked(mouseX, mouseY, button);

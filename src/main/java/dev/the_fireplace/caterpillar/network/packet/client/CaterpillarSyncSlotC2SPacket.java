@@ -37,6 +37,7 @@ public class CaterpillarSyncSlotC2SPacket {
         server.execute(() -> {
             if (level.getBlockEntity(pos) instanceof DrillBaseBlockEntity blockEntity) {
                 blockEntity.setItem(slotId, stack);
+                blockEntity.setChanged();
             }
         });
     }

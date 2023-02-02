@@ -6,6 +6,8 @@ import dev.the_fireplace.caterpillar.block.util.Replacement;
 import dev.the_fireplace.caterpillar.config.ConfigHolder;
 import dev.the_fireplace.caterpillar.init.BlockEntityInit;
 import dev.the_fireplace.caterpillar.menu.ReinforcementMenu;
+import dev.the_fireplace.caterpillar.network.packet.server.CaterpillarSyncInventoryS2CPacket;
+import dev.the_fireplace.caterpillar.network.packet.server.ReinforcementSyncReplacerS2CPacket;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.ByteArrayTag;
@@ -13,6 +15,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Inventory;
@@ -248,11 +251,13 @@ public class ReinforcementBlockEntity extends DrillBaseBlockEntity {
     @Override
     protected void saveAdditional(CompoundTag tag) {
         ListTag listTag = new ListTag();
+
         for (byte[] replacer : this.replacers) {
             listTag.add(new ByteArrayTag(replacer));
         }
 
         tag.put("Replacers", listTag);
+
         super.saveAdditional(tag);
     }
 
@@ -267,11 +272,11 @@ public class ReinforcementBlockEntity extends DrillBaseBlockEntity {
 
     @Override
     public AbstractContainerMenu createMenu(int id, Inventory playerInventory, Player player) {
-        /*
-        PacketHandler.sendToClients(new CaterpillarSyncInventoryS2CPacket(this.getInventory(), this.getBlockPos()));
+        CaterpillarSyncInventoryS2CPacket.send((ServerLevel) this.level, this.inventory, this.getBlockPos());
+
         for (int replacerIndex = 0; replacerIndex < this.replacers.size(); replacerIndex++) {
-            PacketHandler.sendToClients(new ReinforcementSyncReplacerS2CPacket(replacerIndex, this.replacers.get(replacerIndex), worldPosition));
-        }*/
+            ReinforcementSyncReplacerS2CPacket.send((ServerLevel) this.level, replacerIndex, this.replacers.get(replacerIndex), this.getBlockPos());
+        }
 
         return new ReinforcementMenu(id, playerInventory, this, new SimpleContainerData(0));
     }

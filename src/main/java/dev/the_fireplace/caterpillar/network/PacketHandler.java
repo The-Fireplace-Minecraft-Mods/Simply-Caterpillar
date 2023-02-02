@@ -17,9 +17,9 @@ public final class PacketHandler {
 
         ServerPlayNetworking.registerGlobalReceiver(DrillHeadSyncPowerC2SPacket.PACKET_ID, DrillHeadSyncPowerC2SPacket::receive);
 
-        ServerPlayNetworking.registerGlobalReceiver(ReinforcementSyncStateReplacerC2SPacket.PACKET_ID, ReinforcementSyncStateReplacerC2SPacket::receive);
-
         ServerPlayNetworking.registerGlobalReceiver(MinecraftSyncSlotC2SPacket.PACKET_ID, MinecraftSyncSlotC2SPacket::receive);
+
+        ServerPlayNetworking.registerGlobalReceiver(ReinforcementSyncStateReplacerC2SPacket.PACKET_ID, ReinforcementSyncStateReplacerC2SPacket::receive);
     }
 
     public static void registerS2CPackets() {
@@ -34,5 +34,6 @@ public final class PacketHandler {
         ClientPlayNetworking.registerGlobalReceiver(DrillHeadSyncPowerS2CPacket.PACKET_ID, DrillHeadSyncPowerS2CPacket::receive);
 
         ClientPlayNetworking.registerGlobalReceiver(ReinforcementSyncReplacerS2CPacket.PACKET_ID, ReinforcementSyncReplacerS2CPacket::receive);
+        ClientPlayNetworking.registerGlobalReceiver(ReinforcementSyncStateReplacerS2CPacket.PACKET_ID, ReinforcementSyncStateReplacerS2CPacket::receive);
     }
 }

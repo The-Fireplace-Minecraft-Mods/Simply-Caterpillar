@@ -14,6 +14,7 @@ import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Inventory;
@@ -113,7 +114,7 @@ public class TransporterBlockEntity extends DrillBaseBlockEntity {
                 ItemStack stack = drillHeadBlockEntity.getItem(i);
                 if (stack.getCount() == stack.getMaxStackSize()) {
                     if (insertItemStackToTransporter(stack)) {
-                        drillHeadBlockEntity.removeItem(i, 1);
+                        drillHeadBlockEntity.removeItemNoUpdate(i);
                     }
 
                 }
@@ -125,7 +126,7 @@ public class TransporterBlockEntity extends DrillBaseBlockEntity {
                 ItemStack stack = storageBlockEntity.getItem(i);
                 if (stack.getCount() == stack.getMaxStackSize()) {
                     if (insertItemStackToTransporter(stack)) {
-                        storageBlockEntity.removeItem(i, 1);
+                        storageBlockEntity.removeItemNoUpdate(i);
                     }
                 }
             }
@@ -160,7 +161,7 @@ public class TransporterBlockEntity extends DrillBaseBlockEntity {
         }
 
         this.clearContent();
-        // PacketHandler.sendToClients(new CaterpillarSyncInventoryS2CPacket(this.getInventory(), this.getBlockPos()));
+        CaterpillarSyncInventoryS2CPacket.send((ServerLevel) level, this.inventory, this.getBlockPos());
 
         level.removeBlock(this.getBlockPos().below(), false);
 

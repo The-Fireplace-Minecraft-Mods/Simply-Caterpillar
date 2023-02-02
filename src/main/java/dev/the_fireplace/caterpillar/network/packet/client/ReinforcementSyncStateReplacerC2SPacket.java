@@ -2,6 +2,9 @@ package dev.the_fireplace.caterpillar.network.packet.client;
 
 import dev.the_fireplace.caterpillar.Caterpillar;
 import dev.the_fireplace.caterpillar.block.entity.ReinforcementBlockEntity;
+import dev.the_fireplace.caterpillar.network.packet.server.ReinforcementSyncStateReplacerS2CPacket;
+import io.netty.buffer.Unpooled;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
@@ -13,8 +16,17 @@ import net.minecraft.server.network.ServerGamePacketListenerImpl;
 
 public class ReinforcementSyncStateReplacerC2SPacket {
 
-
     public static final ResourceLocation PACKET_ID = new ResourceLocation(Caterpillar.MOD_ID, "reinforcement.state_replacer_sync_c2s");
+
+    public static void send(int replacerIndex, int replacementIndex, byte activated, BlockPos pos) {
+        FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
+        buf.writeInt(replacerIndex);
+        buf.writeInt(replacementIndex);
+        buf.writeByte(activated);
+        buf.writeBlockPos(pos);
+
+        ClientPlayNetworking.send(PACKET_ID, buf);
+    }
 
     public static void receive(MinecraftServer server, ServerPlayer player, ServerGamePacketListenerImpl handler, FriendlyByteBuf buf, PacketSender responseSender) {
         ServerLevel level = player.getLevel();
@@ -29,7 +41,7 @@ public class ReinforcementSyncStateReplacerC2SPacket {
                 reinforcementBlockEntity.getReplacers(replacerIndex)[replacementIndex] = activated;
                 reinforcementBlockEntity.setChanged();
 
-                // PacketHandler.sendToClients(new ReinforcementSyncStateReplacerS2CPacket(this.replacerIndex, this.replacementIndex, this.activated, reinforcementBlockEntity.getBlockPos()));
+                ReinforcementSyncStateReplacerS2CPacket.send((ServerLevel) reinforcementBlockEntity.getLevel(), replacerIndex, replacementIndex, activated, pos);
             }
         });
     }

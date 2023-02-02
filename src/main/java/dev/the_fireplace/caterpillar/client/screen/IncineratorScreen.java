@@ -5,7 +5,6 @@ import dev.the_fireplace.caterpillar.Caterpillar;
 import dev.the_fireplace.caterpillar.block.entity.IncineratorBlockEntity;
 import dev.the_fireplace.caterpillar.client.screen.util.ScreenTabs;
 import dev.the_fireplace.caterpillar.menu.IncineratorMenu;
-import dev.the_fireplace.caterpillar.network.PacketHandler;
 import dev.the_fireplace.caterpillar.network.packet.client.CaterpillarSyncSlotC2SPacket;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -53,7 +52,8 @@ public class IncineratorScreen extends AbstractCaterpillarScreen<IncineratorMenu
         if (this.menu.blockEntity instanceof IncineratorBlockEntity incineratorBlockEntity) {
             incineratorBlockEntity.setItem(incineratorSlotId, stack);
 
-            //PacketHandler.sendToServer(new CaterpillarSyncSlotC2SPacket(incineratorSlotId, stack, incineratorBlockEntity.getBlockPos()));
+
+            CaterpillarSyncSlotC2SPacket.send(incineratorSlotId, stack, incineratorBlockEntity.getBlockPos());
         }
     }
 
