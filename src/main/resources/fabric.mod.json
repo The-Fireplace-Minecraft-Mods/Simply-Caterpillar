@@ -9,13 +9,12 @@
     "${modAuthors}"
   ],
   "contact": {
-    "homepage": "https://fabricmc.net/",
-    "sources": "${modDisplayURL}"
+    "homepage": "${modDisplayURL}",
+    "sources": "${modDisplayURL}",
+    "issues": "${modIssueTrackerURL}"
   },
-
   "license": "${modLicense}",
-  "icon": "assets/simplycaterpillar/${modLogoFile}",
-
+  "icon": "assets/${modId}/${modLogoFile}",
   "environment": "*",
   "entrypoints": {
     "main": [
@@ -23,6 +22,9 @@
     ],
     "client": [
       "${modGroup}.CaterpillarClient"
+    ],
+    "modmenu": [
+      "${modGroup}.config.CaterpillarModMenuIntegration"
     ]
   },
   "mixins": [
@@ -35,7 +37,9 @@
     "minecraft": "~1.19",
     "java": ">=${minecraftJavaVersion}"
   },
+
   "suggests": {
-    "another-mod": "*"
+    "modmenu": "*",
+    "cloth-config": ">=8"
   }
 }

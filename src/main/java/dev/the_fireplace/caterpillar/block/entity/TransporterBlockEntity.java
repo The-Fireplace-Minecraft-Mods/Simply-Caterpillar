@@ -4,7 +4,6 @@ import dev.the_fireplace.caterpillar.Caterpillar;
 import dev.the_fireplace.caterpillar.block.CollectorBlock;
 import dev.the_fireplace.caterpillar.block.TransporterBlock;
 import dev.the_fireplace.caterpillar.block.util.CaterpillarBlockUtil;
-import dev.the_fireplace.caterpillar.config.ConfigHolder;
 import dev.the_fireplace.caterpillar.init.BlockEntityInit;
 import dev.the_fireplace.caterpillar.menu.TransporterMenu;
 import dev.the_fireplace.caterpillar.network.packet.server.CaterpillarSyncInventoryS2CPacket;
@@ -25,7 +24,6 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
@@ -63,7 +61,7 @@ public class TransporterBlockEntity extends DrillBaseBlockEntity {
 
         level.setBlockAndUpdate(nextPos, this.getBlockState());
 
-        if (ConfigHolder.enableSounds) {
+        if (Caterpillar.config.enableSounds) {
             level.playSound(null, basePos, SoundEvents.PISTON_EXTEND, SoundSource.BLOCKS, 1.0F, 1.0F);
         }
 

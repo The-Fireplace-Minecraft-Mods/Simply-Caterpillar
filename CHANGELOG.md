@@ -6,9 +6,12 @@ All notable changes to this project will be documented in this file.
 
 ## Added
 
-- Porting 1.19.2 forge to fabric
+- First release of 1.19.2 forge to fabric
+- Support Mod Menu
+- Support Cloth Config (Auto Config)
 
 ## Fixed
 
-- Transporter block need stone pickaxe to break
-- Transporter Lower minecart didn't drop minecart
+- Transporter block not mineable with a stone pickaxe.
+- Transporter block stored items not dropping when broken.
+- When breaking transporter chest minecart, it was dropping a transporter block instead of a chest minecart item.

@@ -1,15 +1,14 @@
 package dev.the_fireplace.caterpillar;
 
-import dev.the_fireplace.caterpillar.config.ConfigHolder;
-import dev.the_fireplace.caterpillar.entity.SeatEntity;
+import dev.the_fireplace.caterpillar.config.CaterpillarConfig;
 import dev.the_fireplace.caterpillar.init.BlockEntityInit;
 import dev.the_fireplace.caterpillar.init.BlockInit;
-import dev.the_fireplace.caterpillar.init.EntityInit;
 import dev.the_fireplace.caterpillar.init.MenuInit;
 import dev.the_fireplace.caterpillar.network.PacketHandler;
+import me.shedaniel.autoconfig.AutoConfig;
+import me.shedaniel.autoconfig.serializer.Toml4jConfigSerializer;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
-import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
@@ -20,6 +19,8 @@ public class Caterpillar implements ModInitializer {
 
     public static final String MOD_ID = "simplycaterpillar";
 
+    public static CaterpillarConfig config;
+
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
     public static final CreativeModeTab ITEM_GROUP = FabricItemGroupBuilder.build(
@@ -27,7 +28,8 @@ public class Caterpillar implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        ConfigHolder.registerConfigs();
+        AutoConfig.register(CaterpillarConfig.class, Toml4jConfigSerializer::new);
+        config = AutoConfig.getConfigHolder(CaterpillarConfig.class).getConfig();
 
         BlockInit.registerBlocks();
         BlockEntityInit.registerBlockEntities();

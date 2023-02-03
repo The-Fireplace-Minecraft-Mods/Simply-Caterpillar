@@ -5,26 +5,18 @@ import dev.the_fireplace.caterpillar.block.DrillHeadBlock;
 import dev.the_fireplace.caterpillar.block.util.CaterpillarBlockUtil;
 import dev.the_fireplace.caterpillar.block.util.DrillHeadPart;
 import dev.the_fireplace.caterpillar.block.util.Replacement;
-import dev.the_fireplace.caterpillar.config.ConfigHolder;
 import dev.the_fireplace.caterpillar.init.BlockEntityInit;
 import dev.the_fireplace.caterpillar.menu.DrillHeadMenu;
 import dev.the_fireplace.caterpillar.menu.syncdata.DrillHeadContainerData;
-import dev.the_fireplace.caterpillar.network.PacketHandler;
 import dev.the_fireplace.caterpillar.network.packet.server.CaterpillarSyncInventoryS2CPacket;
 import dev.the_fireplace.caterpillar.network.packet.server.DrillHeadSyncLitS2CPacket;
 import dev.the_fireplace.caterpillar.network.packet.server.DrillHeadSyncMovingS2CPacket;
 import dev.the_fireplace.caterpillar.network.packet.server.DrillHeadSyncPowerS2CPacket;
-import io.netty.buffer.Unpooled;
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Inventory;
@@ -205,7 +197,7 @@ public class DrillHeadBlockEntity extends DrillBaseBlockEntity {
                 DrillHeadBlock.removeStructure(this.getLevel(), basePos, nextDrillHeadBlockEntity.getBlockState());
                 DrillHeadBlock.moveStructure(this.getLevel(), nextBasePos, nextDrillHeadBlockEntity.getBlockState());
 
-                if (ConfigHolder.enableSounds) {
+                if (Caterpillar.config.enableSounds) {
                     this.getLevel().playSound(null, basePos, SoundEvents.PISTON_EXTEND, SoundSource.BLOCKS, 1.0F, 1.0F);
                 }
             }
@@ -230,7 +222,7 @@ public class DrillHeadBlockEntity extends DrillBaseBlockEntity {
 
                 BlockState blockState = this.getLevel().getBlockState(destroyPos);
 
-                if (Replacement.ALL.BLOCKS.contains(blockState.getBlock()) && !ConfigHolder.breakUnbreakableBlocks) {
+                if (Replacement.ALL.BLOCKS.contains(blockState.getBlock()) && !Caterpillar.config.breakUnbreakableBlocks) {
                     setPowerOff();
                     DrillHeadSyncPowerS2CPacket.send((ServerLevel) this.level, false, this.getBlockPos());
                 } else if (CaterpillarBlockUtil.canBreakBlock(blockState.getBlock())) {

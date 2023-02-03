@@ -1,7 +1,7 @@
 package dev.the_fireplace.caterpillar.block.entity;
 
+import dev.the_fireplace.caterpillar.Caterpillar;
 import dev.the_fireplace.caterpillar.block.CollectorBlock;
-import dev.the_fireplace.caterpillar.config.ConfigHolder;
 import dev.the_fireplace.caterpillar.init.BlockEntityInit;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
@@ -32,7 +32,7 @@ public class CollectorBlockEntity extends DrillBaseBlockEntity {
         this.getLevel().setBlockAndUpdate(nextPos, this.getBlockState());
         this.getLevel().setBlockAndUpdate(nextPos.below(), this.getBlockState().setValue(CollectorBlock.HALF, DoubleBlockHalf.LOWER));
 
-        if (ConfigHolder.enableSounds) {
+        if (Caterpillar.config.enableSounds) {
             this.getLevel().playSound(null, basePos, SoundEvents.PISTON_EXTEND, SoundSource.BLOCKS, 1.0F, 1.0F);
         }
 
