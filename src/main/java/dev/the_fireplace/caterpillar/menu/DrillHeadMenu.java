@@ -1,5 +1,17 @@
 package dev.the_fireplace.caterpillar.menu;
 
+import dev.the_fireplace.caterpillar.block.entity.DrillHeadBlockEntity;
+import dev.the_fireplace.caterpillar.block.entity.StorageBlockEntity;
+import dev.the_fireplace.caterpillar.init.MenuInit;
+import dev.the_fireplace.caterpillar.menu.slot.CaterpillarFuelSlot;
+import dev.the_fireplace.caterpillar.menu.slot.FakeSlot;
+import dev.the_fireplace.caterpillar.menu.syncdata.DrillHeadContainerData;
+import dev.the_fireplace.caterpillar.network.PacketHandler;
+import dev.the_fireplace.caterpillar.network.packet.client.CaterpillarSyncCarriedC2SPacket;
+import dev.the_fireplace.caterpillar.network.packet.client.CaterpillarSyncSlotC2SPacket;
+import dev.the_fireplace.caterpillar.network.packet.client.DrillHeadSyncPowerC2SPacket;
+import dev.the_fireplace.caterpillar.network.packet.client.MinecraftSyncSlotC2SPacket;
+import dev.the_fireplace.caterpillar.network.packet.server.CaterpillarSyncInventoryS2CPacket;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -8,18 +20,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.items.IItemHandler;
 import org.jetbrains.annotations.NotNull;
-import dev.the_fireplace.caterpillar.block.entity.DrillHeadBlockEntity;
-import dev.the_fireplace.caterpillar.block.entity.StorageBlockEntity;
-import dev.the_fireplace.caterpillar.menu.slot.CaterpillarFuelSlot;
-import dev.the_fireplace.caterpillar.menu.slot.FakeSlot;
-import dev.the_fireplace.caterpillar.menu.syncdata.DrillHeadContainerData;
-import dev.the_fireplace.caterpillar.init.MenuInit;
-import dev.the_fireplace.caterpillar.network.PacketHandler;
-import dev.the_fireplace.caterpillar.network.packet.client.CaterpillarSyncSlotC2SPacket;
-import dev.the_fireplace.caterpillar.network.packet.client.DrillHeadSyncPowerC2SPacket;
-import dev.the_fireplace.caterpillar.network.packet.client.CaterpillarSyncCarriedC2SPacket;
-import dev.the_fireplace.caterpillar.network.packet.client.MinecraftSyncSlotC2SPacket;
-import dev.the_fireplace.caterpillar.network.packet.server.CaterpillarSyncInventoryS2CPacket;
 
 import static dev.the_fireplace.caterpillar.block.entity.DrillHeadBlockEntity.*;
 
@@ -512,7 +512,5 @@ public class DrillHeadMenu extends AbstractScrollableMenu {
     public void setCarried(ItemStack stack) {
         super.setCarried(stack);
         super.setRemoteCarried(stack);
-
-        // PacketHandler.sendToServer(new CaterpillarSyncCarriedC2SPacket(stack, this.blockEntity.getBlockPos()));
     }
 }

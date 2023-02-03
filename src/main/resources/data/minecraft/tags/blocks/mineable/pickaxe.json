@@ -8,6 +8,7 @@
     "simplycaterpillar:decoration",
     "simplycaterpillar:collector",
     "simplycaterpillar:storage",
-    "simplycaterpillar:incinerator"
+    "simplycaterpillar:incinerator",
+    "simplycaterpillar:transporter"
   ]
 }

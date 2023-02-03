@@ -15,19 +15,19 @@ authors = "The_Fireplace, Daniel-Mendes"
 description = "${modDescription}"
 
 [custom.mc-publish]
-    modrinth = "${modrinthId}"
-    curseforge = "${curseForgeId}"
+modrinth = "${modrinthId}"
+curseforge = "${curseForgeId}"
 
 [[dependencies.simplycaterpillar]]
-    modId = "forge"
-    mandatory = true
-    versionRange = "${forgeVersionRange}"
-    ordering = "NONE"
-    side = "BOTH"
+modId = "forge"
+mandatory = true
+versionRange = "${forgeVersionRange}"
+ordering = "NONE"
+side = "BOTH"
 
 [[dependencies.simplycaterpillar]]
-    modId = "minecraft"
-    mandatory = true
-    versionRange = "${minecraftVersionRange}"
-    ordering = "NONE"
-    side = "BOTH"
+modId = "minecraft"
+mandatory = true
+versionRange = "${minecraftVersionRange}"
+ordering = "NONE"
+side = "BOTH"

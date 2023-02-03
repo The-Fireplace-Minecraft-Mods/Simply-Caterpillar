@@ -161,7 +161,9 @@ public class TransporterBlockEntity extends DrillBaseBlockEntity {
         }
 
         this.clearInventory();
-        PacketHandler.sendToClients(new CaterpillarSyncInventoryS2CPacket(this.getInventory(), this.getBlockPos()));
+        if (!level.isClientSide) {
+            PacketHandler.sendToClients(new CaterpillarSyncInventoryS2CPacket(this.getInventory(), this.getBlockPos()));
+        }
 
         level.removeBlock(this.getBlockPos().below(), false);
 
