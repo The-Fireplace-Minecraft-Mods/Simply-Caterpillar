@@ -1,6 +1,5 @@
 package dev.the_fireplace.caterpillar.block;
 
-import dev.the_fireplace.caterpillar.block.entity.DrillBaseBlockEntity;
 import dev.the_fireplace.caterpillar.block.entity.DrillHeadBlockEntity;
 import dev.the_fireplace.caterpillar.block.util.CaterpillarBlockUtil;
 import dev.the_fireplace.caterpillar.block.util.DrillHeadPart;
@@ -185,19 +184,11 @@ public class DrillHeadBlock extends DrillBaseBlock {
         super.setPlacedBy(level, pos, state, livingEntity, stack);
     }
 
-    private void dropContents(Level level, BlockPos pos) {
-        BlockEntity blockEntity = level.getBlockEntity(pos);
-        if (blockEntity instanceof DrillBaseBlockEntity caterpillarBlockEntity) {
-            if (!level.isClientSide()) {
-                caterpillarBlockEntity.drops();
-            }
-        }
-    }
-
     @Override
     public void playerWillDestroy(@NotNull Level level, @NotNull BlockPos pos, @NotNull BlockState state, @NotNull Player player) {
         BlockPos basePos = getBasePos(state, pos);
-        this.dropContents(level, basePos);
+
+        dropContents(level, basePos);
         this.destroyStructure(level, basePos, state, player);
 
         super.playerWillDestroy(level, pos, state, player);

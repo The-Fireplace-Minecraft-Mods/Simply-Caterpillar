@@ -7,9 +7,15 @@ import dev.the_fireplace.caterpillar.init.BlockInit;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.stats.Stats;
+import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -21,6 +27,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.BooleanOp;
@@ -28,6 +35,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
@@ -109,34 +117,41 @@ public class TransporterBlock extends DrillBaseBlock {
         return SHAPES_UPPER.get(state.getValue(FACING));
     }
 
+
     @Override
     public void playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
-        super.playerWillDestroy(level, pos, state, player);
-
-        if (state.getValue(HALF) == DoubleBlockHalf.LOWER) {
-            return;
+        if (level instanceof ServerLevel) {
+            BlockEntity blockEntity = level.getBlockEntity(pos);
+            if (blockEntity instanceof TransporterBlockEntity transporterBlockEntity) {
+                if (!transporterBlockEntity.hasMinecartChest()) {
+                    dropContents(level, pos);
+                } else {
+                    transporterBlockEntity.releaseMinecartChest();
+                }
+            }
         }
 
-        BlockEntity blockEntity = level.getBlockEntity(pos);
-        if (blockEntity instanceof TransporterBlockEntity transporterBlockEntity) {
-            if (level.getBlockState(pos.below()).getBlock() instanceof TransporterBlock) {
-                transporterBlockEntity.releaseMinecartChest();
-            }
+        super.playerWillDestroy(level, pos, state, player);
+    }
+
+    @Override
+    public void playerDestroy(Level level, Player player, BlockPos blockPos, BlockState blockState, @Nullable BlockEntity blockEntity, ItemStack itemStack) {
+        if (blockState.getValue(HALF) == DoubleBlockHalf.LOWER) {
+            Containers.dropItemStack(level, blockPos.getX(), blockPos.getY(), blockPos.getZ(), new ItemStack(Items.CHEST_MINECART));
+        } else {
+            super.playerDestroy(level, player, blockPos, blockState, blockEntity, itemStack);
         }
     }
 
     @Override
     public void destroy(LevelAccessor level, BlockPos pos, BlockState state) {
-        super.destroy(level, pos, state);
-
         if (state.getValue(HALF) == DoubleBlockHalf.UPPER) {
+            super.destroy(level, pos, state);
             return;
         }
 
         BlockEntity blockEntity = level.getBlockEntity(pos.above());
         if (blockEntity instanceof TransporterBlockEntity transporterBlockEntity) {
-            transporterBlockEntity.clearContent();
-
             Block previousBlock = transporterBlockEntity.getPreviousBlock();
 
             if (previousBlock == null) {
@@ -145,6 +160,8 @@ public class TransporterBlock extends DrillBaseBlock {
 
             level.setBlock(pos, previousBlock.defaultBlockState(), 3);
         }
+
+        super.destroy(level, pos, state);
     }
 
     @Override

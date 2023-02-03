@@ -9,6 +9,7 @@ import dev.the_fireplace.caterpillar.init.BlockInit;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.Containers;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -120,15 +121,6 @@ public class StorageBlock extends DrillBaseBlock {
         level.setBlockAndUpdate(pos.relative(direction.getClockWise()), state.setValue(StorageBlock.PART, StoragePart.RIGHT).setValue(WATERLOGGED, level.getFluidState(pos.relative(direction.getClockWise())).getType() == Fluids.WATER));
 
         super.setPlacedBy(level, pos, state, livingEntity, stack);
-    }
-
-    private void dropContents(Level level, BlockPos pos) {
-        BlockEntity blockEntity = level.getBlockEntity(pos);
-        if (blockEntity instanceof DrillBaseBlockEntity caterpillarBlockEntity) {
-            if (!level.isClientSide()) {
-                caterpillarBlockEntity.drops();
-            }
-        }
     }
 
     @Override

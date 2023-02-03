@@ -142,6 +142,13 @@ public class DrillBaseBlock extends BaseEntityBlock implements EntityBlock, Simp
         return pos;
     }
 
+    public static void dropContents(Level level, BlockPos blockPos) {
+        BlockEntity blockEntity = level.getBlockEntity(blockPos);
+        if (blockEntity instanceof DrillBaseBlockEntity caterpillarBlockEntity) {
+            caterpillarBlockEntity.dropContents(level, blockPos);
+        }
+    }
+
     protected void runCalculation(Map<Direction, VoxelShape> shapes, VoxelShape shape) {
         for (Direction direction : Direction.values())
             shapes.put(direction, calculateShapes(direction, shape));

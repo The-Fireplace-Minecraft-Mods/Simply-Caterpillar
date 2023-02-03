@@ -16,13 +16,13 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.Containers;
-import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -103,14 +103,8 @@ public class DrillBaseBlockEntity extends BlockEntity implements ExtendedScreenH
         this.inventory = inventory;
     }
 
-    public void drops() {
-        SimpleContainer inventory = new SimpleContainer(this.inventory.size());
-
-        for (int i = 0; i < this.inventory.size(); i++) {
-            inventory.setItem(i, this.inventory.get(i));
-        }
-
-        Containers.dropContents(this.level, this.worldPosition, inventory);
+    public void dropContents(Level level, BlockPos blockPosWhereToDrop) {
+        Containers.dropContents(level, blockPosWhereToDrop, this.inventory);
     }
 
     protected boolean takeItemFromCaterpillarConsumption(Item item) {

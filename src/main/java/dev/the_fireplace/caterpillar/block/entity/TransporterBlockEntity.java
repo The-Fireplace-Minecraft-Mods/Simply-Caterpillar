@@ -25,6 +25,7 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
@@ -161,7 +162,9 @@ public class TransporterBlockEntity extends DrillBaseBlockEntity {
         }
 
         this.clearContent();
-        CaterpillarSyncInventoryS2CPacket.send((ServerLevel) level, this.inventory, this.getBlockPos());
+        if (!level.isClientSide) {
+            CaterpillarSyncInventoryS2CPacket.send((ServerLevel) level, this.inventory, this.getBlockPos());
+        }
 
         level.removeBlock(this.getBlockPos().below(), false);
 
