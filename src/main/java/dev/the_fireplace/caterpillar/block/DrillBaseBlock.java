@@ -144,7 +144,7 @@ public class DrillBaseBlock extends BaseEntityBlock implements EntityBlock, Simp
 
     public static void dropContents(Level level, BlockPos blockPos) {
         BlockEntity blockEntity = level.getBlockEntity(blockPos);
-        if (blockEntity instanceof DrillBaseBlockEntity caterpillarBlockEntity) {
+        if (blockEntity instanceof DrillHeadBlockEntity caterpillarBlockEntity) {
             caterpillarBlockEntity.dropContents(level, blockPos);
         }
     }
