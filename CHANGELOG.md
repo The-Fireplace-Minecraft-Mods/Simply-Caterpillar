@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Fixed
+
+- Transporter block not mineable with a stone pickaxe.
+- Transporter block stored items not dropping when broken.
+- When breaking transporter chest minecart, it was dropping a transporter block instead of a chest minecart item.
+
 ## [1.18.2-7.2.0] - 2023-01-23
 
 ### Added

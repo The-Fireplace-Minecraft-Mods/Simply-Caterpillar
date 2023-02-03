@@ -8,7 +8,7 @@ plugins {
 // gradle.properties
 version = minecraftVersion + "-" + modVersion
 group = modGroup
-archivesBaseName = modFileName
+archivesBaseName = "${modId}-forge"
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(minecraftJavaVersion)
 

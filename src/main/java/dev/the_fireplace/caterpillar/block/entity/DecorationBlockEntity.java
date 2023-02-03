@@ -1,6 +1,16 @@
 package dev.the_fireplace.caterpillar.block.entity;
 
 import dev.the_fireplace.caterpillar.Caterpillar;
+import dev.the_fireplace.caterpillar.block.DecorationBlock;
+import dev.the_fireplace.caterpillar.block.util.DecorationPart;
+import dev.the_fireplace.caterpillar.config.CaterpillarConfig;
+import dev.the_fireplace.caterpillar.init.BlockEntityInit;
+import dev.the_fireplace.caterpillar.menu.DecorationMenu;
+import dev.the_fireplace.caterpillar.menu.syncdata.DecorationContainerData;
+import dev.the_fireplace.caterpillar.network.PacketHandler;
+import dev.the_fireplace.caterpillar.network.packet.server.DecorationSyncCurrentMapS2CPacket;
+import dev.the_fireplace.caterpillar.network.packet.server.DecorationSyncInventoryS2CPacket;
+import dev.the_fireplace.caterpillar.network.packet.server.DecorationSyncSelectedMapS2CPacket;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -17,7 +27,9 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.context.UseOnContext;
-import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.WallTorchBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
@@ -27,16 +39,6 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
-import dev.the_fireplace.caterpillar.block.DecorationBlock;
-import dev.the_fireplace.caterpillar.block.util.DecorationPart;
-import dev.the_fireplace.caterpillar.menu.DecorationMenu;
-import dev.the_fireplace.caterpillar.menu.syncdata.DecorationContainerData;
-import dev.the_fireplace.caterpillar.config.CaterpillarConfig;
-import dev.the_fireplace.caterpillar.init.BlockEntityInit;
-import dev.the_fireplace.caterpillar.network.PacketHandler;
-import dev.the_fireplace.caterpillar.network.packet.server.DecorationSyncInventoryS2CPacket;
-import dev.the_fireplace.caterpillar.network.packet.server.DecorationSyncCurrentMapS2CPacket;
-import dev.the_fireplace.caterpillar.network.packet.server.DecorationSyncSelectedMapS2CPacket;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -337,8 +339,9 @@ public class DecorationBlockEntity extends DrillBaseBlockEntity {
 
     @Override
     public AbstractContainerMenu createMenu(int id, Inventory playerInventory, Player player) {
-        PacketHandler.sendToClients(new DecorationSyncSelectedMapS2CPacket(DecorationBlockEntity.this.selectedMap, worldPosition));
-        PacketHandler.sendToClients(new DecorationSyncCurrentMapS2CPacket(DecorationBlockEntity.this.getCurrentMap(), worldPosition));
+        this.setSelectedMap(0);
+        PacketHandler.sendToClients(new DecorationSyncSelectedMapS2CPacket(DecorationBlockEntity.this.getSelectedMap(), this.getBlockPos()));
+        PacketHandler.sendToClients(new DecorationSyncCurrentMapS2CPacket(DecorationBlockEntity.this.getCurrentMap(), this.getBlockPos()));
         for (int i = 0; i < this.placementMap.size(); i++) {
             PacketHandler.sendToClients(new DecorationSyncInventoryS2CPacket(i, this.placementMap.get(i), this.getBlockPos()));
         }

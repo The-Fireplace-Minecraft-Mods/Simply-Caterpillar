@@ -231,6 +231,11 @@ public class ReinforcementScreen extends AbstractScrollableScreen<ReinforcementM
             }
         }
 
+        if (getSlotUnderMouse() != null && this.isReinforcementSlot(getSlotUnderMouse().index)) {
+            slotClicked(getSlotUnderMouse(), getSlotUnderMouse().index, 0, ClickType.PICKUP);
+            return true;
+        }
+
         return super.mouseClicked(mouseX, mouseY, button);
     }
 

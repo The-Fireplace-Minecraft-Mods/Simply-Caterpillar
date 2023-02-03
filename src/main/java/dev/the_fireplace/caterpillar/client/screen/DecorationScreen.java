@@ -43,8 +43,6 @@ public class DecorationScreen extends AbstractScrollableScreen<DecorationMenu> {
 
     public DecorationScreen(DecorationMenu menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title, ScreenTabs.DECORATION, SCROLLER_BG_X, SCROLLER_BG_Y, SCROLLER_WIDTH, SCROLLER_HEIGHT, SCROLLBAR_X, SCROLLBAR_Y, SCROLLBAR_HEIGHT);
-
-        this.scrollTo(0.0F);
     }
 
     @Override
