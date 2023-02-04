@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.19.3-7.2.1] - 2023-02-04
+
 ### Fixed
 
 - Transporter block not mineable with a stone pickaxe.
