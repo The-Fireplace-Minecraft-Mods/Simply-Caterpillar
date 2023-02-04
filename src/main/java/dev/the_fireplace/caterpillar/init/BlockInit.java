@@ -19,31 +19,31 @@ public class BlockInit {
 
     // Blocks
     public static final Block DRILL_BASE = registerBlock("drill_base",
-            new DrillBaseBlock(BlockBehaviour.Properties.of(Material.STONE).strength(1.5F, 6.0F).sound(SoundType.STONE).requiresCorrectToolForDrops()), Caterpillar.ITEM_GROUP);
+            new DrillBaseBlock(BlockBehaviour.Properties.of(Material.STONE).strength(1.5F, 6.0F).sound(SoundType.STONE).requiresCorrectToolForDrops()), ItemGroupInit.CATERPILLAR);
 
     public static final Block DRILL_HEAD = registerBlock("drill_head",
-            new DrillHeadBlock(BlockBehaviour.Properties.of(Material.STONE).noOcclusion().strength(1.5F, 6.0F).sound(SoundType.STONE).requiresCorrectToolForDrops()), Caterpillar.ITEM_GROUP);
+            new DrillHeadBlock(BlockBehaviour.Properties.of(Material.STONE).noOcclusion().strength(1.5F, 6.0F).sound(SoundType.STONE).requiresCorrectToolForDrops()), ItemGroupInit.CATERPILLAR);
 
     public static final Block DRILL_SEAT = registerBlock("drill_seat",
-            new DrillSeatBlock(BlockBehaviour.Properties.of(Material.STONE).strength(1.5F, 6.0F).sound(SoundType.STONE).requiresCorrectToolForDrops()), Caterpillar.ITEM_GROUP);
+            new DrillSeatBlock(BlockBehaviour.Properties.of(Material.STONE).strength(1.5F, 6.0F).sound(SoundType.STONE).requiresCorrectToolForDrops()), ItemGroupInit.CATERPILLAR);
 
     public static final Block COLLECTOR = registerBlock("collector",
-            new CollectorBlock(BlockBehaviour.Properties.of(Material.STONE).strength(1.5F, 6.0F).sound(SoundType.STONE).requiresCorrectToolForDrops()), Caterpillar.ITEM_GROUP);
+            new CollectorBlock(BlockBehaviour.Properties.of(Material.STONE).strength(1.5F, 6.0F).sound(SoundType.STONE).requiresCorrectToolForDrops()), ItemGroupInit.CATERPILLAR);
 
     public static final Block REINFORCEMENT = registerBlock("reinforcement",
-            new ReinforcementBlock(BlockBehaviour.Properties.of(Material.STONE).strength(1.5F, 6.0F).sound(SoundType.STONE).requiresCorrectToolForDrops()), Caterpillar.ITEM_GROUP);
+            new ReinforcementBlock(BlockBehaviour.Properties.of(Material.STONE).strength(1.5F, 6.0F).sound(SoundType.STONE).requiresCorrectToolForDrops()), ItemGroupInit.CATERPILLAR);
 
     public static final Block STORAGE = registerBlock("storage",
-            new StorageBlock(BlockBehaviour.Properties.of(Material.STONE).strength(1.5F, 6.0F).sound(SoundType.WOOD).requiresCorrectToolForDrops()), Caterpillar.ITEM_GROUP);
+            new StorageBlock(BlockBehaviour.Properties.of(Material.STONE).strength(1.5F, 6.0F).sound(SoundType.WOOD).requiresCorrectToolForDrops()), ItemGroupInit.CATERPILLAR);
 
     public static final Block INCINERATOR = registerBlock("incinerator",
-            new IncineratorBlock(BlockBehaviour.Properties.of(Material.STONE).strength(1.5F, 6.0F).sound(SoundType.STONE).requiresCorrectToolForDrops()), Caterpillar.ITEM_GROUP);
+            new IncineratorBlock(BlockBehaviour.Properties.of(Material.STONE).strength(1.5F, 6.0F).sound(SoundType.STONE).requiresCorrectToolForDrops()), ItemGroupInit.CATERPILLAR);
 
     public static final Block DECORATION = registerBlock("decoration",
-            new DecorationBlock(BlockBehaviour.Properties.of(Material.STONE).strength(1.5F, 6.0F).sound(SoundType.STONE).requiresCorrectToolForDrops()), Caterpillar.ITEM_GROUP);
+            new DecorationBlock(BlockBehaviour.Properties.of(Material.STONE).strength(1.5F, 6.0F).sound(SoundType.STONE).requiresCorrectToolForDrops()), ItemGroupInit.CATERPILLAR);
 
     public static final Block TRANSPORTER = registerBlock("transporter",
-            new TransporterBlock(BlockBehaviour.Properties.of(Material.STONE).strength(1.5F, 6.0F).sound(SoundType.STONE).requiresCorrectToolForDrops()), Caterpillar.ITEM_GROUP);
+            new TransporterBlock(BlockBehaviour.Properties.of(Material.STONE).strength(1.5F, 6.0F).sound(SoundType.STONE).requiresCorrectToolForDrops()), ItemGroupInit.CATERPILLAR);
 
     private static Block registerBlockWithoutItem(String name, Block block) {
         return Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(Caterpillar.MOD_ID, name), block);
