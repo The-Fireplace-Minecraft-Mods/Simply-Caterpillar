@@ -4,9 +4,12 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.19.2-7.2.1] - 2023-02-04
+
+First release of 1.19.2 forge to fabric
+
 ## Added
 
-- First release of 1.19.2 forge to fabric
 - Support Mod Menu
 - Support Cloth Config (Auto Config)
 
