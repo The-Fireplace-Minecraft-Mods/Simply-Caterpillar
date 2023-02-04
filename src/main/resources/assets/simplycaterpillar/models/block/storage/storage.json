@@ -2,7 +2,7 @@
   "parent": "simplycaterpillar:block/drill_base/drill_base",
   "textures": {
     "side": "simplycaterpillar:block/rock_side",
-    "chest": "minecraft:entity/chest/normal",
+    "chest": "simplycaterpillar:block/storage/chest",
     "rod": "simplycaterpillar:block/pieces/wood_piece"
   },
   "elements": [

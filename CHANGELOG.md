@@ -6,7 +6,7 @@ All notable changes to this project will be documented in this file.
 
 ## Added
 
-- First release of 1.19.2 forge to fabric
+- First release of 1.19.3 fabric version.
 - Support Mod Menu
 - Support Cloth Config (Auto Config)
 

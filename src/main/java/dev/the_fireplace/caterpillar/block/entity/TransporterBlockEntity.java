@@ -9,7 +9,7 @@ import dev.the_fireplace.caterpillar.menu.TransporterMenu;
 import dev.the_fireplace.caterpillar.network.packet.server.CaterpillarSyncInventoryS2CPacket;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -214,12 +214,12 @@ public class TransporterBlockEntity extends DrillBaseBlockEntity {
     public void load(@NotNull CompoundTag tag) {
         super.load(tag);
 
-        this.previousBlock = Registry.BLOCK.get(new ResourceLocation(tag.getString("PreviousBlock")));
+        this.previousBlock = BuiltInRegistries.BLOCK.get(new ResourceLocation(tag.getString("PreviousBlock")));
     }
 
     @Override
     protected void saveAdditional(CompoundTag tag) {
-        tag.putString("PreviousBlock", Registry.BLOCK.getKey(this.previousBlock).toString());
+        tag.putString("PreviousBlock", BuiltInRegistries.BLOCK.getKey(this.previousBlock).toString());
         super.saveAdditional(tag);
     }
 

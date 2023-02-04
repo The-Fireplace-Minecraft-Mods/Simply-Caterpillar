@@ -18,7 +18,7 @@ public class MixinKeyboard {
     private Minecraft minecraft;
 
     @Shadow
-    private boolean sendRepeatsToGui;
+    private boolean handledDebugKey;
 
     @Inject(method = "keyPress", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/client/gui/screens/Screen;wrapScreenError(Ljava/lang/Runnable;Ljava/lang/String;Ljava/lang/String;)V",
@@ -26,7 +26,7 @@ public class MixinKeyboard {
 
     public void onKey(long long_1, int int_1, int int_2, int int_3, int int_4, CallbackInfo info) {
         if (!info.isCancelled()) {
-            if (int_3 != 1 && (int_3 != 2 || !this.sendRepeatsToGui)) {
+            if (int_3 != 1 && (int_3 != 2 || !this.handledDebugKey)) {
                 if (int_3 == 0) {
                     // onKeyReleased
                 }

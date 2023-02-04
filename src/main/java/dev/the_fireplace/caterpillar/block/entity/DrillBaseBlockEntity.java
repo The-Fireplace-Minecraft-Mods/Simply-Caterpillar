@@ -99,6 +99,12 @@ public class DrillBaseBlockEntity extends BlockEntity implements ExtendedScreenH
         buf.writeBlockPos(this.worldPosition);
     }
 
+    // Prevent the mouse to re-center when the screen changes
+    @Override
+    public boolean shouldCloseCurrentScreen() {
+        return false;
+    }
+
     public void setInventory(NonNullList<ItemStack> inventory) {
         this.inventory = inventory;
     }

@@ -2,8 +2,8 @@
   "render_type": "cutout",
   "parent": "simplycaterpillar:block/drill_base/drill_base",
   "textures": {
-    "chest": "minecraft:entity/chest/normal",
-    "minecart": "minecraft:entity/minecart",
+    "chest": "simplycaterpillar:block/storage/chest",
+    "minecart": "simplycaterpillar:block/transporter/minecart",
     "particle": "simplycaterpillar:block/rock_side"
   },
   "elements": [

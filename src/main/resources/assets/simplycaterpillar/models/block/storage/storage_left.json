@@ -1,7 +1,7 @@
 {
 	"textures": {
-      "particle": "entity/chest/normal",
-      "chest": "entity/chest/normal"
+      "particle": "simplycaterpillar:block/storage/chest",
+      "chest": "simplycaterpillar:block/storage/chest"
     },
 	"elements": [
       {

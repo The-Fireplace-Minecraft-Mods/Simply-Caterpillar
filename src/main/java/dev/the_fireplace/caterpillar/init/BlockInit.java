@@ -3,7 +3,9 @@ package dev.the_fireplace.caterpillar.init;
 import dev.the_fireplace.caterpillar.Caterpillar;
 import dev.the_fireplace.caterpillar.block.*;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
+import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
@@ -44,17 +46,25 @@ public class BlockInit {
             new TransporterBlock(BlockBehaviour.Properties.of(Material.STONE).strength(1.5F, 6.0F).sound(SoundType.STONE).requiresCorrectToolForDrops()), Caterpillar.ITEM_GROUP);
 
     private static Block registerBlockWithoutItem(String name, Block block) {
-        return Registry.register(Registry.BLOCK, new ResourceLocation(Caterpillar.MOD_ID, name), block);
+        return Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(Caterpillar.MOD_ID, name), block);
     }
 
     private static Block registerBlock(String name, Block block, CreativeModeTab tab) {
         registerBlockItem(name, block, tab);
-        return Registry.register(Registry.BLOCK, new ResourceLocation(Caterpillar.MOD_ID, name), block);
+        return Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(Caterpillar.MOD_ID, name), block);
     }
 
     private static Item registerBlockItem(String name, Block block, CreativeModeTab tab) {
-        return Registry.register(Registry.ITEM, new ResourceLocation(Caterpillar.MOD_ID, name),
-                new BlockItem(block, new FabricItemSettings().tab(tab)));
+        Item item = Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(Caterpillar.MOD_ID, name),
+                new BlockItem(block, new FabricItemSettings()));
+
+        addToItemGroup(tab, item);
+
+        return item;
+    }
+
+    private static void addToItemGroup(CreativeModeTab group, Item item) {
+        ItemGroupEvents.modifyEntriesEvent(group).register(entries -> entries.accept(item));
     }
 
     public static void registerBlocks() {
