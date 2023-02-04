@@ -4,9 +4,12 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.19.3-7.2.1] - 2023-02-04
+
+First release of 1.19.3 fabric version.
+
 ## Added
 
-- First release of 1.19.3 fabric version.
 - Support Mod Menu
 - Support Cloth Config (Auto Config)
 
