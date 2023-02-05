@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+- Prevent the mouse to re-center when the screen changes
+
 ## [1.19.2-7.2.1] - 2023-02-04
 
 First release of 1.19.2 forge to fabric
