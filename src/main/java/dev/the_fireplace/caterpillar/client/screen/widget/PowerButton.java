@@ -5,7 +5,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.resources.ResourceLocation;
-import org.jetbrains.annotations.NotNull;
 
 public class PowerButton extends ImageButton {
 
@@ -30,7 +29,7 @@ public class PowerButton extends ImageButton {
     }
 
     @Override
-    public void renderButton(@NotNull PoseStack poseStack, int mouseX, int mouseY, float partialTick) {
+    public void renderWidget(PoseStack stack, int mouseX, int mouseY, float partialTick) {
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderTexture(0, texture);
 
@@ -40,7 +39,7 @@ public class PowerButton extends ImageButton {
         }
 
         RenderSystem.enableDepthTest();
-        super.blit(poseStack, this.getX() + (this.powered ? 0 : -3), this.getY(), this.xTexStart, yOffset, this.width, this.height);
+        super.blit(stack, this.getX() + (this.powered ? 0 : -3), this.getY(), this.xTexStart, yOffset, this.width, this.height);
     }
 
     public boolean isPowered() {
