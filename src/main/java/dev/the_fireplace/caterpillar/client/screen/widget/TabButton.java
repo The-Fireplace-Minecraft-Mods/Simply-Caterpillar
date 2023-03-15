@@ -5,7 +5,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.resources.ResourceLocation;
-import org.jetbrains.annotations.NotNull;
 
 public class TabButton extends ImageButton {
 
@@ -34,7 +33,7 @@ public class TabButton extends ImageButton {
     }
 
     @Override
-    public void renderButton(@NotNull PoseStack poseStack, int mouseX, int mouseY, float partialTick) {
+    public void renderWidget(PoseStack stack, int mouseX, int mouseY, float partialTick) {
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderTexture(0, this.resourceLocation);
 
@@ -47,7 +46,7 @@ public class TabButton extends ImageButton {
             yOffset += this.yDiffTex;
         }
 
-        super.blit(poseStack, super.getX(), super.getY(), xOffset, yOffset, width, super.height);
+        super.blit(stack, super.getX(), super.getY(), xOffset, yOffset, width, super.height);
     }
 
     @Override

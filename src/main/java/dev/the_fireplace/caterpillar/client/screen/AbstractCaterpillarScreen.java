@@ -114,7 +114,7 @@ public abstract class AbstractCaterpillarScreen<T extends AbstractCaterpillarMen
         this.renderTooltipTabButtons(stack, mouseX, mouseY);
         this.renderTutorialTooltip(stack, mouseX, mouseY);
 
-        this.renderTabItems();
+        this.renderTabItems(stack);
         this.renderTutorial(stack);
     }
 
@@ -174,22 +174,22 @@ public abstract class AbstractCaterpillarScreen<T extends AbstractCaterpillarMen
         }
     }
 
-    private void renderTabItems() {
+    private void renderTabItems(PoseStack stack) {
         int incrementTabPos = 0;
 
-        super.itemRenderer.blitOffset = 100.0F;
-        for (ScreenTabs tab: ScreenTabs.values()) {
+        // super.itemRenderer.blitOffset = 100.0F;
+        for (ScreenTabs tab : ScreenTabs.values()) {
             if (tabShouldBeDisplayed(tab)) {
                 if (this.SELECTED_TAB.equals(tab)) {
-                    super.itemRenderer.renderAndDecorateItem(tab.ITEM,this.leftPos - 21, this.topPos + 5 + incrementTabPos*20);
+                    super.itemRenderer.renderAndDecorateItem(stack, tab.ITEM, this.leftPos - 21, this.topPos + 5 + incrementTabPos * 20);
                 } else {
-                    super.itemRenderer.renderAndDecorateItem(tab.ITEM, this.leftPos - 20, this.topPos + 5 + incrementTabPos*20);
+                    super.itemRenderer.renderAndDecorateItem(stack, tab.ITEM, this.leftPos - 20, this.topPos + 5 + incrementTabPos * 20);
                 }
 
                 incrementTabPos++;
             }
         }
-        super.itemRenderer.blitOffset = 0.0F;
+        // super.itemRenderer.blitOffset = 0.0F;
     }
 
     private void renderTooltipTabButtons(PoseStack stack, int mouseX, int mouseY) {

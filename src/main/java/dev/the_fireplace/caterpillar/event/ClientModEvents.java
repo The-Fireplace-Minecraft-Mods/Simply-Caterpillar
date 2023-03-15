@@ -67,7 +67,7 @@ public class ClientModEvents {
         event.registerCreativeModeTab(new ResourceLocation(Caterpillar.MOD_ID, "caterpillar"), builder -> builder
                 .title(Component.translatable("itemGroup." + Caterpillar.MOD_ID))
                 .icon(() -> new ItemStack(BlockInit.DRILL_HEAD.get()))
-                .displayItems((featureFlags, output, hasOp) -> {
+                .displayItems((params, output) -> {
                     output.accept(BlockInit.DRILL_BASE.get());
                     output.accept(BlockInit.DRILL_HEAD.get());
                     output.accept(BlockInit.DRILL_SEAT.get());
