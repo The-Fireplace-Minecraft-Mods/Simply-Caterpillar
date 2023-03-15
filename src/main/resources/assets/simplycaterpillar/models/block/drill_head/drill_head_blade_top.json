@@ -3,7 +3,7 @@
 	"textures": {
 		"blades": "simplycaterpillar:block/drill_head/blades/blades",
 		"none_blades": "simplycaterpillar:block/drill_head/blades/none_blades",
-		"particle": "simplycaterpillar:/block/drill_head/blades/blades"
+		"particle": "simplycaterpillar:block/drill_head/blades/blades"
 	},
 	"elements": [
 		{
