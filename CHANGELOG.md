@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.19.2-7.2.2] - 2023-03-15
+
+### Fixed
+
+- Drill head blade top fixed missing particle texture.
+
 ## [1.19.2-7.2.1] - 2023-02-04
 
 ### Fixed
