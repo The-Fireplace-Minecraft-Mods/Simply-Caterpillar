@@ -84,6 +84,12 @@ public final class PacketHandler {
                 .consumerMainThread(DrillHeadSyncLitS2CPacket::handle)
                 .add();
 
+        CHANNEL.messageBuilder(DrillHeadRefreshInventoryS2CPacket.class, index++, NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(DrillHeadRefreshInventoryS2CPacket::new)
+                .encoder(DrillHeadRefreshInventoryS2CPacket::write)
+                .consumerMainThread(DrillHeadRefreshInventoryS2CPacket::handle)
+                .add();
+
         CHANNEL.messageBuilder(DecorationSyncSelectedMapC2SPacket.class, index++, NetworkDirection.PLAY_TO_SERVER)
                 .decoder(DecorationSyncSelectedMapC2SPacket::new)
                 .encoder(DecorationSyncSelectedMapC2SPacket::toBytes)

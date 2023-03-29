@@ -427,7 +427,7 @@ public class DrillHeadMenu extends AbstractScrollableMenu {
         int drillHeadSlotId = slotId - BE_INVENTORY_FIRST_SLOT_INDEX;
         if (this.isConsumptionSlot(slotId)) {
             int i = 3;
-            int j = (int)((double)(this.getScrollOffs() * (float)i) + 0.5D);
+            int j = (int) ((double) (this.getConsumptionScrollOffs() * (float) i) + 0.5D);
             if (j < 0) {
                 j = 0;
             }
@@ -492,16 +492,32 @@ public class DrillHeadMenu extends AbstractScrollableMenu {
         return slotId >= BE_INVENTORY_FIRST_SLOT_INDEX + CONSUMPTION_SLOT_START && slotId <= BE_INVENTORY_FIRST_SLOT_INDEX + GATHERED_SLOT_END;
     }
 
+    public float getConsumptionScrollOffs() {
+        return super.getScrollOffs();
+    }
+
     public float getGatheredScrollOffs() {
         return this.gatheredScrollOffs;
+    }
+
+    public void setConsumptionScrollOffs(float scrollOffs) {
+        super.setScrollOffs(scrollOffs);
     }
 
     public void setGatheredScrollOffs(float scrollOffs) {
         this.gatheredScrollOffs = scrollOffs;
     }
 
+    public boolean isConsumptionScrolling() {
+        return super.isScrolling();
+    }
+
     public boolean isGatheredScrolling() {
         return this.gatheredScrolling;
+    }
+
+    public void setConsumptionScrolling(boolean scrolling) {
+        super.setScrolling(scrolling);
     }
 
     public void setGatheredScrolling(boolean scrolling) {

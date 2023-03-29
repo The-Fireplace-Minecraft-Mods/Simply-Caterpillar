@@ -1,12 +1,13 @@
 package dev.the_fireplace.caterpillar.network.packet.server;
 
+import dev.the_fireplace.caterpillar.block.entity.DecorationBlockEntity;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.network.NetworkEvent;
-import dev.the_fireplace.caterpillar.block.entity.DecorationBlockEntity;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -54,7 +55,9 @@ public class DecorationSyncInventoryS2CPacket {
     public void handle(Supplier<NetworkEvent.Context> supplier) {
         NetworkEvent.Context context = supplier.get();
         context.enqueueWork(() -> {
-            if(Minecraft.getInstance().level.getBlockEntity(pos) instanceof DecorationBlockEntity decorationBlockEntity) {
+            ClientLevel level = Minecraft.getInstance().level;
+
+            if (level.getBlockEntity(pos) instanceof DecorationBlockEntity decorationBlockEntity) {
                 decorationBlockEntity.setPlacementMap(this.placementMapId, this.inventory);
             }
         });
