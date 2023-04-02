@@ -1,7 +1,6 @@
 package dev.the_fireplace.caterpillar.client.screen;
 
 import com.google.common.collect.ImmutableList;
-import dev.the_fireplace.caterpillar.Caterpillar;
 import net.minecraft.client.GameNarrator;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
@@ -16,9 +15,9 @@ import java.util.function.IntFunction;
 
 public class PatternBookViewScreen extends Screen {
 
-    public static final ResourceLocation BOOK_TEXTURE = new ResourceLocation(Caterpillar.MOD_ID, "textures/gui/pattern_book.png");
+    public static final ResourceLocation BOOK_TEXTURE = new ResourceLocation("textures/gui/book.png");
 
-    public static final int TEXTURE_WIDTH = 272;
+    public static final int TEXTURE_WIDTH = 146;
     public static final int TEXTURE_HEIGHT = 180;
 
 

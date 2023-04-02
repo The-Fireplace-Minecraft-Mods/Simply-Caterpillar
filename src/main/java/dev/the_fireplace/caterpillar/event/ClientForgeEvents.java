@@ -1,6 +1,7 @@
 package dev.the_fireplace.caterpillar.event;
 
 import dev.the_fireplace.caterpillar.Caterpillar;
+import dev.the_fireplace.caterpillar.block.entity.DecorationBlockEntity;
 import dev.the_fireplace.caterpillar.client.KeyBinding;
 import dev.the_fireplace.caterpillar.client.screen.AbstractCaterpillarScreen;
 import dev.the_fireplace.caterpillar.client.screen.PatternBookEditScreen;
@@ -17,6 +18,9 @@ import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.items.ItemStackHandler;
+
+import java.util.List;
 
 @Mod.EventBusSubscriber(modid = Caterpillar.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class ClientForgeEvents {
@@ -37,6 +41,8 @@ public class ClientForgeEvents {
             BlockState state = event.getLevel().getBlockState(event.getPos());
 
             if (state.getBlock() == BlockInit.DECORATION.get()) {
+                DecorationBlockEntity decorationBlockEntity = (DecorationBlockEntity) event.getLevel().getBlockEntity(event.getPos());
+                List<ItemStackHandler> pattern = decorationBlockEntity.getPlacementMap();
                 event.setCanceled(true);
                 event.setCancellationResult(InteractionResult.SUCCESS);
 
@@ -45,7 +51,7 @@ public class ClientForgeEvents {
                     ItemStack writablePatternBookStack = new ItemStack(ItemInit.WRITABLE_PATTERN_BOOK.get());
                     Player player = event.getEntity();
 
-                    PatternBookEditScreen patternBookEditScreen = new PatternBookEditScreen(player, writablePatternBookStack, event.getHand());
+                    PatternBookEditScreen patternBookEditScreen = new PatternBookEditScreen(player, writablePatternBookStack, event.getHand(), pattern);
                     Minecraft.getInstance().setScreen(patternBookEditScreen);
                     player.awardStat(Stats.ITEM_USED.get(writablePatternBookStack.getItem()));
                 }

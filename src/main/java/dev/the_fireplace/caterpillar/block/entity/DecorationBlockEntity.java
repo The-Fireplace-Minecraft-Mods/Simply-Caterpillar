@@ -287,6 +287,10 @@ public class DecorationBlockEntity extends DrillBaseBlockEntity {
         setChanged();
     }
 
+    public List<ItemStackHandler> getPlacementMap() {
+        return this.placementMap;
+    }
+
     public void setPlacementMap(int placementMapId, ItemStackHandler inventory) {
         this.placementMap.set(placementMapId, inventory);
         setChanged();

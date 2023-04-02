@@ -15,17 +15,30 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
+import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.items.ItemStackHandler;
 
 import java.util.List;
 
+import static dev.the_fireplace.caterpillar.menu.AbstractCaterpillarMenu.SLOT_SIZE_PLUS_2;
+
 public class PatternBookEditScreen extends Screen {
+
+    private static final Component EDIT_TITLE_LABEL = Component.translatable("book.editTitle");
+    private static final Component FINALIZE_WARNING_LABEL = Component.translatable("book.finalizeWarning");
+    private static final FormattedCharSequence BLACK_CURSOR = FormattedCharSequence.forward("_", Style.EMPTY.withColor(ChatFormatting.BLACK));
+    private static final FormattedCharSequence GRAY_CURSOR = FormattedCharSequence.forward("_", Style.EMPTY.withColor(ChatFormatting.GRAY));
 
     private final Player owner;
     private final ItemStack book;
     private final InteractionHand hand;
+
+    private final List<ItemStackHandler> pattern;
+
     private final List<String> pages = Lists.newArrayList();
     private final Component ownerText;
     private int frameTick;
@@ -37,23 +50,17 @@ public class PatternBookEditScreen extends Screen {
     private PageButton forwardButton;
     private PageButton backButton;
 
-    private float scaleFactor;
-    private int maxScale;
-
-    public PatternBookEditScreen(Player owner, ItemStack book, InteractionHand hand) {
+    public PatternBookEditScreen(Player owner, ItemStack book, InteractionHand hand, List<ItemStackHandler> pattern) {
         super(GameNarrator.NO_TITLE);
 
         this.owner = owner;
         this.book = book;
         this.hand = hand;
+        this.pattern = pattern;
 
         CompoundTag compoundtag = book.getTag();
         if (compoundtag != null) {
             PatternBookViewScreen.loadPages(compoundtag, this.pages::add);
-        }
-
-        if (this.pages.isEmpty()) {
-            this.pages.add("Test");
         }
 
         this.ownerText = Component.translatable("book.byAuthor", owner.getName()).withStyle(ChatFormatting.DARK_GRAY);
@@ -80,13 +87,12 @@ public class PatternBookEditScreen extends Screen {
             this.saveChanges(false);
         }).bounds(this.width / 2 + 2, 196, 98, 20).build());
 
-        int middlePos = (this.width - PatternBookViewScreen.TEXTURE_WIDTH);
-        int leftPos = middlePos / 2;
+        int middlePos = (this.width - PatternBookViewScreen.TEXTURE_WIDTH) / 2;
 
-        this.forwardButton = this.addRenderableWidget(new PageButton(middlePos + 120, 159, true, (p_98144_) -> {
+        this.forwardButton = this.addRenderableWidget(new PageButton(middlePos + 93, 159, true, (onPress) -> {
             this.pageForward();
         }, true));
-        this.backButton = this.addRenderableWidget(new PageButton(leftPos + 27, 159, false, (p_98113_) -> {
+        this.backButton = this.addRenderableWidget(new PageButton(middlePos + 20, 159, false, (onPress) -> {
             this.pageBack();
         }, true));
 
@@ -97,7 +103,38 @@ public class PatternBookEditScreen extends Screen {
     public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTick) {
         this.renderBackground(poseStack);
 
+        int middlePos = (this.width - 192) / 2;
+
+        if (this.currentPage == 0) {
+            boolean flag = this.frameTick / 6 % 2 == 0;
+            FormattedCharSequence formattedcharsequence = FormattedCharSequence.composite(FormattedCharSequence.forward(this.title, Style.EMPTY), flag ? BLACK_CURSOR : GRAY_CURSOR);
+            int k = this.font.width(EDIT_TITLE_LABEL);
+            this.font.draw(poseStack, EDIT_TITLE_LABEL, (float) (middlePos + 36 + (114 - k) / 2), 34.0F, 0);
+            int l = this.font.width(formattedcharsequence);
+            this.font.draw(poseStack, formattedcharsequence, (float) (middlePos + 36 + (114 - l) / 2), 50.0F, 0);
+            int i1 = this.font.width(this.ownerText);
+            this.font.draw(poseStack, this.ownerText, (float) (middlePos + 36 + (114 - i1) / 2), 60.0F, 0);
+            this.font.drawWordWrap(poseStack, FINALIZE_WARNING_LABEL, middlePos + 36, 82, 114, 0);
+        } else {
+            this.renderCurrentPatternPage(poseStack);
+        }
+
         super.render(poseStack, mouseX, mouseY, partialTick);
+    }
+
+    private void renderCurrentPatternPage(PoseStack poseStack) {
+        int middlePos = (this.width - PatternBookViewScreen.TEXTURE_WIDTH) / 2;
+        int slotId = 0;
+
+        for (int row = 0; row < 3; row++) {
+            for (int column = 0; column < 3; column++) {
+                if (row != 1 || column != 1) {
+                    ItemStack itemStack = this.pattern.get(this.currentPage).getStackInSlot(slotId++);
+
+                    super.itemRenderer.renderAndDecorateItem(poseStack, itemStack, middlePos + 46 + column * SLOT_SIZE_PLUS_2, 54 + row * SLOT_SIZE_PLUS_2);
+                }
+            }
+        }
     }
 
     @Override
@@ -105,16 +142,9 @@ public class PatternBookEditScreen extends Screen {
         super.renderBackground(poseStack);
         this.bindTexture();
 
-        // Set the scale factor to 2 (double the original size)
-        poseStack.pushPose();
-        poseStack.scale(2.01F, 1.0F, 1.0F);
+        int middlePos = (this.width - PatternBookViewScreen.TEXTURE_WIDTH) / 2;
 
-        int middlePos = (this.width - PatternBookViewScreen.TEXTURE_WIDTH) / 4;
-
-        // Draw the texture at the original size
-        blit(poseStack, middlePos, 3, 0, 0, PatternBookViewScreen.TEXTURE_WIDTH / 2, PatternBookViewScreen.TEXTURE_HEIGHT);
-
-        poseStack.popPose();
+        blit(poseStack, middlePos, 2, 20, 0, PatternBookViewScreen.TEXTURE_WIDTH, PatternBookViewScreen.TEXTURE_HEIGHT);
     }
 
     private void bindTexture() {
@@ -133,7 +163,7 @@ public class PatternBookEditScreen extends Screen {
     }
 
     private void pageForward() {
-        if (this.currentPage < this.getNumPages() - 1) {
+        if (this.currentPage < this.pattern.size() - 1) {
             ++this.currentPage;
         }
 
@@ -143,6 +173,7 @@ public class PatternBookEditScreen extends Screen {
 
     private void updateButtonVisibility() {
         this.backButton.visible = this.currentPage > 0;
+        this.forwardButton.visible = this.currentPage < this.pattern.size() - 1;
         this.saveButton.active = !this.title.trim().isEmpty();
     }
 
@@ -150,14 +181,14 @@ public class PatternBookEditScreen extends Screen {
         this.updateLocalCopy(publish);
     }
 
-    private void updateLocalCopy(boolean pSign) {
+    private void updateLocalCopy(boolean sign) {
         ListTag listtag = new ListTag();
-        this.pages.stream().map(StringTag::valueOf).forEach(listtag::add);
-        if (!this.pages.isEmpty()) {
-            this.book.addTagElement("pages", listtag);
+
+        if (!this.pattern.isEmpty()) {
+            this.book.addTagElement("pattern", listtag);
         }
 
-        if (pSign) {
+        if (sign) {
             this.book.addTagElement("author", StringTag.valueOf(this.owner.getGameProfile().getName()));
             this.book.addTagElement("title", StringTag.valueOf(this.title.trim()));
         }
