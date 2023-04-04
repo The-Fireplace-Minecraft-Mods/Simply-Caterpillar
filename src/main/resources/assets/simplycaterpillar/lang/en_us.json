@@ -13,9 +13,11 @@
   "block.simplycaterpillar.incinerator": "Incinerator",
   "block.simplycaterpillar.transporter": "Transporter",
   "block.simplycaterpillar.blocks.already_connected": "There is already a %s connected to the caterpillar.",
-
+  "item.simplycaterpillar.writable_pattern_book": "Pattern Book",
+  "item.simplycaterpillar.writable_pattern_book.tooltip": "Right click on block to save pattern.",
+  "item.simplycaterpillar.written_pattern_book": "Pattern Book",
+  "item.simplycaterpillar.written_pattern_book.tooltip": "Right click on block to load pattern.",
   "itemGroup.simplycaterpillar": "Caterpillar",
-
   "container.simplycaterpillar.drill_head": "Drill Head",
   "container.simplycaterpillar.reinforcement": "Reinforcement Builder",
   "container.simplycaterpillar.decoration": "Decoration Placer",

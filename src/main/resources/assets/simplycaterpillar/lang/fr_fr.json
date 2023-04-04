@@ -13,28 +13,27 @@
   "block.simplycaterpillar.incinerator": "Incinérateur",
   "block.simplycaterpillar.transporter": "Transporteur",
   "block.simplycaterpillar.blocks.already_connected": "Il y a déjà un %s connecté à la foreuse.",
-
+  "item.simplycaterpillar.writable_pattern_book": "Livre de modèles",
+  "item.simplycaterpillar.writable_pattern_book.tooltip": "Clique droit sur un bloc pour enregistrer le modèle.",
+  "item.simplycaterpillar.written_pattern_book": "Livre de modèles",
+  "item.simplycaterpillar.written_pattern_book.tooltip": "Clique droit sur un bloc pour charger le modèle.",
   "itemGroup.simplycaterpillar": "Foreuse",
-
   "container.simplycaterpillar.drill_head": "Tête de forage",
   "container.simplycaterpillar.reinforcement": "Constructeur de renforts",
   "container.simplycaterpillar.decoration": "Placeur de décoration",
   "container.simplycaterpillar.incinerator": "Incinérateur",
   "container.simplycaterpillar.transporter": "Transporteur",
-
   "gui.simplycaterpillar.drill_head.consumption": "Consommation",
   "gui.simplycaterpillar.drill_head.gathered": "Collecté",
   "gui.simplycaterpillar.drill_head.power": "Alimentation:",
   "gui.simplycaterpillar.drill_head.power.on": "Allumé",
   "gui.simplycaterpillar.drill_head.power.off": "Éteint",
-
+  "gui.simplycaterpillar.pattern_book.saveButton": "Enregistrer",
   "gui.simplycaterpillar.decoration.current_map": "Plan actuel",
-
   "gui.simplycaterpillar.replacement.ceiling": "Plafond",
   "gui.simplycaterpillar.replacement.left_wall": "Mur de\ngauche",
   "gui.simplycaterpillar.replacement.right_wall": "Mur de\ndroite",
   "gui.simplycaterpillar.replacement.floor": "Plancher",
-
   "gui.simplycaterpillar.replacement.wont_replace": "Ne remplacera pas",
   "gui.simplycaterpillar.replacement.will_replace": "Remplacera",
   "gui.simplycaterpillar.replacement.air": "Air",

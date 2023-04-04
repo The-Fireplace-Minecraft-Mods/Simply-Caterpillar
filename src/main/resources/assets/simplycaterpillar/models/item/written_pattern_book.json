@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "simplycaterpillar:item/written_pattern_book"
+  }
+}

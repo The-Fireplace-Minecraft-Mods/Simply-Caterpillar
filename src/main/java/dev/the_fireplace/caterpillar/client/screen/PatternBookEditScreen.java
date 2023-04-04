@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import dev.the_fireplace.caterpillar.Caterpillar;
+import dev.the_fireplace.caterpillar.client.screen.widget.PatternPageButton;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.GameNarrator;
 import net.minecraft.client.gui.components.Button;
@@ -16,6 +17,7 @@ import net.minecraft.nbt.StringTag;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
@@ -23,8 +25,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.ItemStackHandler;
 
 import java.util.List;
-
-import static dev.the_fireplace.caterpillar.menu.AbstractCaterpillarMenu.SLOT_SIZE_PLUS_2;
 
 public class PatternBookEditScreen extends Screen {
 
@@ -87,12 +87,12 @@ public class PatternBookEditScreen extends Screen {
             this.saveChanges(false);
         }).bounds(this.width / 2 + 2, 196, 98, 20).build());
 
-        int middlePos = (this.width - PatternBookViewScreen.TEXTURE_WIDTH) / 2;
+        int middlePos = (this.width - PatternBookViewScreen.BOOK_TEXTURE_WIDTH) / 2;
 
-        this.forwardButton = this.addRenderableWidget(new PageButton(middlePos + 93, 159, true, (onPress) -> {
+        this.forwardButton = this.addRenderableWidget(new PatternPageButton(middlePos + 116, 159, true, (onPress) -> {
             this.pageForward();
         }, true));
-        this.backButton = this.addRenderableWidget(new PageButton(middlePos + 20, 159, false, (onPress) -> {
+        this.backButton = this.addRenderableWidget(new PatternPageButton(middlePos + 43, 159, false, (onPress) -> {
             this.pageBack();
         }, true));
 
@@ -102,6 +102,10 @@ public class PatternBookEditScreen extends Screen {
     @Override
     public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTick) {
         this.renderBackground(poseStack);
+
+        if (this.currentPage != 0) {
+            this.renderCraftingGrid(poseStack);
+        }
 
         int middlePos = (this.width - 192) / 2;
 
@@ -123,7 +127,7 @@ public class PatternBookEditScreen extends Screen {
     }
 
     private void renderCurrentPatternPage(PoseStack poseStack) {
-        int middlePos = (this.width - PatternBookViewScreen.TEXTURE_WIDTH) / 2;
+        int middlePos = (this.width - 146) / 2;
         int slotId = 0;
 
         for (int row = 0; row < 3; row++) {
@@ -131,7 +135,7 @@ public class PatternBookEditScreen extends Screen {
                 if (row != 1 || column != 1) {
                     ItemStack itemStack = this.pattern.get(this.currentPage).getStackInSlot(slotId++);
 
-                    super.itemRenderer.renderAndDecorateItem(poseStack, itemStack, middlePos + 46 + column * SLOT_SIZE_PLUS_2, 54 + row * SLOT_SIZE_PLUS_2);
+                    super.itemRenderer.renderAndDecorateItem(poseStack, itemStack, middlePos + 46 + column * 19, 54 + row * 19);
                 }
             }
         }
@@ -140,17 +144,23 @@ public class PatternBookEditScreen extends Screen {
     @Override
     public void renderBackground(PoseStack poseStack) {
         super.renderBackground(poseStack);
-        this.bindTexture();
+        this.bindTexture(PatternBookViewScreen.BOOK_TEXTURE);
 
-        int middlePos = (this.width - PatternBookViewScreen.TEXTURE_WIDTH) / 2;
+        int middlePos = (this.width - PatternBookViewScreen.BOOK_TEXTURE_WIDTH) / 2;
 
-        blit(poseStack, middlePos, 2, 20, 0, PatternBookViewScreen.TEXTURE_WIDTH, PatternBookViewScreen.TEXTURE_HEIGHT);
+        blit(poseStack, middlePos, 2, 0, 0, PatternBookViewScreen.BOOK_TEXTURE_WIDTH, PatternBookViewScreen.BOOK_TEXTURE_HEIGHT);
     }
 
-    private void bindTexture() {
+    public void renderCraftingGrid(PoseStack poseStack) {
+        int middlePos = (this.width - PatternBookViewScreen.BOOK_CRAFTING_TEXTURE_WIDTH) / 2;
+
+        blit(poseStack, middlePos, 50, PatternBookViewScreen.BOOK_CRAFTING_TEXTURE_X, PatternBookViewScreen.BOOK_CRAFTING_TEXTURE_Y, PatternBookViewScreen.BOOK_CRAFTING_TEXTURE_WIDTH, PatternBookViewScreen.BOOK_CRAFTING_TEXTURE_HEIGHT);
+    }
+
+    private void bindTexture(ResourceLocation texture) {
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-        RenderSystem.setShaderTexture(0, PatternBookViewScreen.BOOK_TEXTURE);
+        RenderSystem.setShaderTexture(0, texture);
     }
 
     private void pageBack() {

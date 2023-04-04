@@ -8,6 +8,7 @@ import dev.the_fireplace.caterpillar.config.ConfigHelper;
 import dev.the_fireplace.caterpillar.config.ConfigHolder;
 import dev.the_fireplace.caterpillar.init.BlockInit;
 import dev.the_fireplace.caterpillar.init.EntityInit;
+import dev.the_fireplace.caterpillar.init.ItemInit;
 import dev.the_fireplace.caterpillar.init.MenuInit;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.entity.EntityRenderers;
@@ -77,6 +78,7 @@ public class ClientModEvents {
                     output.accept(BlockInit.STORAGE.get());
                     output.accept(BlockInit.DECORATION.get());
                     output.accept(BlockInit.TRANSPORTER.get());
+                    output.accept(ItemInit.WRITABLE_PATTERN_BOOK.get());
                 })
         );
     }
