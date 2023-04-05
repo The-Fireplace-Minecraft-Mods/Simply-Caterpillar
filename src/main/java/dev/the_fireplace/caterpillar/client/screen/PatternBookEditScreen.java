@@ -5,13 +5,15 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import dev.the_fireplace.caterpillar.Caterpillar;
 import dev.the_fireplace.caterpillar.client.screen.widget.PatternPageButton;
+import dev.the_fireplace.caterpillar.network.PacketHandler;
+import dev.the_fireplace.caterpillar.network.packet.client.PatternBookEditC2SPacket;
 import net.minecraft.ChatFormatting;
+import net.minecraft.SharedConstants;
 import net.minecraft.client.GameNarrator;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.PageButton;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.network.chat.CommonComponents;
@@ -45,6 +47,8 @@ public class PatternBookEditScreen extends Screen {
 
     private Component currentPageText = CommonComponents.EMPTY;
     private String title = "";
+
+    private final int TITLE_MAX_LENGTH = 16;
     private Button saveButton;
     private Button cancelButton;
 
@@ -58,11 +62,6 @@ public class PatternBookEditScreen extends Screen {
         this.book = book;
         this.hand = hand;
         this.pattern = pattern;
-
-        CompoundTag compoundtag = book.getTag();
-        if (compoundtag != null) {
-            PatternBookViewScreen.loadPages(compoundtag, this.pages::add);
-        }
 
         this.ownerText = Component.translatable("book.byAuthor", owner.getName()).withStyle(ChatFormatting.DARK_GRAY);
     }
@@ -79,13 +78,12 @@ public class PatternBookEditScreen extends Screen {
     @Override
     protected void init() {
         this.saveButton = this.addRenderableWidget(Button.builder(Component.translatable("gui." + Caterpillar.MOD_ID + ".pattern_book.saveButton"), (onPress) -> {
-            this.saveChanges(true);
+            this.saveChanges();
             this.minecraft.setScreen(null);
         }).bounds(this.width / 2 - 100, 196, 98, 20).build());
 
         this.cancelButton = this.addRenderableWidget(Button.builder(CommonComponents.GUI_CANCEL, (onPress) -> {
             this.minecraft.setScreen(null);
-            this.saveChanges(false);
         }).bounds(this.width / 2 + 2, 196, 98, 20).build());
 
         int middlePos = (this.width - PatternBookViewScreen.BOOK_TEXTURE_WIDTH) / 2;
@@ -198,21 +196,19 @@ public class PatternBookEditScreen extends Screen {
         this.saveButton.active = !this.title.trim().isEmpty();
     }
 
-    private void saveChanges(boolean publish) {
-        this.updateLocalCopy(publish);
+    private void saveChanges() {
+        this.updateLocalCopy();
+        int slotId = this.hand == InteractionHand.MAIN_HAND ? this.owner.getInventory().selected : 40;
+        PacketHandler.sendToServer(new PatternBookEditC2SPacket(slotId, this.pattern, this.title));
     }
 
-    private void updateLocalCopy(boolean sign) {
+    private void updateLocalCopy() {
         ListTag listtag = new ListTag();
+        this.pattern.stream().map(ItemStackHandler::serializeNBT).forEach(listtag::add);
 
-        if (!this.pattern.isEmpty()) {
-            this.book.addTagElement("pattern", listtag);
-        }
-
-        if (sign) {
-            this.book.addTagElement("author", StringTag.valueOf(this.owner.getGameProfile().getName()));
-            this.book.addTagElement("title", StringTag.valueOf(this.title.trim()));
-        }
+        this.book.addTagElement("pattern", listtag);
+        this.book.addTagElement("author", StringTag.valueOf(this.owner.getGameProfile().getName()));
+        this.book.addTagElement("title", StringTag.valueOf(this.title.trim()));
     }
 
     @Override
@@ -224,11 +220,27 @@ public class PatternBookEditScreen extends Screen {
         } else {
             boolean flag = this.bookKeyPressed(keyCode, scanCode, modifiers);
             if (flag) {
-                // this.clearDisplayCache();
                 return true;
             } else {
                 return false;
             }
+        }
+    }
+
+    @Override
+    public boolean charTyped(char codePoint, int modifiers) {
+        if (super.charTyped(codePoint, modifiers)) {
+            return true;
+        } else if (this.currentPage == 0) {
+            if (this.title.length() < TITLE_MAX_LENGTH && SharedConstants.isAllowedChatCharacter(codePoint)) {
+                this.title += codePoint;
+                this.updateButtonVisibility();
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
         }
     }
 
@@ -242,17 +254,21 @@ public class PatternBookEditScreen extends Screen {
         switch (keyCode) {
             case 257, 335 -> {
                 if (!this.title.isEmpty()) {
-                    this.saveChanges(true);
+                    this.saveChanges();
                     this.minecraft.setScreen(null);
                 }
 
                 return true;
             }
             case 259 -> {
-                //this.currentPageText = this.currentPageText.sub(0, this.currentPageText.length() - 1);
-                this.updateButtonVisibility();
-                // this.isModified = true;
-                return true;
+                if (!this.title.isEmpty()) {
+                    this.title = this.title.substring(0, this.title.length() - 1);
+                    this.updateButtonVisibility();
+
+                    return true;
+                } else {
+                    return false;
+                }
             }
             default -> {
                 return false;
