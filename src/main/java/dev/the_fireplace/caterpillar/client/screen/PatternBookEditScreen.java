@@ -17,7 +17,6 @@ import net.minecraft.nbt.StringTag;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
@@ -43,6 +42,8 @@ public class PatternBookEditScreen extends Screen {
     private final Component ownerText;
     private int frameTick;
     private int currentPage;
+
+    private Component currentPageText = CommonComponents.EMPTY;
     private String title = "";
     private Button saveButton;
     private Button cancelButton;
@@ -67,7 +68,7 @@ public class PatternBookEditScreen extends Screen {
     }
 
     private int getNumPages() {
-        return this.pages.size();
+        return this.pattern.size() - 1;
     }
 
     public void tick() {
@@ -121,6 +122,7 @@ public class PatternBookEditScreen extends Screen {
             this.font.drawWordWrap(poseStack, FINALIZE_WARNING_LABEL, middlePos + 36, 82, 114, 0);
         } else {
             this.renderCurrentPatternPage(poseStack);
+            this.renderCurrentPageNumber(poseStack);
         }
 
         super.render(poseStack, mouseX, mouseY, partialTick);
@@ -141,10 +143,19 @@ public class PatternBookEditScreen extends Screen {
         }
     }
 
+    private void renderCurrentPageNumber(PoseStack poseStack) {
+        int middlePos = (this.width - 192) / 2;
+        int fontWidth = this.font.width(this.currentPageText);
+        this.font.draw(poseStack, this.currentPageText, (float) (middlePos - fontWidth + 192 - 44), 18.0F, 0);
+    }
+
     @Override
     public void renderBackground(PoseStack poseStack) {
         super.renderBackground(poseStack);
-        this.bindTexture(PatternBookViewScreen.BOOK_TEXTURE);
+
+        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+        RenderSystem.setShaderTexture(0, PatternBookViewScreen.BOOK_TEXTURE);
 
         int middlePos = (this.width - PatternBookViewScreen.BOOK_TEXTURE_WIDTH) / 2;
 
@@ -152,15 +163,11 @@ public class PatternBookEditScreen extends Screen {
     }
 
     public void renderCraftingGrid(PoseStack poseStack) {
+        RenderSystem.enableBlend();
+
         int middlePos = (this.width - PatternBookViewScreen.BOOK_CRAFTING_TEXTURE_WIDTH) / 2;
 
         blit(poseStack, middlePos, 50, PatternBookViewScreen.BOOK_CRAFTING_TEXTURE_X, PatternBookViewScreen.BOOK_CRAFTING_TEXTURE_Y, PatternBookViewScreen.BOOK_CRAFTING_TEXTURE_WIDTH, PatternBookViewScreen.BOOK_CRAFTING_TEXTURE_HEIGHT);
-    }
-
-    private void bindTexture(ResourceLocation texture) {
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
-        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-        RenderSystem.setShaderTexture(0, texture);
     }
 
     private void pageBack() {
@@ -169,7 +176,7 @@ public class PatternBookEditScreen extends Screen {
         }
 
         this.updateButtonVisibility();
-        // this.clearDisplayCacheAfterPageChange();
+        this.updateCurrentPageText();
     }
 
     private void pageForward() {
@@ -178,7 +185,11 @@ public class PatternBookEditScreen extends Screen {
         }
 
         this.updateButtonVisibility();
-        // this.clearDisplayCacheAfterPageChange();
+        this.updateCurrentPageText();
+    }
+
+    private void updateCurrentPageText() {
+        this.currentPageText = Component.translatable("book.pageIndicator", this.currentPage, this.getNumPages());
     }
 
     private void updateButtonVisibility() {
@@ -204,7 +215,64 @@ public class PatternBookEditScreen extends Screen {
         }
     }
 
-    private String getCurrentPageText() {
-        return this.currentPage >= 0 && this.currentPage < this.pages.size() ? this.pages.get(this.currentPage) : "";
+    @Override
+    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+        if (super.keyPressed(keyCode, scanCode, modifiers)) {
+            return true;
+        } else if (this.currentPage == 0) {
+            return this.titleKeyPressed(keyCode, scanCode, modifiers);
+        } else {
+            boolean flag = this.bookKeyPressed(keyCode, scanCode, modifiers);
+            if (flag) {
+                // this.clearDisplayCache();
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
+
+    @Override
+    public void mouseMoved(double mouseX, double mouseY) {
+        super.mouseMoved(mouseX, mouseY);
+        this.updateButtonVisibility();
+    }
+
+    private boolean titleKeyPressed(int keyCode, int scanCode, int modifiers) {
+        switch (keyCode) {
+            case 257, 335 -> {
+                if (!this.title.isEmpty()) {
+                    this.saveChanges(true);
+                    this.minecraft.setScreen(null);
+                }
+
+                return true;
+            }
+            case 259 -> {
+                //this.currentPageText = this.currentPageText.sub(0, this.currentPageText.length() - 1);
+                this.updateButtonVisibility();
+                // this.isModified = true;
+                return true;
+            }
+            default -> {
+                return false;
+            }
+        }
+    }
+
+    private boolean bookKeyPressed(int keyCode, int scanCode, int modifiers) {
+        switch (keyCode) {
+            case 266 -> {
+                this.backButton.onPress();
+                return true;
+            }
+            case 267 -> {
+                this.forwardButton.onPress();
+                return true;
+            }
+            default -> {
+                return false;
+            }
+        }
     }
 }
