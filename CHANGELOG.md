@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.19.4-7.3.0] - 2023-04-12
+
 ### Added
 
 - Update GUI inventory if changed while opened.
