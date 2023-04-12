@@ -1,6 +1,5 @@
 package dev.the_fireplace.caterpillar.client.screen;
 
-import com.google.common.collect.Lists;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import dev.the_fireplace.caterpillar.Caterpillar;
@@ -30,7 +29,11 @@ import java.util.List;
 public class PatternBookEditScreen extends Screen {
 
     private static final Component EDIT_TITLE_LABEL = Component.translatable("book.editTitle");
-    private static final Component FINALIZE_WARNING_LABEL = Component.translatable("book.finalizeWarning");
+    private static final Component FINALIZE_WARNING_LABEL = Component.translatable(Caterpillar.MOD_ID + ".pattern_book.finalizeWarning");
+
+    private static final Component SAVE_LABEL = Component.translatable(Caterpillar.MOD_ID + ".pattern_book.saveButton");
+
+    private static final Component CANCEL_LABEL = Component.translatable(Caterpillar.MOD_ID + ".pattern_book.cancelButton");
     private static final FormattedCharSequence BLACK_CURSOR = FormattedCharSequence.forward("_", Style.EMPTY.withColor(ChatFormatting.BLACK));
     private static final FormattedCharSequence GRAY_CURSOR = FormattedCharSequence.forward("_", Style.EMPTY.withColor(ChatFormatting.GRAY));
 
@@ -40,7 +43,6 @@ public class PatternBookEditScreen extends Screen {
 
     private final List<ItemStackHandler> pattern;
 
-    private final List<String> pages = Lists.newArrayList();
     private final Component ownerText;
     private int frameTick;
     private int currentPage;
@@ -67,7 +69,7 @@ public class PatternBookEditScreen extends Screen {
     }
 
     private int getNumPages() {
-        return this.pattern.size() - 1;
+        return this.pattern.size();
     }
 
     public void tick() {
@@ -77,12 +79,12 @@ public class PatternBookEditScreen extends Screen {
 
     @Override
     protected void init() {
-        this.saveButton = this.addRenderableWidget(Button.builder(Component.translatable("gui." + Caterpillar.MOD_ID + ".pattern_book.saveButton"), (onPress) -> {
+        this.saveButton = this.addRenderableWidget(Button.builder(SAVE_LABEL, (onPress) -> {
             this.saveChanges();
             this.minecraft.setScreen(null);
         }).bounds(this.width / 2 - 100, 196, 98, 20).build());
 
-        this.cancelButton = this.addRenderableWidget(Button.builder(CommonComponents.GUI_CANCEL, (onPress) -> {
+        this.cancelButton = this.addRenderableWidget(Button.builder(CANCEL_LABEL, (onPress) -> {
             this.minecraft.setScreen(null);
         }).bounds(this.width / 2 + 2, 196, 98, 20).build());
 
@@ -133,9 +135,9 @@ public class PatternBookEditScreen extends Screen {
         for (int row = 0; row < 3; row++) {
             for (int column = 0; column < 3; column++) {
                 if (row != 1 || column != 1) {
-                    ItemStack itemStack = this.pattern.get(this.currentPage).getStackInSlot(slotId++);
+                    ItemStack itemStack = this.pattern.get(this.currentPage - 1).getStackInSlot(slotId++);
 
-                    super.itemRenderer.renderAndDecorateItem(poseStack, itemStack, middlePos + 46 + column * 19, 54 + row * 19);
+                    super.itemRenderer.renderAndDecorateItem(poseStack, itemStack, middlePos + 46 + column * PatternBookViewScreen.SLOT_SIZE_PLUS_2, 54 + row * PatternBookViewScreen.SLOT_SIZE_PLUS_2);
                 }
             }
         }
@@ -178,7 +180,7 @@ public class PatternBookEditScreen extends Screen {
     }
 
     private void pageForward() {
-        if (this.currentPage < this.pattern.size() - 1) {
+        if (this.currentPage < this.pattern.size()) {
             ++this.currentPage;
         }
 
@@ -192,7 +194,7 @@ public class PatternBookEditScreen extends Screen {
 
     private void updateButtonVisibility() {
         this.backButton.visible = this.currentPage > 0;
-        this.forwardButton.visible = this.currentPage < this.pattern.size() - 1;
+        this.forwardButton.visible = this.currentPage < this.pattern.size();
         this.saveButton.active = !this.title.trim().isEmpty();
     }
 
@@ -203,10 +205,10 @@ public class PatternBookEditScreen extends Screen {
     }
 
     private void updateLocalCopy() {
-        ListTag listtag = new ListTag();
-        this.pattern.stream().map(ItemStackHandler::serializeNBT).forEach(listtag::add);
+        ListTag listTag = new ListTag();
+        this.pattern.stream().map(ItemStackHandler::serializeNBT).forEach(listTag::add);
 
-        this.book.addTagElement("pattern", listtag);
+        this.book.addTagElement("pattern", listTag);
         this.book.addTagElement("author", StringTag.valueOf(this.owner.getGameProfile().getName()));
         this.book.addTagElement("title", StringTag.valueOf(this.title.trim()));
     }

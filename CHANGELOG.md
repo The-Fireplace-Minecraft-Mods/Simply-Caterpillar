@@ -6,7 +6,8 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
-Update inventory if changed while opened
+- Update GUI inventory if changed while opened.
+- Added pattern book item, you can now transfer patterns between decoration blocks.
 
 ## [1.19.4-7.2.2] - 2023-03-15
 

@@ -2,6 +2,7 @@ package dev.the_fireplace.caterpillar.network.packet.client;
 
 import dev.the_fireplace.caterpillar.init.ItemInit;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.network.FilteredText;
@@ -14,6 +15,8 @@ import net.minecraftforge.network.NetworkEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
+
+import static dev.the_fireplace.caterpillar.block.entity.DecorationBlockEntity.PLACEMENT_MAX_MAP;
 
 public class PatternBookEditC2SPacket {
     private final int slot;
@@ -31,23 +34,20 @@ public class PatternBookEditC2SPacket {
     public PatternBookEditC2SPacket(FriendlyByteBuf buf) {
         this.slot = buf.readInt();
 
-        List<ItemStack> collection = buf.readCollection(ArrayList::new, FriendlyByteBuf::readItem);
-        this.pattern = new ArrayList<>();
-        for (int i = 0; i < collection.size(); i++) {
-            this.pattern.add(new ItemStackHandler(9));
-            this.pattern.get(i).insertItem(0, collection.get(i), false);
-        }
+        this.pattern = buf.readCollection(ArrayList::new, buffer -> {
+            ItemStackHandler itemStackHandler = new ItemStackHandler(PLACEMENT_MAX_MAP);
+            itemStackHandler.deserializeNBT(buffer.readNbt());
+            return itemStackHandler;
+        });
 
         this.title = buf.readUtf();
     }
 
     public void toBytes(FriendlyByteBuf buf) {
         buf.writeInt(slot);
-        List<ItemStack> list = new ArrayList<>();
-        for (ItemStackHandler itemStackHandler : pattern) {
-            list.add(itemStackHandler.getStackInSlot(0));
-        }
-        buf.writeCollection(list, FriendlyByteBuf::writeItem);
+
+        buf.writeCollection(pattern, (buffer, itemStackHandler) -> buffer.writeNbt(itemStackHandler.serializeNBT()));
+
         buf.writeUtf(title);
     }
 
@@ -72,9 +72,10 @@ public class PatternBookEditC2SPacket {
                         writtenPatternBook.addTagElement("filtered_title", StringTag.valueOf(FilteredText.fullyFiltered(this.title).filteredOrEmpty()));
                         writtenPatternBook.addTagElement("title", StringTag.valueOf(this.title));
                     }
-                    for (int i = 0; i < this.pattern.size(); i++) {
-                        writtenPatternBook.addTagElement("pattern" + i, this.pattern.get(i).serializeNBT());
-                    }
+
+                    ListTag listTag = new ListTag();
+                    this.pattern.stream().map(ItemStackHandler::serializeNBT).forEach(listTag::add);
+                    writtenPatternBook.addTagElement("pattern", listTag);
 
                     player.getInventory().setItem(slot, writtenPatternBook);
                 }

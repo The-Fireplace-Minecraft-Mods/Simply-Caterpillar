@@ -1,5 +1,6 @@
 package dev.the_fireplace.caterpillar.item;
 
+import dev.the_fireplace.caterpillar.Caterpillar;
 import dev.the_fireplace.caterpillar.block.entity.DecorationBlockEntity;
 import dev.the_fireplace.caterpillar.client.screen.PatternBookEditScreen;
 import dev.the_fireplace.caterpillar.init.BlockInit;
@@ -26,7 +27,7 @@ public class WritablePatternBookItem extends WritableBookItem {
 
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
-        player.displayClientMessage(Component.literal("Right-click on a decoration block to copy the pattern."), true);
+        player.displayClientMessage(Component.translatable("item." + Caterpillar.MOD_ID + ".writable_pattern_book.tooltip"), true);
 
         return InteractionResultHolder.success(player.getItemInHand(hand));
     }
@@ -37,6 +38,10 @@ public class WritablePatternBookItem extends WritableBookItem {
         Player player = context.getPlayer();
         BlockPos blockpos = context.getClickedPos();
         BlockState blockstate = level.getBlockState(blockpos);
+
+        if (!level.isClientSide) {
+            return InteractionResult.PASS;
+        }
 
         if (blockstate.is(Blocks.LECTERN)) {
             return LecternBlock.tryPlaceBook(context.getPlayer(), level, blockpos, blockstate, context.getItemInHand()) ? InteractionResult.sidedSuccess(level.isClientSide) : InteractionResult.PASS;
@@ -51,7 +56,7 @@ public class WritablePatternBookItem extends WritableBookItem {
 
             return InteractionResult.sidedSuccess(level.isClientSide);
         } else {
-            player.displayClientMessage(Component.literal("Right-click on a decoration block to copy the pattern."), true);
+            player.displayClientMessage(Component.translatable("item." + Caterpillar.MOD_ID + ".writable_pattern_book.tooltip"), true);
 
             return InteractionResult.PASS;
         }
