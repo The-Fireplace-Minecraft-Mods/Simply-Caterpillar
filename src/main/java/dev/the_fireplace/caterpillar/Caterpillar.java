@@ -33,6 +33,7 @@ public class Caterpillar {
         ItemInit.ITEMS.register(bus);
         MenuInit.MENU_TYPES.register(bus);
         EntityInit.ENTITY_TYPES.register(bus);
+        RecipeInit.RECIPE_SERIALIZERS.register(bus);
 
         bus.addListener(this::commonSetup);
 
