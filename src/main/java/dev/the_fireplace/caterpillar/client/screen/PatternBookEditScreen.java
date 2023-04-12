@@ -221,11 +221,7 @@ public class PatternBookEditScreen extends Screen {
             return this.titleKeyPressed(keyCode, scanCode, modifiers);
         } else {
             boolean flag = this.bookKeyPressed(keyCode, scanCode, modifiers);
-            if (flag) {
-                return true;
-            } else {
-                return false;
-            }
+            return flag;
         }
     }
 
