@@ -1,6 +1,5 @@
 package dev.the_fireplace.caterpillar.block;
 
-import dev.the_fireplace.caterpillar.block.entity.DrillBaseBlockEntity;
 import dev.the_fireplace.caterpillar.block.entity.StorageBlockEntity;
 import dev.the_fireplace.caterpillar.block.util.CaterpillarBlockUtil;
 import dev.the_fireplace.caterpillar.block.util.StoragePart;
@@ -9,7 +8,6 @@ import dev.the_fireplace.caterpillar.init.BlockInit;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.Containers;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -127,7 +125,7 @@ public class StorageBlock extends DrillBaseBlock {
     public void playerWillDestroy(@NotNull Level level, @NotNull BlockPos pos, BlockState state, @NotNull Player player) {
         BlockPos basePos = this.getBasePos(state, pos);
 
-        this.dropContents(level, basePos);
+        dropContents(level, basePos);
         this.destroyStructure(level, basePos, state, player);
 
         super.playerWillDestroy(level, pos, state, player);

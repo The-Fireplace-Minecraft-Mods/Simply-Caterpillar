@@ -5,7 +5,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.resources.ResourceLocation;
-import org.jetbrains.annotations.NotNull;
 
 public class TutorialButton extends ImageButton {
 
@@ -30,7 +29,7 @@ public class TutorialButton extends ImageButton {
     }
 
     @Override
-    public void renderButton(@NotNull PoseStack poseStack, int mouseX, int mouseY, float partialTick) {
+    public void renderWidget(PoseStack stack, int mouseX, int mouseY, float partialTick) {
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderTexture(0, this.resourceLocation);
 
@@ -39,7 +38,7 @@ public class TutorialButton extends ImageButton {
             yOffset += this.yDiffTex;
         }
 
-        super.blit(poseStack, super.getX(), super.getY(), this.xTexStart, yOffset, super.width, super.height);
+        blit(stack, super.getX(), super.getY(), this.xTexStart, yOffset, super.width, super.height);
     }
 
     public void toggleTutorial() {

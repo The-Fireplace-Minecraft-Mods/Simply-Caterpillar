@@ -1,10 +1,7 @@
 package dev.the_fireplace.caterpillar;
 
 import dev.the_fireplace.caterpillar.config.CaterpillarConfig;
-import dev.the_fireplace.caterpillar.init.BlockEntityInit;
-import dev.the_fireplace.caterpillar.init.BlockInit;
-import dev.the_fireplace.caterpillar.init.ItemGroupInit;
-import dev.the_fireplace.caterpillar.init.MenuInit;
+import dev.the_fireplace.caterpillar.init.*;
 import dev.the_fireplace.caterpillar.network.PacketHandler;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.Toml4jConfigSerializer;
@@ -28,6 +25,8 @@ public class Caterpillar implements ModInitializer {
         ItemGroupInit.registerCreativeModeTab();
         BlockInit.registerBlocks();
         BlockEntityInit.registerBlockEntities();
+        ItemInit.registerItems();
+        RecipeInit.registerRecipes();
 
         MenuInit.registerMenus();
 

@@ -201,7 +201,7 @@ public class DrillHeadScreen extends AbstractScrollableScreen<DrillHeadMenu> {
         int consumptionScrollbarX = this.leftPos + CONSUMPTION_SCROLLBAR_X;
         int gatheredScrollbarX = this.leftPos + GATHERED_SCROLLBAR_X;
 
-        blit(stack, consumptionScrollbarX, scrollbarYStart + (int) ((float) (scrollbarYEnd - scrollbarYStart - SCROLLBAR_Y) * this.menu.getScrollOffs()), SCROLLER_BG_X + (this.menu.canScroll() ? 0 : SCROLLER_WIDTH), SCROLLER_BG_Y, SCROLLER_WIDTH, SCROLLER_HEIGHT);
+        blit(stack, consumptionScrollbarX, scrollbarYStart + (int) ((float) (scrollbarYEnd - scrollbarYStart - SCROLLBAR_Y) * this.menu.getConsumptionScrollOffs()), SCROLLER_BG_X + (this.menu.canScroll() ? 0 : SCROLLER_WIDTH), SCROLLER_BG_Y, SCROLLER_WIDTH, SCROLLER_HEIGHT);
         blit(stack, gatheredScrollbarX, scrollbarYStart + (int) ((float) (scrollbarYEnd - scrollbarYStart - SCROLLBAR_Y) * this.menu.getGatheredScrollOffs()), SCROLLER_BG_X + (this.menu.canScroll() ? 0 : SCROLLER_WIDTH), SCROLLER_BG_Y, SCROLLER_WIDTH, SCROLLER_HEIGHT);
     }
 
@@ -389,8 +389,8 @@ public class DrillHeadScreen extends AbstractScrollableScreen<DrillHeadMenu> {
         } else if (this.insideConsumptionScrollArea(mouseX, mouseY)) {
             int i = 3;
             float f = (float) (delta / (double) i);
-            this.menu.setScrollOffs(Mth.clamp(this.menu.getScrollOffs() - f, 0.0F, 1.0F));
-            this.consumptionScrollTo(this.menu.getScrollOffs());
+            this.menu.setConsumptionScrollOffs(Mth.clamp(this.menu.getConsumptionScrollOffs() - f, 0.0F, 1.0F));
+            this.consumptionScrollTo(this.menu.getConsumptionScrollOffs());
             return true;
         }
 
@@ -402,9 +402,9 @@ public class DrillHeadScreen extends AbstractScrollableScreen<DrillHeadMenu> {
         if (this.menu.isScrolling()) {
             int i = this.topPos + SCROLLBAR_Y;
             int j = i + SCROLLBAR_HEIGHT;
-            super.menu.setScrollOffs(((float) mouseY - (float) i - 7.5F) / ((float) (j - i) - 15.0F));
-            super.menu.setScrollOffs(Mth.clamp(this.menu.getScrollOffs(), 0.0F, 1.0F));
-            this.consumptionScrollTo(this.menu.getScrollOffs());
+            super.menu.setConsumptionScrollOffs(((float) mouseY - (float) i - 7.5F) / ((float) (j - i) - 15.0F));
+            super.menu.setConsumptionScrollOffs(Mth.clamp(this.menu.getConsumptionScrollOffs(), 0.0F, 1.0F));
+            this.consumptionScrollTo(this.menu.getConsumptionScrollOffs());
             return true;
         }
 

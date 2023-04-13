@@ -2,10 +2,14 @@ package dev.the_fireplace.caterpillar.block.entity;
 
 import dev.the_fireplace.caterpillar.Caterpillar;
 import dev.the_fireplace.caterpillar.block.ReinforcementBlock;
+import dev.the_fireplace.caterpillar.block.util.CaterpillarBlockUtil;
 import dev.the_fireplace.caterpillar.block.util.Replacement;
+import dev.the_fireplace.caterpillar.config.CaterpillarConfig;
 import dev.the_fireplace.caterpillar.init.BlockEntityInit;
 import dev.the_fireplace.caterpillar.menu.ReinforcementMenu;
+import dev.the_fireplace.caterpillar.menu.util.DrillHeadMenuPart;
 import dev.the_fireplace.caterpillar.network.packet.server.CaterpillarSyncInventoryS2CPacket;
+import dev.the_fireplace.caterpillar.network.packet.server.DrillHeadRefreshInventoryS2CPacket;
 import dev.the_fireplace.caterpillar.network.packet.server.ReinforcementSyncReplacerS2CPacket;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -134,7 +138,7 @@ public class ReinforcementBlockEntity extends DrillBaseBlockEntity {
             level.removeBlock(basePos.above(), true);
             level.removeBlock(basePos.below(), true);
 
-            if (Caterpillar.config.enableSounds) {
+            if (CaterpillarConfig.enableSounds) {
                 level.playSound(null, basePos, SoundEvents.PISTON_EXTEND, SoundSource.BLOCKS, 1.0F, 1.0F);
             }
 
@@ -144,6 +148,7 @@ public class ReinforcementBlockEntity extends DrillBaseBlockEntity {
 
     private void reinforce() {
         Direction direction = this.getBlockState().getValue(ReinforcementBlock.FACING);
+        BlockPos caterpillarHeadBlockPos = CaterpillarBlockUtil.getCaterpillarHeadPos(this.getLevel(), this.getBlockPos(), direction);
 
         for (int i = -2; i <= 2; i++) {
             for (int j = -2; j <= 2; j++) {
@@ -194,6 +199,11 @@ public class ReinforcementBlockEntity extends DrillBaseBlockEntity {
                     }
                 }
             }
+        }
+
+        if (level.getBlockEntity(caterpillarHeadBlockPos) instanceof DrillHeadBlockEntity drillHeadBlockEntity) {
+            CaterpillarSyncInventoryS2CPacket.send((ServerLevel) level, drillHeadBlockEntity.inventory, drillHeadBlockEntity.getBlockPos());
+            DrillHeadRefreshInventoryS2CPacket.send((ServerLevel) level, drillHeadBlockEntity.getBlockPos(), DrillHeadMenuPart.CONSUMPTION);
         }
     }
 

@@ -16,7 +16,9 @@ public class MenuInit {
         Registry.register(BuiltInRegistries.MENU, new ResourceLocation(Caterpillar.MOD_ID, "incinerator"), INCINERATOR);
         Registry.register(BuiltInRegistries.MENU, new ResourceLocation(Caterpillar.MOD_ID, "reinforcement"), REINFORCEMENT);
         Registry.register(BuiltInRegistries.MENU, new ResourceLocation(Caterpillar.MOD_ID, "transporter"), TRANSPORTER);
-    }    public static MenuType<DrillHeadMenu> DRILL_HEAD = new ExtendedScreenHandlerType<>(DrillHeadMenu::new);
+    }
+
+    public static MenuType<DrillHeadMenu> DRILL_HEAD = new ExtendedScreenHandlerType<>(DrillHeadMenu::new);
 
     public static MenuType<DecorationMenu> DECORATION = new ExtendedScreenHandlerType<>(DecorationMenu::new);
 
@@ -25,6 +27,4 @@ public class MenuInit {
     public static MenuType<ReinforcementMenu> REINFORCEMENT = new ExtendedScreenHandlerType<>(ReinforcementMenu::new);
 
     public static MenuType<TransporterMenu> TRANSPORTER = new ExtendedScreenHandlerType<>(TransporterMenu::new);
-
-
 }

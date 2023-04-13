@@ -5,6 +5,7 @@ import dev.the_fireplace.caterpillar.block.DrillHeadBlock;
 import dev.the_fireplace.caterpillar.block.util.CaterpillarBlockUtil;
 import dev.the_fireplace.caterpillar.block.util.DrillHeadPart;
 import dev.the_fireplace.caterpillar.block.util.Replacement;
+import dev.the_fireplace.caterpillar.config.CaterpillarConfig;
 import dev.the_fireplace.caterpillar.init.BlockEntityInit;
 import dev.the_fireplace.caterpillar.menu.DrillHeadMenu;
 import dev.the_fireplace.caterpillar.menu.syncdata.DrillHeadContainerData;
@@ -197,7 +198,7 @@ public class DrillHeadBlockEntity extends DrillBaseBlockEntity {
                 DrillHeadBlock.removeStructure(this.getLevel(), basePos, nextDrillHeadBlockEntity.getBlockState());
                 DrillHeadBlock.moveStructure(this.getLevel(), nextBasePos, nextDrillHeadBlockEntity.getBlockState());
 
-                if (Caterpillar.config.enableSounds) {
+                if (CaterpillarConfig.enableSounds) {
                     this.getLevel().playSound(null, basePos, SoundEvents.PISTON_EXTEND, SoundSource.BLOCKS, 1.0F, 1.0F);
                 }
             }
@@ -222,7 +223,7 @@ public class DrillHeadBlockEntity extends DrillBaseBlockEntity {
 
                 BlockState blockState = this.getLevel().getBlockState(destroyPos);
 
-                if (Replacement.ALL.BLOCKS.contains(blockState.getBlock()) && !Caterpillar.config.breakUnbreakableBlocks) {
+                if (Replacement.ALL.BLOCKS.contains(blockState.getBlock()) && !CaterpillarConfig.breakUnbreakableBlocks) {
                     setPowerOff();
                     DrillHeadSyncPowerS2CPacket.send((ServerLevel) this.level, false, this.getBlockPos());
                 } else if (CaterpillarBlockUtil.canBreakBlock(blockState.getBlock())) {
