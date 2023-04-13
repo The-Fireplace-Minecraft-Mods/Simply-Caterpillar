@@ -24,7 +24,7 @@ import net.minecraft.world.level.block.LecternBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.items.ItemStackHandler;
 
-import static dev.the_fireplace.caterpillar.block.entity.DecorationBlockEntity.PLACEMENT_MAX_MAP;
+import static dev.the_fireplace.caterpillar.block.entity.DecorationBlockEntity.INVENTORY_MAX_SLOTS;
 
 public class WrittenPatternBookItem extends WrittenBookItem {
     public WrittenPatternBookItem(Properties properties) {
@@ -82,7 +82,7 @@ public class WrittenPatternBookItem extends WrittenBookItem {
         ListTag tagList = tag.getList("pattern", Tag.TAG_COMPOUND);
         for (int i = 0; i < tagList.size(); i++) {
             CompoundTag itemTags = tagList.getCompound(i);
-            ItemStackHandler itemStackHandler = new ItemStackHandler(PLACEMENT_MAX_MAP);
+            ItemStackHandler itemStackHandler = new ItemStackHandler(INVENTORY_MAX_SLOTS);
             itemStackHandler.deserializeNBT(itemTags);
 
             decorationBlockEntity.setPlacementMap(i, itemStackHandler);

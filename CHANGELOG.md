@@ -14,6 +14,8 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 
 - Fixed a bug where the item collector would not use the drill storage inventory.
+-
+    - Fixed a bug where decoration pattern would not be updated when the pattern book was used.
 
 ## [1.19.3-7.2.2] - 2023-03-15
 
