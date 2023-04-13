@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Fixed
+
+- Fixed a bug where the item collector would not use the drill storage inventory.
+
 ## [1.19.3-7.2.2] - 2023-03-15
 
 ### Fixed
