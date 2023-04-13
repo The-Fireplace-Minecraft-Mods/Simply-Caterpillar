@@ -15,7 +15,7 @@ public class PatternPageButton extends PageButton {
         this.isForward = isForward;
     }
 
-    public void renderWidget(PoseStack poseStack, int p_99234_, int p_99235_, float p_99236_) {
+    public void renderButton(PoseStack poseStack, int p_99234_, int p_99235_, float p_99236_) {
         RenderSystem.setShaderTexture(0, PatternBookViewScreen.BOOK_TEXTURE);
         int i = 0;
         int j = 192;

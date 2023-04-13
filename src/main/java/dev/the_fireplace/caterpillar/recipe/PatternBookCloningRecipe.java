@@ -4,7 +4,6 @@ import dev.the_fireplace.caterpillar.init.ItemInit;
 import dev.the_fireplace.caterpillar.init.RecipeInit;
 import dev.the_fireplace.caterpillar.item.WrittenPatternBookItem;
 import net.minecraft.core.NonNullList;
-import net.minecraft.core.RegistryAccess;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.CraftingContainer;
@@ -48,7 +47,7 @@ public class PatternBookCloningRecipe extends BookCloningRecipe {
     }
 
     @Override
-    public ItemStack assemble(CraftingContainer container, RegistryAccess access) {
+    public ItemStack assemble(CraftingContainer container) {
         int i = 0;
         ItemStack itemStack = ItemStack.EMPTY;
 

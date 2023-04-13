@@ -171,9 +171,9 @@ public abstract class AbstractCaterpillarScreen<T extends AbstractCaterpillarMen
         for (ScreenTabs tab : ScreenTabs.values()) {
             if (tabShouldBeDisplayed(tab)) {
                 if (this.SELECTED_TAB.equals(tab)) {
-                    super.itemRenderer.renderAndDecorateItem(stack, tab.ITEM, this.leftPos - 21, this.topPos + 5 + incrementTabPos * 20);
+                    super.itemRenderer.renderAndDecorateItem(tab.ITEM, this.leftPos - 21, this.topPos + 5 + incrementTabPos * 20);
                 } else {
-                    super.itemRenderer.renderAndDecorateItem(stack, tab.ITEM, this.leftPos - 20, this.topPos + 5 + incrementTabPos * 20);
+                    super.itemRenderer.renderAndDecorateItem(tab.ITEM, this.leftPos - 20, this.topPos + 5 + incrementTabPos * 20);
                 }
 
                 incrementTabPos++;

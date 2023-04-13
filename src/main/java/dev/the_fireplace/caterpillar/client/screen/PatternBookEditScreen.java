@@ -118,7 +118,7 @@ public class PatternBookEditScreen extends Screen {
             this.font.draw(poseStack, formattedcharsequence, (float) (middlePos + 36 + (114 - l) / 2), 50.0F, 0);
             int i1 = this.font.width(this.ownerText);
             this.font.draw(poseStack, this.ownerText, (float) (middlePos + 36 + (114 - i1) / 2), 60.0F, 0);
-            this.font.drawWordWrap(poseStack, FINALIZE_WARNING_LABEL, middlePos + 36, 82, 114, 0);
+            this.font.drawWordWrap(FINALIZE_WARNING_LABEL, middlePos + 36, 82, 114, 0);
         } else {
             this.renderCurrentPatternPage(poseStack);
             this.renderCurrentPageNumber(poseStack);
@@ -136,7 +136,7 @@ public class PatternBookEditScreen extends Screen {
                 if (row != 1 || column != 1) {
                     ItemStack itemStack = this.pattern.get(this.currentPage - 1).get(slotId++);
 
-                    super.itemRenderer.renderAndDecorateItem(poseStack, itemStack, middlePos + 46 + column * PatternBookViewScreen.SLOT_SIZE_PLUS_2, 54 + row * PatternBookViewScreen.SLOT_SIZE_PLUS_2);
+                    super.itemRenderer.renderAndDecorateItem(itemStack, middlePos + 46 + column * PatternBookViewScreen.SLOT_SIZE_PLUS_2, 54 + row * PatternBookViewScreen.SLOT_SIZE_PLUS_2);
                 }
             }
         }

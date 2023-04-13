@@ -100,7 +100,7 @@ public class PatternBookViewScreen extends Screen {
         this.renderBackground(poseStack);
 
         this.renderCraftingGrid(poseStack);
-        this.renderCurrentPatternPage(poseStack);
+        this.renderCurrentPatternPage();
         this.renderCurrentPageNumber(poseStack);
 
         super.render(poseStack, mouseX, mouseY, partialTick);
@@ -127,7 +127,7 @@ public class PatternBookViewScreen extends Screen {
         blit(poseStack, middlePos, 50, BOOK_CRAFTING_TEXTURE_X, BOOK_CRAFTING_TEXTURE_Y, BOOK_CRAFTING_TEXTURE_WIDTH, PatternBookViewScreen.BOOK_CRAFTING_TEXTURE_HEIGHT);
     }
 
-    private void renderCurrentPatternPage(PoseStack poseStack) {
+    private void renderCurrentPatternPage() {
         int middlePos = (this.width - 146) / 2;
         int slotId = 0;
 
@@ -136,7 +136,7 @@ public class PatternBookViewScreen extends Screen {
                 if (row != 1 || column != 1) {
                     ItemStack itemStack = this.pattern.get(this.currentPage).get(slotId++);
 
-                    super.itemRenderer.renderAndDecorateItem(poseStack, itemStack, middlePos + 46 + column * PatternBookViewScreen.SLOT_SIZE_PLUS_2, 54 + row * PatternBookViewScreen.SLOT_SIZE_PLUS_2);
+                    super.itemRenderer.renderAndDecorateItem(itemStack, middlePos + 46 + column * PatternBookViewScreen.SLOT_SIZE_PLUS_2, 54 + row * PatternBookViewScreen.SLOT_SIZE_PLUS_2);
                 }
             }
         }
