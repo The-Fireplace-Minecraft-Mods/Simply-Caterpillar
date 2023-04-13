@@ -101,7 +101,7 @@ public class DecorationScreen extends AbstractScrollableScreen<DecorationMenu> {
 
     private void renderScrollerText(PoseStack stack) {
         int colorPlacement = this.menu.getCurrentMap() == this.menu.getSelectedMap() ? ChatFormatting.BLUE.getColor() : 0x404040;
-        this.font.draw(stack, "" + this.menu.getSelectedMap(), this.leftPos + 31, this.topPos + 39, colorPlacement);
+        this.font.draw(stack, String.valueOf(this.menu.getSelectedMap()), this.leftPos + 31, this.topPos + 39, colorPlacement);
     }
 
     private void renderTooltipCurrentMap(PoseStack stack, int mouseX, int mouseY) {
