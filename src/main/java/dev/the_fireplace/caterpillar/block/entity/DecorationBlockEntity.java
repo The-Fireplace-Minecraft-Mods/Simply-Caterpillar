@@ -2,13 +2,14 @@ package dev.the_fireplace.caterpillar.block.entity;
 
 import dev.the_fireplace.caterpillar.Caterpillar;
 import dev.the_fireplace.caterpillar.block.DecorationBlock;
+import dev.the_fireplace.caterpillar.block.util.CaterpillarBlockUtil;
 import dev.the_fireplace.caterpillar.block.util.DecorationPart;
+import dev.the_fireplace.caterpillar.config.CaterpillarConfig;
 import dev.the_fireplace.caterpillar.init.BlockEntityInit;
 import dev.the_fireplace.caterpillar.menu.DecorationMenu;
 import dev.the_fireplace.caterpillar.menu.syncdata.DecorationContainerData;
-import dev.the_fireplace.caterpillar.network.packet.server.DecorationSyncCurrentMapS2CPacket;
-import dev.the_fireplace.caterpillar.network.packet.server.DecorationSyncInventoryS2CPacket;
-import dev.the_fireplace.caterpillar.network.packet.server.DecorationSyncSelectedMapS2CPacket;
+import dev.the_fireplace.caterpillar.menu.util.DrillHeadMenuPart;
+import dev.the_fireplace.caterpillar.network.packet.server.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
@@ -123,7 +124,7 @@ public class DecorationBlockEntity extends DrillBaseBlockEntity {
             this.getLevel().removeBlock(basePos.relative(direction.getCounterClockWise()), false);
             this.getLevel().removeBlock(basePos.relative(direction.getClockWise()), false);
 
-            if (Caterpillar.config.enableSounds) {
+            if (CaterpillarConfig.enableSounds) {
                 this.getLevel().playSound(null, basePos, SoundEvents.PISTON_EXTEND, SoundSource.BLOCKS, 1.0F, 1.0F);
             }
 
@@ -141,6 +142,7 @@ public class DecorationBlockEntity extends DrillBaseBlockEntity {
         int placementSlotId = INVENTORY_MAX_SLOTS - 1;
         NonNullList<ItemStack> currentPlacementMap = this.placementMap.get(this.currentMap);
         Direction direction = this.getBlockState().getValue(FACING);
+        BlockPos caterpillarHeadBlockPos = CaterpillarBlockUtil.getCaterpillarHeadPos(this.getLevel(), this.getBlockPos(), direction);
 
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
@@ -212,6 +214,11 @@ public class DecorationBlockEntity extends DrillBaseBlockEntity {
                 }
             }
         }
+
+        if (level.getBlockEntity(caterpillarHeadBlockPos) instanceof DrillHeadBlockEntity drillHeadBlockEntity) {
+            CaterpillarSyncInventoryS2CPacket.send((ServerLevel) level, drillHeadBlockEntity.inventory, drillHeadBlockEntity.getBlockPos());
+            DrillHeadRefreshInventoryS2CPacket.send((ServerLevel) level, drillHeadBlockEntity.getBlockPos(), DrillHeadMenuPart.CONSUMPTION);
+        }
     }
 
     public NonNullList<ItemStack> getSelectedPlacementMap() {
@@ -242,6 +249,10 @@ public class DecorationBlockEntity extends DrillBaseBlockEntity {
             this.currentMap = currentMap;
         }
         setChanged();
+    }
+
+    public List<NonNullList<ItemStack>> getPlacementMap() {
+        return this.placementMap;
     }
 
     @Override

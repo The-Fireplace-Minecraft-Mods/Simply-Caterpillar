@@ -2,6 +2,7 @@ package dev.the_fireplace.caterpillar.block.entity;
 
 import dev.the_fireplace.caterpillar.Caterpillar;
 import dev.the_fireplace.caterpillar.block.IncineratorBlock;
+import dev.the_fireplace.caterpillar.config.CaterpillarConfig;
 import dev.the_fireplace.caterpillar.init.BlockEntityInit;
 import dev.the_fireplace.caterpillar.menu.IncineratorMenu;
 import net.minecraft.core.BlockPos;
@@ -59,7 +60,7 @@ public class IncineratorBlockEntity extends DrillBaseBlockEntity {
 
             this.getLevel().removeBlock(basePos, false);
 
-            if (Caterpillar.config.enableSounds) {
+            if (CaterpillarConfig.enableSounds) {
                 this.getLevel().playSound(null, basePos, SoundEvents.PISTON_EXTEND, SoundSource.BLOCKS, 1.0F, 1.0F);
             }
 

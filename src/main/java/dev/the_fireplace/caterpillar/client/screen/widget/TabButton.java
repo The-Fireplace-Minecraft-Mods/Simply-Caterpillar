@@ -46,7 +46,7 @@ public class TabButton extends ImageButton {
             yOffset += this.yDiffTex;
         }
 
-        super.blit(stack, super.getX(), super.getY(), xOffset, yOffset, width, super.height);
+        blit(stack, super.getX(), super.getY(), xOffset, yOffset, width, super.height);
     }
 
     @Override

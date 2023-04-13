@@ -4,6 +4,7 @@ import dev.the_fireplace.caterpillar.Caterpillar;
 import dev.the_fireplace.caterpillar.block.CollectorBlock;
 import dev.the_fireplace.caterpillar.block.TransporterBlock;
 import dev.the_fireplace.caterpillar.block.util.CaterpillarBlockUtil;
+import dev.the_fireplace.caterpillar.config.CaterpillarConfig;
 import dev.the_fireplace.caterpillar.init.BlockEntityInit;
 import dev.the_fireplace.caterpillar.menu.TransporterMenu;
 import dev.the_fireplace.caterpillar.network.packet.server.CaterpillarSyncInventoryS2CPacket;
@@ -61,7 +62,7 @@ public class TransporterBlockEntity extends DrillBaseBlockEntity {
 
         level.setBlockAndUpdate(nextPos, this.getBlockState());
 
-        if (Caterpillar.config.enableSounds) {
+        if (CaterpillarConfig.enableSounds) {
             level.playSound(null, basePos, SoundEvents.PISTON_EXTEND, SoundSource.BLOCKS, 1.0F, 1.0F);
         }
 

@@ -133,7 +133,7 @@ public class CaterpillarBlockUtil {
         StorageBlockEntity storageBlockEntity = CaterpillarBlockUtil.getStorageBlockEntity(caterpillarBlockEntities);
         // Because caterpillar is moving, it can have a space between the caterpillar blocks
         if (storageBlockEntity == null) {
-            caterpillarBlockEntities = CaterpillarBlockUtil.getConnectedCaterpillarBlockEntities(level, caterpillarBlockEntities.get(caterpillarBlockEntities.size() - 1).getBlockPos().relative(direction, 2), new ArrayList<>(0));
+            caterpillarBlockEntities = CaterpillarBlockUtil.getConnectedCaterpillarBlockEntities(level, caterpillarBlockEntities.get(caterpillarBlockEntities.size() - 1).getBlockPos().relative(direction.getOpposite(), 2), new ArrayList<>(0));
             storageBlockEntity = CaterpillarBlockUtil.getStorageBlockEntity(caterpillarBlockEntities);
         }
 

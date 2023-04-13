@@ -1,0 +1,63 @@
+package dev.the_fireplace.caterpillar.network.packet.server;
+
+import dev.the_fireplace.caterpillar.Caterpillar;
+import dev.the_fireplace.caterpillar.menu.DrillHeadMenu;
+import dev.the_fireplace.caterpillar.menu.util.DrillHeadMenuPart;
+import io.netty.buffer.Unpooled;
+import net.fabricmc.fabric.api.networking.v1.PacketSender;
+import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientPacketListener;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+
+public class DrillHeadRefreshInventoryS2CPacket {
+    public static final ResourceLocation PACKET_ID = new ResourceLocation(Caterpillar.MOD_ID, "drill_head.refresh_inventory_s2c");
+
+    public static void send(ServerLevel level, BlockPos pos, DrillHeadMenuPart menuPart) {
+        FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
+
+        buf.writeBlockPos(pos);
+        buf.writeEnum(menuPart);
+
+        for (ServerPlayer player : PlayerLookup.tracking(level, pos)) {
+            ServerPlayNetworking.send(player, PACKET_ID, buf);
+        }
+    }
+
+    public static void receive(Minecraft client, ClientPacketListener handler, FriendlyByteBuf buf, PacketSender responseSender) {
+        LocalPlayer player = client.player;
+
+        BlockPos pos = buf.readBlockPos();
+        DrillHeadMenuPart menuPart = buf.readEnum(DrillHeadMenuPart.class);
+
+        client.execute(() -> {
+            if (player.containerMenu instanceof DrillHeadMenu drillHeadMenu && drillHeadMenu.blockEntity.getBlockPos().equals(pos)) {
+                if (menuPart == DrillHeadMenuPart.CONSUMPTION) {
+                    int i = 3;
+                    int j = (int) ((double) (drillHeadMenu.getConsumptionScrollOffs() * (float) i) + 0.5D);
+                    if (j < 0) {
+                        j = 0;
+                    }
+                    int consumptionScrollTo = j;
+
+                    drillHeadMenu.consumptionScrollTo(consumptionScrollTo);
+                } else if (menuPart == DrillHeadMenuPart.GATHERED) {
+                    int i = 3;
+                    int j = (int) ((double) (drillHeadMenu.getGatheredScrollOffs() * (float) i) + 0.5D);
+                    if (j < 0) {
+                        j = 0;
+                    }
+                    int gatheredScrollTo = j;
+
+                    drillHeadMenu.gatheredScrollTo(gatheredScrollTo);
+                }
+            }
+        });
+    }
+}

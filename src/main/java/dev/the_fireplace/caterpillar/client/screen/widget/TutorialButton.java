@@ -38,7 +38,7 @@ public class TutorialButton extends ImageButton {
             yOffset += this.yDiffTex;
         }
 
-        super.blit(stack, super.getX(), super.getY(), this.xTexStart, yOffset, super.width, super.height);
+        blit(stack, super.getX(), super.getY(), this.xTexStart, yOffset, super.width, super.height);
     }
 
     public void toggleTutorial() {

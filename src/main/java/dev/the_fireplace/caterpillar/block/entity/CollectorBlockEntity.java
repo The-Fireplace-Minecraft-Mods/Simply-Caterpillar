@@ -1,9 +1,15 @@
 package dev.the_fireplace.caterpillar.block.entity;
 
-import dev.the_fireplace.caterpillar.Caterpillar;
 import dev.the_fireplace.caterpillar.block.CollectorBlock;
+import dev.the_fireplace.caterpillar.block.util.CaterpillarBlockUtil;
+import dev.the_fireplace.caterpillar.config.CaterpillarConfig;
 import dev.the_fireplace.caterpillar.init.BlockEntityInit;
+import dev.the_fireplace.caterpillar.menu.util.DrillHeadMenuPart;
+import dev.the_fireplace.caterpillar.network.packet.server.CaterpillarSyncInventoryS2CPacket;
+import dev.the_fireplace.caterpillar.network.packet.server.DrillHeadRefreshInventoryS2CPacket;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -32,7 +38,7 @@ public class CollectorBlockEntity extends DrillBaseBlockEntity {
         this.getLevel().setBlockAndUpdate(nextPos, this.getBlockState());
         this.getLevel().setBlockAndUpdate(nextPos.below(), this.getBlockState().setValue(CollectorBlock.HALF, DoubleBlockHalf.LOWER));
 
-        if (Caterpillar.config.enableSounds) {
+        if (CaterpillarConfig.enableSounds) {
             this.getLevel().playSound(null, basePos, SoundEvents.PISTON_EXTEND, SoundSource.BLOCKS, 1.0F, 1.0F);
         }
 
@@ -49,6 +55,19 @@ public class CollectorBlockEntity extends DrillBaseBlockEntity {
         for (ItemEntity itemEntity : getItemsAround()) {
             ItemStack remainderStack = super.insertItemStackToCaterpillarGathered(itemEntity.getItem());
             itemEntity.setItem(remainderStack);
+        }
+
+        Direction direction = this.getBlockState().getValue(FACING);
+        BlockPos caterpillarHeadBlockPos = CaterpillarBlockUtil.getCaterpillarHeadPos(this.getLevel(), this.getBlockPos(), direction);
+
+        for (ItemEntity itemEntity : getItemsAround()) {
+            ItemStack remainderStack = super.insertItemStackToCaterpillarGathered(itemEntity.getItem());
+            itemEntity.setItem(remainderStack);
+        }
+
+        if (level.getBlockEntity(caterpillarHeadBlockPos) instanceof DrillHeadBlockEntity drillHeadBlockEntity) {
+            CaterpillarSyncInventoryS2CPacket.send((ServerLevel) level, drillHeadBlockEntity.inventory, drillHeadBlockEntity.getBlockPos());
+            DrillHeadRefreshInventoryS2CPacket.send((ServerLevel) level, drillHeadBlockEntity.getBlockPos(), DrillHeadMenuPart.GATHERED);
         }
     }
 
