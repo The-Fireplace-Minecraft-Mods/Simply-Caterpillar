@@ -40,7 +40,7 @@ public class PowerButton extends ImageButton {
         }
 
         RenderSystem.enableDepthTest();
-        super.blit(poseStack, this.getX() + (this.powered ? 0 : -3), this.getY(), this.xTexStart, yOffset, this.width, this.height);
+        blit(poseStack, this.getX() + (this.powered ? 0 : -3), this.getY(), this.xTexStart, yOffset, this.width, this.height);
     }
 
     public boolean isPowered() {

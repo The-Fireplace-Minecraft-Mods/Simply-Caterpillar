@@ -1,7 +1,18 @@
 package dev.the_fireplace.caterpillar.block.entity;
 
 import dev.the_fireplace.caterpillar.Caterpillar;
+import dev.the_fireplace.caterpillar.block.IncineratorBlock;
+import dev.the_fireplace.caterpillar.block.ReinforcementBlock;
+import dev.the_fireplace.caterpillar.block.util.CaterpillarBlockUtil;
+import dev.the_fireplace.caterpillar.config.CaterpillarConfig;
+import dev.the_fireplace.caterpillar.init.BlockEntityInit;
+import dev.the_fireplace.caterpillar.menu.IncineratorMenu;
+import dev.the_fireplace.caterpillar.menu.util.DrillHeadMenuPart;
+import dev.the_fireplace.caterpillar.network.PacketHandler;
+import dev.the_fireplace.caterpillar.network.packet.server.CaterpillarSyncInventoryS2CPacket;
+import dev.the_fireplace.caterpillar.network.packet.server.DrillHeadRefreshInventoryS2CPacket;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
@@ -15,10 +26,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import dev.the_fireplace.caterpillar.block.IncineratorBlock;
-import dev.the_fireplace.caterpillar.menu.IncineratorMenu;
-import dev.the_fireplace.caterpillar.config.CaterpillarConfig;
-import dev.the_fireplace.caterpillar.init.BlockEntityInit;
 
 public class IncineratorBlockEntity extends DrillBaseBlockEntity {
 
@@ -69,10 +76,18 @@ public class IncineratorBlockEntity extends DrillBaseBlockEntity {
     }
 
     private void incinerate() {
+        Direction direction = this.getBlockState().getValue(ReinforcementBlock.FACING);
+        BlockPos caterpillarHeadBlockPos = CaterpillarBlockUtil.getCaterpillarHeadPos(this.getLevel(), this.getBlockPos(), direction);
+
         for (int i = 0; i < INVENTORY_SIZE; i++) {
             Item itemToIncinerate = this.getStackInSlot(i).getItem();
 
             super.removeItemFromCaterpillarGathered(itemToIncinerate);
+        }
+
+        if (level.getBlockEntity(caterpillarHeadBlockPos) instanceof DrillHeadBlockEntity drillHeadBlockEntity) {
+            PacketHandler.sendToClients(new CaterpillarSyncInventoryS2CPacket(drillHeadBlockEntity.getInventory(), drillHeadBlockEntity.getBlockPos()));
+            PacketHandler.sendToClients(new DrillHeadRefreshInventoryS2CPacket(drillHeadBlockEntity.getBlockPos(), DrillHeadMenuPart.GATHERED));
         }
     }
 

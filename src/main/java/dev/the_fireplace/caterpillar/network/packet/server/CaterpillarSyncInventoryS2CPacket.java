@@ -2,6 +2,7 @@ package dev.the_fireplace.caterpillar.network.packet.server;
 
 import dev.the_fireplace.caterpillar.block.entity.DrillBaseBlockEntity;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.item.ItemStack;
@@ -47,11 +48,12 @@ public class CaterpillarSyncInventoryS2CPacket {
     public void handle(Supplier<NetworkEvent.Context> supplier) {
         NetworkEvent.Context context = supplier.get();
         context.enqueueWork(() -> {
-            if(Minecraft.getInstance().level.getBlockEntity(pos) instanceof DrillBaseBlockEntity caterpillarBlockEntity) {
+            ClientLevel level = Minecraft.getInstance().level;
+
+            if (level.getBlockEntity(pos) instanceof DrillBaseBlockEntity caterpillarBlockEntity) {
                 caterpillarBlockEntity.setInventory(this.inventory);
             }
         });
         context.setPacketHandled(true);
     }
 }
-

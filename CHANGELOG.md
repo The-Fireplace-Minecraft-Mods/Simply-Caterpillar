@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.19.3-7.3.1] - 2023-04-13
+
+### Added
+
+- Update GUI inventory if changed while opened.
+- Added pattern book item, you can now transfer patterns between decoration blocks.
+
 ### Fixed
 
 - Fixed a bug where the item collector would not use the drill storage inventory.

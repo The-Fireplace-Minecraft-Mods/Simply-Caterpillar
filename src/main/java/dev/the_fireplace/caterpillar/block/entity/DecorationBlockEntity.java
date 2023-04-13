@@ -2,15 +2,15 @@ package dev.the_fireplace.caterpillar.block.entity;
 
 import dev.the_fireplace.caterpillar.Caterpillar;
 import dev.the_fireplace.caterpillar.block.DecorationBlock;
+import dev.the_fireplace.caterpillar.block.util.CaterpillarBlockUtil;
 import dev.the_fireplace.caterpillar.block.util.DecorationPart;
 import dev.the_fireplace.caterpillar.config.CaterpillarConfig;
 import dev.the_fireplace.caterpillar.init.BlockEntityInit;
 import dev.the_fireplace.caterpillar.menu.DecorationMenu;
 import dev.the_fireplace.caterpillar.menu.syncdata.DecorationContainerData;
+import dev.the_fireplace.caterpillar.menu.util.DrillHeadMenuPart;
 import dev.the_fireplace.caterpillar.network.PacketHandler;
-import dev.the_fireplace.caterpillar.network.packet.server.DecorationSyncCurrentMapS2CPacket;
-import dev.the_fireplace.caterpillar.network.packet.server.DecorationSyncInventoryS2CPacket;
-import dev.the_fireplace.caterpillar.network.packet.server.DecorationSyncSelectedMapS2CPacket;
+import dev.the_fireplace.caterpillar.network.packet.server.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -153,6 +153,7 @@ public class DecorationBlockEntity extends DrillBaseBlockEntity {
         int placementSlotId = INVENTORY_MAX_SLOTS - 1;
         ItemStackHandler currentPlacementMap =  this.placementMap.get(this.currentMap);
         Direction direction = this.getBlockState().getValue(FACING);
+        BlockPos caterpillarHeadBlockPos = CaterpillarBlockUtil.getCaterpillarHeadPos(this.getLevel(), this.getBlockPos(), direction);
 
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
@@ -224,6 +225,11 @@ public class DecorationBlockEntity extends DrillBaseBlockEntity {
                 }
             }
         }
+
+        if (level.getBlockEntity(caterpillarHeadBlockPos) instanceof DrillHeadBlockEntity drillHeadBlockEntity) {
+            PacketHandler.sendToClients(new CaterpillarSyncInventoryS2CPacket(drillHeadBlockEntity.getInventory(), drillHeadBlockEntity.getBlockPos()));
+            PacketHandler.sendToClients(new DrillHeadRefreshInventoryS2CPacket(drillHeadBlockEntity.getBlockPos(), DrillHeadMenuPart.CONSUMPTION));
+        }
     }
 
     public ItemStackHandler getSelectedPlacementMap() {
@@ -279,6 +285,10 @@ public class DecorationBlockEntity extends DrillBaseBlockEntity {
     public void setInventory(ItemStackHandler inventory) {
         this.placementMap.set(this.getSelectedMap(), inventory);
         setChanged();
+    }
+
+    public List<ItemStackHandler> getPlacementMap() {
+        return this.placementMap;
     }
 
     public void setPlacementMap(int placementMapId, ItemStackHandler inventory) {

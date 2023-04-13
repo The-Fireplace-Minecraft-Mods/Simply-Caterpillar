@@ -127,6 +127,18 @@ You can add or not add any part to customize your drill.
 	<img src="https://raw.githubusercontent.com/The-Fireplace-Minecraft-Mods/Simply-Caterpillar/1.19.3-forge/.github/sources/recipe-transporter.png" alt="Transporter Recipe" />
 </details>
 
+<details>
+	<summary>
+		<h3>Pattern Book</h3>
+		<p>Transfer patterns between decoration blocks.</p>
+	</summary>
+    <h4>Screen</h4>
+    <p>Preview pattern and give it a name.</p>
+<img src="https://raw.githubusercontent.com/The-Fireplace-Minecraft-Mods/Simply-Caterpillar/1.19.3-forge/.github/sources/screen-pattern_book.png" alt="Pattern Book Screen" width="480" />
+	<h4>Recipe</h4>
+	<img src="https://raw.githubusercontent.com/The-Fireplace-Minecraft-Mods/Simply-Caterpillar/1.19.3-forge/.github/sources/recipe-pattern_book.png" alt="Pattern Book Recipe" />
+</details>
+
 ## Credits
 
 - Daniel-Mendes

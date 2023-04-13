@@ -84,6 +84,12 @@ public final class PacketHandler {
                 .consumerMainThread(DrillHeadSyncLitS2CPacket::handle)
                 .add();
 
+        CHANNEL.messageBuilder(DrillHeadRefreshInventoryS2CPacket.class, index++, NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(DrillHeadRefreshInventoryS2CPacket::new)
+                .encoder(DrillHeadRefreshInventoryS2CPacket::write)
+                .consumerMainThread(DrillHeadRefreshInventoryS2CPacket::handle)
+                .add();
+
         CHANNEL.messageBuilder(DecorationSyncSelectedMapC2SPacket.class, index++, NetworkDirection.PLAY_TO_SERVER)
                 .decoder(DecorationSyncSelectedMapC2SPacket::new)
                 .encoder(DecorationSyncSelectedMapC2SPacket::toBytes)
@@ -130,6 +136,12 @@ public final class PacketHandler {
                 .decoder(ReinforcementSyncReplacerS2CPacket::new)
                 .encoder(ReinforcementSyncReplacerS2CPacket::toBytes)
                 .consumerMainThread(ReinforcementSyncReplacerS2CPacket::handle)
+                .add();
+
+        CHANNEL.messageBuilder(PatternBookEditC2SPacket.class, index++, NetworkDirection.PLAY_TO_SERVER)
+                .decoder(PatternBookEditC2SPacket::new)
+                .encoder(PatternBookEditC2SPacket::toBytes)
+                .consumerMainThread(PatternBookEditC2SPacket::handle)
                 .add();
 
         Caterpillar.LOGGER.info("Registered {} packets!", index);
