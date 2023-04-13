@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
-import static dev.the_fireplace.caterpillar.block.entity.DecorationBlockEntity.PLACEMENT_MAX_MAP;
+import static dev.the_fireplace.caterpillar.block.entity.DecorationBlockEntity.INVENTORY_MAX_SLOTS;
 
 public class PatternBookEditC2SPacket {
     private final int slot;
@@ -35,7 +35,7 @@ public class PatternBookEditC2SPacket {
         this.slot = buf.readInt();
 
         this.pattern = buf.readCollection(ArrayList::new, buffer -> {
-            ItemStackHandler itemStackHandler = new ItemStackHandler(PLACEMENT_MAX_MAP);
+            ItemStackHandler itemStackHandler = new ItemStackHandler(INVENTORY_MAX_SLOTS);
             itemStackHandler.deserializeNBT(buffer.readNbt());
             return itemStackHandler;
         });

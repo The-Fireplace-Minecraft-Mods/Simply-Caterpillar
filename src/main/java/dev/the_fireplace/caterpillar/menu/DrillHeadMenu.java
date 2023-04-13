@@ -51,6 +51,9 @@ public class DrillHeadMenu extends AbstractScrollableMenu {
 
     public DrillHeadMenu(int id, Inventory playerInventory, FriendlyByteBuf extraData) {
         super(MenuInit.DRILL_HEAD.get(), id, playerInventory, extraData, DrillHeadContainerData.SIZE, DrillHeadBlockEntity.INVENTORY_SIZE);
+
+        this.consumptionScrollTo(0);
+        this.gatheredScrollTo(0);
     }
 
     public DrillHeadMenu(int id, Inventory playerInventory, DrillHeadBlockEntity entity, DrillHeadContainerData data) {

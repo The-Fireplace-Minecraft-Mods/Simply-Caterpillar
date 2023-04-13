@@ -21,6 +21,7 @@ import net.minecraftforge.items.ItemStackHandler;
 import java.util.ArrayList;
 import java.util.List;
 
+import static dev.the_fireplace.caterpillar.block.entity.DecorationBlockEntity.INVENTORY_MAX_SLOTS;
 import static dev.the_fireplace.caterpillar.block.entity.DecorationBlockEntity.PLACEMENT_MAX_MAP;
 
 public class PatternBookViewScreen extends Screen {
@@ -61,7 +62,7 @@ public class PatternBookViewScreen extends Screen {
 
     private void loadPattern(CompoundTag tag) {
         for (int i = 0; i < PLACEMENT_MAX_MAP; i++) {
-            pattern.add(new ItemStackHandler(PLACEMENT_MAX_MAP));
+            pattern.add(new ItemStackHandler(INVENTORY_MAX_SLOTS));
         }
 
         if (tag != null) {
