@@ -2,6 +2,7 @@ package dev.the_fireplace.caterpillar.event;
 
 import dev.the_fireplace.caterpillar.Caterpillar;
 import dev.the_fireplace.caterpillar.client.KeyBinding;
+import dev.the_fireplace.caterpillar.client.handler.LecternEventHandler;
 import dev.the_fireplace.caterpillar.client.renderer.entity.SeatEntityRenderer;
 import dev.the_fireplace.caterpillar.client.screen.*;
 import dev.the_fireplace.caterpillar.config.ConfigHelper;
@@ -18,12 +19,15 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.CreativeModeTabEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 
 @Mod.EventBusSubscriber(modid = Caterpillar.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class ClientModEvents {
@@ -81,5 +85,16 @@ public class ClientModEvents {
                     output.accept(ItemInit.WRITABLE_PATTERN_BOOK.get());
                 })
         );
+    }
+
+    @SubscribeEvent
+    public static void onInitialize(FMLCommonSetupEvent event) {
+        MinecraftForge.EVENT_BUS.addListener((PlayerInteractEvent.RightClickBlock e) -> {
+            var result = LecternEventHandler.rightClick(e.getEntity(), e.getLevel(), e.getHand(), e.getHitVec());
+            if (result.consumesAction()) {
+                e.setCanceled(true);
+                e.setCancellationResult(result);
+            }
+        });
     }
 }
