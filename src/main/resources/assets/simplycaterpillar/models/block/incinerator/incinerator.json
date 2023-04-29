@@ -2,10 +2,9 @@
 	"parent": "simplycaterpillar:block/drill_base/drill_base",
 	"textures": {
 		"rod": "simplycaterpillar:block/pieces/wood_piece",
-		"particle": "simplycaterpillar:block/rock_side",
-		"back": "simplycaterpillar:block/rock_side",
-		"furnace": "simplycaterpillar:block/incinerator/furnace_front",
-		"side": "simplycaterpillar:block/incinerator/furnace_side"
+		"front": "simplycaterpillar:block/incinerator/incinerator_front",
+		"side": "simplycaterpillar:block/incinerator/incinerator_side",
+		"particle": "simplycaterpillar:block/rock_side"
 	},
 	"elements": [
 		{
@@ -17,43 +16,205 @@
 				"south": {"uv": [6, 10, 10, 16], "texture": "#side"},
 				"west": {"uv": [0, 10, 16, 16], "texture": "#side"},
 				"up": {"uv": [0, 10, 16, 14], "rotation": 270, "texture": "#side"},
-				"down": {"uv": [6, 0, 10, 16], "rotation": 180, "texture": "#back"}
+				"down": {
+					"uv": [
+						6,
+						0,
+						10,
+						16
+					],
+					"rotation": 180,
+					"texture": "#particle"
+				}
 			}
 		},
 		{
 			"from": [10, 0, 0],
 			"to": [16, 16, 16],
 			"faces": {
-				"north": {"uv": [0, 0, 6, 16], "texture": "#side", "tintindex": 0},
-				"east": {"uv": [0, 0, 16, 16], "texture": "#furnace"},
-				"south": {"uv": [10, 0, 16, 16], "texture": "#side"},
-				"west": {"uv": [0, 0, 16, 16], "texture": "#side"},
-				"up": {"uv": [0, 0, 6, 16], "rotation": 180, "texture": "#back"},
-				"down": {"uv": [0, 0, 6, 16], "rotation": 180, "texture": "#back"}
+				"north": {
+					"uv": [
+						0,
+						0,
+						6,
+						16
+					],
+					"texture": "#side",
+					"tintindex": 0
+				},
+				"east": {
+					"uv": [
+						0,
+						0,
+						16,
+						16
+					],
+					"texture": "#front"
+				},
+				"south": {
+					"uv": [
+						10,
+						0,
+						16,
+						16
+					],
+					"texture": "#side"
+				},
+				"west": {
+					"uv": [
+						0,
+						0,
+						16,
+						16
+					],
+					"texture": "#side"
+				},
+				"up": {
+					"uv": [
+						0,
+						0,
+						6,
+						16
+					],
+					"rotation": 180,
+					"texture": "#particle"
+				},
+				"down": {
+					"uv": [
+						0,
+						0,
+						6,
+						16
+					],
+					"rotation": 180,
+					"texture": "#particle"
+				}
 			}
 		},
 		{
 			"from": [0, 0, 0],
 			"to": [6, 16, 16],
 			"faces": {
-				"north": {"uv": [10, 0, 16, 16], "texture": "#side", "tintindex": 0},
-				"east": {"uv": [0, 0, 16, 16], "texture": "#side"},
-				"south": {"uv": [0, 0, 6, 16], "texture": "#side"},
-				"west": {"uv": [0, 0, 16, 16], "texture": "#furnace"},
-				"up": {"uv": [10, 0, 16, 16], "rotation": 180, "texture": "#back"},
-				"down": {"uv": [10, 0, 16, 16], "rotation": 180, "texture": "#back"}
+				"north": {
+					"uv": [
+						10,
+						0,
+						16,
+						16
+					],
+					"texture": "#side",
+					"tintindex": 0
+				},
+				"east": {
+					"uv": [
+						0,
+						0,
+						16,
+						16
+					],
+					"texture": "#side"
+				},
+				"south": {
+					"uv": [
+						0,
+						0,
+						6,
+						16
+					],
+					"texture": "#side"
+				},
+				"west": {
+					"uv": [
+						0,
+						0,
+						16,
+						16
+					],
+					"texture": "#front"
+				},
+				"up": {
+					"uv": [
+						10,
+						0,
+						16,
+						16
+					],
+					"rotation": 180,
+					"texture": "#particle"
+				},
+				"down": {
+					"uv": [
+						10,
+						0,
+						16,
+						16
+					],
+					"rotation": 180,
+					"texture": "#particle"
+				}
 			}
 		},
 		{
 			"from": [6, 10, 0],
 			"to": [10, 16, 16],
 			"faces": {
-				"north": {"uv": [6, 0, 10, 6], "texture": "#side", "tintindex": 0},
-				"east": {"uv": [0, 0, 16, 6], "texture": "#back"},
-				"south": {"uv": [6, 0, 10, 6], "texture": "#side"},
-				"west": {"uv": [0, 0, 16, 6], "texture": "#back"},
-				"up": {"uv": [6, 0, 10, 16], "rotation": 180, "texture": "#back"},
-				"down": {"uv": [0, 3, 16, 7], "rotation": 270, "texture": "#side"}
+				"north": {
+					"uv": [
+						6,
+						0,
+						10,
+						6
+					],
+					"texture": "#side",
+					"tintindex": 0
+				},
+				"east": {
+					"uv": [
+						0,
+						0,
+						16,
+						6
+					],
+					"texture": "#particle"
+				},
+				"south": {
+					"uv": [
+						6,
+						0,
+						10,
+						6
+					],
+					"texture": "#side"
+				},
+				"west": {
+					"uv": [
+						0,
+						0,
+						16,
+						6
+					],
+					"texture": "#particle"
+				},
+				"up": {
+					"uv": [
+						6,
+						0,
+						10,
+						16
+					],
+					"rotation": 180,
+					"texture": "#particle"
+				},
+				"down": {
+					"uv": [
+						0,
+						3,
+						16,
+						7
+					],
+					"rotation": 270,
+					"texture": "#side"
+				}
 			}
 		},
 		{

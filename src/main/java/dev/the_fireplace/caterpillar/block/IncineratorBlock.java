@@ -1,9 +1,17 @@
 package dev.the_fireplace.caterpillar.block;
 
+import dev.the_fireplace.caterpillar.block.entity.IncineratorBlockEntity;
+import dev.the_fireplace.caterpillar.block.util.CaterpillarBlockUtil;
+import dev.the_fireplace.caterpillar.init.BlockEntityInit;
+import dev.the_fireplace.caterpillar.init.BlockInit;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -12,6 +20,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.Shapes;
@@ -19,26 +30,55 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import dev.the_fireplace.caterpillar.block.entity.IncineratorBlockEntity;
-import dev.the_fireplace.caterpillar.block.util.CaterpillarBlockUtil;
-import dev.the_fireplace.caterpillar.init.BlockEntityInit;
-import dev.the_fireplace.caterpillar.init.BlockInit;
 
 import java.util.ArrayList;
 import java.util.stream.Stream;
 
 public class IncineratorBlock extends DrillBaseBlock {
+    public static final BooleanProperty LIT = BlockStateProperties.LIT;
+
     private static final VoxelShape SHAPE = Stream.of(
-        Block.box(6, 0, 0, 10, 6, 16),
-        Block.box(10, 0, 0, 16, 16, 16),
-        Block.box(0, 0, 0, 6, 16, 16),
-        Block.box(6, 10, 0, 10, 16, 16),
-        Block.box(6, 6, 16, 10, 10, 31)
+            Block.box(6, 0, 0, 10, 6, 16),
+            Block.box(10, 0, 0, 16, 16, 16),
+            Block.box(0, 0, 0, 6, 16, 16),
+            Block.box(6, 10, 0, 10, 16, 16),
+            Block.box(6, 6, 16, 10, 10, 31)
     ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
 
     public IncineratorBlock(Properties properties) {
         super(properties);
+        super.registerDefaultState(defaultBlockState().setValue(LIT, false));
         super.runCalculation(SHAPES, SHAPE);
+    }
+
+    @Override
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+        super.createBlockStateDefinition(builder);
+        builder.add(LIT);
+    }
+
+    @Override
+    public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
+        if (state.getValue(LIT)) {
+            double d0 = (double) pos.getX() + 0.5D;
+            double d1 = (double) pos.getY();
+            double d2 = (double) pos.getZ() + 0.5D;
+
+            Direction direction = state.getValue(FACING);
+            Direction.Axis direction$axis = direction.getAxis();
+            double d3 = 0.52D;
+            double d4 = random.nextDouble() * 0.6D - 0.3D;
+            double d5 = direction$axis == Direction.Axis.X ? d4 : (double) direction.getStepX() * d3;
+            double d6 = random.nextDouble() * 6.0D / 16.0D;
+            double d7 = direction$axis == Direction.Axis.Z ? d4 : (double) direction.getStepZ() * d3;
+
+            if (random.nextDouble() < 0.1D) {
+                level.playLocalSound(d0, d1, d2, SoundEvents.LAVA_POP, SoundSource.BLOCKS, 1.0F, 1.0F, false);
+
+                level.addParticle(ParticleTypes.SMALL_FLAME, d0 + d5, d1 + d6, d2 - 0.5D + d7, 0.0D, 0.0D, 0.0D);
+                level.addParticle(ParticleTypes.SMALL_FLAME, d0 + d5, d1 + d6, d2 + 0.5D + d7, 0.0D, 0.0D, 0.0D);
+            }
+        }
     }
 
     @Override

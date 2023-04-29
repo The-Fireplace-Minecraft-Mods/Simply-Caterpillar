@@ -1,0 +1,6 @@
+{
+  "parent": "simplycaterpillar:block/incinerator/incinerator",
+  "textures": {
+    "front": "simplycaterpillar:block/incinerator/incinerator_front_on"
+  }
+}
