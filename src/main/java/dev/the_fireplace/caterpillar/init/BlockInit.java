@@ -51,7 +51,7 @@ public class BlockInit {
 
     public static final RegistryObject<IncineratorBlock> INCINERATOR = register(
             "incinerator",
-            () -> new IncineratorBlock(BlockBehaviour.Properties.of(Material.STONE).strength(1.5F, 6.0F).sound(SoundType.STONE).requiresCorrectToolForDrops())
+            () -> new IncineratorBlock(BlockBehaviour.Properties.of(Material.STONE).strength(1.5F, 6.0F).sound(SoundType.STONE).lightLevel((blockState) -> 15).requiresCorrectToolForDrops())
     );
 
     public static final RegistryObject<DecorationBlock> DECORATION = register(

@@ -1,8 +1,8 @@
 {
     "variants": {
-        "facing=north": { "model": "simplycaterpillar:block/drill_seat/drill_seat" },
-        "facing=south": { "model": "simplycaterpillar:block/drill_seat/drill_seat", "y": 180 },
-        "facing=west":  { "model": "simplycaterpillar:block/drill_seat/drill_seat", "y": 270 },
-        "facing=east":  { "model": "simplycaterpillar:block/drill_seat/drill_seat", "y": 90 }
+        "facing=north": { "model": "simplycaterpillar:block/drill_seat/drill_seat_block" },
+        "facing=south": { "model": "simplycaterpillar:block/drill_seat/drill_seat_block", "y": 180 },
+        "facing=west":  { "model": "simplycaterpillar:block/drill_seat/drill_seat_block", "y": 270 },
+        "facing=east":  { "model": "simplycaterpillar:block/drill_seat/drill_seat_block", "y": 90 }
     }
 }

@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Updated
+
+- Changed texture of the incinerator.
+- Changed texture of the reinforcement.
+- Changed texture of the drill head.
+
 ## [1.19.4-7.3.1] - 2023-04-13
 
 ### Fixed

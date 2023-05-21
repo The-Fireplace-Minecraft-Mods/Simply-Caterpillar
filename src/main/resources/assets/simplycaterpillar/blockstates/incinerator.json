@@ -1,33 +1,18 @@
 {
     "variants": {
-        "facing=north,lit=false": {
-            "model": "simplycaterpillar:block/incinerator/incinerator"
+        "facing=north": {
+            "model": "simplycaterpillar:block/incinerator/incinerator_block"
         },
-        "facing=north,lit=true": {
-            "model": "simplycaterpillar:block/incinerator/incinerator_on"
-        },
-        "facing=south,lit=false": {
-            "model": "simplycaterpillar:block/incinerator/incinerator",
+        "facing=south": {
+            "model": "simplycaterpillar:block/incinerator/incinerator_block",
             "y": 180
         },
-        "facing=south,lit=true": {
-            "model": "simplycaterpillar:block/incinerator/incinerator_on",
-            "y": 180
-        },
-        "facing=west,lit=false": {
-            "model": "simplycaterpillar:block/incinerator/incinerator",
+        "facing=west": {
+            "model": "simplycaterpillar:block/incinerator/incinerator_block",
             "y": 270
         },
-        "facing=west,lit=true": {
-            "model": "simplycaterpillar:block/incinerator/incinerator_on",
-            "y": 270
-        },
-        "facing=east,lit=false": {
-            "model": "simplycaterpillar:block/incinerator/incinerator",
-            "y": 90
-        },
-        "facing=east,lit=true": {
-            "model": "simplycaterpillar:block/incinerator/incinerator_on",
+        "facing=east": {
+            "model": "simplycaterpillar:block/incinerator/incinerator_block",
             "y": 90
         }
     }

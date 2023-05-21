@@ -1,10 +1,11 @@
 {
+	"render_type": "cutout",
 	"textures": {
-		"side": "simplycaterpillar:block/rock_side",
-		"particle": "simplycaterpillar:block/decoration/rock_face",
-		"front": "simplycaterpillar:block/decoration/rock_face",
-		"rod": "simplycaterpillar:block/pieces/wood_piece",
-		"side_small": "simplycaterpillar:block/decoration/rock_side_small"
+		"side": "simplycaterpillar:block/drill_base/drill_base_inner",
+		"particle": "simplycaterpillar:block/decoration/decoration_front",
+		"front": "simplycaterpillar:block/decoration/decoration_front",
+		"rod": "simplycaterpillar:block/decoration/decoration_rod",
+		"side_small": "simplycaterpillar:block/decoration/decoration_side"
 	},
 	"elements": [
 		{
@@ -12,12 +13,10 @@
 			"to": [10, 10, 10],
 			"rotation": {"angle": 0, "axis": "y", "origin": [7, 0, 8]},
 			"faces": {
-				"north": {"uv": [0, 6, 10, 10], "texture": "#rod"},
-				"east": {"uv": [0, 12, 4, 16], "texture": "#rod"},
-				"south": {"uv": [0, 6, 10, 10], "texture": "#rod", "tintindex": 0},
-				"west": {"uv": [0, 12, 4, 16], "texture": "#rod"},
-				"up": {"uv": [0, 6, 10, 10], "texture": "#rod"},
-				"down": {"uv": [0, 6, 10, 10], "texture": "#rod"}
+				"north": {"uv": [0, 0, 10, 4], "rotation": 180, "texture": "#rod"},
+				"south": {"uv": [0, 0, 10, 4], "texture": "#rod", "tintindex": 0},
+				"up": {"uv": [0, 0, 10, 4], "texture": "#rod"},
+				"down": {"uv": [0, 0, 10, 4], "texture": "#rod"}
 			}
 		},
 		{
@@ -25,7 +24,7 @@
 			"to": [16, 16, 16],
 			"rotation": {"angle": 0, "axis": "y", "origin": [7, 0, 8]},
 			"faces": {
-				"north": {"uv": [0, 0, 6, 16], "texture": "#side_small"},
+				"north": {"uv": [6, 0, 0, 16], "texture": "#side_small"},
 				"east": {"uv": [0, 0, 16, 16], "texture": "#front"},
 				"south": {"uv": [0, 0, 6, 16], "texture": "#side_small", "tintindex": 0},
 				"west": {"uv": [0, 0, 16, 16], "texture": "#side"},

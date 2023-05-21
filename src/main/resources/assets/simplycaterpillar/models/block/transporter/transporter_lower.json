@@ -1,10 +1,10 @@
 {
+	"parent": "simplycaterpillar:block/drill_base/drill_base_block",
 	"render_type": "cutout",
-	"parent": "simplycaterpillar:block/drill_base/drill_base",
 	"textures": {
 		"chest": "simplycaterpillar:block/storage/chest",
 		"minecart": "simplycaterpillar:block/transporter/minecart",
-		"particle": "simplycaterpillar:block/rock_side"
+		"particle": "simplycaterpillar:block/drill_base/drill_base_block"
 	},
 	"elements": [
 		{
@@ -119,241 +119,41 @@
 		},
 		{
 			"from": [3, 3, 3],
-			"to": [
-				13,
-				11,
-				13
-			],
-			"rotation": {
-				"angle": 0,
-				"axis": "y",
-				"origin": [
-					8,
-					0,
-					8
-				]
-			},
+			"to": [13, 11, 13],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 0, 8]},
 			"faces": {
-				"north": {
-					"uv": [
-						3.5,
-						8.25,
-						7,
-						10.75
-					],
-					"texture": "#chest"
-				},
-				"east": {
-					"uv": [
-						0,
-						8.25,
-						3.5,
-						10.75
-					],
-					"texture": "#chest"
-				},
-				"south": {
-					"uv": [
-						10.5,
-						10.75,
-						14,
-						8.25
-					],
-					"texture": "#chest",
-					"tintindex": 0
-				},
-				"west": {
-					"uv": [
-						7,
-						8.25,
-						10.5,
-						10.75
-					],
-					"texture": "#chest"
-				},
-				"up": {
-					"uv": [
-						9.5,
-						10.5,
-						4.25,
-						14.5
-					],
-					"rotation": 180,
-					"texture": "#chest"
-				},
-				"down": {
-					"uv": [
-						7,
-						0,
-						10.5,
-						3.5
-					],
-					"texture": "#chest"
-				}
+				"north": {"uv": [3.5, 8.25, 7, 10.75], "texture": "#chest"},
+				"east": {"uv": [0, 8.25, 3.5, 10.75], "texture": "#chest"},
+				"south": {"uv": [10.5, 10.75, 14, 8.25], "texture": "#chest", "tintindex": 0},
+				"west": {"uv": [7, 8.25, 10.5, 10.75], "texture": "#chest"},
+				"up": {"uv": [9.5, 10.5, 4.25, 14.5], "rotation": 180, "texture": "#chest"},
+				"down": {"uv": [7, 0, 10.5, 3.5], "texture": "#chest"}
 			}
 		},
 		{
-			"from": [
-				6,
-				8,
-				1
-			],
-			"to": [
-				10,
-				16,
-				2
-			],
-			"rotation": {
-				"angle": 0,
-				"axis": "y",
-				"origin": [
-					8,
-					0,
-					8
-				]
-			},
+			"from": [6, 8, 1],
+			"to": [10, 16, 2],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 0, 8]},
 			"faces": {
-				"north": {
-					"uv": [
-						2,
-						6,
-						10,
-						10
-					],
-					"rotation": 90,
-					"texture": "#particle"
-				},
-				"east": {
-					"uv": [
-						1,
-						1,
-						9,
-						2
-					],
-					"rotation": 90,
-					"texture": "#particle"
-				},
-				"south": {
-					"uv": [
-						1,
-						1,
-						9,
-						5
-					],
-					"rotation": 90,
-					"texture": "#particle",
-					"tintindex": 0
-				},
-				"west": {
-					"uv": [
-						1,
-						1,
-						9,
-						2
-					],
-					"rotation": 90,
-					"texture": "#particle"
-				},
-				"up": {
-					"uv": [
-						11,
-						1,
-						15,
-						2
-					],
-					"texture": "#particle"
-				},
-				"down": {
-					"uv": [
-						1,
-						1,
-						5,
-						2
-					],
-					"texture": "#particle"
-				}
+				"north": {"uv": [2, 6, 10, 10], "rotation": 90, "texture": "#particle"},
+				"east": {"uv": [1, 1, 9, 2], "rotation": 90, "texture": "#particle"},
+				"south": {"uv": [1, 1, 9, 5], "rotation": 90, "texture": "#particle", "tintindex": 0},
+				"west": {"uv": [1, 1, 9, 2], "rotation": 90, "texture": "#particle"},
+				"up": {"uv": [11, 1, 15, 2], "texture": "#particle"},
+				"down": {"uv": [1, 1, 5, 2], "texture": "#particle"}
 			}
 		},
 		{
-			"from": [
-				5,
-				7,
-				2
-			],
-			"to": [
-				11,
-				13,
-				3
-			],
-			"rotation": {
-				"angle": 0,
-				"axis": "y",
-				"origin": [
-					8,
-					0,
-					8
-				]
-			},
+			"from": [5, 7, 2],
+			"to": [11, 13, 3],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 0, 8]},
 			"faces": {
-				"north": {
-					"uv": [
-						2,
-						6,
-						8,
-						12
-					],
-					"rotation": 90,
-					"texture": "#particle"
-				},
-				"east": {
-					"uv": [
-						1,
-						1,
-						11,
-						2
-					],
-					"rotation": 90,
-					"texture": "#particle"
-				},
-				"south": {
-					"uv": [
-						1,
-						1,
-						11,
-						9
-					],
-					"rotation": 90,
-					"texture": "#particle",
-					"tintindex": 0
-				},
-				"west": {
-					"uv": [
-						3,
-						5,
-						13,
-						6
-					],
-					"rotation": 90,
-					"texture": "#particle"
-				},
-				"up": {
-					"uv": [
-						3,
-						5,
-						11,
-						6
-					],
-					"texture": "#particle"
-				},
-				"down": {
-					"uv": [
-						3,
-						5,
-						11,
-						6
-					],
-					"texture": "#particle"
-				}
+				"north": {"uv": [2, 6, 8, 12], "rotation": 90, "texture": "#particle"},
+				"east": {"uv": [1, 1, 11, 2], "rotation": 90, "texture": "#particle"},
+				"south": {"uv": [1, 1, 11, 9], "rotation": 90, "texture": "#particle", "tintindex": 0},
+				"west": {"uv": [3, 5, 13, 6], "rotation": 90, "texture": "#particle"},
+				"up": {"uv": [3, 5, 11, 6], "texture": "#particle"},
+				"down": {"uv": [3, 5, 11, 6], "texture": "#particle"}
 			}
 		}
 	],
@@ -362,20 +162,7 @@
 			"name": "VoxelShapes",
 			"origin": [8, 8, 8],
 			"color": 0,
-			"children": [
-				0,
-				1,
-				2,
-				3,
-				4,
-				5,
-				6,
-				7,
-				8,
-				9,
-				10,
-				11
-			]
+			"children": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
 		}
 	]
 }

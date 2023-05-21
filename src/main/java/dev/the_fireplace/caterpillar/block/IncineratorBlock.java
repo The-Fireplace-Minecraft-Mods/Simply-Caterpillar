@@ -35,49 +35,36 @@ import java.util.ArrayList;
 import java.util.stream.Stream;
 
 public class IncineratorBlock extends DrillBaseBlock {
-    public static final BooleanProperty LIT = BlockStateProperties.LIT;
 
     private static final VoxelShape SHAPE = Stream.of(
-            Block.box(6, 0, 0, 10, 6, 16),
-            Block.box(10, 0, 0, 16, 16, 16),
-            Block.box(0, 0, 0, 6, 16, 16),
-            Block.box(6, 10, 0, 10, 16, 16),
-            Block.box(6, 6, 16, 10, 10, 31)
+        Block.box(0, 0, 0, 16, 16, 16),
+        Block.box(6, 6, 16, 10, 10, 32)
     ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
 
     public IncineratorBlock(Properties properties) {
         super(properties);
-        super.registerDefaultState(defaultBlockState().setValue(LIT, false));
         super.runCalculation(SHAPES, SHAPE);
     }
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        super.createBlockStateDefinition(builder);
-        builder.add(LIT);
-    }
-
-    @Override
     public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
-        if (state.getValue(LIT)) {
+        if (random.nextDouble() < 0.1D) {
             double d0 = (double) pos.getX() + 0.5D;
-            double d1 = (double) pos.getY();
+            double d1 = (double) pos.getY() + 0.25D;
             double d2 = (double) pos.getZ() + 0.5D;
 
             Direction direction = state.getValue(FACING);
             Direction.Axis direction$axis = direction.getAxis();
-            double d3 = 0.52D;
+            double d3 = 0.48D;
             double d4 = random.nextDouble() * 0.6D - 0.3D;
             double d5 = direction$axis == Direction.Axis.X ? d4 : (double) direction.getStepX() * d3;
             double d6 = random.nextDouble() * 6.0D / 16.0D;
             double d7 = direction$axis == Direction.Axis.Z ? d4 : (double) direction.getStepZ() * d3;
 
-            if (random.nextDouble() < 0.1D) {
-                level.playLocalSound(d0, d1, d2, SoundEvents.LAVA_POP, SoundSource.BLOCKS, 1.0F, 1.0F, false);
+            level.playLocalSound(d0, d1, d2, SoundEvents.LAVA_POP, SoundSource.BLOCKS, 1.0F, 1.0F, false);
 
-                level.addParticle(ParticleTypes.SMALL_FLAME, d0 + d5, d1 + d6, d2 - 0.5D + d7, 0.0D, 0.0D, 0.0D);
-                level.addParticle(ParticleTypes.SMALL_FLAME, d0 + d5, d1 + d6, d2 + 0.5D + d7, 0.0D, 0.0D, 0.0D);
-            }
+            level.addParticle(ParticleTypes.DRIPPING_LAVA, d0 + d5, d1 + d6, d2 - 0.5D + d7, 0.0D, 0.0D, 0.0D);
+            level.addParticle(ParticleTypes.DRIPPING_LAVA, d0 + d5, d1 + d6, d2 + 0.5D + d7, 0.0D, 0.0D, 0.0D);
         }
     }
 
