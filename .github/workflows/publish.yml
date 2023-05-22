@@ -12,7 +12,7 @@ jobs:
           workflow: build.yml
           name: Simply-Caterpillar_JAR
           path: build/libs/
-      - uses: Kir-Antipov/mc-publish@v3.2
+      - uses: Kir-Antipov/mc-publish@v3.3
         with:
           modrinth-id: boPuyi2x
           modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
