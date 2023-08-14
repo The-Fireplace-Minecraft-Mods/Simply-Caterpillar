@@ -72,27 +72,33 @@ public class DrillHeadBlock extends DrillBaseBlock {
     ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
 
     private static final VoxelShape SHAPE_BIT_TOP_LEFT = Stream.of(
-        Block.box(0, 0, 0, 16, 16, 1),
-        Block.box(0, 0, 0.5, 16, 16, 0.5)
+        Block.box(3, 3, 3, 13, 13, 14),
+        Block.box(4, 6, 14, 12, 10, 16),
+        Block.box(12, 7, 14, 16, 9, 15),
+        Block.box(7, 0, 14, 9, 6, 15)
     ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
 
     private static final VoxelShape SHAPE_BIT_TOP = Stream.of(
         Block.box(0, 7, 14, 4, 9, 15),
         Block.box(4, 6, 14, 12, 10, 16),
-        Block.box(8, 3, 3, 8, 13, 14),
-        Block.box(3, 8, 3, 13, 8, 14),
         Block.box(12, 7, 14, 16, 9, 15),
-        Block.box(7, 0, 14, 9, 6, 15)
+        Block.box(7, 0, 14, 9, 6, 15),
+        Block.box(3, 3, 3, 13, 13, 14)
     ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
 
     private static final VoxelShape SHAPE_BIT_TOP_RIGHT = Stream.of(
-        Block.box(0, 0, 0, 16, 16, 1),
-        Block.box(0, 0, 0.5, 16, 16, 0.5)
+        Block.box(3, 3, 3, 13, 13, 14),
+        Block.box(4, 6, 14, 12, 10, 16),
+        Block.box(0, 7, 14, 4, 9, 15),
+        Block.box(7, 0, 14, 9, 6, 15)
     ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
 
     private static final VoxelShape SHAPE_BIT_LEFT = Stream.of(
-        Block.box(0, 0, 0, 16, 16, 1),
-        Block.box(0, 0, 0.5, 16, 16, 0.5)
+        Block.box(4, 6, 14, 12, 10, 16),
+        Block.box(7, 10, 14, 9, 16, 15),
+        Block.box(12, 7, 14, 16, 9, 15),
+        Block.box(7, 0, 14, 9, 6, 15),
+        Block.box(3, 3, 3, 13, 13, 14)
     ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
 
     private static final VoxelShape SHAPE_BIT_MIDDLE = Stream.of(
@@ -101,28 +107,37 @@ public class DrillHeadBlock extends DrillBaseBlock {
         Block.box(7, 0, 14, 9, 6, 15),
         Block.box(12, 7, 14, 16, 9, 15),
         Block.box(4, 6, 14, 12, 10, 16),
-        Block.box(3, 8, 3, 13, 8, 14),
-        Block.box(8, 3, 3, 8, 13, 14)
+        Block.box(3, 3, 3, 13, 13, 14)
     ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
 
     private static final VoxelShape SHAPE_BIT_RIGHT = Stream.of(
-        Block.box(0, 0, 0, 16, 16, 1),
-        Block.box(0, 0, 0.5, 16, 16, 0.5)
+        Block.box(7, 10, 14, 9, 16, 15),
+        Block.box(4, 6, 14, 12, 10, 16),
+        Block.box(0, 7, 14, 4, 9, 15),
+        Block.box(7, 0, 14, 9, 6, 15),
+        Block.box(3, 3, 3, 13, 13, 14)
     ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
 
     private static final VoxelShape SHAPE_BIT_BOTTOM_LEFT = Stream.of(
-        Block.box(0, 0, 0, 16, 16, 1),
-        Block.box(0, 0, 0.5, 16, 16, 0.5)
+        Block.box(4, 6, 14, 12, 10, 16),
+        Block.box(12, 7, 14, 16, 9, 15),
+        Block.box(7, 10, 14, 9, 16, 15),
+        Block.box(3, 3, 3, 13, 13, 14)
     ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
 
     private static final VoxelShape SHAPE_BIT_BOTTOM = Stream.of(
-        Block.box(0, 0, 0, 16, 16, 1),
-        Block.box(0, 0, 0.5, 16, 16, 0.5)
+        Block.box(4, 6, 14, 12, 10, 16),
+        Block.box(0, 7, 14, 4, 9, 15),
+        Block.box(7, 10, 14, 9, 16, 15),
+        Block.box(12, 7, 14, 16, 9, 15),
+        Block.box(3, 3, 3, 13, 13, 14)
     ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
 
     private static final VoxelShape SHAPE_BIT_BOTTOM_RIGHT = Stream.of(
-        Block.box(0, 0, 0, 16, 16, 1),
-        Block.box(0, 0, 0.5, 16, 16, 0.5)
+        Block.box(0, 7, 14, 4, 9, 15),
+        Block.box(4, 6, 14, 12, 10, 16),
+        Block.box(7, 10, 14, 9, 16, 15),
+        Block.box(3, 3, 3, 13, 13, 14)
     ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
 
     public DrillHeadBlock(Properties properties) {
@@ -230,28 +245,29 @@ public class DrillHeadBlock extends DrillBaseBlock {
         Direction direction = state.getValue(FACING);
 
         level.destroyBlock(pos, !player.isCreative());
-        level.destroyBlock(pos.relative(direction.getCounterClockWise()), false);
-        level.destroyBlock(pos.relative(direction.getClockWise()), false);
-        level.destroyBlock(pos.above(), false);
-        level.destroyBlock(pos.below(), false);
-        level.destroyBlock(pos.above().relative(direction.getCounterClockWise()), false);
-        level.destroyBlock(pos.above().relative(direction.getClockWise()), false);
-        level.destroyBlock(pos.below().relative(direction.getCounterClockWise()), false);
-        level.destroyBlock(pos.below().relative(direction.getClockWise()), false);
+        level.destroyBlock(pos.relative(direction), false);
+        level.destroyBlock(pos.relative(direction).relative(direction.getCounterClockWise()), false);
+        level.destroyBlock(pos.relative(direction).relative(direction.getClockWise()), false);
+        level.destroyBlock(pos.relative(direction).above(), false);
+        level.destroyBlock(pos.relative(direction).below(), false);
+        level.destroyBlock(pos.relative(direction).above().relative(direction.getCounterClockWise()), false);
+        level.destroyBlock(pos.relative(direction).above().relative(direction.getClockWise()), false);
+        level.destroyBlock(pos.relative(direction).below().relative(direction.getCounterClockWise()), false);
+        level.destroyBlock(pos.relative(direction).below().relative(direction.getClockWise()), false);
     }
 
     public static void removeStructure(Level level, BlockPos pos, BlockState state) {
         Direction direction = state.getValue(FACING);
 
         level.removeBlock(pos, false);
-        level.removeBlock(pos.relative(direction.getCounterClockWise()), false);
-        level.removeBlock(pos.relative(direction.getClockWise()), false);
-        level.removeBlock(pos.above(), false);
-        level.removeBlock(pos.below(), false);
-        level.removeBlock(pos.above().relative(direction.getCounterClockWise()), false);
-        level.removeBlock(pos.above().relative(direction.getClockWise()), false);
-        level.removeBlock(pos.below().relative(direction.getCounterClockWise()), false);
-        level.removeBlock(pos.below().relative(direction.getClockWise()), false);
+        level.removeBlock(pos.relative(direction).relative(direction.getCounterClockWise()), false);
+        level.removeBlock(pos.relative(direction).relative(direction.getClockWise()), false);
+        level.removeBlock(pos.relative(direction).above(), false);
+        level.removeBlock(pos.relative(direction).below(), false);
+        level.removeBlock(pos.relative(direction).above().relative(direction.getCounterClockWise()), false);
+        level.removeBlock(pos.relative(direction).above().relative(direction.getClockWise()), false);
+        level.removeBlock(pos.relative(direction).below().relative(direction.getCounterClockWise()), false);
+        level.removeBlock(pos.relative(direction).below().relative(direction.getClockWise()), false);
     }
 
     public static void buildStructure(Level level, BlockPos pos, BlockState state) {
@@ -271,29 +287,30 @@ public class DrillHeadBlock extends DrillBaseBlock {
     public static void moveStructure(Level level, BlockPos pos, BlockState state) {
         Direction direction = state.getValue(FACING);
 
-        level.setBlockAndUpdate(pos.below(), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BIT_BOTTOM));
-        level.setBlockAndUpdate(pos.below().relative(direction.getCounterClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BIT_BOTTOM_LEFT));
-        level.setBlockAndUpdate(pos.below().relative(direction.getClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BIT_BOTTOM_RIGHT));
-        level.setBlockAndUpdate(pos.relative(direction.getCounterClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BIT_LEFT));
-        level.setBlockAndUpdate(pos.relative(direction.getClockWise()), state.setValue(PART, DrillHeadPart.BIT_RIGHT));
-        level.setBlockAndUpdate(pos.above(), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BIT_TOP));
-        level.setBlockAndUpdate(pos.above().relative(direction.getCounterClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BIT_TOP_LEFT));
-        level.setBlockAndUpdate(pos.above().relative(direction.getClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BIT_TOP_RIGHT));
+        level.setBlockAndUpdate(pos.relative(direction).below(), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BIT_BOTTOM));
+        level.setBlockAndUpdate(pos.relative(direction).below().relative(direction.getCounterClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BIT_BOTTOM_LEFT));
+        level.setBlockAndUpdate(pos.relative(direction).below().relative(direction.getClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BIT_BOTTOM_RIGHT));
+        level.setBlockAndUpdate(pos.relative(direction).relative(direction.getCounterClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BIT_LEFT));
+        level.setBlockAndUpdate(pos.relative(direction), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BIT_MIDDLE));
+        level.setBlockAndUpdate(pos.relative(direction).relative(direction.getClockWise()), state.setValue(PART, DrillHeadPart.BIT_RIGHT));
+        level.setBlockAndUpdate(pos.relative(direction).above(), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BIT_TOP));
+        level.setBlockAndUpdate(pos.relative(direction).above().relative(direction.getCounterClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BIT_TOP_LEFT));
+        level.setBlockAndUpdate(pos.relative(direction).above().relative(direction.getClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BIT_TOP_RIGHT));
     }
 
     public BlockPos getBasePos(BlockState state, BlockPos pos) {
         Direction direction = state.getValue(FACING);
 
         return switch (state.getValue(PART)) {
-            case BIT_RIGHT -> pos.relative(direction.getCounterClockWise());
-            case BIT_LEFT -> pos.relative(direction.getClockWise());
-            case BIT_TOP -> pos.below();
-            case BIT_BOTTOM -> pos.above();
+            case BIT_RIGHT -> pos.relative(direction.getOpposite()).relative(direction.getCounterClockWise());
+            case BIT_LEFT -> pos.relative(direction.getOpposite()).relative(direction.getClockWise());
+            case BIT_TOP -> pos.relative(direction.getOpposite()).below();
+            case BIT_BOTTOM -> pos.relative(direction.getOpposite()).above();
             case BIT_MIDDLE -> pos.relative(direction.getOpposite());
-            case BIT_TOP_LEFT -> pos.below().relative(direction.getClockWise());
-            case BIT_BOTTOM_LEFT -> pos.above().relative(direction.getClockWise());
-            case BIT_TOP_RIGHT -> pos.below().relative(direction.getCounterClockWise());
-            case BIT_BOTTOM_RIGHT -> pos.above().relative(direction.getCounterClockWise());
+            case BIT_TOP_LEFT -> pos.relative(direction.getOpposite()).below().relative(direction.getClockWise());
+            case BIT_BOTTOM_LEFT -> pos.relative(direction.getOpposite()).above().relative(direction.getClockWise());
+            case BIT_TOP_RIGHT -> pos.relative(direction.getOpposite()).below().relative(direction.getCounterClockWise());
+            case BIT_BOTTOM_RIGHT -> pos.relative(direction.getOpposite()).above().relative(direction.getCounterClockWise());
             default -> pos;
         };
     }
@@ -301,15 +318,16 @@ public class DrillHeadBlock extends DrillBaseBlock {
     public static void updateDrillingState(Level level, BlockPos pos, BlockState state) {
         Direction direction = state.getValue(FACING);
 
-        level.setBlockAndUpdate(pos.below(), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BIT_BOTTOM));
-        level.setBlockAndUpdate(pos.below().relative(direction.getCounterClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BIT_BOTTOM_LEFT));
-        level.setBlockAndUpdate(pos.below().relative(direction.getClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BIT_BOTTOM_RIGHT));
+        level.setBlockAndUpdate(pos.relative(direction).below(), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BIT_BOTTOM));
+        level.setBlockAndUpdate(pos.relative(direction).below().relative(direction.getCounterClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BIT_BOTTOM_LEFT));
+        level.setBlockAndUpdate(pos.relative(direction).below().relative(direction.getClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BIT_BOTTOM_RIGHT));
         level.setBlockAndUpdate(pos, state);
-        level.setBlockAndUpdate(pos.relative(direction.getCounterClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BIT_LEFT));
-        level.setBlockAndUpdate(pos.relative(direction.getClockWise()), state.setValue(PART, DrillHeadPart.BIT_RIGHT));
-        level.setBlockAndUpdate(pos.above(), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BIT_TOP));
-        level.setBlockAndUpdate(pos.above().relative(direction.getCounterClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BIT_TOP_LEFT));
-        level.setBlockAndUpdate(pos.above().relative(direction.getClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BIT_TOP_RIGHT));
+        level.setBlockAndUpdate(pos.relative(direction).relative(direction.getCounterClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BIT_LEFT));
+        level.setBlockAndUpdate(pos.relative(direction), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BIT_MIDDLE));
+        level.setBlockAndUpdate(pos.relative(direction).relative(direction.getClockWise()), state.setValue(PART, DrillHeadPart.BIT_RIGHT));
+        level.setBlockAndUpdate(pos.relative(direction).above(), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BIT_TOP));
+        level.setBlockAndUpdate(pos.relative(direction).above().relative(direction.getCounterClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BIT_TOP_LEFT));
+        level.setBlockAndUpdate(pos.relative(direction).above().relative(direction.getClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BIT_TOP_RIGHT));
     }
 
     @Override
@@ -321,9 +339,9 @@ public class DrillHeadBlock extends DrillBaseBlock {
             Direction direction = level.getBlockEntity(pos).getBlockState().getValue(DrillHeadBlock.FACING);
             Direction.Axis direction$axis = direction.getAxis();
 
-            double x = direction$axis == Direction.Axis.X ? pos.getX() + 0.55D : pos.getX();
+            double x = direction$axis == Direction.Axis.X ? pos.getX() - 0.44D : pos.getX();
             double y = pos.getY();
-            double z = direction$axis == Direction.Axis.Z ? pos.getZ() + 0.55D : pos.getZ();
+            double z = direction$axis == Direction.Axis.Z ? pos.getZ() - 0.44D : pos.getZ();
 
             for (int i = 0; i < 10; i++) {
                 double randomDefault = level.getRandom().nextDouble() * (2.0D + 1.0D) - 1.0D;
