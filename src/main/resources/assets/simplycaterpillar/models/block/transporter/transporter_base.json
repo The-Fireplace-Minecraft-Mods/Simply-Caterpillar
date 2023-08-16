@@ -79,8 +79,8 @@
 	"display": {
 		"gui": {
 			"rotation": [30, 45, 0],
-			"translation": [-1.6, 1, 0],
-			"scale": [0.52, 0.52, 0.52]
+			"translation": [-1.8, 0.25, 0],
+			"scale": [0.5, 0.5, 0.5]
 		}
 	},
 	"groups": [
