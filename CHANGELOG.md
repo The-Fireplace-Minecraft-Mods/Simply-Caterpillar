@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.19.4-7.4.0] - 2023-08-17
+
 ### Updated
 
 - Changed texture of the incinerator.
