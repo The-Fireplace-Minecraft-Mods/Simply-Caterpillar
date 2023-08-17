@@ -1,32 +1,33 @@
 {
+	"render_type": "cutout",
 	"textures": {
-		"top": "simplycaterpillar:block/reinforcement/wooden_top",
-		"rod": "simplycaterpillar:block/pieces/wood_piece",
-		"particle": "simplycaterpillar:block/reinforcement/wooden_top"
+		"2": "simplycaterpillar:block/reinforcement/reinforcement_rod",
+		"extend": "simplycaterpillar:block/reinforcement/reinforcement_extend",
+		"particle": "simplycaterpillar:block/reinforcement/reinforcement_top",
+		"top": "simplycaterpillar:block/reinforcement/reinforcement_top"
 	},
 	"elements": [
 		{
-			"from": [6, 1, 6],
+			"from": [6, 4, 6],
 			"to": [10, 16, 10],
+			"rotation": {"angle": 0, "axis": "y", "origin": [16, 0, 0]},
 			"faces": {
-				"north": {"uv": [0, 0, 15, 4], "rotation": 90, "texture": "#rod"},
-				"east": {"uv": [0, 0, 15, 4], "rotation": 90, "texture": "#rod"},
-				"south": {"uv": [0, 0, 15, 4], "rotation": 90, "texture": "#rod", "tintindex": 0},
-				"west": {"uv": [0, 0, 15, 4], "rotation": 90, "texture": "#rod"},
-				"up": {"uv": [0, 12, 4, 16], "texture": "#rod"},
-				"down": {"uv": [0, 12, 4, 16], "texture": "#rod"}
+				"north": {"uv": [0, 0, 12, 4], "rotation": 270, "texture": "#2", "tintindex": 0},
+				"east": {"uv": [0, 0, 12, 4], "rotation": 270, "texture": "#2"},
+				"south": {"uv": [0, 0, 12, 4], "rotation": 270, "texture": "#2"}
 			}
 		},
 		{
 			"from": [0, 0, 0],
-			"to": [16, 1, 16],
+			"to": [16, 4, 16],
+			"rotation": {"angle": 0, "axis": "y", "origin": [16, 0, 0]},
 			"faces": {
-				"north": {"uv": [0, 15, 16, 16], "texture": "#top"},
-				"east": {"uv": [0, 15, 16, 16], "texture": "#top"},
-				"south": {"uv": [0, 15, 16, 16], "texture": "#top", "tintindex": 0},
-				"west": {"uv": [0, 15, 16, 16], "texture": "#top"},
-				"up": {"uv": [0, 0, 16, 16], "texture": "#top"},
-				"down": {"uv": [0, 0, 16, 16], "texture": "#top"}
+				"north": {"uv": [0, 0, 16, 4], "rotation": 180, "texture": "#extend", "tintindex": 0},
+				"east": {"uv": [0, 0, 16, 4], "rotation": 180, "texture": "#extend"},
+				"south": {"uv": [0, 0, 16, 4], "rotation": 180, "texture": "#extend"},
+				"west": {"uv": [0, 0, 16, 4], "rotation": 180, "texture": "#extend"},
+				"up": {"uv": [0, 0, 16, 16], "rotation": 180, "texture": "#top"},
+				"down": {"uv": [0, 0, 16, 16], "rotation": 180, "texture": "#top"}
 			}
 		}
 	],

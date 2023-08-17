@@ -7,21 +7,23 @@ public enum DrillHeadPart implements StringRepresentable {
 
     BASE("base"),
 
-    BLADE_TOP("blade_top"),
+    BIT_TOP_LEFT("bit_top_left"),
 
-    BLADE_BOTTOM("blade_bottom"),
+    BIT_TOP("bit_top"),
 
-    BLADE_LEFT("blade_left"),
+    BIT_TOP_RIGHT("bit_top_right"),
 
-    BLADE_LEFT_TOP("blade_left_top"),
+    BIT_LEFT("bit_left"),
 
-    BLADE_LEFT_BOTTOM("blade_left_bottom"),
+    BIT_MIDDLE("bit_middle"),
 
-    BLADE_RIGHT("blade_right"),
+    BIT_RIGHT("bit_right"),
 
-    BLADE_RIGHT_TOP("blade_right_top"),
+    BIT_BOTTOM_LEFT("bit_bottom_left"),
 
-    BLADE_RIGHT_BOTTOM("blade_right_bottom");
+    BIT_BOTTOM("bit_bottom"),
+
+    BIT_BOTTOM_RIGHT("bit_bottom_right");
 
     private final String name;
 

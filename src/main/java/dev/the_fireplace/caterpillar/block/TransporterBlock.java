@@ -50,11 +50,8 @@ public class TransporterBlock extends DrillBaseBlock {
     private static final Map<Direction, VoxelShape> SHAPES_LOWER = new EnumMap<>(Direction.class);
 
     private static final VoxelShape SHAPE_UPPER = Stream.of(
-        Block.box(6, 0, 0, 10, 6, 16),
-        Block.box(10, 0, 0, 16, 16, 16),
-        Block.box(0, 0, 0, 6, 16, 16),
-        Block.box(6, 10, 0, 10, 16, 16),
-        Block.box(6, 6, 16, 10, 10, 31),
+        Block.box(0, 0, 0, 16, 16, 16),
+        Block.box(6, 6, 16, 10, 10, 32),
         Block.box(-0.1, -7, 1.5, 2.9, 9, 1.5),
         Block.box(1.5, -7, -0.1, 1.5, 9, 2.9),
         Block.box(14.5, -7, 12.9, 14.5, 9, 15.9),

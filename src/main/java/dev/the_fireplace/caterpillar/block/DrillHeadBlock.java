@@ -48,27 +48,111 @@ public class DrillHeadBlock extends DrillBaseBlock {
 
     private static final Map<Direction, VoxelShape> SHAPES_BASE = new EnumMap<>(Direction.class);
 
-    private static final Map<Direction, VoxelShape> SHAPES_BLADES = new EnumMap<>(Direction.class);
+    private static final Map<Direction, VoxelShape> SHAPES_BIT_TOP_LEFT = new EnumMap<>(Direction.class);
+
+    private static final Map<Direction, VoxelShape> SHAPES_BIT_TOP = new EnumMap<>(Direction.class);
+
+    private static final Map<Direction, VoxelShape> SHAPES_BIT_TOP_RIGHT = new EnumMap<>(Direction.class);
+
+    private static final Map<Direction, VoxelShape> SHAPES_BIT_LEFT = new EnumMap<>(Direction.class);
+
+    private static final Map<Direction, VoxelShape> SHAPES_BIT_MIDDLE = new EnumMap<>(Direction.class);
+
+    private static final Map<Direction, VoxelShape> SHAPES_BIT_RIGHT = new EnumMap<>(Direction.class);
+
+    private static final Map<Direction, VoxelShape> SHAPES_BIT_BOTTOM_LEFT = new EnumMap<>(Direction.class);
+
+    private static final Map<Direction, VoxelShape> SHAPES_BIT_BOTTOM = new EnumMap<>(Direction.class);
+
+    private static final Map<Direction, VoxelShape> SHAPES_BIT_BOTTOM_RIGHT = new EnumMap<>(Direction.class);
 
     private static final VoxelShape SHAPE_BASE = Stream.of(
-        Block.box(0, 10, 1, 16, 16, 16),
-        Block.box(0, 6, 1, 16, 10, 16),
-        Block.box(0, 0, 1, 16, 6, 16),
-        Block.box(6, 6, 16, 10, 10, 31),
-        Block.box(0, 0, 0.5, 16, 16, 0.5),
-        Block.box(0, 0, 0, 16, 16, 1)
+        Block.box(0, 0, 0, 16, 16, 16),
+        Block.box(6, 6, 16, 10, 10, 32)
     ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
 
-    private static final VoxelShape SHAPE_BLADES = Stream.of(
-        Block.box(0, 0, 0, 16, 16, 1),
-        Block.box(0, 0, 0.5, 16, 16, 0.5)
+    private static final VoxelShape SHAPE_BIT_TOP_LEFT = Stream.of(
+        Block.box(3, 3, 3, 13, 13, 14),
+        Block.box(4, 6, 14, 12, 10, 16),
+        Block.box(12, 7, 14, 16, 9, 15),
+        Block.box(7, 0, 14, 9, 6, 15)
+    ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
+
+    private static final VoxelShape SHAPE_BIT_TOP = Stream.of(
+        Block.box(0, 7, 14, 4, 9, 15),
+        Block.box(4, 6, 14, 12, 10, 16),
+        Block.box(12, 7, 14, 16, 9, 15),
+        Block.box(7, 0, 14, 9, 6, 15),
+        Block.box(3, 3, 3, 13, 13, 14)
+    ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
+
+    private static final VoxelShape SHAPE_BIT_TOP_RIGHT = Stream.of(
+        Block.box(3, 3, 3, 13, 13, 14),
+        Block.box(4, 6, 14, 12, 10, 16),
+        Block.box(0, 7, 14, 4, 9, 15),
+        Block.box(7, 0, 14, 9, 6, 15)
+    ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
+
+    private static final VoxelShape SHAPE_BIT_LEFT = Stream.of(
+        Block.box(4, 6, 14, 12, 10, 16),
+        Block.box(7, 10, 14, 9, 16, 15),
+        Block.box(12, 7, 14, 16, 9, 15),
+        Block.box(7, 0, 14, 9, 6, 15),
+        Block.box(3, 3, 3, 13, 13, 14)
+    ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
+
+    private static final VoxelShape SHAPE_BIT_MIDDLE = Stream.of(
+        Block.box(7, 10, 14, 9, 16, 15),
+        Block.box(0, 7, 14, 4, 9, 15),
+        Block.box(7, 0, 14, 9, 6, 15),
+        Block.box(12, 7, 14, 16, 9, 15),
+        Block.box(4, 6, 14, 12, 10, 16),
+        Block.box(3, 3, 3, 13, 13, 14)
+    ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
+
+    private static final VoxelShape SHAPE_BIT_RIGHT = Stream.of(
+        Block.box(7, 10, 14, 9, 16, 15),
+        Block.box(4, 6, 14, 12, 10, 16),
+        Block.box(0, 7, 14, 4, 9, 15),
+        Block.box(7, 0, 14, 9, 6, 15),
+        Block.box(3, 3, 3, 13, 13, 14)
+    ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
+
+    private static final VoxelShape SHAPE_BIT_BOTTOM_LEFT = Stream.of(
+        Block.box(4, 6, 14, 12, 10, 16),
+        Block.box(12, 7, 14, 16, 9, 15),
+        Block.box(7, 10, 14, 9, 16, 15),
+        Block.box(3, 3, 3, 13, 13, 14)
+    ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
+
+    private static final VoxelShape SHAPE_BIT_BOTTOM = Stream.of(
+        Block.box(4, 6, 14, 12, 10, 16),
+        Block.box(0, 7, 14, 4, 9, 15),
+        Block.box(7, 10, 14, 9, 16, 15),
+        Block.box(12, 7, 14, 16, 9, 15),
+        Block.box(3, 3, 3, 13, 13, 14)
+    ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
+
+    private static final VoxelShape SHAPE_BIT_BOTTOM_RIGHT = Stream.of(
+        Block.box(0, 7, 14, 4, 9, 15),
+        Block.box(4, 6, 14, 12, 10, 16),
+        Block.box(7, 10, 14, 9, 16, 15),
+        Block.box(3, 3, 3, 13, 13, 14)
     ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
 
     public DrillHeadBlock(Properties properties) {
         super(properties);
-        super.registerDefaultState(defaultBlockState().setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_BOTTOM).setValue(DrillHeadBlock.WATERLOGGED, Boolean.FALSE).setValue(DrillHeadBlock.DRILLING, Boolean.FALSE));
-        super.runCalculation(DrillHeadBlock.SHAPES_BLADES, DrillHeadBlock.SHAPE_BLADES);
+        super.registerDefaultState(defaultBlockState().setValue(DrillHeadBlock.PART, DrillHeadPart.BIT_BOTTOM).setValue(DrillHeadBlock.WATERLOGGED, Boolean.FALSE).setValue(DrillHeadBlock.DRILLING, Boolean.FALSE));
         super.runCalculation(DrillHeadBlock.SHAPES_BASE, DrillHeadBlock.SHAPE_BASE);
+        super.runCalculation(DrillHeadBlock.SHAPES_BIT_TOP_LEFT, DrillHeadBlock.SHAPE_BIT_TOP_LEFT);
+        super.runCalculation(DrillHeadBlock.SHAPES_BIT_TOP, DrillHeadBlock.SHAPE_BIT_TOP);
+        super.runCalculation(DrillHeadBlock.SHAPES_BIT_TOP_RIGHT, DrillHeadBlock.SHAPE_BIT_TOP_RIGHT);
+        super.runCalculation(DrillHeadBlock.SHAPES_BIT_LEFT, DrillHeadBlock.SHAPE_BIT_LEFT);
+        super.runCalculation(DrillHeadBlock.SHAPES_BIT_MIDDLE, DrillHeadBlock.SHAPE_BIT_MIDDLE);
+        super.runCalculation(DrillHeadBlock.SHAPES_BIT_RIGHT, DrillHeadBlock.SHAPE_BIT_RIGHT);
+        super.runCalculation(DrillHeadBlock.SHAPES_BIT_BOTTOM_LEFT, DrillHeadBlock.SHAPE_BIT_BOTTOM_LEFT);
+        super.runCalculation(DrillHeadBlock.SHAPES_BIT_BOTTOM, DrillHeadBlock.SHAPE_BIT_BOTTOM);
+        super.runCalculation(DrillHeadBlock.SHAPES_BIT_BOTTOM_RIGHT, DrillHeadBlock.SHAPE_BIT_BOTTOM_RIGHT);
     }
 
     @Override
@@ -79,10 +163,18 @@ public class DrillHeadBlock extends DrillBaseBlock {
 
     @Override
     public @NotNull VoxelShape getShape(BlockState state, @NotNull BlockGetter level, @NotNull BlockPos pos, @NotNull CollisionContext context) {
-        if (state.getValue(DrillHeadBlock.PART) == DrillHeadPart.BASE) {
-            return DrillHeadBlock.SHAPES_BASE.get(state.getValue(FACING));
-        }
-        return DrillHeadBlock.SHAPES_BLADES.get(state.getValue(FACING));
+        return switch (state.getValue(DrillHeadBlock.PART)) {
+            case BIT_TOP_LEFT -> DrillHeadBlock.SHAPES_BIT_TOP_LEFT.get(state.getValue(FACING));
+            case BIT_TOP -> DrillHeadBlock.SHAPES_BIT_TOP.get(state.getValue(FACING));
+            case BIT_TOP_RIGHT -> DrillHeadBlock.SHAPES_BIT_TOP_RIGHT.get(state.getValue(FACING));
+            case BIT_LEFT -> DrillHeadBlock.SHAPES_BIT_LEFT.get(state.getValue(FACING));
+            case BIT_MIDDLE -> DrillHeadBlock.SHAPES_BIT_MIDDLE.get(state.getValue(FACING));
+            case BIT_RIGHT -> DrillHeadBlock.SHAPES_BIT_RIGHT.get(state.getValue(FACING));
+            case BIT_BOTTOM_LEFT -> DrillHeadBlock.SHAPES_BIT_BOTTOM_LEFT.get(state.getValue(FACING));
+            case BIT_BOTTOM -> DrillHeadBlock.SHAPES_BIT_BOTTOM.get(state.getValue(FACING));
+            case BIT_BOTTOM_RIGHT -> DrillHeadBlock.SHAPES_BIT_BOTTOM_RIGHT.get(state.getValue(FACING));
+            default -> DrillHeadBlock.SHAPES_BASE.get(state.getValue(FACING));
+        };
     }
 
     @Override
@@ -107,7 +199,7 @@ public class DrillHeadBlock extends DrillBaseBlock {
 
             if (CaterpillarBlockUtil.getConnectedCaterpillarBlockEntities(level, caterpillarHeadPos, new ArrayList<>()).stream().noneMatch(blockEntity -> blockEntity instanceof DrillHeadBlockEntity)) {
                 if (CaterpillarBlockUtil.isConnectedCaterpillarSameDirection(level, blockPos.above(), direction)) {
-                    return defaultBlockState().setValue(FACING, direction).setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_BOTTOM).setValue(DrillHeadBlock.WATERLOGGED, fluidState.getType() == Fluids.WATER);
+                    return defaultBlockState().setValue(FACING, direction).setValue(DrillHeadBlock.PART, DrillHeadPart.BIT_BOTTOM).setValue(DrillHeadBlock.WATERLOGGED, fluidState.getType() == Fluids.WATER);
                 }
             } else {
                 context.getPlayer().displayClientMessage(Component.translatable("block.simplycaterpillar.blocks.already_connected", BlockInit.DRILL_HEAD.get().getName()), true);
@@ -153,68 +245,72 @@ public class DrillHeadBlock extends DrillBaseBlock {
         Direction direction = state.getValue(FACING);
 
         level.destroyBlock(pos, !player.isCreative());
-        level.destroyBlock(pos.relative(direction.getCounterClockWise()), false);
-        level.destroyBlock(pos.relative(direction.getClockWise()), false);
-        level.destroyBlock(pos.above(), false);
-        level.destroyBlock(pos.below(), false);
-        level.destroyBlock(pos.above().relative(direction.getCounterClockWise()), false);
-        level.destroyBlock(pos.above().relative(direction.getClockWise()), false);
-        level.destroyBlock(pos.below().relative(direction.getCounterClockWise()), false);
-        level.destroyBlock(pos.below().relative(direction.getClockWise()), false);
+        level.destroyBlock(pos.relative(direction), false);
+        level.destroyBlock(pos.relative(direction).relative(direction.getCounterClockWise()), false);
+        level.destroyBlock(pos.relative(direction).relative(direction.getClockWise()), false);
+        level.destroyBlock(pos.relative(direction).above(), false);
+        level.destroyBlock(pos.relative(direction).below(), false);
+        level.destroyBlock(pos.relative(direction).above().relative(direction.getCounterClockWise()), false);
+        level.destroyBlock(pos.relative(direction).above().relative(direction.getClockWise()), false);
+        level.destroyBlock(pos.relative(direction).below().relative(direction.getCounterClockWise()), false);
+        level.destroyBlock(pos.relative(direction).below().relative(direction.getClockWise()), false);
     }
 
     public static void removeStructure(Level level, BlockPos pos, BlockState state) {
         Direction direction = state.getValue(FACING);
 
         level.removeBlock(pos, false);
-        level.removeBlock(pos.relative(direction.getCounterClockWise()), false);
-        level.removeBlock(pos.relative(direction.getClockWise()), false);
-        level.removeBlock(pos.above(), false);
-        level.removeBlock(pos.below(), false);
-        level.removeBlock(pos.above().relative(direction.getCounterClockWise()), false);
-        level.removeBlock(pos.above().relative(direction.getClockWise()), false);
-        level.removeBlock(pos.below().relative(direction.getCounterClockWise()), false);
-        level.removeBlock(pos.below().relative(direction.getClockWise()), false);
+        level.removeBlock(pos.relative(direction).relative(direction.getCounterClockWise()), false);
+        level.removeBlock(pos.relative(direction).relative(direction.getClockWise()), false);
+        level.removeBlock(pos.relative(direction).above(), false);
+        level.removeBlock(pos.relative(direction).below(), false);
+        level.removeBlock(pos.relative(direction).above().relative(direction.getCounterClockWise()), false);
+        level.removeBlock(pos.relative(direction).above().relative(direction.getClockWise()), false);
+        level.removeBlock(pos.relative(direction).below().relative(direction.getCounterClockWise()), false);
+        level.removeBlock(pos.relative(direction).below().relative(direction.getClockWise()), false);
     }
 
     public static void buildStructure(Level level, BlockPos pos, BlockState state) {
         Direction direction = state.getValue(FACING);
 
-        level.setBlockAndUpdate(pos.relative(direction.getCounterClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_LEFT_BOTTOM).setValue(DrillHeadBlock.WATERLOGGED, level.getFluidState(pos.relative(direction.getCounterClockWise())).getType() == Fluids.WATER));
-        level.setBlockAndUpdate(pos.relative(direction.getClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_RIGHT_BOTTOM).setValue(DrillHeadBlock.WATERLOGGED, level.getFluidState(pos.relative(direction.getClockWise())).getType() == Fluids.WATER));
-        level.setBlockAndUpdate(pos.above().relative(direction.getCounterClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_LEFT).setValue(DrillHeadBlock.WATERLOGGED, level.getFluidState(pos.above().relative(direction.getCounterClockWise())).getType() == Fluids.WATER));
-        level.setBlockAndUpdate(pos.above().relative(direction.getClockWise()), state.setValue(PART, DrillHeadPart.BLADE_RIGHT).setValue(DrillHeadBlock.WATERLOGGED, level.getFluidState(pos.above().relative(direction.getClockWise())).getType() == Fluids.WATER));
-        level.setBlockAndUpdate(pos.above(2), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_TOP).setValue(DrillHeadBlock.WATERLOGGED, level.getFluidState(pos.above(2)).getType() == Fluids.WATER));
-        level.setBlockAndUpdate(pos.above(2).relative(direction.getCounterClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_LEFT_TOP).setValue(DrillHeadBlock.WATERLOGGED, level.getFluidState(pos.above(2).relative(direction.getCounterClockWise())).getType() == Fluids.WATER));
-        level.setBlockAndUpdate(pos.above(2).relative(direction.getClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_RIGHT_TOP).setValue(DrillHeadBlock.WATERLOGGED, level.getFluidState(pos.above(2).relative(direction.getClockWise())).getType() == Fluids.WATER));
-        level.setBlockAndUpdate(pos.above(), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BASE).setValue(WATERLOGGED, level.getFluidState(pos.above()).getType() == Fluids.WATER));
+        level.setBlockAndUpdate(pos.relative(direction.getCounterClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BIT_BOTTOM_LEFT).setValue(DrillHeadBlock.WATERLOGGED, level.getFluidState(pos.relative(direction.getCounterClockWise())).getType() == Fluids.WATER));
+        level.setBlockAndUpdate(pos.relative(direction.getClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BIT_BOTTOM_RIGHT).setValue(DrillHeadBlock.WATERLOGGED, level.getFluidState(pos.relative(direction.getClockWise())).getType() == Fluids.WATER));
+        level.setBlockAndUpdate(pos.above().relative(direction.getCounterClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BIT_LEFT).setValue(DrillHeadBlock.WATERLOGGED, level.getFluidState(pos.above().relative(direction.getCounterClockWise())).getType() == Fluids.WATER));
+        level.setBlockAndUpdate(pos.above().relative(direction.getClockWise()), state.setValue(PART, DrillHeadPart.BIT_RIGHT).setValue(DrillHeadBlock.WATERLOGGED, level.getFluidState(pos.above().relative(direction.getClockWise())).getType() == Fluids.WATER));
+        level.setBlockAndUpdate(pos.above(2), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BIT_TOP).setValue(DrillHeadBlock.WATERLOGGED, level.getFluidState(pos.above(2)).getType() == Fluids.WATER));
+        level.setBlockAndUpdate(pos.above(), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BIT_MIDDLE).setValue(DrillHeadBlock.WATERLOGGED, level.getFluidState(pos.above()).getType() == Fluids.WATER));
+        level.setBlockAndUpdate(pos.above(2).relative(direction.getCounterClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BIT_TOP_LEFT).setValue(DrillHeadBlock.WATERLOGGED, level.getFluidState(pos.above(2).relative(direction.getCounterClockWise())).getType() == Fluids.WATER));
+        level.setBlockAndUpdate(pos.above(2).relative(direction.getClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BIT_TOP_RIGHT).setValue(DrillHeadBlock.WATERLOGGED, level.getFluidState(pos.above(2).relative(direction.getClockWise())).getType() == Fluids.WATER));
+        level.setBlockAndUpdate(pos.above().relative(direction.getOpposite()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BASE).setValue(WATERLOGGED, level.getFluidState(pos.above()).getType() == Fluids.WATER));
     }
 
     public static void moveStructure(Level level, BlockPos pos, BlockState state) {
         Direction direction = state.getValue(FACING);
 
-        level.setBlockAndUpdate(pos.below(), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_BOTTOM));
-        level.setBlockAndUpdate(pos.below().relative(direction.getCounterClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_LEFT_BOTTOM));
-        level.setBlockAndUpdate(pos.below().relative(direction.getClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_RIGHT_BOTTOM));
-        level.setBlockAndUpdate(pos.relative(direction.getCounterClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_LEFT));
-        level.setBlockAndUpdate(pos.relative(direction.getClockWise()), state.setValue(PART, DrillHeadPart.BLADE_RIGHT));
-        level.setBlockAndUpdate(pos.above(), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_TOP));
-        level.setBlockAndUpdate(pos.above().relative(direction.getCounterClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_LEFT_TOP));
-        level.setBlockAndUpdate(pos.above().relative(direction.getClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_RIGHT_TOP));
+        level.setBlockAndUpdate(pos.relative(direction).below(), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BIT_BOTTOM));
+        level.setBlockAndUpdate(pos.relative(direction).below().relative(direction.getCounterClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BIT_BOTTOM_LEFT));
+        level.setBlockAndUpdate(pos.relative(direction).below().relative(direction.getClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BIT_BOTTOM_RIGHT));
+        level.setBlockAndUpdate(pos.relative(direction).relative(direction.getCounterClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BIT_LEFT));
+        level.setBlockAndUpdate(pos.relative(direction), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BIT_MIDDLE));
+        level.setBlockAndUpdate(pos.relative(direction).relative(direction.getClockWise()), state.setValue(PART, DrillHeadPart.BIT_RIGHT));
+        level.setBlockAndUpdate(pos.relative(direction).above(), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BIT_TOP));
+        level.setBlockAndUpdate(pos.relative(direction).above().relative(direction.getCounterClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BIT_TOP_LEFT));
+        level.setBlockAndUpdate(pos.relative(direction).above().relative(direction.getClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BIT_TOP_RIGHT));
     }
 
     public BlockPos getBasePos(BlockState state, BlockPos pos) {
         Direction direction = state.getValue(FACING);
 
         return switch (state.getValue(PART)) {
-            case BLADE_RIGHT -> pos.relative(direction.getCounterClockWise());
-            case BLADE_LEFT -> pos.relative(direction.getClockWise());
-            case BLADE_TOP -> pos.below();
-            case BLADE_BOTTOM -> pos.above();
-            case BLADE_LEFT_TOP -> pos.below().relative(direction.getClockWise());
-            case BLADE_LEFT_BOTTOM -> pos.above().relative(direction.getClockWise());
-            case BLADE_RIGHT_TOP -> pos.below().relative(direction.getCounterClockWise());
-            case BLADE_RIGHT_BOTTOM -> pos.above().relative(direction.getCounterClockWise());
+            case BIT_RIGHT -> pos.relative(direction.getOpposite()).relative(direction.getCounterClockWise());
+            case BIT_LEFT -> pos.relative(direction.getOpposite()).relative(direction.getClockWise());
+            case BIT_TOP -> pos.relative(direction.getOpposite()).below();
+            case BIT_BOTTOM -> pos.relative(direction.getOpposite()).above();
+            case BIT_MIDDLE -> pos.relative(direction.getOpposite());
+            case BIT_TOP_LEFT -> pos.relative(direction.getOpposite()).below().relative(direction.getClockWise());
+            case BIT_BOTTOM_LEFT -> pos.relative(direction.getOpposite()).above().relative(direction.getClockWise());
+            case BIT_TOP_RIGHT -> pos.relative(direction.getOpposite()).below().relative(direction.getCounterClockWise());
+            case BIT_BOTTOM_RIGHT -> pos.relative(direction.getOpposite()).above().relative(direction.getCounterClockWise());
             default -> pos;
         };
     }
@@ -222,15 +318,16 @@ public class DrillHeadBlock extends DrillBaseBlock {
     public static void updateDrillingState(Level level, BlockPos pos, BlockState state) {
         Direction direction = state.getValue(FACING);
 
-        level.setBlockAndUpdate(pos.below(), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_BOTTOM));
-        level.setBlockAndUpdate(pos.below().relative(direction.getCounterClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_LEFT_BOTTOM));
-        level.setBlockAndUpdate(pos.below().relative(direction.getClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_RIGHT_BOTTOM));
+        level.setBlockAndUpdate(pos.relative(direction).below(), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BIT_BOTTOM));
+        level.setBlockAndUpdate(pos.relative(direction).below().relative(direction.getCounterClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BIT_BOTTOM_LEFT));
+        level.setBlockAndUpdate(pos.relative(direction).below().relative(direction.getClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BIT_BOTTOM_RIGHT));
         level.setBlockAndUpdate(pos, state);
-        level.setBlockAndUpdate(pos.relative(direction.getCounterClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_LEFT));
-        level.setBlockAndUpdate(pos.relative(direction.getClockWise()), state.setValue(PART, DrillHeadPart.BLADE_RIGHT));
-        level.setBlockAndUpdate(pos.above(), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_TOP));
-        level.setBlockAndUpdate(pos.above().relative(direction.getCounterClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_LEFT_TOP));
-        level.setBlockAndUpdate(pos.above().relative(direction.getClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BLADE_RIGHT_TOP));
+        level.setBlockAndUpdate(pos.relative(direction).relative(direction.getCounterClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BIT_LEFT));
+        level.setBlockAndUpdate(pos.relative(direction), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BIT_MIDDLE));
+        level.setBlockAndUpdate(pos.relative(direction).relative(direction.getClockWise()), state.setValue(PART, DrillHeadPart.BIT_RIGHT));
+        level.setBlockAndUpdate(pos.relative(direction).above(), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BIT_TOP));
+        level.setBlockAndUpdate(pos.relative(direction).above().relative(direction.getCounterClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BIT_TOP_LEFT));
+        level.setBlockAndUpdate(pos.relative(direction).above().relative(direction.getClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BIT_TOP_RIGHT));
     }
 
     @Override
@@ -242,9 +339,9 @@ public class DrillHeadBlock extends DrillBaseBlock {
             Direction direction = level.getBlockEntity(pos).getBlockState().getValue(DrillHeadBlock.FACING);
             Direction.Axis direction$axis = direction.getAxis();
 
-            double x = direction$axis == Direction.Axis.X ? pos.getX() + 0.55D : pos.getX();
+            double x = direction$axis == Direction.Axis.X ? pos.getX() - 0.44D : pos.getX();
             double y = pos.getY();
-            double z = direction$axis == Direction.Axis.Z ? pos.getZ() + 0.55D : pos.getZ();
+            double z = direction$axis == Direction.Axis.Z ? pos.getZ() - 0.44D : pos.getZ();
 
             for (int i = 0; i < 10; i++) {
                 double randomDefault = level.getRandom().nextDouble() * (2.0D + 1.0D) - 1.0D;

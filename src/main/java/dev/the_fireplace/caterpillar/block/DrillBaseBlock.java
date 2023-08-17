@@ -42,11 +42,8 @@ public class DrillBaseBlock extends BaseEntityBlock implements SimpleWaterlogged
 
     protected final Map<Direction, VoxelShape> SHAPES = new EnumMap<>(Direction.class);
     private static final VoxelShape SHAPE = Stream.of(
-        Block.box(6, 0, 0, 10, 6, 16),
-        Block.box(10, 0, 0, 16, 16, 16),
-        Block.box(0, 0, 0, 6, 16, 16),
-        Block.box(6, 10, 0, 10, 16, 16),
-        Block.box(6, 6, 16, 10, 10, 31)
+        Block.box(0, 0, 0, 16, 16, 16),
+        Block.box(6, 6, 16, 10, 10, 32)
     ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
 
     public DrillBaseBlock(Properties properties) {

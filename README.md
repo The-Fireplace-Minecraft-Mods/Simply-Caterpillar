@@ -9,7 +9,7 @@
 </div>
 
 <div align="center">
-    <a href="https://minecraft.curseforge.com/projects/simply-caterpillar" target="_blank">
+    <a href="https://www.curseforge.com/minecraft/mc-mods/simply-caterpillar" target="_blank">
         <img src="https://raw.githubusercontent.com/The-Fireplace-Minecraft-Mods/Simply-Caterpillar/1.19.4-forge/.github/sources/curseforge-badge.png" alt="CurseForge download link" />
     </a>
     <a href="https://modrinth.com/mod/simply-caterpillar" target="_blank">
@@ -141,7 +141,8 @@ You can add or not add any part to customize your drill.
 
 ## Credits
 
-- Daniel-Mendes
-- The_Fireplace **[Twitter](https://twitter.com/The_FireplaceMC)** | **[Discord](https://discord.gg/CJ6pNEk)**
-- freethemice
-- Rumaruka
+- Daniel-Mendes currently maintains the mod.
+- The_Fireplace ([Twitter](https://twitter.com/The_FireplaceMC) | [CurseForge](https://curseforge.com/members/the_fireplace/projects)) previously maintained the mod.
+- [Caterpillar mod by freethemice](https://www.curseforge.com/minecraft/mc-mods/caterpillar) for the original idea.
+- [Patchouli mod by Vazkii](https://www.curseforge.com/minecraft/mc-mods/patchouli) for the book texture.
+- Reijvi ([Twitter](https://twitter.com/Reijvii) | [CurseForge](https://curseforge.com/members/Reijvi/projects)) for the incinerator texture commissioned by Daniel-Mendes.
