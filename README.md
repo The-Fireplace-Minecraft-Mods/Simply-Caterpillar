@@ -9,7 +9,7 @@
 </div>
 
 <div align="center">
-    <a href="https://minecraft.curseforge.com/projects/simply-caterpillar" target="_blank">
+    <a href="https://www.curseforge.com/minecraft/mc-mods/simply-caterpillar" target="_blank">
         <img src="https://raw.githubusercontent.com/The-Fireplace-Minecraft-Mods/Simply-Caterpillar/1.19.4-forge/.github/sources/curseforge-badge.png" alt="CurseForge download link" />
     </a>
     <a href="https://modrinth.com/mod/simply-caterpillar" target="_blank">
