@@ -45,7 +45,7 @@ public class CaterpillarSyncSelectedTabC2SPacket {
         context.enqueueWork(() -> {
             ServerPlayer player = context.getSender();
             assert player != null;
-            ServerLevel level = player.getLevel();
+            ServerLevel level = player.serverLevel();
 
             if(level.getBlockEntity(pos) instanceof DrillBaseBlockEntity currentBlockEntity) {
                 BlockState state = currentBlockEntity.getBlockState();

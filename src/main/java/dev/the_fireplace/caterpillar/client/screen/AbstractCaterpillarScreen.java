@@ -11,8 +11,11 @@ import dev.the_fireplace.caterpillar.client.screen.widget.TutorialButton;
 import dev.the_fireplace.caterpillar.menu.AbstractCaterpillarMenu;
 import dev.the_fireplace.caterpillar.network.PacketHandler;
 import dev.the_fireplace.caterpillar.network.packet.client.CaterpillarSyncSelectedTabC2SPacket;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.entity.DisplayRenderer;
+import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -106,32 +109,33 @@ public abstract class AbstractCaterpillarScreen<T extends AbstractCaterpillarMen
     }
 
     @Override
-    public void render(@NotNull PoseStack stack, int mouseX, int mouseY, float partialTicks) {
-        this.renderBackground(stack);
+    public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+        this.renderBackground(graphics);
 
-        super.render(stack, mouseX, mouseY, partialTicks);
-        this.renderTooltip(stack, mouseX, mouseY);
-        this.renderTooltipTabButtons(stack, mouseX, mouseY);
-        this.renderTutorialTooltip(stack, mouseX, mouseY);
+        super.render(graphics, mouseX, mouseY, partialTicks);
+        this.renderTooltip(graphics, mouseX, mouseY);
+        this.renderTooltipTabButtons(graphics, mouseX, mouseY);
+        this.renderTutorialTooltip(graphics, mouseX, mouseY);
 
-        this.renderTabItems(stack);
-        this.renderTutorial(stack);
+        this.renderTabItems(graphics);
+        this.renderTutorial(graphics);
     }
 
     @Override
-    protected void renderBg(@NotNull PoseStack stack, float partialTick, int mouseX, int mouseY) {
+    protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
         this.bindTexture();
 
-        blit(stack, super.leftPos, super.topPos, 0, 0, super.imageWidth, super.imageHeight);
+        graphics.blit(SELECTED_TAB.TEXTURE, super.leftPos, super.topPos, 0, 0, super.imageWidth, super.imageHeight);
     }
 
     @Override
-    protected void renderLabels(@NotNull PoseStack stack, int mouseX, int mouseY) {
-        this.font.draw(stack, this.SELECTED_TAB.TITLE, super.titleLabelX, super.titleLabelY, 0x404040);
-        this.font.draw(stack, super.playerInventoryTitle, super.inventoryLabelX, super.inventoryLabelY, 0x404040);
+    protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY) {
+        graphics.drawString(this.font, this.SELECTED_TAB.TITLE, super.titleLabelX, super.titleLabelY, 4210752, false);
+        graphics.drawString(this.font, this.SELECTED_TAB.TITLE, super.titleLabelX, super.titleLabelY, 4210752, false);
+        graphics.drawString(this.font, super.playerInventoryTitle, super.inventoryLabelX, super.inventoryLabelY, 4210752, false);
     }
 
-    private void renderTutorialTooltip(PoseStack stack, int mouseX, int mouseY) {
+    private void renderTutorialTooltip(GuiGraphics graphics, int mouseX, int mouseY) {
         if (mouseX > super.leftPos + TUTORIAL_X &&
                 mouseX < super.leftPos + TUTORIAL_X + TUTORIAL_WIDTH &&
                 mouseY > super.topPos + this.SELECTED_TAB.IMAGE_HEIGHT + TUTORIAL_Y &&
@@ -143,11 +147,11 @@ public abstract class AbstractCaterpillarScreen<T extends AbstractCaterpillarMen
             List<Component> tooltip = new ArrayList<>();
             MutableComponent tooltipText = Component.translatable(Caterpillar.MOD_ID + ".tutorial." + (this.tutorialButton != null && this.tutorialButton.isTutorialShown() ? "hide" : "show"));
             tooltip.add(tooltipText);
-            this.renderComponentTooltip(stack, tooltip, tooltipX, tooltipY);
+            graphics.renderComponentTooltip(this.font, tooltip, tooltipX, tooltipY);
         }
     }
 
-    protected abstract void renderTutorial(PoseStack stack);
+    protected abstract void renderTutorial(GuiGraphics graphics);
 
     private void addTutorialButton() {
         this.tutorialButton = new TutorialButton(false, super.leftPos + TUTORIAL_X, super.topPos + SELECTED_TAB.IMAGE_HEIGHT + TUTORIAL_Y, TUTORIAL_WIDTH, TUTORIAL_HEIGHT, TUTORIAL_BG_X, TUTORIAL_BG_Y, TUTORIAL_BG_Y_OFFSET, CATERPILLAR_GUI, (onPress) -> this.tutorialButton.toggleTutorial());
@@ -174,16 +178,16 @@ public abstract class AbstractCaterpillarScreen<T extends AbstractCaterpillarMen
         }
     }
 
-    private void renderTabItems(PoseStack stack) {
+    private void renderTabItems(GuiGraphics graphics) {
         int incrementTabPos = 0;
 
         // super.itemRenderer.blitOffset = 100.0F;
         for (ScreenTabs tab : ScreenTabs.values()) {
             if (tabShouldBeDisplayed(tab)) {
                 if (this.SELECTED_TAB.equals(tab)) {
-                    super.itemRenderer.renderAndDecorateItem(stack, tab.ITEM, this.leftPos - 21, this.topPos + 5 + incrementTabPos * 20);
+                    graphics.renderItem(tab.ITEM, this.leftPos - 21, this.topPos + 5 + incrementTabPos * 20);
                 } else {
-                    super.itemRenderer.renderAndDecorateItem(stack, tab.ITEM, this.leftPos - 20, this.topPos + 5 + incrementTabPos * 20);
+                    graphics.renderItem(tab.ITEM, this.leftPos - 20, this.topPos + 5 + incrementTabPos * 20);
                 }
 
                 incrementTabPos++;
@@ -192,13 +196,13 @@ public abstract class AbstractCaterpillarScreen<T extends AbstractCaterpillarMen
         // super.itemRenderer.blitOffset = 0.0F;
     }
 
-    private void renderTooltipTabButtons(PoseStack stack, int mouseX, int mouseY) {
+    private void renderTooltipTabButtons(GuiGraphics graphics, int mouseX, int mouseY) {
         int incrementTabPos = 0;
 
         for (ScreenTabs tab: ScreenTabs.values()) {
             if (tabShouldBeDisplayed(tab)) {
                 if (mouseX >= this.leftPos - 31 && mouseY >= this.topPos + incrementTabPos * 20 + 3 && mouseX <= this.leftPos && mouseY <= this.topPos + incrementTabPos * 20 + 3 + 20) {
-                    this.renderTooltip(stack, tab.TITLE, this.leftPos - 15, this.topPos + incrementTabPos * 20 + 21);
+                    graphics.renderTooltip(this.font, tab.TITLE, this.leftPos - 15, this.topPos + incrementTabPos * 20 + 21);
                 }
 
                 incrementTabPos++;

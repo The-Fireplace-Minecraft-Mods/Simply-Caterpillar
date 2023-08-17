@@ -8,6 +8,7 @@ import dev.the_fireplace.caterpillar.menu.DecorationMenu;
 import dev.the_fireplace.caterpillar.network.PacketHandler;
 import dev.the_fireplace.caterpillar.network.packet.client.DecorationSyncSlotC2SPacket;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.util.Mth;
@@ -44,23 +45,23 @@ public class DecorationScreen extends AbstractScrollableScreen<DecorationMenu> {
     }
 
     @Override
-    public void render(@NotNull PoseStack stack, int mouseX, int mouseY, float partialTicks) {
-        super.render(stack, mouseX, mouseY, partialTicks);
+    public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+        super.render(graphics, mouseX, mouseY, partialTicks);
 
-        this.renderTooltipCurrentMap(stack, mouseX, mouseY);
-        this.renderScrollerText(stack);
+        this.renderTooltipCurrentMap(graphics, mouseX, mouseY);
+        this.renderScrollerText(graphics);
     }
 
     @Override
-    protected void renderTutorial(PoseStack stack) {
+    protected void renderTutorial(GuiGraphics graphics) {
         if (super.tutorialButton != null && super.tutorialButton.isTutorialShown()) {
-            this.renderDecorationTutorial(stack);
-            this.renderMouseWheelTutorial(stack);
-            this.renderCurrentMapTutorial(stack);
+            this.renderDecorationTutorial(graphics);
+            this.renderMouseWheelTutorial(graphics);
+            this.renderCurrentMapTutorial(graphics);
         }
     }
 
-    private void renderDecorationTutorial(PoseStack stack) {
+    private void renderDecorationTutorial(GuiGraphics graphics) {
         int tutorialX = super.leftPos - 32;
         int tutorialY = super.topPos - 16;
         List<Component> decorationTutorial = new ArrayList<>();
@@ -68,10 +69,10 @@ public class DecorationScreen extends AbstractScrollableScreen<DecorationMenu> {
         MutableComponent tutorialText = Component.translatable(Caterpillar.MOD_ID + ".tutorial.decoration");
         decorationTutorial.add(tutorialText);
 
-        this.renderComponentTooltip(stack, decorationTutorial, tutorialX, tutorialY);
+        graphics.renderComponentTooltip(this.font, decorationTutorial, tutorialX, tutorialY);
     }
 
-    private void renderMouseWheelTutorial(PoseStack stack) {
+    private void renderMouseWheelTutorial(GuiGraphics graphics) {
         int tutorialX = super.leftPos + 108;
         int tutorialY = super.topPos + 49;
         List<Component> decorationTutorial = new ArrayList<>();
@@ -82,10 +83,10 @@ public class DecorationScreen extends AbstractScrollableScreen<DecorationMenu> {
         MutableComponent tutorialText = Component.translatable(Caterpillar.MOD_ID + ".tutorial.decoration.mouse_wheel");
         decorationTutorial.add(tutorialText);
 
-        this.renderComponentTooltip(stack, decorationTutorial, tutorialX, tutorialY);
+        graphics.renderComponentTooltip(this.font, decorationTutorial, tutorialX, tutorialY);
     }
 
-    private void renderCurrentMapTutorial(PoseStack stack) {
+    private void renderCurrentMapTutorial(GuiGraphics graphics) {
         int tutorialX = super.leftPos + 17;
         int tutorialY = super.topPos + 87;
         List<Component> decorationTutorial = new ArrayList<>();
@@ -96,15 +97,15 @@ public class DecorationScreen extends AbstractScrollableScreen<DecorationMenu> {
         MutableComponent tutorialText = Component.translatable(Caterpillar.MOD_ID + ".tutorial.decoration.current_map").withStyle(ChatFormatting.WHITE);
         decorationTutorial.add(tutorialText);
 
-        this.renderComponentTooltip(stack, decorationTutorial, tutorialX, tutorialY);
+        graphics.renderComponentTooltip(this.font, decorationTutorial, tutorialX, tutorialY);
     }
 
-    private void renderScrollerText(PoseStack stack) {
-        int colorPlacement = this.menu.getCurrentMap() == this.menu.getSelectedMap() ? ChatFormatting.BLUE.getColor() : 0x404040;
-        this.font.draw(stack, String.valueOf(this.menu.getSelectedMap()), this.leftPos + 31, this.topPos + 39, colorPlacement);
+    private void renderScrollerText(GuiGraphics graphics) {
+        int colorPlacement = this.menu.getCurrentMap() == this.menu.getSelectedMap() ? ChatFormatting.BLUE.getColor() : 4210752;
+        graphics.drawString(this.font, String.valueOf(this.menu.getSelectedMap()), this.leftPos + 31, this.topPos + 39, colorPlacement, false);
     }
 
-    private void renderTooltipCurrentMap(PoseStack stack, int mouseX, int mouseY) {
+    private void renderTooltipCurrentMap(GuiGraphics graphics, int mouseX, int mouseY) {
         if (
                 mouseX >= super.leftPos + 25 &&
                 mouseY >= super.topPos + 34 &&
@@ -116,7 +117,7 @@ public class DecorationScreen extends AbstractScrollableScreen<DecorationMenu> {
 
                 int currentMapTooltipX = -8;
                 int currentMapTooltipY = 32;
-                this.renderTooltip(stack, currentMap, super.leftPos + currentMapTooltipX, super.topPos + currentMapTooltipY);
+                graphics.renderTooltip(this.font, currentMap, super.leftPos + currentMapTooltipX, super.topPos + currentMapTooltipY);
             }
         }
     }

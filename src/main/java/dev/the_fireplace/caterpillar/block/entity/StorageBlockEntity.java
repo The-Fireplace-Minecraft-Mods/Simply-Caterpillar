@@ -9,7 +9,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import dev.the_fireplace.caterpillar.block.StorageBlock;
 import dev.the_fireplace.caterpillar.block.util.StoragePart;
 import dev.the_fireplace.caterpillar.config.CaterpillarConfig;
-import dev.the_fireplace.caterpillar.init.BlockEntityInit;
+import dev.the_fireplace.caterpillar.registry.BlockEntityRegistry;
 
 public class StorageBlockEntity extends DrillBaseBlockEntity {
 
@@ -24,7 +24,7 @@ public class StorageBlockEntity extends DrillBaseBlockEntity {
     public static final int GATHERED_SLOT_END = 17;
 
     public StorageBlockEntity(BlockPos pos, BlockState state) {
-        super(BlockEntityInit.STORAGE.get(), pos, state, INVENTORY_SIZE);
+        super(BlockEntityRegistry.STORAGE.get(), pos, state, INVENTORY_SIZE);
     }
 
     public void move() {

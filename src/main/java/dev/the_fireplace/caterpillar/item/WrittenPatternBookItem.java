@@ -3,7 +3,7 @@ package dev.the_fireplace.caterpillar.item;
 import dev.the_fireplace.caterpillar.Caterpillar;
 import dev.the_fireplace.caterpillar.block.entity.DecorationBlockEntity;
 import dev.the_fireplace.caterpillar.client.screen.PatternBookViewScreen;
-import dev.the_fireplace.caterpillar.init.BlockInit;
+import dev.the_fireplace.caterpillar.registry.BlockRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -54,7 +54,7 @@ public class WrittenPatternBookItem extends WrittenBookItem {
 
         if (blockstate.is(Blocks.LECTERN)) {
             return LecternBlock.tryPlaceBook(context.getPlayer(), level, blockpos, blockstate, context.getItemInHand()) ? InteractionResult.sidedSuccess(level.isClientSide) : InteractionResult.PASS;
-        } else if (blockstate.is(BlockInit.DECORATION.get())) {
+        } else if (blockstate.is(BlockRegistry.DECORATION.get())) {
             DecorationBlockEntity decorationBlockEntity = (DecorationBlockEntity) level.getBlockEntity(blockpos);
 
             InteractionHand hand = context.getHand();

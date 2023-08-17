@@ -11,7 +11,7 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 import org.jetbrains.annotations.NotNull;
 import dev.the_fireplace.caterpillar.block.entity.IncineratorBlockEntity;
-import dev.the_fireplace.caterpillar.init.MenuInit;
+import dev.the_fireplace.caterpillar.registry.MenuRegistry;
 
 import static dev.the_fireplace.caterpillar.block.entity.IncineratorBlockEntity.INVENTORY_SIZE;
 
@@ -22,11 +22,11 @@ public class IncineratorMenu extends AbstractCaterpillarMenu {
     private static final int INCINERATOR_SLOT_Y_START = 17;
 
     public IncineratorMenu(int id, Inventory playerInventory, FriendlyByteBuf extraData) {
-        super(MenuInit.INCINERATOR.get(), id, playerInventory, extraData, 0, INVENTORY_SIZE);
+        super(MenuRegistry.INCINERATOR.get(), id, playerInventory, extraData, 0, INVENTORY_SIZE);
     }
 
     public IncineratorMenu(int id, Inventory playerInventory, IncineratorBlockEntity blockEntity, ContainerData data) {
-        super(MenuInit.INCINERATOR.get(), id, playerInventory, blockEntity, data, INVENTORY_SIZE);
+        super(MenuRegistry.INCINERATOR.get(), id, playerInventory, blockEntity, data, INVENTORY_SIZE);
     }
 
     @Override

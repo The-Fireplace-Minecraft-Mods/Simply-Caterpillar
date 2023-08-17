@@ -41,7 +41,7 @@ public class CaterpillarSyncSlotC2SPacket {
         NetworkEvent.Context context = supplier.get();
         context.enqueueWork(() -> {
             ServerPlayer player = context.getSender();
-            ServerLevel level = player.getLevel();
+            ServerLevel level = player.serverLevel();
 
             if(level.getBlockEntity(pos) instanceof DrillBaseBlockEntity blockEntity) {
                 blockEntity.setStackInSlot(slotId, stack);

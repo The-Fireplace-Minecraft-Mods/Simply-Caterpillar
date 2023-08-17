@@ -3,7 +3,7 @@ package dev.the_fireplace.caterpillar.block.entity;
 import dev.the_fireplace.caterpillar.block.CollectorBlock;
 import dev.the_fireplace.caterpillar.block.util.CaterpillarBlockUtil;
 import dev.the_fireplace.caterpillar.config.CaterpillarConfig;
-import dev.the_fireplace.caterpillar.init.BlockEntityInit;
+import dev.the_fireplace.caterpillar.registry.BlockEntityRegistry;
 import dev.the_fireplace.caterpillar.menu.util.DrillHeadMenuPart;
 import dev.the_fireplace.caterpillar.network.PacketHandler;
 import dev.the_fireplace.caterpillar.network.packet.server.CaterpillarSyncInventoryS2CPacket;
@@ -28,7 +28,7 @@ public class CollectorBlockEntity extends DrillBaseBlockEntity {
     public static final int INVENTORY_SIZE = 0;
 
     public CollectorBlockEntity(BlockPos pos, BlockState state) {
-        super(BlockEntityInit.COLLECTOR.get(), pos, state, INVENTORY_SIZE);
+        super(BlockEntityRegistry.COLLECTOR.get(), pos, state, INVENTORY_SIZE);
     }
 
     public void move() {

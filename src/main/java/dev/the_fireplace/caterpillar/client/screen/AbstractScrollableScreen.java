@@ -2,6 +2,7 @@ package dev.the_fireplace.caterpillar.client.screen;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import dev.the_fireplace.caterpillar.client.screen.util.ScreenTabs;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import org.jetbrains.annotations.NotNull;
@@ -34,18 +35,18 @@ public abstract class AbstractScrollableScreen<D extends AbstractScrollableMenu>
     }
 
     @Override
-    protected void renderBg(@NotNull PoseStack stack, float partialTick, int mouseX, int mouseY) {
-        super.renderBg(stack, partialTick, mouseX, mouseY);
+    protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
+        super.renderBg(graphics, partialTick, mouseX, mouseY);
 
-        this.renderScroller(stack);
+        this.renderScroller(graphics);
     }
 
-    protected void renderScroller(PoseStack stack) {
+    protected void renderScroller(GuiGraphics graphics) {
         int scrollbarX = this.leftPos + SCROLLBAR_X;
         int scrollbarY = this.topPos + SCROLLBAR_Y;
         int scrollbarYEnd = scrollbarY + SCROLLBAR_HEIGHT;
 
-        blit(stack, scrollbarX, scrollbarY + (int)((float)(scrollbarYEnd - scrollbarY - SCROLLBAR_Y) * this.menu.getScrollOffs()), SCROLLER_BG_X, SCROLLER_BG_Y, SCROLLER_WIDTH, SCROLLER_HEIGHT);
+        graphics.blit(SELECTED_TAB.TEXTURE, scrollbarX, scrollbarY + (int)((float)(scrollbarYEnd - scrollbarY - SCROLLBAR_Y) * this.menu.getScrollOffs()), SCROLLER_BG_X, SCROLLER_BG_Y, SCROLLER_WIDTH, SCROLLER_HEIGHT);
     }
 
     protected abstract void scrollTo(float scrollOffs);

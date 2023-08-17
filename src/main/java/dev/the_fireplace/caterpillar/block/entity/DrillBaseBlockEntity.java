@@ -18,7 +18,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import dev.the_fireplace.caterpillar.block.DrillBaseBlock;
 import dev.the_fireplace.caterpillar.config.CaterpillarConfig;
-import dev.the_fireplace.caterpillar.init.BlockEntityInit;
+import dev.the_fireplace.caterpillar.registry.BlockEntityRegistry;
 
 import java.util.List;
 
@@ -29,7 +29,7 @@ public class DrillBaseBlockEntity extends InventoryBlockEntity implements MenuPr
     public static final int INVENTORY_SIZE = 0;
 
     public DrillBaseBlockEntity(BlockPos pos, BlockState state) {
-        super(BlockEntityInit.DRILL_BASE.get(), pos, state, INVENTORY_SIZE);
+        super(BlockEntityRegistry.DRILL_BASE.get(), pos, state, INVENTORY_SIZE);
     }
 
     public DrillBaseBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state, int inventorySize) {
@@ -73,7 +73,7 @@ public class DrillBaseBlockEntity extends InventoryBlockEntity implements MenuPr
         // Take item from drill head consumption slots
         for (int i = DrillHeadBlockEntity.CONSUMPTION_SLOT_START; i <= DrillHeadBlockEntity.CONSUMPTION_SLOT_END; i++) {
             ItemStack drillHeadItemStack = drillHeadAndStorageBlockEntities.get(0).getStackInSlot(i);
-            if (!drillHeadItemStack.isEmpty() && ItemStack.isSame(drillHeadItemStack, new ItemStack(item))) {
+            if (!drillHeadItemStack.isEmpty() && ItemStack.isSameItem(drillHeadItemStack, new ItemStack(item))) {
                 drillHeadItemStack.shrink(1);
                 return true;
             }
@@ -86,7 +86,7 @@ public class DrillBaseBlockEntity extends InventoryBlockEntity implements MenuPr
         // Take item from storage consumption slots
         for (int i = StorageBlockEntity.CONSUMPTION_SLOT_START; i <= StorageBlockEntity.CONSUMPTION_SLOT_END; i++) {
             ItemStack storageItemStack = drillHeadAndStorageBlockEntities.get(1).getStackInSlot(i);
-            if (!storageItemStack.isEmpty() && ItemStack.isSame(storageItemStack, new ItemStack(item))) {
+            if (!storageItemStack.isEmpty() && ItemStack.isSameItem(storageItemStack, new ItemStack(item))) {
                 storageItemStack.shrink(1);
                 return true;
             }

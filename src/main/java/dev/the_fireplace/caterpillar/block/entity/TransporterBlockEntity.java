@@ -5,7 +5,7 @@ import dev.the_fireplace.caterpillar.block.CollectorBlock;
 import dev.the_fireplace.caterpillar.block.TransporterBlock;
 import dev.the_fireplace.caterpillar.block.util.CaterpillarBlockUtil;
 import dev.the_fireplace.caterpillar.config.CaterpillarConfig;
-import dev.the_fireplace.caterpillar.init.BlockEntityInit;
+import dev.the_fireplace.caterpillar.registry.BlockEntityRegistry;
 import dev.the_fireplace.caterpillar.menu.TransporterMenu;
 import dev.the_fireplace.caterpillar.network.PacketHandler;
 import dev.the_fireplace.caterpillar.network.packet.server.CaterpillarSyncInventoryS2CPacket;
@@ -47,7 +47,7 @@ public class TransporterBlockEntity extends DrillBaseBlockEntity {
     private Block previousBlock = null;
 
     public TransporterBlockEntity(BlockPos pos, BlockState state) {
-        super(BlockEntityInit.TRANSPORTER.get(), pos, state, INVENTORY_SIZE);
+        super(BlockEntityRegistry.TRANSPORTER.get(), pos, state, INVENTORY_SIZE);
     }
 
     @Override

@@ -46,7 +46,7 @@ public class ReinforcementSyncStateReplacerC2SPacket {
         NetworkEvent.Context context = supplier.get();
         context.enqueueWork(() -> {
             ServerPlayer player = context.getSender();
-            ServerLevel level = player.getLevel();
+            ServerLevel level = player.serverLevel();
 
             if(level.getBlockEntity(pos) instanceof ReinforcementBlockEntity reinforcementBlockEntity) {
                 reinforcementBlockEntity.getReplacers(this.replacerIndex)[this.replacementIndex] = this.activated;

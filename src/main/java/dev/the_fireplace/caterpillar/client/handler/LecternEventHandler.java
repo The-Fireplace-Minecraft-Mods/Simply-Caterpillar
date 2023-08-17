@@ -1,6 +1,6 @@
 package dev.the_fireplace.caterpillar.client.handler;
 
-import dev.the_fireplace.caterpillar.init.ItemInit;
+import dev.the_fireplace.caterpillar.registry.ItemRegistry;
 import dev.the_fireplace.caterpillar.network.PacketHandler;
 import dev.the_fireplace.caterpillar.network.packet.server.OpenBookGuiS2CPacket;
 import net.minecraft.core.BlockPos;
@@ -35,7 +35,7 @@ public class LecternEventHandler {
                     ItemStack book = lectern.getBook();
                     if (!book.isEmpty()) {
                         if (!level.isClientSide) {
-                            if (book.is(ItemInit.WRITTEN_PATTERN_BOOK.get())) {
+                            if (book.is(ItemRegistry.WRITTEN_PATTERN_BOOK.get())) {
                                 PacketHandler.sendToPlayer(new OpenBookGuiS2CPacket(book), (ServerPlayer) player);
                                 player.awardStat(Stats.INTERACT_WITH_LECTERN);
                             } else {

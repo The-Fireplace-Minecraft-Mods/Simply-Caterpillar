@@ -10,6 +10,7 @@ import dev.the_fireplace.caterpillar.network.PacketHandler;
 import dev.the_fireplace.caterpillar.network.packet.client.CaterpillarSyncSlotC2SPacket;
 import dev.the_fireplace.caterpillar.network.packet.client.ReinforcementSyncStateReplacerC2SPacket;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -57,30 +58,30 @@ public class ReinforcementScreen extends AbstractScrollableScreen<ReinforcementM
     }
 
     @Override
-    public void render(@NotNull PoseStack stack, int mouseX, int mouseY, float partialTicks) {
-        super.render(stack, mouseX, mouseY, partialTicks);
+    public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+        super.render(graphics, mouseX, mouseY, partialTicks);
 
-        this.renderTextOfCurrentReplacement(stack);
+        this.renderTextOfCurrentReplacement(graphics);
         this.renderReplacerButtons();
-        this.renderTooltipReplacerButtons(stack, mouseX, mouseY);
+        this.renderTooltipReplacerButtons(graphics, mouseX, mouseY);
     }
 
     @Override
-    protected void renderLabels(@NotNull PoseStack stack, int mouseX, int mouseY) {
+    protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY) {
         super.inventoryLabelY = super.imageHeight - 94;
 
-        super.renderLabels(stack, mouseX, mouseY);
+        super.renderLabels(graphics, mouseX, mouseY);
     }
 
     @Override
-    protected void renderTutorial(PoseStack stack) {
+    protected void renderTutorial(GuiGraphics graphics) {
         if (super.tutorialButton != null && super.tutorialButton.isTutorialShown()) {
-            this.renderReplacerButtonsTutorial(stack);
-            this.renderReplacerBlocksTutorial(stack);
+            this.renderReplacerButtonsTutorial(graphics);
+            this.renderReplacerBlocksTutorial(graphics);
         }
     }
 
-    private void renderReplacerButtonsTutorial(PoseStack stack) {
+    private void renderReplacerButtonsTutorial(GuiGraphics graphics) {
         int tutorialX = super.leftPos - 1;
         int tutorialY = super.topPos + 122;
         List<Component> replacerButtonsTutorial = new ArrayList<>();
@@ -91,10 +92,10 @@ public class ReinforcementScreen extends AbstractScrollableScreen<ReinforcementM
         MutableComponent tutorialText = Component.translatable(Caterpillar.MOD_ID + ".tutorial.reinforcement.replacer_buttons").withStyle(ChatFormatting.WHITE);
         replacerButtonsTutorial.add(tutorialText);
 
-        this.renderComponentTooltip(stack, replacerButtonsTutorial, tutorialX, tutorialY);
+        graphics.renderComponentTooltip(this.font, replacerButtonsTutorial, tutorialX, tutorialY);
     }
 
-    private void renderReplacerBlocksTutorial(PoseStack stack) {
+    private void renderReplacerBlocksTutorial(GuiGraphics graphics) {
         int tutorialX = super.leftPos + 25;
         int tutorialY = super.topPos - 17;
         List<Component> replacerBlocksTutorial = new ArrayList<>();
@@ -105,10 +106,10 @@ public class ReinforcementScreen extends AbstractScrollableScreen<ReinforcementM
         Component tutorialArrow = Component.literal("  \\/").withStyle(ChatFormatting.GREEN);
         replacerBlocksTutorial.add(tutorialArrow);
 
-        this.renderComponentTooltip(stack, replacerBlocksTutorial, tutorialX, tutorialY);
+        graphics.renderComponentTooltip(this.font, replacerBlocksTutorial, tutorialX, tutorialY);
     }
 
-    private void renderTextOfCurrentReplacement(PoseStack stack) {
+    private void renderTextOfCurrentReplacement(GuiGraphics graphics) {
         int i = 3;
         int j = (int)((double)(this.menu.getScrollOffs() * (float)i) + 0.5D);
         if (j < 0) {
@@ -127,7 +128,7 @@ public class ReinforcementScreen extends AbstractScrollableScreen<ReinforcementM
         int textX = super.leftPos + (super.imageWidth - super.font.width(textOfCurrentReplacement)) / 2;
         int textY = super.topPos + 58;
 
-        this.font.draw(stack, textOfCurrentReplacement, textX, textY, 0x404040);
+        graphics.drawString(this.font, textOfCurrentReplacement, textX, textY, 4210752, false);
     }
 
     private void renderReplacerButtons() {
@@ -160,7 +161,7 @@ public class ReinforcementScreen extends AbstractScrollableScreen<ReinforcementM
         }
     }
 
-    private void renderTooltipReplacerButtons(PoseStack stack, int mouseX, int mouseY) {
+    private void renderTooltipReplacerButtons(GuiGraphics graphics, int mouseX, int mouseY) {
         int incrementReplacerPos = 0;
         for (Replacement replacement : Replacement.values()) {
             if (mouseX >= super.leftPos + REPLACER_BTN_BG_X && mouseX <= super.leftPos + REPLACER_BTN_BG_X + REPLACER_BTN_BG_WIDTH && mouseY >= super.topPos + REPLACER_BTN_BG_Y + incrementReplacerPos*(REPLACER_BTN_BG_HEIGHT + 2) && mouseY <= super.topPos + REPLACER_BTN_BG_Y + REPLACER_BTN_BG_HEIGHT + incrementReplacerPos*(REPLACER_BTN_BG_HEIGHT + 2)) {
@@ -176,7 +177,7 @@ public class ReinforcementScreen extends AbstractScrollableScreen<ReinforcementM
                     replacerComponents.add(replacerText);
                 }
 
-                this.renderComponentTooltip(stack, replacerComponents, super.leftPos + REPLACER_BTN_BG_X + 20,super.topPos + REPLACER_BTN_BG_Y + incrementReplacerPos*(REPLACER_BTN_BG_HEIGHT + 2) + 16);
+                graphics.renderComponentTooltip(this.font, replacerComponents, super.leftPos + REPLACER_BTN_BG_X + 20,super.topPos + REPLACER_BTN_BG_Y + incrementReplacerPos*(REPLACER_BTN_BG_HEIGHT + 2) + 16);
             }
 
             incrementReplacerPos++;

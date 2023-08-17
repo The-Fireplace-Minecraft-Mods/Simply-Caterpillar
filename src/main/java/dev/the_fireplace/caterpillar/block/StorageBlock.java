@@ -26,8 +26,8 @@ import org.jetbrains.annotations.Nullable;
 import dev.the_fireplace.caterpillar.block.entity.StorageBlockEntity;
 import dev.the_fireplace.caterpillar.block.util.CaterpillarBlockUtil;
 import dev.the_fireplace.caterpillar.block.util.StoragePart;
-import dev.the_fireplace.caterpillar.init.BlockEntityInit;
-import dev.the_fireplace.caterpillar.init.BlockInit;
+import dev.the_fireplace.caterpillar.registry.BlockEntityRegistry;
+import dev.the_fireplace.caterpillar.registry.BlockRegistry;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
@@ -102,7 +102,7 @@ public class StorageBlock extends DrillBaseBlock {
                     return defaultBlockState().setValue(FACING, direction).setValue(StorageBlock.PART, StoragePart.BASE).setValue(DrillHeadBlock.WATERLOGGED, fluidState.getType() == Fluids.WATER);
                 }
             } else {
-                context.getPlayer().displayClientMessage(Component.translatable("block.simplycaterpillar.blocks.already_connected", BlockInit.STORAGE.get().getName()), true);
+                context.getPlayer().displayClientMessage(Component.translatable("block.simplycaterpillar.blocks.already_connected", BlockRegistry.STORAGE.get().getName()), true);
             }
         }
 
@@ -158,6 +158,6 @@ public class StorageBlock extends DrillBaseBlock {
     @Nullable
     @Override
     public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
-        return BlockEntityInit.STORAGE.get().create(pos, state);
+        return BlockEntityRegistry.STORAGE.get().create(pos, state);
     }
 }

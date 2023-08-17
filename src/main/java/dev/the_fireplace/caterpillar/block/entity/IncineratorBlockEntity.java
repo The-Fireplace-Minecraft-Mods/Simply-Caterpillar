@@ -5,7 +5,7 @@ import dev.the_fireplace.caterpillar.block.IncineratorBlock;
 import dev.the_fireplace.caterpillar.block.ReinforcementBlock;
 import dev.the_fireplace.caterpillar.block.util.CaterpillarBlockUtil;
 import dev.the_fireplace.caterpillar.config.CaterpillarConfig;
-import dev.the_fireplace.caterpillar.init.BlockEntityInit;
+import dev.the_fireplace.caterpillar.registry.BlockEntityRegistry;
 import dev.the_fireplace.caterpillar.menu.IncineratorMenu;
 import dev.the_fireplace.caterpillar.menu.util.DrillHeadMenuPart;
 import dev.the_fireplace.caterpillar.network.PacketHandler;
@@ -36,7 +36,7 @@ public class IncineratorBlockEntity extends DrillBaseBlockEntity {
     public static final int INVENTORY_SIZE = 9;
 
     public IncineratorBlockEntity(BlockPos pos, BlockState state) {
-        super(BlockEntityInit.INCINERATOR.get(), pos, state, INVENTORY_SIZE);
+        super(BlockEntityRegistry.INCINERATOR.get(), pos, state, INVENTORY_SIZE);
 
         this.setDefaultIncinerationBlocks();
     }

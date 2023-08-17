@@ -26,7 +26,7 @@ import dev.the_fireplace.caterpillar.block.util.CaterpillarBlockUtil;
 import dev.the_fireplace.caterpillar.menu.DrillHeadMenu;
 import dev.the_fireplace.caterpillar.menu.syncdata.DrillHeadContainerData;
 import dev.the_fireplace.caterpillar.config.CaterpillarConfig;
-import dev.the_fireplace.caterpillar.init.BlockEntityInit;
+import dev.the_fireplace.caterpillar.registry.BlockEntityRegistry;
 import dev.the_fireplace.caterpillar.block.util.DrillHeadPart;
 import dev.the_fireplace.caterpillar.network.PacketHandler;
 import dev.the_fireplace.caterpillar.network.packet.server.*;
@@ -75,7 +75,7 @@ public class DrillHeadBlockEntity extends DrillBaseBlockEntity {
     protected boolean moving;
 
     public DrillHeadBlockEntity(BlockPos pos, BlockState state) {
-        super(BlockEntityInit.DRILL_HEAD.get(), pos, state, INVENTORY_SIZE);
+        super(BlockEntityRegistry.DRILL_HEAD.get(), pos, state, INVENTORY_SIZE);
     }
 
     public static void tick(Level level, BlockPos pos, BlockState state, DrillHeadBlockEntity blockEntity) {

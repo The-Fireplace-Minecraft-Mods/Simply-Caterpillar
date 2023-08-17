@@ -2,7 +2,7 @@ package dev.the_fireplace.caterpillar;
 
 import com.mojang.logging.LogUtils;
 import dev.the_fireplace.caterpillar.config.ConfigHolder;
-import dev.the_fireplace.caterpillar.init.*;
+import dev.the_fireplace.caterpillar.registry.*;
 import dev.the_fireplace.caterpillar.network.PacketHandler;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -28,12 +28,13 @@ public class Caterpillar {
         modLoadingContext.registerConfig(ModConfig.Type.SERVER, ConfigHolder.SERVER_SPEC);
 
         // Register Deferred Registers
-        BlockInit.BLOCKS.register(bus);
-        BlockEntityInit.BLOCK_ENTITY_TYPES.register(bus);
-        ItemInit.ITEMS.register(bus);
-        MenuInit.MENU_TYPES.register(bus);
-        EntityInit.ENTITY_TYPES.register(bus);
-        RecipeInit.RECIPE_SERIALIZERS.register(bus);
+        CreativeModeTabRegistry.register(bus);
+        BlockRegistry.BLOCKS.register(bus);
+        BlockEntityRegistry.BLOCK_ENTITY_TYPES.register(bus);
+        ItemRegistry.ITEMS.register(bus);
+        MenuRegistry.MENU_TYPES.register(bus);
+        EntityRegistry.ENTITY_TYPES.register(bus);
+        RecipeRegistry.RECIPE_SERIALIZERS.register(bus);
 
         bus.addListener(this::commonSetup);
 

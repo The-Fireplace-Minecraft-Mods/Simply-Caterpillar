@@ -30,8 +30,8 @@ import org.jetbrains.annotations.Nullable;
 import dev.the_fireplace.caterpillar.block.entity.ReinforcementBlockEntity;
 import dev.the_fireplace.caterpillar.block.util.CaterpillarBlockUtil;
 import dev.the_fireplace.caterpillar.block.util.ReinforcementPart;
-import dev.the_fireplace.caterpillar.init.BlockEntityInit;
-import dev.the_fireplace.caterpillar.init.BlockInit;
+import dev.the_fireplace.caterpillar.registry.BlockEntityRegistry;
+import dev.the_fireplace.caterpillar.registry.BlockRegistry;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
@@ -143,7 +143,7 @@ public class ReinforcementBlock extends DrillBaseBlock {
                     return defaultBlockState().setValue(FACING, direction).setValue(ReinforcementBlock.PART, ReinforcementPart.BOTTOM).setValue(DrillHeadBlock.WATERLOGGED, fluidState.getType() == Fluids.WATER);
                 }
             } else {
-                context.getPlayer().displayClientMessage(Component.translatable("block.simplycaterpillar.blocks.already_connected", BlockInit.REINFORCEMENT.get().getName()), true);
+                context.getPlayer().displayClientMessage(Component.translatable("block.simplycaterpillar.blocks.already_connected", BlockRegistry.REINFORCEMENT.get().getName()), true);
             }
         }
 
@@ -191,6 +191,6 @@ public class ReinforcementBlock extends DrillBaseBlock {
 
     @Override
     public @Nullable BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
-        return BlockEntityInit.REINFORCEMENT.get().create(pos, state);
+        return BlockEntityRegistry.REINFORCEMENT.get().create(pos, state);
     }
 }

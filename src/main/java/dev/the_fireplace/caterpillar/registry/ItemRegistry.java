@@ -1,4 +1,4 @@
-package dev.the_fireplace.caterpillar.init;
+package dev.the_fireplace.caterpillar.registry;
 
 import dev.the_fireplace.caterpillar.Caterpillar;
 import dev.the_fireplace.caterpillar.item.WritablePatternBookItem;
@@ -8,7 +8,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
-public class ItemInit {
+public class ItemRegistry {
 
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Caterpillar.MOD_ID);
     public static final RegistryObject<Item> WRITABLE_PATTERN_BOOK = ITEMS.register("writable_pattern_book",

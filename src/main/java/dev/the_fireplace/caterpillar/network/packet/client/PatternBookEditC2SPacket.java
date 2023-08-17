@@ -1,6 +1,6 @@
 package dev.the_fireplace.caterpillar.network.packet.client;
 
-import dev.the_fireplace.caterpillar.init.ItemInit;
+import dev.the_fireplace.caterpillar.registry.ItemRegistry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
@@ -58,8 +58,8 @@ public class PatternBookEditC2SPacket {
 
             if (Inventory.isHotbarSlot(slot)) {
                 ItemStack itemStack = player.getInventory().getItem(slot);
-                if (itemStack.is(ItemInit.WRITABLE_PATTERN_BOOK.get())) {
-                    ItemStack writtenPatternBook = new ItemStack(ItemInit.WRITTEN_PATTERN_BOOK.get());
+                if (itemStack.is(ItemRegistry.WRITABLE_PATTERN_BOOK.get())) {
+                    ItemStack writtenPatternBook = new ItemStack(ItemRegistry.WRITTEN_PATTERN_BOOK.get());
                     CompoundTag tag = itemStack.getTag();
                     if (tag != null) {
                         writtenPatternBook.setTag(tag.copy());

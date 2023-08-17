@@ -2,8 +2,8 @@ package dev.the_fireplace.caterpillar.block;
 
 import dev.the_fireplace.caterpillar.block.entity.TransporterBlockEntity;
 import dev.the_fireplace.caterpillar.block.util.CaterpillarBlockUtil;
-import dev.the_fireplace.caterpillar.init.BlockEntityInit;
-import dev.the_fireplace.caterpillar.init.BlockInit;
+import dev.the_fireplace.caterpillar.registry.BlockEntityRegistry;
+import dev.the_fireplace.caterpillar.registry.BlockRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -173,7 +173,7 @@ public class TransporterBlock extends DrillBaseBlock {
                     return super.defaultBlockState().setValue(FACING, direction).setValue(HALF, DoubleBlockHalf.UPPER).setValue(WATERLOGGED, level.getFluidState(pos).getType() == Fluids.WATER);
                 }
             } else {
-                context.getPlayer().displayClientMessage(Component.translatable("block.simplycaterpillar.blocks.already_connected", BlockInit.TRANSPORTER.get().getName()), true);
+                context.getPlayer().displayClientMessage(Component.translatable("block.simplycaterpillar.blocks.already_connected", BlockRegistry.TRANSPORTER.get().getName()), true);
             }
         }
 
@@ -191,6 +191,6 @@ public class TransporterBlock extends DrillBaseBlock {
 
     @Override
     public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
-        return BlockEntityInit.TRANSPORTER.get().create(pos, state);
+        return BlockEntityRegistry.TRANSPORTER.get().create(pos, state);
     }
 }

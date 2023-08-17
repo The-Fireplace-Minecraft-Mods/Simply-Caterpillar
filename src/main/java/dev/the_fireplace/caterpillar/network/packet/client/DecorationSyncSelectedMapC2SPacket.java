@@ -36,7 +36,7 @@ public class DecorationSyncSelectedMapC2SPacket {
         NetworkEvent.Context context = supplier.get();
         context.enqueueWork(() -> {
             ServerPlayer player = context.getSender();
-            ServerLevel level = player.getLevel();
+            ServerLevel level = player.serverLevel();
 
             if(level.getBlockEntity(pos) instanceof DecorationBlockEntity blockEntity) {
                 blockEntity.setSelectedMap(selectedMap);

@@ -41,7 +41,7 @@ public class DecorationSyncSlotC2SPacket {
         NetworkEvent.Context context = supplier.get();
         context.enqueueWork(() -> {
             ServerPlayer player = context.getSender();
-            ServerLevel level = player.getLevel();
+            ServerLevel level = player.serverLevel();
 
             if(level.getBlockEntity(pos) instanceof DecorationBlockEntity decorationBlockEntity) {
                 decorationBlockEntity.getSelectedPlacementMap().setStackInSlot(placementSlotId, stack);

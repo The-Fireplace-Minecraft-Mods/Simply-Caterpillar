@@ -1,6 +1,6 @@
 package dev.the_fireplace.caterpillar.entity;
 
-import dev.the_fireplace.caterpillar.init.EntityInit;
+import dev.the_fireplace.caterpillar.registry.EntityRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -21,7 +21,7 @@ import java.util.List;
 public class SeatEntity extends Entity {
 
     public SeatEntity(Level level) {
-        super(EntityInit.SEAT.get(), level);
+        super(EntityRegistry.SEAT.get(), level);
 
         this.noPhysics = true;
     }
@@ -36,10 +36,10 @@ public class SeatEntity extends Entity {
     public void tick() {
         super.tick();
 
-        if(!this.level.isClientSide) {
-            if(this.getPassengers().isEmpty() || this.level.isEmptyBlock(this.blockPosition())) {
+        if(!this.level().isClientSide) {
+            if(this.getPassengers().isEmpty() || this.level().isEmptyBlock(this.blockPosition())) {
                 this.remove(RemovalReason.DISCARDED);
-                this.level.updateNeighbourForOutputSignal(blockPosition(), this.level.getBlockState(blockPosition()).getBlock());
+                this.level().updateNeighbourForOutputSignal(blockPosition(), this.level().getBlockState(blockPosition()).getBlock());
             }
         }
     }
@@ -88,7 +88,7 @@ public class SeatEntity extends Entity {
         Direction[] offsets = {original, original.getClockWise(), original.getCounterClockWise(), original.getOpposite()};
 
         for(Direction dir : offsets) {
-            Vec3 safeVec = DismountHelper.findSafeDismountLocation(entity.getType(), this.level, this.blockPosition().below().relative(dir), true);
+            Vec3 safeVec = DismountHelper.findSafeDismountLocation(entity.getType(), this.level(), this.blockPosition().below().relative(dir), true);
 
             if(safeVec != null) {
                 return safeVec.add(0.0D, 0.25D, 0.0D);

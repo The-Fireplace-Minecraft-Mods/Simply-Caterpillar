@@ -1,4 +1,4 @@
-package dev.the_fireplace.caterpillar.init;
+package dev.the_fireplace.caterpillar.registry;
 
 import dev.the_fireplace.caterpillar.Caterpillar;
 import dev.the_fireplace.caterpillar.recipe.PatternBookCloningRecipe;
@@ -8,7 +8,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
-public class RecipeInit {
+public class RecipeRegistry {
 
     public static final DeferredRegister<RecipeSerializer<?>> RECIPE_SERIALIZERS = DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, Caterpillar.MOD_ID);
 

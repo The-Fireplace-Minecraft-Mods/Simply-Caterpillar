@@ -28,7 +28,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.network.NetworkHooks;
-import dev.the_fireplace.caterpillar.init.BlockEntityInit;
+import dev.the_fireplace.caterpillar.registry.BlockEntityRegistry;
 
 import java.util.EnumMap;
 import java.util.Map;
@@ -149,6 +149,6 @@ public class DrillBaseBlock extends BaseEntityBlock implements SimpleWaterlogged
 
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return BlockEntityInit.DRILL_BASE.get().create(pos, state);
+        return BlockEntityRegistry.DRILL_BASE.get().create(pos, state);
     }
 }

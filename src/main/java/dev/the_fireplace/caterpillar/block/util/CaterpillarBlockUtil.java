@@ -5,7 +5,7 @@ import dev.the_fireplace.caterpillar.block.DrillHeadBlock;
 import dev.the_fireplace.caterpillar.block.entity.DrillBaseBlockEntity;
 import dev.the_fireplace.caterpillar.block.entity.DrillHeadBlockEntity;
 import dev.the_fireplace.caterpillar.block.entity.StorageBlockEntity;
-import dev.the_fireplace.caterpillar.init.BlockInit;
+import dev.the_fireplace.caterpillar.registry.BlockRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
@@ -23,15 +23,15 @@ import static dev.the_fireplace.caterpillar.block.DrillBaseBlock.FACING;
 public class CaterpillarBlockUtil {
 
     public static boolean isCaterpillarBlock(Block block) {
-        return (block == BlockInit.DRILL_HEAD.get()) ||
-                (block == BlockInit.DECORATION.get()) ||
-                (block == BlockInit.REINFORCEMENT.get()) ||
-                (block == BlockInit.INCINERATOR.get()) ||
-                (block == BlockInit.COLLECTOR.get()) ||
-                (block == BlockInit.STORAGE.get()) ||
-                (block == BlockInit.DRILL_BASE.get()) ||
-                (block == BlockInit.DRILL_SEAT.get()) ||
-                (block == BlockInit.TRANSPORTER.get());
+        return (block == BlockRegistry.DRILL_HEAD.get()) ||
+                (block == BlockRegistry.DECORATION.get()) ||
+                (block == BlockRegistry.REINFORCEMENT.get()) ||
+                (block == BlockRegistry.INCINERATOR.get()) ||
+                (block == BlockRegistry.COLLECTOR.get()) ||
+                (block == BlockRegistry.STORAGE.get()) ||
+                (block == BlockRegistry.DRILL_BASE.get()) ||
+                (block == BlockRegistry.DRILL_SEAT.get()) ||
+                (block == BlockRegistry.TRANSPORTER.get());
     }
 
     public static BlockPos getCaterpillarHeadPos(Level level, BlockPos pos, Direction direction) {
@@ -41,7 +41,7 @@ public class CaterpillarBlockUtil {
             return pos.relative(direction.getOpposite());
         }
 
-        if (state.getBlock() == BlockInit.DRILL_HEAD.get() && state.getValue(DrillHeadBlock.PART) == DrillHeadPart.BIT_MIDDLE) {
+        if (state.getBlock() == BlockRegistry.DRILL_HEAD.get() && state.getValue(DrillHeadBlock.PART) == DrillHeadPart.BIT_MIDDLE) {
             return pos.relative(direction.getOpposite());
         }
 

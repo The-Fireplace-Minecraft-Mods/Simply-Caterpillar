@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import dev.the_fireplace.caterpillar.Caterpillar;
 import dev.the_fireplace.caterpillar.client.screen.widget.PatternPageButton;
 import net.minecraft.client.GameNarrator;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.PageButton;
@@ -95,19 +96,19 @@ public class PatternBookViewScreen extends Screen {
     }
 
     @Override
-    public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTick) {
-        this.renderBackground(poseStack);
+    public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+        this.renderBackground(graphics);
 
-        this.renderCraftingGrid(poseStack);
-        this.renderCurrentPatternPage(poseStack);
-        this.renderCurrentPageNumber(poseStack);
+        this.renderCraftingGrid(graphics);
+        this.renderCurrentPatternPage(graphics);
+        this.renderCurrentPageNumber(graphics);
 
-        super.render(poseStack, mouseX, mouseY, partialTick);
+        super.render(graphics, mouseX, mouseY, partialTick);
     }
 
     @Override
-    public void renderBackground(PoseStack poseStack) {
-        super.renderBackground(poseStack);
+    public void renderBackground(GuiGraphics graphics) {
+        super.renderBackground(graphics);
 
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
@@ -115,18 +116,18 @@ public class PatternBookViewScreen extends Screen {
 
         int middlePos = (this.width - BOOK_TEXTURE_WIDTH) / 2;
 
-        blit(poseStack, middlePos, 2, 0, 0, BOOK_TEXTURE_WIDTH, BOOK_TEXTURE_HEIGHT);
+        graphics.blit(BOOK_TEXTURE, middlePos, 2, 0, 0, BOOK_TEXTURE_WIDTH, BOOK_TEXTURE_HEIGHT);
     }
 
-    public void renderCraftingGrid(PoseStack poseStack) {
+    public void renderCraftingGrid(GuiGraphics graphics) {
         RenderSystem.enableBlend();
 
         int middlePos = (this.width - BOOK_CRAFTING_TEXTURE_WIDTH) / 2;
 
-        blit(poseStack, middlePos, 50, BOOK_CRAFTING_TEXTURE_X, BOOK_CRAFTING_TEXTURE_Y, BOOK_CRAFTING_TEXTURE_WIDTH, PatternBookViewScreen.BOOK_CRAFTING_TEXTURE_HEIGHT);
+        graphics.blit(BOOK_TEXTURE, middlePos, 50, BOOK_CRAFTING_TEXTURE_X, BOOK_CRAFTING_TEXTURE_Y, BOOK_CRAFTING_TEXTURE_WIDTH, PatternBookViewScreen.BOOK_CRAFTING_TEXTURE_HEIGHT);
     }
 
-    private void renderCurrentPatternPage(PoseStack poseStack) {
+    private void renderCurrentPatternPage(GuiGraphics graphics) {
         int middlePos = (this.width - 146) / 2;
         int slotId = 0;
 
@@ -135,16 +136,16 @@ public class PatternBookViewScreen extends Screen {
                 if (row != 1 || column != 1) {
                     ItemStack itemStack = this.pattern.get(this.currentPage).getStackInSlot(slotId++);
 
-                    super.itemRenderer.renderAndDecorateItem(poseStack, itemStack, middlePos + 46 + column * PatternBookViewScreen.SLOT_SIZE_PLUS_2, 54 + row * PatternBookViewScreen.SLOT_SIZE_PLUS_2);
+                    graphics.renderItem(itemStack, middlePos + 46 + column * PatternBookViewScreen.SLOT_SIZE_PLUS_2, 54 + row * PatternBookViewScreen.SLOT_SIZE_PLUS_2);
                 }
             }
         }
     }
 
-    private void renderCurrentPageNumber(PoseStack poseStack) {
+    private void renderCurrentPageNumber(GuiGraphics graphics) {
         int middlePos = (this.width - 192) / 2;
         int fontWidth = this.font.width(this.currentPageText);
-        this.font.draw(poseStack, this.currentPageText, (float) (middlePos - fontWidth + 192 - 44), 18.0F, 0);
+        graphics.drawString(this.font, this.currentPageText, (middlePos - fontWidth + 192 - 44), 18, 0);
     }
 
     private void pageBack() {

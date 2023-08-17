@@ -2,6 +2,7 @@ package dev.the_fireplace.caterpillar.client.screen.widget;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.resources.ResourceLocation;
@@ -33,7 +34,7 @@ public class TabButton extends ImageButton {
     }
 
     @Override
-    public void renderWidget(PoseStack stack, int mouseX, int mouseY, float partialTick) {
+    public void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderTexture(0, this.resourceLocation);
 
@@ -46,7 +47,7 @@ public class TabButton extends ImageButton {
             yOffset += this.yDiffTex;
         }
 
-        blit(stack, super.getX(), super.getY(), xOffset, yOffset, width, super.height);
+        graphics.blit(this.resourceLocation, super.getX(), super.getY(), xOffset, yOffset, width, super.height);
     }
 
     @Override

@@ -7,7 +7,7 @@ import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 import dev.the_fireplace.caterpillar.block.entity.ReinforcementBlockEntity;
-import dev.the_fireplace.caterpillar.init.MenuInit;
+import dev.the_fireplace.caterpillar.registry.MenuRegistry;
 
 import static dev.the_fireplace.caterpillar.block.entity.ReinforcementBlockEntity.*;
 
@@ -18,11 +18,11 @@ public class ReinforcementMenu extends AbstractScrollableMenu {
     private static final int REINFORCEMENT_SLOT_Y_START = 17;
 
     public ReinforcementMenu(int id, Inventory playerInventory, FriendlyByteBuf extraData) {
-        super(MenuInit.REINFORCEMENT.get(), id, playerInventory, extraData, 0, INVENTORY_SIZE);
+        super(MenuRegistry.REINFORCEMENT.get(), id, playerInventory, extraData, 0, INVENTORY_SIZE);
     }
 
     public ReinforcementMenu(int id, Inventory playerInventory, ReinforcementBlockEntity blockEntity, ContainerData data) {
-        super(MenuInit.REINFORCEMENT.get(), id, playerInventory, blockEntity, data, INVENTORY_SIZE);
+        super(MenuRegistry.REINFORCEMENT.get(), id, playerInventory, blockEntity, data, INVENTORY_SIZE);
     }
 
     @Override

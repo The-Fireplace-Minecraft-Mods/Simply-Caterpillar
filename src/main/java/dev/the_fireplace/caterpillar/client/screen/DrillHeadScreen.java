@@ -9,6 +9,7 @@ import dev.the_fireplace.caterpillar.client.screen.widget.PowerButton;
 import dev.the_fireplace.caterpillar.menu.DrillHeadMenu;
 import dev.the_fireplace.caterpillar.menu.slot.FakeSlot;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.util.Mth;
@@ -89,44 +90,44 @@ public class DrillHeadScreen extends AbstractScrollableScreen<DrillHeadMenu> {
     }
 
     @Override
-    public void render(@NotNull PoseStack stack, int mouseX, int mouseY, float partialTicks) {
-        super.render(stack, mouseX, mouseY, partialTicks);
+    public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+        super.render(graphics, mouseX, mouseY, partialTicks);
 
-        this.renderTooltipPowerButton(stack, mouseX, mouseY);
+        this.renderTooltipPowerButton(graphics, mouseX, mouseY);
     }
 
     @Override
-    protected void renderBg(@NotNull PoseStack stack, float partialTick, int mouseX, int mouseY) {
-        super.renderBg(stack, partialTick, mouseX, mouseY);
+    protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
+        super.renderBg(graphics, partialTick, mouseX, mouseY);
 
         if (this.menu.isPowered()) {
             int litProgress = this.menu.getLitProgress();
-            blit(stack, super.leftPos + BURN_SLOT_BG_X, super.topPos + BURN_SLOT_BG_Y - litProgress, ScreenTabs.DRILL_HEAD.IMAGE_WIDTH, 12 - litProgress, BURN_SLOT_BG_WIDTH, litProgress + 1);
+            graphics.blit(SELECTED_TAB.TEXTURE, super.leftPos + BURN_SLOT_BG_X, super.topPos + BURN_SLOT_BG_Y - litProgress, ScreenTabs.DRILL_HEAD.IMAGE_WIDTH, 12 - litProgress, BURN_SLOT_BG_WIDTH, litProgress + 1);
         }
     }
 
     @Override
-    protected void renderLabels(@NotNull PoseStack stack, int mouseX, int mouseY) {
+    protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY) {
         int consumptionX = 4, consumptionY = 6, gatheredX = 119, gatheredY = 6;
 
-        this.font.draw(stack, DrillHeadBlockEntity.CONSUMPTION_TITLE, consumptionX, consumptionY, 0x404040);
-        this.font.draw(stack, DrillHeadBlockEntity.GATHERED_TITLE, gatheredX, gatheredY, 0x404040);
-        this.font.draw(stack, super.playerInventoryTitle, super.inventoryLabelX, super.inventoryLabelY, 0x404040);
+        graphics.drawString(this.font, DrillHeadBlockEntity.CONSUMPTION_TITLE, consumptionX, consumptionY, 4210752, false);
+        graphics.drawString(this.font, DrillHeadBlockEntity.GATHERED_TITLE, gatheredX, gatheredY, 4210752, false);
+        graphics.drawString(this.font, super.playerInventoryTitle, super.inventoryLabelX, super.inventoryLabelY, 4210752, false);
     }
 
     @Override
-    protected void renderTutorial(PoseStack stack) {
+    protected void renderTutorial(GuiGraphics graphics) {
         if (super.tutorialButton != null && super.tutorialButton.isTutorialShown()) {
             if (this.menu.canScroll()) {
-                this.renderWheelStorageTutorial(stack);
+                this.renderWheelStorageTutorial(graphics);
             }
 
-            this.renderFuelSlotTutorial(stack);
-            this.renderPowerButtonTutorial(stack);
+            this.renderFuelSlotTutorial(graphics);
+            this.renderPowerButtonTutorial(graphics);
         }
     }
 
-    private void renderPowerButtonTutorial(PoseStack stack) {
+    private void renderPowerButtonTutorial(GuiGraphics graphics) {
         int tutorialX = super.leftPos + 90;
         int tutorialY = super.topPos + 33;
         List<Component> powerButtonTutorial = new ArrayList<>();
@@ -135,10 +136,10 @@ public class DrillHeadScreen extends AbstractScrollableScreen<DrillHeadMenu> {
         tutorialText.append(Component.translatable(Caterpillar.MOD_ID + ".tutorial.drill_head.power_button").withStyle(ChatFormatting.WHITE).append(""));
         powerButtonTutorial.add(tutorialText);
 
-        this.renderComponentTooltip(stack, powerButtonTutorial, tutorialX, tutorialY);
+        graphics.renderComponentTooltip(this.font, powerButtonTutorial, tutorialX, tutorialY);
     }
 
-    private void renderFuelSlotTutorial(PoseStack stack) {
+    private void renderFuelSlotTutorial(GuiGraphics graphics) {
         int tutorialX = super.leftPos + 90;
         int tutorialY = super.topPos + 69;
         List<Component> fuelSlotTutorial = new ArrayList<>();
@@ -147,10 +148,10 @@ public class DrillHeadScreen extends AbstractScrollableScreen<DrillHeadMenu> {
         tutorialText.append(Component.translatable(Caterpillar.MOD_ID + ".tutorial.drill_head.fuel_slot").withStyle(ChatFormatting.WHITE).append(""));
         fuelSlotTutorial.add(tutorialText);
 
-        this.renderComponentTooltip(stack, fuelSlotTutorial, tutorialX, tutorialY);
+        graphics.renderComponentTooltip(this.font, fuelSlotTutorial, tutorialX, tutorialY);
     }
 
-    private void renderWheelStorageTutorial(PoseStack stack) {
+    private void renderWheelStorageTutorial(GuiGraphics graphics) {
         int tutorialX = super.leftPos + 230;
         int tutorialY = super.topPos + 87;
         List<Component> storageWheelTutorial = new ArrayList<>();
@@ -161,7 +162,7 @@ public class DrillHeadScreen extends AbstractScrollableScreen<DrillHeadMenu> {
         MutableComponent tutorialText = Component.translatable(Caterpillar.MOD_ID + ".tutorial.drill_head.wheel_storage");
         storageWheelTutorial.add(tutorialText);
 
-        this.renderComponentTooltip(stack, storageWheelTutorial, tutorialX, tutorialY);
+        graphics.renderComponentTooltip(this.font, storageWheelTutorial, tutorialX, tutorialY);
     }
 
     private void addPowerButton() {
@@ -169,7 +170,7 @@ public class DrillHeadScreen extends AbstractScrollableScreen<DrillHeadMenu> {
         this.addRenderableWidget(this.powerButton);
     }
 
-    private void renderTooltipPowerButton(PoseStack stack, int mouseX, int mouseY) {
+    private void renderTooltipPowerButton(GuiGraphics graphics, int mouseX, int mouseY) {
         if (
                 mouseX >= super.leftPos + (super.imageWidth - SLOT_SIZE) / 2 - 3 &&
                 mouseY >= super.topPos + 16 &&
@@ -187,7 +188,7 @@ public class DrillHeadScreen extends AbstractScrollableScreen<DrillHeadMenu> {
             }
 
             int tooltipPadding = 24;
-            this.renderComponentTooltip(stack, powerStatusComponents, super.leftPos + (super.imageWidth - super.font.width(powerStatusComponent) - tooltipPadding) / 2, super.topPos - 1);
+            graphics.renderComponentTooltip(this.font, powerStatusComponents, super.leftPos + (super.imageWidth - super.font.width(powerStatusComponent) - tooltipPadding) / 2, super.topPos - 1);
         }
     }
     private void updatePowerButton() {
@@ -197,15 +198,15 @@ public class DrillHeadScreen extends AbstractScrollableScreen<DrillHeadMenu> {
     }
 
     @Override
-    protected void renderScroller(PoseStack stack) {
+    protected void renderScroller(GuiGraphics graphics) {
         int scrollbarYStart = this.topPos + SCROLLBAR_Y;
         int scrollbarYEnd = scrollbarYStart + super.SCROLLBAR_HEIGHT;
 
         int consumptionScrollbarX = this.leftPos + CONSUMPTION_SCROLLBAR_X;
         int gatheredScrollbarX = this.leftPos + GATHERED_SCROLLBAR_X;
 
-        blit(stack, consumptionScrollbarX, scrollbarYStart + (int) ((float) (scrollbarYEnd - scrollbarYStart - SCROLLBAR_Y) * this.menu.getConsumptionScrollOffs()), SCROLLER_BG_X + (this.menu.canScroll() ? 0 : SCROLLER_WIDTH), SCROLLER_BG_Y, SCROLLER_WIDTH, SCROLLER_HEIGHT);
-        blit(stack, gatheredScrollbarX, scrollbarYStart + (int) ((float) (scrollbarYEnd - scrollbarYStart - SCROLLBAR_Y) * this.menu.getGatheredScrollOffs()), SCROLLER_BG_X + (this.menu.canScroll() ? 0 : SCROLLER_WIDTH), SCROLLER_BG_Y, SCROLLER_WIDTH, SCROLLER_HEIGHT);
+        graphics.blit(SELECTED_TAB.TEXTURE, consumptionScrollbarX, scrollbarYStart + (int) ((float) (scrollbarYEnd - scrollbarYStart - SCROLLBAR_Y) * this.menu.getConsumptionScrollOffs()), SCROLLER_BG_X + (this.menu.canScroll() ? 0 : SCROLLER_WIDTH), SCROLLER_BG_Y, SCROLLER_WIDTH, SCROLLER_HEIGHT);
+        graphics.blit(SELECTED_TAB.TEXTURE, gatheredScrollbarX, scrollbarYStart + (int) ((float) (scrollbarYEnd - scrollbarYStart - SCROLLBAR_Y) * this.menu.getGatheredScrollOffs()), SCROLLER_BG_X + (this.menu.canScroll() ? 0 : SCROLLER_WIDTH), SCROLLER_BG_Y, SCROLLER_WIDTH, SCROLLER_HEIGHT);
     }
 
     @Override
@@ -242,7 +243,7 @@ public class DrillHeadScreen extends AbstractScrollableScreen<DrillHeadMenu> {
                         carried.shrink(stack.getCount());
                     }
                 } else {
-                    if (stack.sameItem(carried)) {
+                    if (ItemStack.isSameItem(stack, carried)) {
                         if (button == 0) {
                             if (stack.getCount() + carried.getCount() <= stack.getMaxStackSize()) {
                                 stack.grow(carried.getCount());

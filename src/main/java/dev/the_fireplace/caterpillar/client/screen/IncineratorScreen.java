@@ -8,6 +8,7 @@ import dev.the_fireplace.caterpillar.menu.IncineratorMenu;
 import dev.the_fireplace.caterpillar.network.PacketHandler;
 import dev.the_fireplace.caterpillar.network.packet.client.CaterpillarSyncSlotC2SPacket;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.entity.player.Inventory;
@@ -72,13 +73,13 @@ public class IncineratorScreen extends AbstractCaterpillarScreen<IncineratorMenu
     }
 
     @Override
-    protected void renderTutorial(PoseStack stack) {
+    protected void renderTutorial(GuiGraphics graphics) {
         if (super.tutorialButton != null && super.tutorialButton.isTutorialShown()) {
-            this.renderIncineratorTutorial(stack);
+            this.renderIncineratorTutorial(graphics);
         }
     }
 
-    private void renderIncineratorTutorial(PoseStack stack) {
+    private void renderIncineratorTutorial(GuiGraphics graphics) {
         int tutorialX = super.leftPos + 108;
         int tutorialY = super.topPos + 32;
         List<Component> incineratorTutorial = new ArrayList<>();
@@ -87,6 +88,6 @@ public class IncineratorScreen extends AbstractCaterpillarScreen<IncineratorMenu
         tutorialText.append(Component.translatable(Caterpillar.MOD_ID + ".tutorial.incinerator").withStyle(ChatFormatting.WHITE).append(""));
         incineratorTutorial.add(tutorialText);
 
-        this.renderComponentTooltip(stack, incineratorTutorial, tutorialX, tutorialY);
+        graphics.renderComponentTooltip(this.font, incineratorTutorial, tutorialX, tutorialY);
     }
 }

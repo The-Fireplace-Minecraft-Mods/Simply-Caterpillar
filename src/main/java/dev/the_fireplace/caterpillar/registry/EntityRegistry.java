@@ -1,4 +1,4 @@
-package dev.the_fireplace.caterpillar.init;
+package dev.the_fireplace.caterpillar.registry;
 
 import dev.the_fireplace.caterpillar.Caterpillar;
 import dev.the_fireplace.caterpillar.entity.SeatEntity;
@@ -9,7 +9,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
-public class EntityInit {
+public class EntityRegistry {
 
     public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, Caterpillar.MOD_ID);
 

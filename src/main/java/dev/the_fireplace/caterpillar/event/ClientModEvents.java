@@ -7,20 +7,14 @@ import dev.the_fireplace.caterpillar.client.renderer.entity.SeatEntityRenderer;
 import dev.the_fireplace.caterpillar.client.screen.*;
 import dev.the_fireplace.caterpillar.config.ConfigHelper;
 import dev.the_fireplace.caterpillar.config.ConfigHolder;
-import dev.the_fireplace.caterpillar.init.BlockInit;
-import dev.the_fireplace.caterpillar.init.EntityInit;
-import dev.the_fireplace.caterpillar.init.ItemInit;
-import dev.the_fireplace.caterpillar.init.MenuInit;
+import dev.the_fireplace.caterpillar.registry.EntityRegistry;
+import dev.the_fireplace.caterpillar.registry.MenuRegistry;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.entity.EntityRenderers;
-import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.CreativeModeTabEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -34,16 +28,16 @@ public class ClientModEvents {
 
     @SubscribeEvent
     public static void onClientSetup(FMLClientSetupEvent event) {
-        MenuScreens.register(MenuInit.DECORATION.get(), DecorationScreen::new);
-        MenuScreens.register(MenuInit.DRILL_HEAD.get(), DrillHeadScreen::new);
-        MenuScreens.register(MenuInit.INCINERATOR.get(), IncineratorScreen::new);
-        MenuScreens.register(MenuInit.REINFORCEMENT.get(), ReinforcementScreen::new);
-        MenuScreens.register(MenuInit.TRANSPORTER.get(), TransporterScreen::new);
+        MenuScreens.register(MenuRegistry.DECORATION.get(), DecorationScreen::new);
+        MenuScreens.register(MenuRegistry.DRILL_HEAD.get(), DrillHeadScreen::new);
+        MenuScreens.register(MenuRegistry.INCINERATOR.get(), IncineratorScreen::new);
+        MenuScreens.register(MenuRegistry.REINFORCEMENT.get(), ReinforcementScreen::new);
+        MenuScreens.register(MenuRegistry.TRANSPORTER.get(), TransporterScreen::new);
     }
 
     @SubscribeEvent
     public static void onRegisterRenderers(EntityRenderersEvent.RegisterRenderers event) {
-        EntityRenderers.register(EntityInit.SEAT.get(), SeatEntityRenderer::new);
+        EntityRenderers.register(EntityRegistry.SEAT.get(), SeatEntityRenderer::new);
     }
 
     /**
@@ -65,26 +59,6 @@ public class ClientModEvents {
     @SubscribeEvent
     public static void onKeyRegister(RegisterKeyMappingsEvent event) {
         event.register(KeyBinding.TOGGLE_TUTORIAL_KEY);
-    }
-
-    @SubscribeEvent
-    public static void registerTabs(CreativeModeTabEvent.Register event) {
-        event.registerCreativeModeTab(new ResourceLocation(Caterpillar.MOD_ID, "caterpillar"), builder -> builder
-                .title(Component.translatable("itemGroup." + Caterpillar.MOD_ID))
-                .icon(() -> new ItemStack(BlockInit.DRILL_HEAD.get()))
-                .displayItems((params, output) -> {
-                    output.accept(BlockInit.DRILL_BASE.get());
-                    output.accept(BlockInit.DRILL_HEAD.get());
-                    output.accept(BlockInit.DRILL_SEAT.get());
-                    output.accept(BlockInit.COLLECTOR.get());
-                    output.accept(BlockInit.REINFORCEMENT.get());
-                    output.accept(BlockInit.INCINERATOR.get());
-                    output.accept(BlockInit.STORAGE.get());
-                    output.accept(BlockInit.DECORATION.get());
-                    output.accept(BlockInit.TRANSPORTER.get());
-                    output.accept(ItemInit.WRITABLE_PATTERN_BOOK.get());
-                })
-        );
     }
 
     @SubscribeEvent

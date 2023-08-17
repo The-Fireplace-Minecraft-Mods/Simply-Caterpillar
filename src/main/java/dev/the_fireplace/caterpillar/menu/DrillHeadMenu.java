@@ -2,7 +2,7 @@ package dev.the_fireplace.caterpillar.menu;
 
 import dev.the_fireplace.caterpillar.block.entity.DrillHeadBlockEntity;
 import dev.the_fireplace.caterpillar.block.entity.StorageBlockEntity;
-import dev.the_fireplace.caterpillar.init.MenuInit;
+import dev.the_fireplace.caterpillar.registry.MenuRegistry;
 import dev.the_fireplace.caterpillar.menu.slot.CaterpillarFuelSlot;
 import dev.the_fireplace.caterpillar.menu.slot.FakeSlot;
 import dev.the_fireplace.caterpillar.menu.syncdata.DrillHeadContainerData;
@@ -50,14 +50,14 @@ public class DrillHeadMenu extends AbstractScrollableMenu {
     private boolean gatheredScrolling;
 
     public DrillHeadMenu(int id, Inventory playerInventory, FriendlyByteBuf extraData) {
-        super(MenuInit.DRILL_HEAD.get(), id, playerInventory, extraData, DrillHeadContainerData.SIZE, DrillHeadBlockEntity.INVENTORY_SIZE);
+        super(MenuRegistry.DRILL_HEAD.get(), id, playerInventory, extraData, DrillHeadContainerData.SIZE, DrillHeadBlockEntity.INVENTORY_SIZE);
 
         this.consumptionScrollTo(0);
         this.gatheredScrollTo(0);
     }
 
     public DrillHeadMenu(int id, Inventory playerInventory, DrillHeadBlockEntity entity, DrillHeadContainerData data) {
-        super(MenuInit.DRILL_HEAD.get(), id, playerInventory, entity, data, DrillHeadBlockEntity.INVENTORY_SIZE);
+        super(MenuRegistry.DRILL_HEAD.get(), id, playerInventory, entity, data, DrillHeadBlockEntity.INVENTORY_SIZE);
 
         StorageBlockEntity storageBlockEntity = this.getStorageBlockEntity();
         if (storageBlockEntity != null && !storageBlockEntity.getLevel().isClientSide()) {

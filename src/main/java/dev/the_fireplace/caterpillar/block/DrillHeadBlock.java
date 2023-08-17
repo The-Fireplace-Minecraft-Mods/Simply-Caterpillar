@@ -32,8 +32,8 @@ import dev.the_fireplace.caterpillar.block.entity.DrillHeadBlockEntity;
 import dev.the_fireplace.caterpillar.block.util.CaterpillarBlockUtil;
 import dev.the_fireplace.caterpillar.block.util.DrillHeadPart;
 import dev.the_fireplace.caterpillar.config.CaterpillarConfig;
-import dev.the_fireplace.caterpillar.init.BlockEntityInit;
-import dev.the_fireplace.caterpillar.init.BlockInit;
+import dev.the_fireplace.caterpillar.registry.BlockEntityRegistry;
+import dev.the_fireplace.caterpillar.registry.BlockRegistry;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
@@ -202,7 +202,7 @@ public class DrillHeadBlock extends DrillBaseBlock {
                     return defaultBlockState().setValue(FACING, direction).setValue(DrillHeadBlock.PART, DrillHeadPart.BIT_BOTTOM).setValue(DrillHeadBlock.WATERLOGGED, fluidState.getType() == Fluids.WATER);
                 }
             } else {
-                context.getPlayer().displayClientMessage(Component.translatable("block.simplycaterpillar.blocks.already_connected", BlockInit.DRILL_HEAD.get().getName()), true);
+                context.getPlayer().displayClientMessage(Component.translatable("block.simplycaterpillar.blocks.already_connected", BlockRegistry.DRILL_HEAD.get().getName()), true);
             }
 
         }
@@ -213,7 +213,7 @@ public class DrillHeadBlock extends DrillBaseBlock {
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(@NotNull Level level, @NotNull BlockState state, @NotNull BlockEntityType<T> type) {
-        return createTickerHelper(type, BlockEntityInit.DRILL_HEAD.get(), DrillHeadBlockEntity::tick);
+        return createTickerHelper(type, BlockEntityRegistry.DRILL_HEAD.get(), DrillHeadBlockEntity::tick);
     }
 
     @Override
@@ -359,6 +359,6 @@ public class DrillHeadBlock extends DrillBaseBlock {
     @Nullable
     @Override
     public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
-        return BlockEntityInit.DRILL_HEAD.get().create(pos, state);
+        return BlockEntityRegistry.DRILL_HEAD.get().create(pos, state);
     }
 }

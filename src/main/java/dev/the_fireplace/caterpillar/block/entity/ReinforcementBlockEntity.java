@@ -5,7 +5,7 @@ import dev.the_fireplace.caterpillar.block.ReinforcementBlock;
 import dev.the_fireplace.caterpillar.block.util.CaterpillarBlockUtil;
 import dev.the_fireplace.caterpillar.block.util.Replacement;
 import dev.the_fireplace.caterpillar.config.CaterpillarConfig;
-import dev.the_fireplace.caterpillar.init.BlockEntityInit;
+import dev.the_fireplace.caterpillar.registry.BlockEntityRegistry;
 import dev.the_fireplace.caterpillar.menu.ReinforcementMenu;
 import dev.the_fireplace.caterpillar.menu.util.DrillHeadMenuPart;
 import dev.the_fireplace.caterpillar.network.PacketHandler;
@@ -70,7 +70,7 @@ public class ReinforcementBlockEntity extends DrillBaseBlockEntity {
     public static final int REPLACER_FLOOR = 3;
 
     public ReinforcementBlockEntity(BlockPos pos, BlockState state) {
-        super(BlockEntityInit.REINFORCEMENT.get(), pos, state, INVENTORY_SIZE);
+        super(BlockEntityRegistry.REINFORCEMENT.get(), pos, state, INVENTORY_SIZE);
 
         this.setDefaultReinforcementBlocks();
         this.setDefaultReplacers();
@@ -229,7 +229,7 @@ public class ReinforcementBlockEntity extends DrillBaseBlockEntity {
                 }
 
                 if (replacerIndex == Replacement.AIR.INDEX) {
-                    if (block.defaultBlockState().getMaterial().isReplaceable()) {
+                    if (block.defaultBlockState().canBeReplaced()) {
                         return true;
                     }
                 }

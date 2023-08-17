@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.20.1-8.0.0] - 2023-08-17
+
+First release of the forge 1.20.1 version
+
 ## [1.19.4-7.4.0] - 2023-08-17
 
 ### Updated
