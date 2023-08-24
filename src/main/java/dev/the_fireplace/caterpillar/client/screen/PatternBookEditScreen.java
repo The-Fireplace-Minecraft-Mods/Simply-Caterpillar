@@ -115,11 +115,11 @@ public class PatternBookEditScreen extends Screen {
             boolean flag = this.frameTick / 6 % 2 == 0;
             FormattedCharSequence formattedcharsequence = FormattedCharSequence.composite(FormattedCharSequence.forward(this.title, Style.EMPTY), flag ? BLACK_CURSOR : GRAY_CURSOR);
             int k = this.font.width(EDIT_TITLE_LABEL);
-            graphics.drawString(this.font, EDIT_TITLE_LABEL, (middlePos + 36 + (114 - k) / 2), 34, 0);
+            graphics.drawString(this.font, EDIT_TITLE_LABEL, (middlePos + 36 + (114 - k) / 2), 34, 0, false);
             int l = this.font.width(formattedcharsequence);
-            graphics.drawString(this.font, formattedcharsequence, (middlePos + 36 + (114 - l) / 2), 50, 0);
+            graphics.drawString(this.font, formattedcharsequence, (middlePos + 36 + (114 - l) / 2), 50, 0, false);
             int i1 = this.font.width(this.ownerText);
-            graphics.drawString(this.font, this.ownerText, (middlePos + 36 + (114 - i1) / 2), 60, 0);
+            graphics.drawString(this.font, this.ownerText, (middlePos + 36 + (114 - i1) / 2), 60, 0, false);
             graphics.drawWordWrap(this.font, FINALIZE_WARNING_LABEL, middlePos + 36, 82, 114, 0);
         } else {
             this.renderCurrentPatternPage(graphics);
@@ -147,7 +147,7 @@ public class PatternBookEditScreen extends Screen {
     private void renderCurrentPageNumber(GuiGraphics graphics) {
         int middlePos = (this.width - 192) / 2;
         int fontWidth = this.font.width(this.currentPageText);
-        graphics.drawString(this.font, this.currentPageText, (middlePos - fontWidth + 192 - 44), 18, 0);
+        graphics.drawString(this.font, this.currentPageText, (middlePos - fontWidth + 192 - 44), 18, 0, false);
     }
 
     @Override

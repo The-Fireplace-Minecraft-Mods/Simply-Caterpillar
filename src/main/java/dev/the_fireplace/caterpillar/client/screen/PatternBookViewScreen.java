@@ -145,7 +145,7 @@ public class PatternBookViewScreen extends Screen {
     private void renderCurrentPageNumber(GuiGraphics graphics) {
         int middlePos = (this.width - 192) / 2;
         int fontWidth = this.font.width(this.currentPageText);
-        graphics.drawString(this.font, this.currentPageText, (middlePos - fontWidth + 192 - 44), 18, 0);
+        graphics.drawString(this.font, this.currentPageText, (middlePos - fontWidth + 192 - 44), 18, 0, false);
     }
 
     private void pageBack() {

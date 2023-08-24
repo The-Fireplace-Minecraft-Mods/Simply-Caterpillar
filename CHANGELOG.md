@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.20.1-8.0.1] - 2023-08-24
+
+### Fixed
+
+- Fixed a bug in pattern book gui with text.
+
 ## [1.20.1-8.0.0] - 2023-08-17
 
 First release of the forge 1.20.1 version
