@@ -1,7 +1,7 @@
 package dev.the_fireplace.caterpillar.menu;
 
 import dev.the_fireplace.caterpillar.block.entity.TransporterBlockEntity;
-import dev.the_fireplace.caterpillar.init.MenuInit;
+import dev.the_fireplace.caterpillar.registry.MenuRegistry;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
@@ -17,11 +17,11 @@ public class TransporterMenu extends AbstractCaterpillarMenu {
     private static final int TRANSPORTER_SLOT_Y_START = 17;
 
     public TransporterMenu(int id, Inventory playerInventory, FriendlyByteBuf extraData) {
-        super(MenuInit.TRANSPORTER, id, playerInventory, extraData, 0, INVENTORY_SIZE);
+        super(MenuRegistry.TRANSPORTER, id, playerInventory, extraData, 0, INVENTORY_SIZE);
     }
 
     public TransporterMenu(int id, Inventory playerInventory, TransporterBlockEntity blockEntity, ContainerData data) {
-        super(MenuInit.TRANSPORTER, id, playerInventory, blockEntity, data, INVENTORY_SIZE);
+        super(MenuRegistry.TRANSPORTER, id, playerInventory, blockEntity, data, INVENTORY_SIZE);
     }
 
     @Override

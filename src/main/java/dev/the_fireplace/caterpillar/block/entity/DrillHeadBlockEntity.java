@@ -6,13 +6,18 @@ import dev.the_fireplace.caterpillar.block.util.CaterpillarBlockUtil;
 import dev.the_fireplace.caterpillar.block.util.DrillHeadPart;
 import dev.the_fireplace.caterpillar.block.util.Replacement;
 import dev.the_fireplace.caterpillar.config.CaterpillarConfig;
-import dev.the_fireplace.caterpillar.init.BlockEntityInit;
+import dev.the_fireplace.caterpillar.registry.BlockEntityRegistry;
 import dev.the_fireplace.caterpillar.menu.DrillHeadMenu;
 import dev.the_fireplace.caterpillar.menu.syncdata.DrillHeadContainerData;
 import dev.the_fireplace.caterpillar.network.packet.server.CaterpillarSyncInventoryS2CPacket;
 import dev.the_fireplace.caterpillar.network.packet.server.DrillHeadSyncLitS2CPacket;
 import dev.the_fireplace.caterpillar.network.packet.server.DrillHeadSyncMovingS2CPacket;
 import dev.the_fireplace.caterpillar.network.packet.server.DrillHeadSyncPowerS2CPacket;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.ArrayList;
+import java.util.List;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -28,11 +33,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class DrillHeadBlockEntity extends DrillBaseBlockEntity {
 
@@ -75,7 +75,7 @@ public class DrillHeadBlockEntity extends DrillBaseBlockEntity {
     protected boolean moving;
 
     public DrillHeadBlockEntity(BlockPos pos, BlockState state) {
-        super(BlockEntityInit.DRILL_HEAD, pos, state, INVENTORY_SIZE);
+        super(BlockEntityRegistry.DRILL_HEAD, pos, state, INVENTORY_SIZE);
     }
 
     public static void tick(Level level, BlockPos pos, BlockState state, DrillHeadBlockEntity blockEntity) {

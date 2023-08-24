@@ -3,10 +3,11 @@ package dev.the_fireplace.caterpillar.block.entity;
 import dev.the_fireplace.caterpillar.block.CollectorBlock;
 import dev.the_fireplace.caterpillar.block.util.CaterpillarBlockUtil;
 import dev.the_fireplace.caterpillar.config.CaterpillarConfig;
-import dev.the_fireplace.caterpillar.init.BlockEntityInit;
+import dev.the_fireplace.caterpillar.registry.BlockEntityRegistry;
 import dev.the_fireplace.caterpillar.menu.util.DrillHeadMenuPart;
 import dev.the_fireplace.caterpillar.network.packet.server.CaterpillarSyncInventoryS2CPacket;
 import dev.the_fireplace.caterpillar.network.packet.server.DrillHeadRefreshInventoryS2CPacket;
+import java.util.List;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -19,8 +20,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.phys.AABB;
 
-import java.util.List;
-
 import static dev.the_fireplace.caterpillar.block.DrillBaseBlock.FACING;
 
 public class CollectorBlockEntity extends DrillBaseBlockEntity {
@@ -28,7 +27,7 @@ public class CollectorBlockEntity extends DrillBaseBlockEntity {
     public static final int INVENTORY_SIZE = 0;
 
     public CollectorBlockEntity(BlockPos pos, BlockState state) {
-        super(BlockEntityInit.COLLECTOR, pos, state, INVENTORY_SIZE);
+        super(BlockEntityRegistry.COLLECTOR, pos, state, INVENTORY_SIZE);
     }
 
     public void move() {

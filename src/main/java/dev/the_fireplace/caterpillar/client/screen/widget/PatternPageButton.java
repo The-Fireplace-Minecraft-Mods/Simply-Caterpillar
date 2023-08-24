@@ -1,8 +1,8 @@
 package dev.the_fireplace.caterpillar.client.screen.widget;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import dev.the_fireplace.caterpillar.client.screen.PatternBookViewScreen;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.PageButton;
 
 public class PatternPageButton extends PageButton {
@@ -15,7 +15,7 @@ public class PatternPageButton extends PageButton {
         this.isForward = isForward;
     }
 
-    public void renderWidget(PoseStack poseStack, int p_99234_, int p_99235_, float p_99236_) {
+    public void renderWidget(GuiGraphics graphics, int p_99234_, int p_99235_, float p_99236_) {
         RenderSystem.setShaderTexture(0, PatternBookViewScreen.BOOK_TEXTURE);
         int i = 0;
         int j = 192;
@@ -27,6 +27,6 @@ public class PatternPageButton extends PageButton {
             j += 13;
         }
 
-        blit(poseStack, this.getX(), this.getY(), i, j, 23, 13);
+        graphics.blit(PatternBookViewScreen.BOOK_TEXTURE, this.getX(), this.getY(), i, j, 23, 13);
     }
 }

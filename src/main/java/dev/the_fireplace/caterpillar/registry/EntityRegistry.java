@@ -1,4 +1,4 @@
-package dev.the_fireplace.caterpillar.init;
+package dev.the_fireplace.caterpillar.registry;
 
 import dev.the_fireplace.caterpillar.Caterpillar;
 import dev.the_fireplace.caterpillar.entity.SeatEntity;
@@ -10,7 +10,7 @@ import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 
-public class EntityInit {
+public class EntityRegistry {
 
     public static final EntityType<SeatEntity> SEAT = Registry.register(BuiltInRegistries.ENTITY_TYPE, new ResourceLocation(Caterpillar.MOD_ID, "seat"),
             FabricEntityTypeBuilder.create(MobCategory.MISC, SeatEntity::new).dimensions(EntityDimensions.fixed(0.5f, 0.5f)).build());

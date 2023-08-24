@@ -1,13 +1,14 @@
 package dev.the_fireplace.caterpillar.recipe;
 
-import dev.the_fireplace.caterpillar.init.ItemInit;
-import dev.the_fireplace.caterpillar.init.RecipeInit;
+import dev.the_fireplace.caterpillar.registry.ItemRegistry;
+import dev.the_fireplace.caterpillar.registry.RecipeRegistry;
 import dev.the_fireplace.caterpillar.item.WrittenPatternBookItem;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.world.inventory.TransientCraftingContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.BookCloningRecipe;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
@@ -28,14 +29,14 @@ public class PatternBookCloningRecipe extends BookCloningRecipe {
             ItemStack itemStack1 = container.getItem(j);
 
             if (!itemStack1.isEmpty()) {
-                if (itemStack1.is(ItemInit.WRITTEN_PATTERN_BOOK)) {
+                if (itemStack1.is(ItemRegistry.WRITTEN_PATTERN_BOOK)) {
                     if (!itemStack.isEmpty()) {
                         return false;
                     }
 
                     itemStack = itemStack1;
                 } else {
-                    if (!itemStack1.is(ItemInit.WRITABLE_PATTERN_BOOK)) {
+                    if (!itemStack1.is(ItemRegistry.WRITABLE_PATTERN_BOOK)) {
                         return false;
                     }
 
@@ -55,14 +56,14 @@ public class PatternBookCloningRecipe extends BookCloningRecipe {
         for (int j = 0; j < container.getContainerSize(); ++j) {
             ItemStack itemStack1 = container.getItem(j);
             if (!itemStack1.isEmpty()) {
-                if (itemStack1.is(ItemInit.WRITTEN_PATTERN_BOOK)) {
+                if (itemStack1.is(ItemRegistry.WRITTEN_PATTERN_BOOK)) {
                     if (!itemStack.isEmpty()) {
                         return ItemStack.EMPTY;
                     }
 
                     itemStack = itemStack1;
                 } else {
-                    if (!itemStack1.is(ItemInit.WRITABLE_PATTERN_BOOK)) {
+                    if (!itemStack1.is(ItemRegistry.WRITABLE_PATTERN_BOOK)) {
                         return ItemStack.EMPTY;
                     }
 
@@ -72,7 +73,7 @@ public class PatternBookCloningRecipe extends BookCloningRecipe {
         }
 
         if (!itemStack.isEmpty() && itemStack.hasTag() && i >= 1 && WrittenPatternBookItem.getGeneration(itemStack) < 2) {
-            ItemStack itemStack2 = new ItemStack(ItemInit.WRITTEN_PATTERN_BOOK, i);
+            ItemStack itemStack2 = new ItemStack(ItemRegistry.WRITTEN_PATTERN_BOOK, i);
             CompoundTag compoundTag = itemStack.getTag().copy();
             compoundTag.putInt("generation", WrittenPatternBookItem.getGeneration(itemStack) + 1);
             itemStack2.setTag(compoundTag);
@@ -83,7 +84,7 @@ public class PatternBookCloningRecipe extends BookCloningRecipe {
     }
 
     @Override
-    public NonNullList<ItemStack> getRemainingItems(CraftingContainer container) {
+    public NonNullList<ItemStack> getRemainingItems(CraftingContainer  container) {
         NonNullList<ItemStack> nonNullList = NonNullList.withSize(container.getContainerSize(), ItemStack.EMPTY);
 
         for (int i = 0; i < nonNullList.size(); ++i) {
@@ -103,6 +104,6 @@ public class PatternBookCloningRecipe extends BookCloningRecipe {
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return RecipeInit.PATTERN_BOOK_CLONING;
+        return RecipeRegistry.PATTERN_BOOK_CLONING;
     }
 }

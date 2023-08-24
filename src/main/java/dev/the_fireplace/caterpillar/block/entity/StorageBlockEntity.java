@@ -3,7 +3,7 @@ package dev.the_fireplace.caterpillar.block.entity;
 import dev.the_fireplace.caterpillar.block.StorageBlock;
 import dev.the_fireplace.caterpillar.block.util.StoragePart;
 import dev.the_fireplace.caterpillar.config.CaterpillarConfig;
-import dev.the_fireplace.caterpillar.init.BlockEntityInit;
+import dev.the_fireplace.caterpillar.registry.BlockEntityRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvents;
@@ -24,7 +24,7 @@ public class StorageBlockEntity extends DrillBaseBlockEntity {
     public static final int GATHERED_SLOT_END = 17;
 
     public StorageBlockEntity(BlockPos pos, BlockState state) {
-        super(BlockEntityInit.STORAGE, pos, state, INVENTORY_SIZE);
+        super(BlockEntityRegistry.STORAGE, pos, state, INVENTORY_SIZE);
     }
 
     public void move() {

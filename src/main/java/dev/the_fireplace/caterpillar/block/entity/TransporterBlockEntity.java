@@ -5,9 +5,12 @@ import dev.the_fireplace.caterpillar.block.CollectorBlock;
 import dev.the_fireplace.caterpillar.block.TransporterBlock;
 import dev.the_fireplace.caterpillar.block.util.CaterpillarBlockUtil;
 import dev.the_fireplace.caterpillar.config.CaterpillarConfig;
-import dev.the_fireplace.caterpillar.init.BlockEntityInit;
+import dev.the_fireplace.caterpillar.registry.BlockEntityRegistry;
 import dev.the_fireplace.caterpillar.menu.TransporterMenu;
 import dev.the_fireplace.caterpillar.network.packet.server.CaterpillarSyncInventoryS2CPacket;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -29,9 +32,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
 
 import static dev.the_fireplace.caterpillar.block.DrillBaseBlock.FACING;
 import static dev.the_fireplace.caterpillar.block.TransporterBlock.HALF;
@@ -47,7 +47,7 @@ public class TransporterBlockEntity extends DrillBaseBlockEntity {
     private Block previousBlock = null;
 
     public TransporterBlockEntity(BlockPos pos, BlockState state) {
-        super(BlockEntityInit.TRANSPORTER, pos, state, INVENTORY_SIZE);
+        super(BlockEntityRegistry.TRANSPORTER, pos, state, INVENTORY_SIZE);
     }
 
     @Override

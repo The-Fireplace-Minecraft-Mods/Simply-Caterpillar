@@ -29,7 +29,7 @@ public class DecorationSyncSlotC2SPacket {
     }
 
     public static void receive(MinecraftServer server, ServerPlayer player, ServerGamePacketListenerImpl handler, FriendlyByteBuf buf, PacketSender responseSender) {
-        ServerLevel level = player.getLevel();
+        ServerLevel level = player.serverLevel();
 
         int placementSlotId = buf.readInt();
         ItemStack stack = buf.readItem();

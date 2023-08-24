@@ -1,7 +1,7 @@
 package dev.the_fireplace.caterpillar;
 
 import dev.the_fireplace.caterpillar.config.CaterpillarConfig;
-import dev.the_fireplace.caterpillar.init.*;
+import dev.the_fireplace.caterpillar.registry.*;
 import dev.the_fireplace.caterpillar.network.PacketHandler;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.Toml4jConfigSerializer;
@@ -22,13 +22,13 @@ public class Caterpillar implements ModInitializer {
         AutoConfig.register(CaterpillarConfig.class, Toml4jConfigSerializer::new);
         config = AutoConfig.getConfigHolder(CaterpillarConfig.class).getConfig();
 
-        ItemGroupInit.registerCreativeModeTab();
-        BlockInit.registerBlocks();
-        BlockEntityInit.registerBlockEntities();
-        ItemInit.registerItems();
-        RecipeInit.registerRecipes();
+        ItemGroupRegistry.registerCreativeModeTab();
+        BlockRegistry.registerBlocks();
+        BlockEntityRegistry.registerBlockEntities();
+        ItemRegistry.registerItems();
+        RecipeRegistry.registerRecipes();
 
-        MenuInit.registerMenus();
+        MenuRegistry.registerMenus();
 
         PacketHandler.registerC2SPackets();
     }

@@ -3,7 +3,7 @@ package dev.the_fireplace.caterpillar.block.entity;
 import dev.the_fireplace.caterpillar.block.entity.util.ImplementedInventory;
 import dev.the_fireplace.caterpillar.block.util.CaterpillarBlockUtil;
 import dev.the_fireplace.caterpillar.config.CaterpillarConfig;
-import dev.the_fireplace.caterpillar.init.BlockEntityInit;
+import dev.the_fireplace.caterpillar.registry.BlockEntityRegistry;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -26,7 +26,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-
 import java.util.List;
 
 import static dev.the_fireplace.caterpillar.block.DrillBaseBlock.FACING;
@@ -38,7 +37,7 @@ public class DrillBaseBlockEntity extends BlockEntity implements ExtendedScreenH
     protected int timer = 0;
 
     public DrillBaseBlockEntity(BlockPos blockPos, BlockState blockState) {
-        this(BlockEntityInit.DRILL_BASE, blockPos, blockState, 0);
+        this(BlockEntityRegistry.DRILL_BASE, blockPos, blockState, 0);
     }
 
     public DrillBaseBlockEntity(BlockEntityType<?> blockEntityType, BlockPos blockPos, BlockState blockState, int inventorySize) {
@@ -128,7 +127,7 @@ public class DrillBaseBlockEntity extends BlockEntity implements ExtendedScreenH
         // Take item from drill head consumption slots
         for (int i = DrillHeadBlockEntity.CONSUMPTION_SLOT_START; i <= DrillHeadBlockEntity.CONSUMPTION_SLOT_END; i++) {
             ItemStack drillHeadItemStack = drillHeadAndStorageBlockEntities.get(0).getItem(i);
-            if (!drillHeadItemStack.isEmpty() && ItemStack.isSame(drillHeadItemStack, new ItemStack(item))) {
+            if (!drillHeadItemStack.isEmpty() && ItemStack.isSameItem(drillHeadItemStack, new ItemStack(item))) {
                 drillHeadItemStack.shrink(1);
                 return true;
             }
@@ -141,7 +140,7 @@ public class DrillBaseBlockEntity extends BlockEntity implements ExtendedScreenH
         // Take item from storage consumption slots
         for (int i = StorageBlockEntity.CONSUMPTION_SLOT_START; i <= StorageBlockEntity.CONSUMPTION_SLOT_END; i++) {
             ItemStack storageItemStack = drillHeadAndStorageBlockEntities.get(1).getItem(i);
-            if (!storageItemStack.isEmpty() && ItemStack.isSame(storageItemStack, new ItemStack(item))) {
+            if (!storageItemStack.isEmpty() && ItemStack.isSameItem(storageItemStack, new ItemStack(item))) {
                 storageItemStack.shrink(1);
                 return true;
             }

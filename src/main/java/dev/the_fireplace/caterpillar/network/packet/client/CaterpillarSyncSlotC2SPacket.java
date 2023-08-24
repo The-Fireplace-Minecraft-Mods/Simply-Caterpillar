@@ -28,7 +28,7 @@ public class CaterpillarSyncSlotC2SPacket {
     }
 
     public static void receive(MinecraftServer server, ServerPlayer player, ServerGamePacketListenerImpl handler, FriendlyByteBuf buf, PacketSender responseSender) {
-        ServerLevel level = player.getLevel();
+        ServerLevel level = player.serverLevel();
 
         int slotId = buf.readInt();
         ItemStack stack = buf.readItem();

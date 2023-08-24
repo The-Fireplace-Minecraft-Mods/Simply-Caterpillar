@@ -1,12 +1,11 @@
 package dev.the_fireplace.caterpillar.block.util;
 
 import dev.the_fireplace.caterpillar.Caterpillar;
+import java.util.List;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-
-import java.util.List;
 
 public enum Replacement {
     WATER(0, Component.translatable("gui." + Caterpillar.MOD_ID + ".replacement.water"), List.of(Blocks.WATER)),

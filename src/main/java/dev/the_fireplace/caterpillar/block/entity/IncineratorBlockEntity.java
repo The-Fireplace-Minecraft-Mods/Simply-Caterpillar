@@ -3,7 +3,7 @@ package dev.the_fireplace.caterpillar.block.entity;
 import dev.the_fireplace.caterpillar.Caterpillar;
 import dev.the_fireplace.caterpillar.block.IncineratorBlock;
 import dev.the_fireplace.caterpillar.config.CaterpillarConfig;
-import dev.the_fireplace.caterpillar.init.BlockEntityInit;
+import dev.the_fireplace.caterpillar.registry.BlockEntityRegistry;
 import dev.the_fireplace.caterpillar.menu.IncineratorMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -29,7 +29,7 @@ public class IncineratorBlockEntity extends DrillBaseBlockEntity {
     public static final int INVENTORY_SIZE = 9;
 
     public IncineratorBlockEntity(BlockPos pos, BlockState state) {
-        super(BlockEntityInit.INCINERATOR, pos, state, INVENTORY_SIZE);
+        super(BlockEntityRegistry.INCINERATOR, pos, state, INVENTORY_SIZE);
 
         this.setDefaultIncinerationBlocks();
     }

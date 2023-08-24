@@ -1,9 +1,10 @@
 package dev.the_fireplace.caterpillar.item;
 
 import dev.the_fireplace.caterpillar.Caterpillar;
+import dev.the_fireplace.caterpillar.block.DecorationBlock;
 import dev.the_fireplace.caterpillar.block.entity.DecorationBlockEntity;
 import dev.the_fireplace.caterpillar.client.screen.PatternBookEditScreen;
-import dev.the_fireplace.caterpillar.init.BlockInit;
+import dev.the_fireplace.caterpillar.registry.BlockRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -38,20 +39,22 @@ public class WritablePatternBookItem extends WritableBookItem {
         Player player = context.getPlayer();
         BlockPos blockpos = context.getClickedPos();
         BlockState blockstate = level.getBlockState(blockpos);
-
         if (!level.isClientSide) {
             return InteractionResult.PASS;
         }
 
         if (blockstate.is(Blocks.LECTERN)) {
             return LecternBlock.tryPlaceBook(context.getPlayer(), level, blockpos, blockstate, context.getItemInHand()) ? InteractionResult.sidedSuccess(level.isClientSide) : InteractionResult.PASS;
-        } else if (blockstate.is(BlockInit.DECORATION)) {
-            DecorationBlockEntity decorationBlockEntity = (DecorationBlockEntity) level.getBlockEntity(blockpos);
+        } else if (blockstate.is(BlockRegistry.DECORATION)) {
+            DecorationBlock clickedDecorationBlock = (DecorationBlock) blockstate.getBlock();
+
+            BlockPos baseDecorationBlockPos = clickedDecorationBlock.getBasePos(blockstate, blockpos);
+            DecorationBlockEntity baseDecorationBlockEntity = (DecorationBlockEntity) level.getBlockEntity(baseDecorationBlockPos);
 
             InteractionHand hand = context.getHand();
             ItemStack itemStack = player.getItemInHand(hand);
 
-            Minecraft.getInstance().setScreen(new PatternBookEditScreen(player, itemStack, hand, decorationBlockEntity.getPlacementMap()));
+            Minecraft.getInstance().setScreen(new PatternBookEditScreen(player, itemStack, hand, baseDecorationBlockEntity.getPlacementMap()));
             player.awardStat(Stats.ITEM_USED.get(this));
 
             return InteractionResult.sidedSuccess(level.isClientSide);

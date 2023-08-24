@@ -1,11 +1,15 @@
 package dev.the_fireplace.caterpillar.client.screen;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import dev.the_fireplace.caterpillar.Caterpillar;
 import dev.the_fireplace.caterpillar.block.entity.DecorationBlockEntity;
 import dev.the_fireplace.caterpillar.client.screen.util.ScreenTabs;
 import dev.the_fireplace.caterpillar.menu.DecorationMenu;
 import dev.the_fireplace.caterpillar.network.packet.client.DecorationSyncSlotC2SPacket;
+import net.minecraft.client.gui.GuiGraphics;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.List;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -14,10 +18,6 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static dev.the_fireplace.caterpillar.block.entity.DecorationBlockEntity.INVENTORY_MAX_SLOTS;
 import static dev.the_fireplace.caterpillar.menu.AbstractCaterpillarMenu.BE_INVENTORY_FIRST_SLOT_INDEX;
@@ -43,23 +43,23 @@ public class DecorationScreen extends AbstractScrollableScreen<DecorationMenu> {
     }
 
     @Override
-    public void render(@NotNull PoseStack stack, int mouseX, int mouseY, float partialTicks) {
-        super.render(stack, mouseX, mouseY, partialTicks);
+    public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+        super.render(graphics, mouseX, mouseY, partialTicks);
 
-        this.renderTooltipCurrentMap(stack, mouseX, mouseY);
-        this.renderScrollerText(stack);
+        this.renderTooltipCurrentMap(graphics, mouseX, mouseY);
+        this.renderScrollerText(graphics);
     }
 
     @Override
-    protected void renderTutorial(PoseStack stack) {
+    protected void renderTutorial(GuiGraphics graphics) {
         if (super.tutorialButton != null && super.tutorialButton.isTutorialShown()) {
-            this.renderDecorationTutorial(stack);
-            this.renderMouseWheelTutorial(stack);
-            this.renderCurrentMapTutorial(stack);
+            this.renderDecorationTutorial(graphics);
+            this.renderMouseWheelTutorial(graphics);
+            this.renderCurrentMapTutorial(graphics);
         }
     }
 
-    private void renderDecorationTutorial(PoseStack stack) {
+    private void renderDecorationTutorial(GuiGraphics graphics) {
         int tutorialX = super.leftPos - 32;
         int tutorialY = super.topPos - 16;
         List<Component> decorationTutorial = new ArrayList<>();
@@ -67,10 +67,10 @@ public class DecorationScreen extends AbstractScrollableScreen<DecorationMenu> {
         MutableComponent tutorialText = Component.translatable(Caterpillar.MOD_ID + ".tutorial.decoration");
         decorationTutorial.add(tutorialText);
 
-        this.renderComponentTooltip(stack, decorationTutorial, tutorialX, tutorialY);
+        graphics.renderComponentTooltip(this.font, decorationTutorial, tutorialX, tutorialY);
     }
 
-    private void renderMouseWheelTutorial(PoseStack stack) {
+    private void renderMouseWheelTutorial(GuiGraphics graphics) {
         int tutorialX = super.leftPos + 108;
         int tutorialY = super.topPos + 49;
         List<Component> decorationTutorial = new ArrayList<>();
@@ -81,10 +81,10 @@ public class DecorationScreen extends AbstractScrollableScreen<DecorationMenu> {
         MutableComponent tutorialText = Component.translatable(Caterpillar.MOD_ID + ".tutorial.decoration.mouse_wheel");
         decorationTutorial.add(tutorialText);
 
-        this.renderComponentTooltip(stack, decorationTutorial, tutorialX, tutorialY);
+        graphics.renderComponentTooltip(this.font, decorationTutorial, tutorialX, tutorialY);
     }
 
-    private void renderCurrentMapTutorial(PoseStack stack) {
+    private void renderCurrentMapTutorial(GuiGraphics graphics) {
         int tutorialX = super.leftPos + 17;
         int tutorialY = super.topPos + 87;
         List<Component> decorationTutorial = new ArrayList<>();
@@ -95,15 +95,15 @@ public class DecorationScreen extends AbstractScrollableScreen<DecorationMenu> {
         MutableComponent tutorialText = Component.translatable(Caterpillar.MOD_ID + ".tutorial.decoration.current_map").withStyle(ChatFormatting.WHITE);
         decorationTutorial.add(tutorialText);
 
-        this.renderComponentTooltip(stack, decorationTutorial, tutorialX, tutorialY);
+        graphics.renderComponentTooltip(this.font, decorationTutorial, tutorialX, tutorialY);
     }
 
-    private void renderScrollerText(PoseStack stack) {
+    private void renderScrollerText(GuiGraphics graphics) {
         int colorPlacement = this.menu.getCurrentMap() == this.menu.getSelectedMap() ? ChatFormatting.BLUE.getColor() : 0x404040;
-        this.font.draw(stack, String.valueOf(this.menu.getSelectedMap()), this.leftPos + 31, this.topPos + 39, colorPlacement);
+        graphics.drawString(this.font, String.valueOf(this.menu.getSelectedMap()), this.leftPos + 31, this.topPos + 39, colorPlacement, false);
     }
 
-    private void renderTooltipCurrentMap(PoseStack stack, int mouseX, int mouseY) {
+    private void renderTooltipCurrentMap(GuiGraphics graphics, int mouseX, int mouseY) {
         if (mouseX >= super.leftPos + 25 &&
                 mouseY >= super.topPos + 34 &&
                 mouseX <= super.leftPos + 25 + SLOT_SIZE &&
@@ -114,7 +114,7 @@ public class DecorationScreen extends AbstractScrollableScreen<DecorationMenu> {
 
                 int currentMapTooltipX = -8;
                 int currentMapTooltipY = 32;
-                this.renderTooltip(stack, currentMap, super.leftPos + currentMapTooltipX, super.topPos + currentMapTooltipY);
+                graphics.renderTooltip(this.font, currentMap, super.leftPos + currentMapTooltipX, super.topPos + currentMapTooltipY);
             }
         }
     }
@@ -127,23 +127,23 @@ public class DecorationScreen extends AbstractScrollableScreen<DecorationMenu> {
         }
 
         int placementSlotId = slotId - BE_INVENTORY_FIRST_SLOT_INDEX;
-        ItemStack placementStack;
+        ItemStack placementgraphics;
         ItemStack carried = this.menu.getCarried().copy();
 
         if (carried.isEmpty()) {
-            placementStack = ItemStack.EMPTY;
+            placementgraphics = ItemStack.EMPTY;
         } else {
-            placementStack = carried.copy();
-            placementStack.setCount(1);
+            placementgraphics = carried.copy();
+            placementgraphics.setCount(1);
         }
 
-        this.menu.slots.get(BE_INVENTORY_FIRST_SLOT_INDEX + placementSlotId).set(placementStack);
+        this.menu.slots.get(BE_INVENTORY_FIRST_SLOT_INDEX + placementSlotId).set(placementgraphics);
         this.menu.setCarried(carried);
 
         if (this.menu.blockEntity instanceof DecorationBlockEntity decorationBlockEntity) {
-            decorationBlockEntity.getSelectedPlacementMap().set(placementSlotId, placementStack);
+            decorationBlockEntity.getSelectedPlacementMap().set(placementSlotId, placementgraphics);
 
-            DecorationSyncSlotC2SPacket.send(placementSlotId, placementStack, decorationBlockEntity.getBlockPos());
+            DecorationSyncSlotC2SPacket.send(placementSlotId, placementgraphics, decorationBlockEntity.getBlockPos());
         }
     }
 

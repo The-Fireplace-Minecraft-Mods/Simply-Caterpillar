@@ -1,11 +1,15 @@
 package dev.the_fireplace.caterpillar.client.screen;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import dev.the_fireplace.caterpillar.Caterpillar;
 import dev.the_fireplace.caterpillar.block.entity.IncineratorBlockEntity;
 import dev.the_fireplace.caterpillar.client.screen.util.ScreenTabs;
 import dev.the_fireplace.caterpillar.menu.IncineratorMenu;
 import dev.the_fireplace.caterpillar.network.packet.client.CaterpillarSyncSlotC2SPacket;
+import net.minecraft.client.gui.GuiGraphics;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.List;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -13,13 +17,11 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static dev.the_fireplace.caterpillar.block.entity.IncineratorBlockEntity.INVENTORY_SIZE;
 import static dev.the_fireplace.caterpillar.menu.AbstractCaterpillarMenu.BE_INVENTORY_FIRST_SLOT_INDEX;
+
+import com.mojang.blaze3d.vertex.PoseStack;
 
 public class IncineratorScreen extends AbstractCaterpillarScreen<IncineratorMenu> {
     public IncineratorScreen(IncineratorMenu menu, Inventory playerInventory, Component title) {
@@ -72,13 +74,13 @@ public class IncineratorScreen extends AbstractCaterpillarScreen<IncineratorMenu
     }
 
     @Override
-    protected void renderTutorial(PoseStack stack) {
+    protected void renderTutorial(GuiGraphics graphics) {
         if (super.tutorialButton != null && super.tutorialButton.isTutorialShown()) {
-            this.renderIncineratorTutorial(stack);
+            this.renderIncineratorTutorial(graphics);
         }
     }
 
-    private void renderIncineratorTutorial(PoseStack stack) {
+    private void renderIncineratorTutorial(GuiGraphics graphics) {
         int tutorialX = super.leftPos + 108;
         int tutorialY = super.topPos + 32;
         List<Component> incineratorTutorial = new ArrayList<>();
@@ -87,6 +89,6 @@ public class IncineratorScreen extends AbstractCaterpillarScreen<IncineratorMenu
         tutorialText.append(Component.translatable(Caterpillar.MOD_ID + ".tutorial.incinerator").withStyle(ChatFormatting.WHITE).append(""));
         incineratorTutorial.add(tutorialText);
 
-        this.renderComponentTooltip(stack, incineratorTutorial, tutorialX, tutorialY);
+        graphics.renderComponentTooltip(this.font, incineratorTutorial, tutorialX, tutorialY);
     }
 }

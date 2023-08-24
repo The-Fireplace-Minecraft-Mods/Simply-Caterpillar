@@ -1,6 +1,7 @@
 package dev.the_fireplace.caterpillar.entity;
 
-import dev.the_fireplace.caterpillar.init.EntityInit;
+import dev.the_fireplace.caterpillar.registry.EntityRegistry;
+import java.util.List;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -17,8 +18,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
-import java.util.List;
-
 public class SeatEntity extends Entity {
 
     public SeatEntity(EntityType<SeatEntity> entityType, Level level) {
@@ -28,7 +27,7 @@ public class SeatEntity extends Entity {
     }
 
     private SeatEntity(Level level, BlockPos source, double yOffset, Direction direction) {
-        this(EntityInit.SEAT, level);
+        this(EntityRegistry.SEAT, level);
         this.setPos(source.getX() + 0.5, source.getY() + yOffset, source.getZ() + 0.5);
         this.setRot(direction.getOpposite().toYRot(), 0F);
     }
@@ -51,10 +50,10 @@ public class SeatEntity extends Entity {
     public void tick() {
         super.tick();
 
-        if (!this.level.isClientSide) {
-            if (this.getPassengers().isEmpty() || this.level.isEmptyBlock(this.blockPosition())) {
+        if (!this.level().isClientSide) {
+            if (this.getPassengers().isEmpty() || this.level().isEmptyBlock(this.blockPosition())) {
                 this.remove(RemovalReason.DISCARDED);
-                this.level.updateNeighbourForOutputSignal(blockPosition(), this.level.getBlockState(blockPosition()).getBlock());
+                this.level().updateNeighbourForOutputSignal(blockPosition(), this.level().getBlockState(blockPosition()).getBlock());
             }
         }
     }
@@ -92,7 +91,7 @@ public class SeatEntity extends Entity {
         Direction[] offsets = {original, original.getClockWise(), original.getCounterClockWise(), original.getOpposite()};
 
         for (Direction dir : offsets) {
-            Vec3 safeVec = DismountHelper.findSafeDismountLocation(entity.getType(), this.level, this.blockPosition().below().relative(dir), true);
+            Vec3 safeVec = DismountHelper.findSafeDismountLocation(entity.getType(), this.level(), this.blockPosition().below().relative(dir), true);
 
             if (safeVec != null) {
                 return safeVec.add(0.0D, 0.25D, 0.0D);

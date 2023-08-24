@@ -3,7 +3,8 @@ package dev.the_fireplace.caterpillar.block.entity;
 import dev.the_fireplace.caterpillar.block.DrillBaseBlock;
 import dev.the_fireplace.caterpillar.config.CaterpillarConfig;
 import dev.the_fireplace.caterpillar.entity.SeatEntity;
-import dev.the_fireplace.caterpillar.init.BlockEntityInit;
+import dev.the_fireplace.caterpillar.registry.BlockEntityRegistry;
+import java.util.List;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvents;
@@ -11,14 +12,12 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 
-import java.util.List;
-
 public class DrillSeatBlockEntity extends DrillBaseBlockEntity {
 
     public static final int INVENTORY_SIZE = 0;
 
     public DrillSeatBlockEntity(BlockPos pos, BlockState state) {
-        super(BlockEntityInit.DRILL_SEAT, pos, state, INVENTORY_SIZE);
+        super(BlockEntityRegistry.DRILL_SEAT, pos, state, INVENTORY_SIZE);
     }
 
     @Override

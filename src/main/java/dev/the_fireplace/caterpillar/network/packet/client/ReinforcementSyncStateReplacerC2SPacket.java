@@ -29,7 +29,7 @@ public class ReinforcementSyncStateReplacerC2SPacket {
     }
 
     public static void receive(MinecraftServer server, ServerPlayer player, ServerGamePacketListenerImpl handler, FriendlyByteBuf buf, PacketSender responseSender) {
-        ServerLevel level = player.getLevel();
+        ServerLevel level = player.serverLevel();
 
         int replacerIndex = buf.readInt();
         int replacementIndex = buf.readInt();

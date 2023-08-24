@@ -31,7 +31,7 @@ public class DrillHeadSyncPowerC2SPacket {
         BlockPos pos = buf.readBlockPos();
 
         server.execute(() -> {
-            ServerLevel level = player.getLevel();
+            ServerLevel level = player.serverLevel();
 
             if (level.getBlockEntity(pos) instanceof DrillHeadBlockEntity drillHeadBlockEntity) {
                 drillHeadBlockEntity.setPower(powered);

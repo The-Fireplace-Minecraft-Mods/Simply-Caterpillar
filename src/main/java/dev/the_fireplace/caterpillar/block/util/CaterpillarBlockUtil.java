@@ -5,7 +5,9 @@ import dev.the_fireplace.caterpillar.block.DrillHeadBlock;
 import dev.the_fireplace.caterpillar.block.entity.DrillBaseBlockEntity;
 import dev.the_fireplace.caterpillar.block.entity.DrillHeadBlockEntity;
 import dev.the_fireplace.caterpillar.block.entity.StorageBlockEntity;
-import dev.the_fireplace.caterpillar.init.BlockInit;
+import dev.the_fireplace.caterpillar.registry.BlockRegistry;
+import java.util.ArrayList;
+import java.util.List;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
@@ -15,22 +17,19 @@ import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import static dev.the_fireplace.caterpillar.block.DrillBaseBlock.FACING;
 
 public class CaterpillarBlockUtil {
     public static boolean isCaterpillarBlock(Block block) {
-        return (block == BlockInit.DRILL_HEAD) ||
-                (block == BlockInit.DECORATION) ||
-                (block == BlockInit.REINFORCEMENT) ||
-                (block == BlockInit.INCINERATOR) ||
-                (block == BlockInit.COLLECTOR) ||
-                (block == BlockInit.STORAGE) ||
-                (block == BlockInit.DRILL_BASE) ||
-                (block == BlockInit.DRILL_SEAT) ||
-                (block == BlockInit.TRANSPORTER);
+        return (block == BlockRegistry.DRILL_HEAD) ||
+                (block == BlockRegistry.DECORATION) ||
+                (block == BlockRegistry.REINFORCEMENT) ||
+                (block == BlockRegistry.INCINERATOR) ||
+                (block == BlockRegistry.COLLECTOR) ||
+                (block == BlockRegistry.STORAGE) ||
+                (block == BlockRegistry.DRILL_BASE) ||
+                (block == BlockRegistry.DRILL_SEAT) ||
+                (block == BlockRegistry.TRANSPORTER);
     }
 
     public static BlockPos getCaterpillarHeadPos(Level level, BlockPos pos, Direction direction) {
@@ -40,7 +39,7 @@ public class CaterpillarBlockUtil {
             return pos.relative(direction.getOpposite());
         }
 
-        if (state.getBlock() == BlockInit.DRILL_HEAD && state.getValue(DrillHeadBlock.PART) == DrillHeadPart.BIT_MIDDLE) {
+        if (state.getBlock() == BlockRegistry.DRILL_HEAD && state.getValue(DrillHeadBlock.PART) == DrillHeadPart.BIT_MIDDLE) {
             return pos.relative(direction.getOpposite());
         }
 

@@ -2,13 +2,14 @@ package dev.the_fireplace.caterpillar.client.screen.widget;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.resources.ResourceLocation;
 
 public class PowerButton extends ImageButton {
 
-    private final ResourceLocation texture;
+    private final ResourceLocation resourceLocation;
 
     private final int xTexStart;
 
@@ -21,7 +22,7 @@ public class PowerButton extends ImageButton {
     public PowerButton(boolean powered, int x, int y, int width, int height, int xTexStart, int yTexStart, int yDiffTex, ResourceLocation resourceLocation, OnPress onPress) {
         super(x, y, width, height, xTexStart, yTexStart, yDiffTex, resourceLocation, onPress);
 
-        this.texture = resourceLocation;
+        this.resourceLocation = resourceLocation;
         this.xTexStart = xTexStart;
         this.yTexStart = yTexStart;
         this.yDiffTex = yDiffTex;
@@ -29,9 +30,9 @@ public class PowerButton extends ImageButton {
     }
 
     @Override
-    public void renderWidget(PoseStack stack, int mouseX, int mouseY, float partialTick) {
+    public void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
-        RenderSystem.setShaderTexture(0, texture);
+        RenderSystem.setShaderTexture(0, resourceLocation);
 
         int yOffset = this.yTexStart;
         if (!this.powered) {
@@ -39,7 +40,7 @@ public class PowerButton extends ImageButton {
         }
 
         RenderSystem.enableDepthTest();
-        blit(stack, this.getX() + (this.powered ? 0 : -3), this.getY(), this.xTexStart, yOffset, this.width, this.height);
+        graphics.blit(resourceLocation, this.getX() + (this.powered ? 0 : -3), this.getY(), this.xTexStart, yOffset, this.width, this.height);
     }
 
     public boolean isPowered() {

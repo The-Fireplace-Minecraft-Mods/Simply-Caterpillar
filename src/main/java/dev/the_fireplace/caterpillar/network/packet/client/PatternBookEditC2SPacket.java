@@ -1,7 +1,7 @@
 package dev.the_fireplace.caterpillar.network.packet.client;
 
 import dev.the_fireplace.caterpillar.Caterpillar;
-import dev.the_fireplace.caterpillar.init.ItemInit;
+import dev.the_fireplace.caterpillar.registry.ItemRegistry;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
@@ -18,7 +18,6 @@ import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,8 +53,8 @@ public class PatternBookEditC2SPacket {
         server.execute(() -> {
             if (Inventory.isHotbarSlot(slot)) {
                 ItemStack itemStack = player.getInventory().getItem(slot);
-                if (itemStack.is(ItemInit.WRITABLE_PATTERN_BOOK)) {
-                    ItemStack writtenPatternBook = new ItemStack(ItemInit.WRITTEN_PATTERN_BOOK);
+                if (itemStack.is(ItemRegistry.WRITABLE_PATTERN_BOOK)) {
+                    ItemStack writtenPatternBook = new ItemStack(ItemRegistry.WRITTEN_PATTERN_BOOK);
                     CompoundTag tag = itemStack.getTag();
                     if (tag != null) {
                         writtenPatternBook.setTag(tag.copy());

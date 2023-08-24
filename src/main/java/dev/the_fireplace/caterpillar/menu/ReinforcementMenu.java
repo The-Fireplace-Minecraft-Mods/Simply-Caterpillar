@@ -1,7 +1,7 @@
 package dev.the_fireplace.caterpillar.menu;
 
 import dev.the_fireplace.caterpillar.block.entity.ReinforcementBlockEntity;
-import dev.the_fireplace.caterpillar.init.MenuInit;
+import dev.the_fireplace.caterpillar.registry.MenuRegistry;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
@@ -17,11 +17,11 @@ public class ReinforcementMenu extends AbstractScrollableMenu {
     private static final int REINFORCEMENT_SLOT_Y_START = 17;
 
     public ReinforcementMenu(int id, Inventory playerInventory, FriendlyByteBuf extraData) {
-        super(MenuInit.REINFORCEMENT, id, playerInventory, extraData, 0, INVENTORY_SIZE);
+        super(MenuRegistry.REINFORCEMENT, id, playerInventory, extraData, 0, INVENTORY_SIZE);
     }
 
     public ReinforcementMenu(int id, Inventory playerInventory, ReinforcementBlockEntity blockEntity, ContainerData data) {
-        super(MenuInit.REINFORCEMENT, id, playerInventory, blockEntity, data, INVENTORY_SIZE);
+        super(MenuRegistry.REINFORCEMENT, id, playerInventory, blockEntity, data, INVENTORY_SIZE);
     }
 
     @Override

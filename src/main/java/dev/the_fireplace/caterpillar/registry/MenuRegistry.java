@@ -1,4 +1,4 @@
-package dev.the_fireplace.caterpillar.init;
+package dev.the_fireplace.caterpillar.registry;
 
 import dev.the_fireplace.caterpillar.Caterpillar;
 import dev.the_fireplace.caterpillar.menu.*;
@@ -8,7 +8,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.MenuType;
 
-public class MenuInit {
+public class MenuRegistry {
 
     public static void registerMenus() {
         Registry.register(BuiltInRegistries.MENU, new ResourceLocation(Caterpillar.MOD_ID, "drill_head"), DRILL_HEAD);

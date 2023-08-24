@@ -19,7 +19,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.world.level.block.state.BlockState;
-
 import java.util.ArrayList;
 
 import static dev.the_fireplace.caterpillar.block.DrillBaseBlock.FACING;
@@ -37,7 +36,7 @@ public class CaterpillarSyncSelectedTabC2SPacket {
     }
 
     public static void receive(MinecraftServer server, ServerPlayer player, ServerGamePacketListenerImpl handler, FriendlyByteBuf buf, PacketSender responseSender) {
-        ServerLevel level = player.getLevel();
+        ServerLevel level = player.serverLevel();
 
         ScreenTabs tab = ScreenTabs.values()[buf.readInt()];
         BlockPos pos = buf.readBlockPos();

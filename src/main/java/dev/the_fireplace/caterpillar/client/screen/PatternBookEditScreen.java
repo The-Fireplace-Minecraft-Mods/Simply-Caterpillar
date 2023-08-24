@@ -8,6 +8,7 @@ import dev.the_fireplace.caterpillar.network.packet.client.PatternBookEditC2SPac
 import net.minecraft.ChatFormatting;
 import net.minecraft.SharedConstants;
 import net.minecraft.client.GameNarrator;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.PageButton;
@@ -24,7 +25,6 @@ import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-
 import java.util.List;
 
 public class PatternBookEditScreen extends Screen {
@@ -100,11 +100,11 @@ public class PatternBookEditScreen extends Screen {
     }
 
     @Override
-    public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTick) {
-        this.renderBackground(poseStack);
+    public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+        this.renderBackground(graphics);
 
         if (this.currentPage != 0) {
-            this.renderCraftingGrid(poseStack);
+            this.renderCraftingGrid(graphics);
         }
 
         int middlePos = (this.width - 192) / 2;
@@ -113,21 +113,21 @@ public class PatternBookEditScreen extends Screen {
             boolean flag = this.frameTick / 6 % 2 == 0;
             FormattedCharSequence formattedcharsequence = FormattedCharSequence.composite(FormattedCharSequence.forward(this.title, Style.EMPTY), flag ? BLACK_CURSOR : GRAY_CURSOR);
             int k = this.font.width(EDIT_TITLE_LABEL);
-            this.font.draw(poseStack, EDIT_TITLE_LABEL, (float) (middlePos + 36 + (114 - k) / 2), 34.0F, 0);
+            graphics.drawString(this.font, EDIT_TITLE_LABEL, (middlePos + 36 + (114 - k) / 2), 34, 0, false);
             int l = this.font.width(formattedcharsequence);
-            this.font.draw(poseStack, formattedcharsequence, (float) (middlePos + 36 + (114 - l) / 2), 50.0F, 0);
+            graphics.drawString(this.font, formattedcharsequence, (middlePos + 36 + (114 - l) / 2), 50, 0, false);
             int i1 = this.font.width(this.ownerText);
-            this.font.draw(poseStack, this.ownerText, (float) (middlePos + 36 + (114 - i1) / 2), 60.0F, 0);
-            this.font.drawWordWrap(poseStack, FINALIZE_WARNING_LABEL, middlePos + 36, 82, 114, 0);
+            graphics.drawString(this.font, this.ownerText, (middlePos + 36 + (114 - i1) / 2), 60, 0, false);
+            graphics.drawWordWrap(this.font, FINALIZE_WARNING_LABEL, middlePos + 36, 82, 114, 0);
         } else {
-            this.renderCurrentPatternPage(poseStack);
-            this.renderCurrentPageNumber(poseStack);
+            this.renderCurrentPatternPage(graphics);
+            this.renderCurrentPageNumber(graphics);
         }
 
-        super.render(poseStack, mouseX, mouseY, partialTick);
+        super.render(graphics, mouseX, mouseY, partialTick);
     }
 
-    private void renderCurrentPatternPage(PoseStack poseStack) {
+    private void renderCurrentPatternPage(GuiGraphics graphics) {
         int middlePos = (this.width - 146) / 2;
         int slotId = 0;
 
@@ -136,21 +136,21 @@ public class PatternBookEditScreen extends Screen {
                 if (row != 1 || column != 1) {
                     ItemStack itemStack = this.pattern.get(this.currentPage - 1).get(slotId++);
 
-                    super.itemRenderer.renderAndDecorateItem(poseStack, itemStack, middlePos + 46 + column * PatternBookViewScreen.SLOT_SIZE_PLUS_2, 54 + row * PatternBookViewScreen.SLOT_SIZE_PLUS_2);
+                    graphics.renderItem(itemStack, middlePos + 46 + column * PatternBookViewScreen.SLOT_SIZE_PLUS_2, 54 + row * PatternBookViewScreen.SLOT_SIZE_PLUS_2);
                 }
             }
         }
     }
 
-    private void renderCurrentPageNumber(PoseStack poseStack) {
+    private void renderCurrentPageNumber(GuiGraphics graphics) {
         int middlePos = (this.width - 192) / 2;
         int fontWidth = this.font.width(this.currentPageText);
-        this.font.draw(poseStack, this.currentPageText, (float) (middlePos - fontWidth + 192 - 44), 18.0F, 0);
+        graphics.drawString(this.font, this.currentPageText, middlePos - fontWidth + 192 - 44, 18, 0, false);
     }
 
     @Override
-    public void renderBackground(PoseStack poseStack) {
-        super.renderBackground(poseStack);
+    public void renderBackground(GuiGraphics graphics) {
+        super.renderBackground(graphics);
 
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
@@ -158,15 +158,15 @@ public class PatternBookEditScreen extends Screen {
 
         int middlePos = (this.width - PatternBookViewScreen.BOOK_TEXTURE_WIDTH) / 2;
 
-        blit(poseStack, middlePos, 2, 0, 0, PatternBookViewScreen.BOOK_TEXTURE_WIDTH, PatternBookViewScreen.BOOK_TEXTURE_HEIGHT);
+        graphics.blit(PatternBookViewScreen.BOOK_TEXTURE, middlePos, 2, 0, 0, PatternBookViewScreen.BOOK_TEXTURE_WIDTH, PatternBookViewScreen.BOOK_TEXTURE_HEIGHT);
     }
 
-    public void renderCraftingGrid(PoseStack poseStack) {
+    public void renderCraftingGrid(GuiGraphics graphics) {
         RenderSystem.enableBlend();
 
         int middlePos = (this.width - PatternBookViewScreen.BOOK_CRAFTING_TEXTURE_WIDTH) / 2;
 
-        blit(poseStack, middlePos, 50, PatternBookViewScreen.BOOK_CRAFTING_TEXTURE_X, PatternBookViewScreen.BOOK_CRAFTING_TEXTURE_Y, PatternBookViewScreen.BOOK_CRAFTING_TEXTURE_WIDTH, PatternBookViewScreen.BOOK_CRAFTING_TEXTURE_HEIGHT);
+        graphics.blit(PatternBookViewScreen.BOOK_TEXTURE, middlePos, 50, PatternBookViewScreen.BOOK_CRAFTING_TEXTURE_X, PatternBookViewScreen.BOOK_CRAFTING_TEXTURE_Y, PatternBookViewScreen.BOOK_CRAFTING_TEXTURE_WIDTH, PatternBookViewScreen.BOOK_CRAFTING_TEXTURE_HEIGHT);
     }
 
     private void pageBack() {

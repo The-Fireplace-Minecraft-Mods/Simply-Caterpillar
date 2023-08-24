@@ -1,7 +1,7 @@
 package dev.the_fireplace.caterpillar.menu.syncdata;
 
-import net.minecraft.world.inventory.SimpleContainerData;
 import dev.the_fireplace.caterpillar.block.entity.DrillHeadBlockEntity;
+import net.minecraft.world.inventory.SimpleContainerData;
 
 public class DrillHeadContainerData extends SimpleContainerData {
 

@@ -1,10 +1,8 @@
 package dev.the_fireplace.caterpillar.client.handler;
 
-import dev.the_fireplace.caterpillar.init.ItemInit;
-import dev.the_fireplace.caterpillar.network.PacketHandler;
+import dev.the_fireplace.caterpillar.registry.ItemRegistry;
 import dev.the_fireplace.caterpillar.network.packet.server.OpenBookGuiS2CPacket;
 import net.minecraft.core.BlockPos;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -35,7 +33,7 @@ public class LecternEventHandler {
                     ItemStack book = lectern.getBook();
                     if (!book.isEmpty()) {
                         if (!level.isClientSide) {
-                            if (book.is(ItemInit.WRITTEN_PATTERN_BOOK)) {
+                            if (book.is(ItemRegistry.WRITTEN_PATTERN_BOOK)) {
                                 OpenBookGuiS2CPacket.send(book);
                                 player.awardStat(Stats.INTERACT_WITH_LECTERN);
                             } else {
@@ -63,7 +61,7 @@ public class LecternEventHandler {
     private static void takeBook(Player player, LecternBlockEntity lectern) {
         ItemStack itemStack = lectern.getBook();
         lectern.setBook(ItemStack.EMPTY);
-        LecternBlock.resetBookState((Entity) null, lectern.getLevel(), lectern.getBlockPos(), lectern.getBlockState(), false);
+        LecternBlock.resetBookState(null, lectern.getLevel(), lectern.getBlockPos(), lectern.getBlockState(), false);
         if (!player.getInventory().add(itemStack)) {
             player.drop(itemStack, false);
         }

@@ -5,12 +5,14 @@ import dev.the_fireplace.caterpillar.block.ReinforcementBlock;
 import dev.the_fireplace.caterpillar.block.util.CaterpillarBlockUtil;
 import dev.the_fireplace.caterpillar.block.util.Replacement;
 import dev.the_fireplace.caterpillar.config.CaterpillarConfig;
-import dev.the_fireplace.caterpillar.init.BlockEntityInit;
+import dev.the_fireplace.caterpillar.registry.BlockEntityRegistry;
 import dev.the_fireplace.caterpillar.menu.ReinforcementMenu;
 import dev.the_fireplace.caterpillar.menu.util.DrillHeadMenuPart;
 import dev.the_fireplace.caterpillar.network.packet.server.CaterpillarSyncInventoryS2CPacket;
 import dev.the_fireplace.caterpillar.network.packet.server.DrillHeadRefreshInventoryS2CPacket;
 import dev.the_fireplace.caterpillar.network.packet.server.ReinforcementSyncReplacerS2CPacket;
+import java.util.ArrayList;
+import java.util.List;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.ByteArrayTag;
@@ -31,9 +33,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class ReinforcementBlockEntity extends DrillBaseBlockEntity {
 
@@ -65,7 +64,7 @@ public class ReinforcementBlockEntity extends DrillBaseBlockEntity {
     public final List<byte[]> replacers = new ArrayList<>();
 
     public ReinforcementBlockEntity(BlockPos pos, BlockState state) {
-        super(BlockEntityInit.REINFORCEMENT, pos, state, INVENTORY_SIZE);
+        super(BlockEntityRegistry.REINFORCEMENT, pos, state, INVENTORY_SIZE);
 
         this.setDefaultReinforcementBlocks();
         this.setDefaultReplacers();
@@ -224,7 +223,7 @@ public class ReinforcementBlockEntity extends DrillBaseBlockEntity {
                 }
 
                 if (replacerIndex == Replacement.AIR.INDEX) {
-                    if (block.defaultBlockState().getMaterial().isReplaceable()) {
+                    if (block.defaultBlockState().canBeReplaced()) {
                         return true;
                     }
                 }

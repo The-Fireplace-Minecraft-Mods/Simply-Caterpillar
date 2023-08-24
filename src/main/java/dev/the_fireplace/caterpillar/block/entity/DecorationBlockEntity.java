@@ -5,11 +5,13 @@ import dev.the_fireplace.caterpillar.block.DecorationBlock;
 import dev.the_fireplace.caterpillar.block.util.CaterpillarBlockUtil;
 import dev.the_fireplace.caterpillar.block.util.DecorationPart;
 import dev.the_fireplace.caterpillar.config.CaterpillarConfig;
-import dev.the_fireplace.caterpillar.init.BlockEntityInit;
+import dev.the_fireplace.caterpillar.registry.BlockEntityRegistry;
 import dev.the_fireplace.caterpillar.menu.DecorationMenu;
 import dev.the_fireplace.caterpillar.menu.syncdata.DecorationContainerData;
 import dev.the_fireplace.caterpillar.menu.util.DrillHeadMenuPart;
 import dev.the_fireplace.caterpillar.network.packet.server.*;
+import java.util.ArrayList;
+import java.util.List;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
@@ -33,9 +35,6 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static dev.the_fireplace.caterpillar.block.DrillBaseBlock.FACING;
 
@@ -67,7 +66,7 @@ public class DecorationBlockEntity extends DrillBaseBlockEntity {
     private int currentMap;
 
     public DecorationBlockEntity(BlockPos pos, BlockState state) {
-        super(BlockEntityInit.DECORATION, pos, state, INVENTORY_MAX_SLOTS);
+        super(BlockEntityRegistry.DECORATION, pos, state, INVENTORY_MAX_SLOTS);
 
         this.placementMap = new ArrayList<>();
 
@@ -160,7 +159,7 @@ public class DecorationBlockEntity extends DrillBaseBlockEntity {
                 ItemStack itemStackToPlace = currentPlacementMap.get(placementSlotId--);
                 Block blockToPlace = Block.byItem(itemStackToPlace.getItem());
 
-                blockToPlace.defaultBlockState().getMaterial().isReplaceable();
+                blockToPlace.defaultBlockState().canBeReplaced();
 
                 if (blockToPlace == Blocks.AIR) {
                     continue;

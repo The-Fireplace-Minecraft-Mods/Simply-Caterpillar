@@ -42,12 +42,12 @@ public abstract class AbstractCaterpillarMenu extends AbstractContainerMenu {
     public final int BE_INVENTORY_SLOT_COUNT;
 
     public AbstractCaterpillarMenu(MenuType<?> menuType, int id, Inventory playerInventory, FriendlyByteBuf extraData, int containerDataSize, int inventorySize) {
-        this(menuType, id, playerInventory, (DrillBaseBlockEntity) playerInventory.player.level.getBlockEntity(extraData.readBlockPos()), new SimpleContainerData(containerDataSize), inventorySize);
+        this(menuType, id, playerInventory, (DrillBaseBlockEntity) playerInventory.player.level().getBlockEntity(extraData.readBlockPos()), new SimpleContainerData(containerDataSize), inventorySize);
     }
 
     public <T> AbstractCaterpillarMenu(MenuType<?> menuType, int id, Inventory playerInventory, DrillBaseBlockEntity blockEntity, ContainerData data, int inventorySize) {
         super(menuType, id);
-        Level level = playerInventory.player.level;
+        Level level = playerInventory.player.level();
         this.inventory = blockEntity;
         this.blockEntity = blockEntity;
         this.access = ContainerLevelAccess.create(level, this.blockEntity.getBlockPos());
@@ -81,7 +81,7 @@ public abstract class AbstractCaterpillarMenu extends AbstractContainerMenu {
     protected void addPlayerInventory(Inventory playerInventory, int inventoryX, int inventoryY) {
         for (int row = 0; row < 3; row++) {
             for (int column = 0; column < 9; column++) {
-                super.addSlot(new Slot(playerInventory, column + row * 9 + 9, inventoryX + column * SLOT_SIZE_PLUS_2, inventoryY + row * SLOT_SIZE_PLUS_2));
+                super.addSlot(new net.minecraft.world.inventory.Slot(playerInventory, column + row * 9 + 9, inventoryX + column * SLOT_SIZE_PLUS_2, inventoryY + row * SLOT_SIZE_PLUS_2));
             }
         }
     }
@@ -94,7 +94,7 @@ public abstract class AbstractCaterpillarMenu extends AbstractContainerMenu {
 
     protected void addPlayerHotbar(Inventory playerInventory, int hotbarX, int hotbarY) {
         for (int column = 0; column < 9; column++) {
-            super.addSlot(new Slot(playerInventory, column, hotbarX + column * SLOT_SIZE_PLUS_2, hotbarY));
+            super.addSlot(new net.minecraft.world.inventory.Slot(playerInventory, column, hotbarX + column * SLOT_SIZE_PLUS_2, hotbarY));
         }
     }
 
@@ -105,7 +105,7 @@ public abstract class AbstractCaterpillarMenu extends AbstractContainerMenu {
 
     @Override
     public @NotNull ItemStack quickMoveStack(@NotNull Player player, int index) {
-        Slot sourceSlot = slots.get(index);
+        net.minecraft.world.inventory.Slot sourceSlot = slots.get(index);
         if (!sourceSlot.hasItem()) return ItemStack.EMPTY;
         ItemStack sourceStack = sourceSlot.getItem();
         ItemStack copyOfSourceStack = sourceStack.copy();

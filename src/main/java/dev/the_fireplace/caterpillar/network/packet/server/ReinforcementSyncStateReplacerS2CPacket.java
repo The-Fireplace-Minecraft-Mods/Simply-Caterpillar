@@ -10,10 +10,10 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
-import dev.the_fireplace.caterpillar.block.entity.ReinforcementBlockEntity;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import dev.the_fireplace.caterpillar.block.entity.ReinforcementBlockEntity;
 
 public class ReinforcementSyncStateReplacerS2CPacket {
 
