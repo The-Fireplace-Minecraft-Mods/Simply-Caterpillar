@@ -63,7 +63,7 @@ public class LecternEventHandler {
     private static void takeBook(Player player, LecternBlockEntity lectern) {
         ItemStack itemStack = lectern.getBook();
         lectern.setBook(ItemStack.EMPTY);
-        LecternBlock.resetBookState((Entity) null, lectern.getLevel(), lectern.getBlockPos(), lectern.getBlockState(), false);
+        LecternBlock.resetBookState(null, lectern.getLevel(), lectern.getBlockPos(), lectern.getBlockState(), false);
         if (!player.getInventory().add(itemStack)) {
             player.drop(itemStack, false);
         }
