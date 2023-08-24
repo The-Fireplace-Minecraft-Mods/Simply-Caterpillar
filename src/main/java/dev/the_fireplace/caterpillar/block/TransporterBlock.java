@@ -51,31 +51,29 @@ public class TransporterBlock extends DrillBaseBlock {
     private static final Map<Direction, VoxelShape> SHAPES_LOWER = new EnumMap<>(Direction.class);
 
     private static final VoxelShape SHAPE_UPPER = Stream.of(
-            Block.box(6, 0, 0, 10, 6, 16),
-            Block.box(10, 0, 0, 16, 16, 16),
-            Block.box(0, 0, 0, 6, 16, 16),
-            Block.box(6, 10, 0, 10, 16, 16),
-            Block.box(6, 6, 16, 10, 10, 31),
-            Block.box(-0.1, -7, 1.5, 2.9, 9, 1.5),
-            Block.box(1.5, -7, -0.1, 1.5, 9, 2.9),
-            Block.box(14.5, -7, 12.9, 14.5, 9, 15.9),
-            Block.box(12.9, -7, 14.5, 15.9, 9, 14.5)
+        Block.box(0, 0, 0, 16, 16, 16),
+        Block.box(6, 6, 16, 10, 10, 32),
+        Block.box(-0.1, -7, 1.5, 2.9, 9, 1.5),
+        Block.box(1.5, -7, -0.1, 1.5, 9, 2.9),
+        Block.box(14.5, -7, 12.9, 14.5, 9, 15.9),
+        Block.box(12.9, -7, 14.5, 15.9, 9, 14.5)
     ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
 
     private static final VoxelShape SHAPE_LOWER = Stream.of(
-            Block.box(0, 1, 0, 2, 3, 16),
-            Block.box(0, 3, 0, 2, 11, 16),
-            Block.box(14, 1, 0, 16, 3, 16),
-            Block.box(14, 3, 0, 16, 11, 16),
-            Block.box(0, 1, 16, 16, 11, 18),
-            Block.box(0, 1, -2, 16, 11, 0),
-            Block.box(2, 1, 0, 14, 2, 16),
-            Block.box(6.5, 8, 13, 8.5, 12, 14),
-            Block.box(3, 11, 3, 13, 15, 13),
-            Block.box(3, 3, 3, 13, 11, 13),
-            Block.box(6, 8, 1, 10, 16, 2),
-            Block.box(5, 7, 2, 11, 13, 3)
+        Block.box(0, 1, 0, 2, 3, 16),
+        Block.box(0, 3, 0, 2, 11, 16),
+        Block.box(14, 1, 0, 16, 3, 16),
+        Block.box(14, 3, 0, 16, 11, 16),
+        Block.box(0, 1, 16, 16, 11, 18),
+        Block.box(0, 1, -2, 16, 11, 0),
+        Block.box(2, 1, 0, 14, 2, 16),
+        Block.box(6.5, 8, 13, 8.5, 12, 14),
+        Block.box(3, 11, 3, 13, 15, 13),
+        Block.box(3, 3, 3, 13, 11, 13),
+        Block.box(6, 8, 1, 10, 16, 2),
+        Block.box(5, 7, 2, 11, 13, 3)
     ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
+
 
     public TransporterBlock(Properties properties) {
         super(properties);

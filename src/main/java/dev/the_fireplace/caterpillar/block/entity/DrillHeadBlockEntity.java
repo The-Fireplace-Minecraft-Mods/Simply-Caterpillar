@@ -37,16 +37,15 @@ import java.util.List;
 public class DrillHeadBlockEntity extends DrillBaseBlockEntity {
 
     public static final Component TITLE = Component.translatable(
-            "container." + Caterpillar.MOD_ID + ".drill_head"
-
+        "container." + Caterpillar.MOD_ID + ".drill_head"
     );
 
     public static final Component GATHERED_TITLE = Component.translatable(
-            "gui." + Caterpillar.MOD_ID + ".drill_head.gathered"
+        "gui." + Caterpillar.MOD_ID + ".drill_head.gathered"
     );
 
     public static final Component CONSUMPTION_TITLE = Component.translatable(
-            "gui." + Caterpillar.MOD_ID + ".drill_head.consumption"
+        "gui." + Caterpillar.MOD_ID + ".drill_head.consumption"
     );
 
     public static final int CONSUMPTION_SLOT_START = 1;
@@ -215,10 +214,10 @@ public class DrillHeadBlockEntity extends DrillBaseBlockEntity {
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
                 destroyPos = switch (direction) {
-                    case EAST -> this.getBlockPos().offset(1, i, j);
-                    case WEST -> this.getBlockPos().offset(-1, i, j);
-                    case SOUTH -> this.getBlockPos().offset(j, i, 1);
-                    default -> this.getBlockPos().offset(j, i, -1);
+                    case EAST -> this.getBlockPos().offset(2, i, j);
+                    case WEST -> this.getBlockPos().offset(-2, i, j);
+                    case SOUTH -> this.getBlockPos().offset(j, i, 2);
+                    default -> this.getBlockPos().offset(j, i, -2);
                 };
 
                 BlockState blockState = this.getLevel().getBlockState(destroyPos);

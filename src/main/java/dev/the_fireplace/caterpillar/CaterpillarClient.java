@@ -1,5 +1,6 @@
 package dev.the_fireplace.caterpillar;
 
+import dev.the_fireplace.caterpillar.client.handler.LecternEventHandler;
 import dev.the_fireplace.caterpillar.client.renderer.entity.SeatEntityRenderer;
 import dev.the_fireplace.caterpillar.client.screen.*;
 import dev.the_fireplace.caterpillar.event.KeyInputHandler;
@@ -10,6 +11,7 @@ import dev.the_fireplace.caterpillar.network.PacketHandler;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
+import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.RenderType;
 
@@ -30,5 +32,7 @@ public class CaterpillarClient implements ClientModInitializer {
         PacketHandler.registerS2CPackets();
 
         EntityRendererRegistry.register(EntityInit.SEAT, SeatEntityRenderer::new);
+
+        UseBlockCallback.EVENT.register(LecternEventHandler::rightClick);
     }
 }

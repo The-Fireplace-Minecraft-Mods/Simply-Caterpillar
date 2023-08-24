@@ -1,0 +1,51 @@
+{
+	"parent": "simplycaterpillar:block/drill_base/drill_base_block",
+	"render_type": "cutout",
+	"textures": {
+		"rod": "simplycaterpillar:block/drill_base/drill_base_rod",
+		"particle": "simplycaterpillar:block/drill_base/drill_base_inner",
+		"side": "simplycaterpillar:block/drill_base/drill_base_inner"
+	},
+	"elements": [
+		{
+			"from": [0, 0, 0],
+			"to": [16, 16, 16],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, -16, 8]},
+			"faces": {
+				"north": {"uv": [0, 0, 16, 16], "texture": "#side", "tintindex": 0},
+				"east": {"uv": [0, 0, 16, 16], "texture": "#side"},
+				"south": {"uv": [0, 0, 16, 16], "texture": "#side"},
+				"west": {"uv": [0, 0, 16, 16], "texture": "#side"},
+				"up": {"uv": [0, 0, 16, 16], "rotation": 180, "texture": "#side"},
+				"down": {"uv": [0, 0, 16, 16], "rotation": 180, "texture": "#side"}
+			}
+		},
+		{
+			"from": [6, 6, 16],
+			"to": [10, 10, 32],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, -16, 8]},
+			"faces": {
+				"east": {"uv": [0, 0, 16, 4], "texture": "#rod"},
+				"south": {"uv": [2, 0, 6, 4], "texture": "#rod"},
+				"west": {"uv": [0, 0, 16, 4], "rotation": 180, "texture": "#rod"},
+				"up": {"uv": [0, 0, 16, 4], "rotation": 270, "texture": "#rod"},
+				"down": {"uv": [0, 0, 16, 4], "rotation": 90, "texture": "#rod"}
+			}
+		}
+	],
+	"display": {
+		"gui": {
+			"rotation": [30, 45, 0],
+			"translation": [-1.6, 1, 0],
+			"scale": [0.52, 0.52, 0.52]
+		}
+	},
+	"groups": [
+		{
+			"name": "VoxelShapes",
+			"origin": [8, 8, 8],
+			"color": 0,
+			"children": [0, 1]
+		}
+	]
+}

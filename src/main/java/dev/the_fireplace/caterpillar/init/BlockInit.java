@@ -37,7 +37,7 @@ public class BlockInit {
             new StorageBlock(BlockBehaviour.Properties.of(Material.STONE).strength(1.5F, 6.0F).sound(SoundType.WOOD).requiresCorrectToolForDrops()), ItemGroupInit.CATERPILLAR);
 
     public static final Block INCINERATOR = registerBlock("incinerator",
-            new IncineratorBlock(BlockBehaviour.Properties.of(Material.STONE).strength(1.5F, 6.0F).sound(SoundType.STONE).requiresCorrectToolForDrops()), ItemGroupInit.CATERPILLAR);
+            new IncineratorBlock(BlockBehaviour.Properties.of(Material.STONE).strength(1.5F, 6.0F).sound(SoundType.STONE).lightLevel((blockState) -> 15).requiresCorrectToolForDrops()), ItemGroupInit.CATERPILLAR);
 
     public static final Block DECORATION = registerBlock("decoration",
             new DecorationBlock(BlockBehaviour.Properties.of(Material.STONE).strength(1.5F, 6.0F).sound(SoundType.STONE).requiresCorrectToolForDrops()), ItemGroupInit.CATERPILLAR);

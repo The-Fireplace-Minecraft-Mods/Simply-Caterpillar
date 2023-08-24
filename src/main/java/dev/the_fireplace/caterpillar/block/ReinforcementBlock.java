@@ -51,31 +51,28 @@ public class ReinforcementBlock extends DrillBaseBlock {
     private static final Map<Direction, VoxelShape> SHAPES_BOTTOM = new EnumMap<>(Direction.class);
 
     private static final VoxelShape SHAPE_LEFT = Stream.of(
-            Block.box(0, 0, 0, 1, 16, 16),
-            Block.box(1, 6, 6, 16, 10, 10)
+        Block.box(4, 6, 6, 16, 10, 10),
+        Block.box(0, 0, 0, 4, 16, 16)
     ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
 
     private static final VoxelShape SHAPE_BASE = Stream.of(
-            Block.box(6, 0, 0, 10, 6, 16),
-            Block.box(10, 0, 0, 16, 16, 16),
-            Block.box(0, 0, 0, 6, 16, 16),
-            Block.box(6, 10, 0, 10, 16, 16),
-            Block.box(6, 6, 16, 10, 10, 31)
+        Block.box(0, 0, 0, 16, 16, 16),
+        Block.box(6, 6, 16, 10, 10, 32)
     ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
 
     private static final VoxelShape SHAPE_RIGHT = Stream.of(
-            Block.box(0, 6, 6, 15, 10, 10),
-            Block.box(15, 0, 0, 16, 16, 16)
+        Block.box(0, 6, 6, 12, 10, 10),
+        Block.box(12, 0, 0, 16, 16, 16)
     ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
 
     private static final VoxelShape SHAPE_TOP = Stream.of(
-            Block.box(6, 0, 6, 10, 15, 10),
-            Block.box(0, 15, 0, 16, 16, 16)
+        Block.box(0, 12, 0, 16, 16, 16),
+        Block.box(6, 0, 6, 10, 12, 10)
     ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
 
     private static final VoxelShape SHAPE_BOTTOM = Stream.of(
-            Block.box(6, 1, 6, 10, 16, 10),
-            Block.box(0, 0, 0, 16, 1, 16)
+        Block.box(6, 4, 6, 10, 16, 10),
+        Block.box(0, 0, 0, 16, 4, 16)
     ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
 
     public ReinforcementBlock(Properties properties) {

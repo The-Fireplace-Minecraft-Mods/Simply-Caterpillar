@@ -1,0 +1,94 @@
+{
+	"parent": "simplycaterpillar:block/drill_base/drill_base_block",
+	"render_type": "cutout",
+	"textures": {
+		"4": "simplycaterpillar:block/drill_base/drill_base",
+		"5": "simplycaterpillar:block/transporter/transporter_front",
+		"chain": "block/chain",
+		"rod": "simplycaterpillar:block/drill_base/drill_base_rod",
+		"particle": "simplycaterpillar:block/drill_base/drill_base_inner",
+		"side": "simplycaterpillar:block/drill_base/drill_base_inner"
+	},
+	"elements": [
+		{
+			"from": [0, 0, 0],
+			"to": [16, 16, 16],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, -16, 8]},
+			"faces": {
+				"north": {"uv": [0, 0, 16, 16], "texture": "#side", "tintindex": 0},
+				"east": {"uv": [0, 0, 16, 16], "texture": "#5"},
+				"south": {"uv": [0, 0, 16, 16], "texture": "#side"},
+				"west": {"uv": [0, 0, 16, 16], "texture": "#5"},
+				"up": {"uv": [0, 0, 16, 16], "rotation": 180, "texture": "#4"},
+				"down": {"uv": [0, 0, 16, 16], "rotation": 180, "texture": "#4"}
+			}
+		},
+		{
+			"from": [6, 6, 16],
+			"to": [10, 10, 32],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, -16, 8]},
+			"faces": {
+				"east": {"uv": [0, 0, 16, 4], "texture": "#rod"},
+				"south": {"uv": [2, 0, 6, 4], "texture": "#rod"},
+				"west": {"uv": [0, 0, 16, 4], "rotation": 180, "texture": "#rod"},
+				"up": {"uv": [0, 0, 16, 4], "rotation": 270, "texture": "#rod"},
+				"down": {"uv": [0, 0, 16, 4], "rotation": 90, "texture": "#rod"}
+			}
+		},
+		{
+			"from": [-0.1, -7, 1.5],
+			"to": [2.9, 9, 1.5],
+			"shade": false,
+			"rotation": {"angle": 45, "axis": "y", "origin": [8, -8, 8]},
+			"faces": {
+				"north": {"uv": [3, 0, 0, 16], "texture": "#chain"},
+				"south": {"uv": [0, 0, 3, 16], "texture": "#chain"}
+			}
+		},
+		{
+			"from": [1.5, -7, -0.1],
+			"to": [1.5, 9, 2.9],
+			"shade": false,
+			"rotation": {"angle": 45, "axis": "y", "origin": [8, -8, 8]},
+			"faces": {
+				"east": {"uv": [3, 0, 6, 16], "texture": "#chain"},
+				"west": {"uv": [6, 0, 3, 16], "texture": "#chain"}
+			}
+		},
+		{
+			"from": [14.5, -7, 12.9],
+			"to": [14.5, 9, 15.9],
+			"shade": false,
+			"rotation": {"angle": 45, "axis": "y", "origin": [8, -8, 8]},
+			"faces": {
+				"east": {"uv": [3, 0, 6, 16], "texture": "#chain"},
+				"west": {"uv": [6, 0, 3, 16], "texture": "#chain"}
+			}
+		},
+		{
+			"from": [12.9, -7, 14.5],
+			"to": [15.9, 9, 14.5],
+			"shade": false,
+			"rotation": {"angle": 45, "axis": "y", "origin": [8, -8, 8]},
+			"faces": {
+				"north": {"uv": [3, 0, 0, 16], "texture": "#chain"},
+				"south": {"uv": [0, 0, 3, 16], "texture": "#chain"}
+			}
+		}
+	],
+	"display": {
+		"gui": {
+			"rotation": [30, 45, 0],
+			"translation": [-1.8, 0.25, 0],
+			"scale": [0.5, 0.5, 0.5]
+		}
+	},
+	"groups": [
+		{
+			"name": "VoxelShapes",
+			"origin": [8, 8, 8],
+			"color": 0,
+			"children": [0, 1, 2, 3, 4, 5]
+		}
+	]
+}

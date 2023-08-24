@@ -42,21 +42,17 @@ public class CollectorBlock extends DrillBaseBlock {
     private static final Map<Direction, VoxelShape> SHAPES_LOWER = new EnumMap<>(Direction.class);
 
     private static final VoxelShape SHAPE_UPPER = Stream.of(
-            Block.box(6, 0, 0, 10, 6, 16),
-            Block.box(10, 0, 0, 16, 16, 16),
-            Block.box(0, 0, 0, 6, 16, 16),
-            Block.box(6, 10, 0, 10, 16, 16),
-            Block.box(6, 6, 16, 10, 10, 31)
+        Block.box(0, 0, 0, 16, 16, 16),
+        Block.box(6, 6, 16, 10, 10, 32)
     ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
 
     private static final VoxelShape SHAPE_LOWER = Stream.of(
-            Block.box(0, 0, 0, 16, 4, 4),
-            Block.box(12, 4, 0, 16, 12, 4),
-            Block.box(0, 12, 0, 16, 16, 4),
-            Block.box(3, 3, 5, 13, 13, 11),
-            Block.box(6, 6, 11, 10, 16, 15),
-            Block.box(0, 0, 4, 16, 16, 5),
-            Block.box(0, 4, 0, 4, 12, 4)
+        Block.box(4, 0, 0, 12, 4, 6),
+        Block.box(12, 0, 0, 16, 16, 6),
+        Block.box(4, 12, 0, 12, 16, 6),
+        Block.box(4, 4, 6, 12, 12, 12),
+        Block.box(6, 6, 12, 10, 16, 16),
+        Block.box(0, 0, 0, 4, 16, 6)
     ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
 
     public CollectorBlock(Properties properties) {

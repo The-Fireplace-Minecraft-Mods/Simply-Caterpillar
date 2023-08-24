@@ -38,5 +38,7 @@ public final class PacketHandler {
 
         ClientPlayNetworking.registerGlobalReceiver(ReinforcementSyncReplacerS2CPacket.PACKET_ID, ReinforcementSyncReplacerS2CPacket::receive);
         ClientPlayNetworking.registerGlobalReceiver(ReinforcementSyncStateReplacerS2CPacket.PACKET_ID, ReinforcementSyncStateReplacerS2CPacket::receive);
+
+        ClientPlayNetworking.registerGlobalReceiver(OpenBookGuiS2CPacket.PACKET_ID, OpenBookGuiS2CPacket::receive);
     }
 }
