@@ -131,7 +131,6 @@ public abstract class AbstractCaterpillarScreen<T extends AbstractCaterpillarMen
     @Override
     protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY) {
         graphics.drawString(this.font, this.SELECTED_TAB.TITLE, super.titleLabelX, super.titleLabelY, 4210752, false);
-        graphics.drawString(this.font, this.SELECTED_TAB.TITLE, super.titleLabelX, super.titleLabelY, 4210752, false);
         graphics.drawString(this.font, super.playerInventoryTitle, super.inventoryLabelX, super.inventoryLabelY, 4210752, false);
     }
 
