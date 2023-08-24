@@ -1,6 +1,7 @@
 package dev.the_fireplace.caterpillar.item;
 
 import dev.the_fireplace.caterpillar.Caterpillar;
+import dev.the_fireplace.caterpillar.block.DecorationBlock;
 import dev.the_fireplace.caterpillar.block.entity.DecorationBlockEntity;
 import dev.the_fireplace.caterpillar.client.screen.PatternBookEditScreen;
 import dev.the_fireplace.caterpillar.init.BlockInit;
@@ -46,12 +47,15 @@ public class WritablePatternBookItem extends WritableBookItem {
         if (blockstate.is(Blocks.LECTERN)) {
             return LecternBlock.tryPlaceBook(context.getPlayer(), level, blockpos, blockstate, context.getItemInHand()) ? InteractionResult.sidedSuccess(level.isClientSide) : InteractionResult.PASS;
         } else if (blockstate.is(BlockInit.DECORATION)) {
-            DecorationBlockEntity decorationBlockEntity = (DecorationBlockEntity) level.getBlockEntity(blockpos);
+            DecorationBlock clickedDecorationBlock = (DecorationBlock) blockstate.getBlock();
+
+            BlockPos baseDecorationBlockPos = clickedDecorationBlock.getBasePos(blockstate, blockpos);
+            DecorationBlockEntity baseDecorationBlockEntity = (DecorationBlockEntity) level.getBlockEntity(baseDecorationBlockPos);
 
             InteractionHand hand = context.getHand();
             ItemStack itemStack = player.getItemInHand(hand);
 
-            Minecraft.getInstance().setScreen(new PatternBookEditScreen(player, itemStack, hand, decorationBlockEntity.getPlacementMap()));
+            Minecraft.getInstance().setScreen(new PatternBookEditScreen(player, itemStack, hand, baseDecorationBlockEntity.getPlacementMap()));
             player.awardStat(Stats.ITEM_USED.get(this));
 
             return InteractionResult.sidedSuccess(level.isClientSide);
