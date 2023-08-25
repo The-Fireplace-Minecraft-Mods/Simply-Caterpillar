@@ -11,8 +11,8 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 
-public class OpenBookGuiS2CPacket {
-    public static final ResourceLocation PACKET_ID = new ResourceLocation(Caterpillar.MOD_ID, "book.open");
+public class OpenWrittenPatternBookGuiS2CPacket {
+    public static final ResourceLocation PACKET_ID = new ResourceLocation(Caterpillar.MOD_ID, "written_pattern_book.open");
 
     public static void send(ItemStack book) {
         FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());

@@ -2,7 +2,7 @@ package dev.the_fireplace.caterpillar.item;
 
 import dev.the_fireplace.caterpillar.Caterpillar;
 import dev.the_fireplace.caterpillar.block.entity.DecorationBlockEntity;
-import dev.the_fireplace.caterpillar.client.screen.PatternBookViewScreen;
+import dev.the_fireplace.caterpillar.network.packet.server.OpenWrittenPatternBookGuiS2CPacket;
 import dev.the_fireplace.caterpillar.registry.BlockRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
@@ -34,16 +34,14 @@ public class WrittenPatternBookItem extends WrittenBookItem {
 
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
-        if (!level.isClientSide) {
-            return InteractionResultHolder.pass(player.getItemInHand(hand));
-        }
-
         ItemStack itemStack = player.getItemInHand(hand);
 
-        Minecraft.getInstance().setScreen(new PatternBookViewScreen(itemStack));
-        player.awardStat(Stats.ITEM_USED.get(this));
+        if (!level.isClientSide) {
+            OpenWrittenPatternBookGuiS2CPacket.send(itemStack);
+            player.awardStat(Stats.ITEM_USED.get(this));
+        }
 
-        return InteractionResultHolder.success(player.getItemInHand(hand));
+        return InteractionResultHolder.success(itemStack);
     }
 
     @Override

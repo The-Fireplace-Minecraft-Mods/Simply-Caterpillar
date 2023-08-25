@@ -3,9 +3,8 @@ package dev.the_fireplace.caterpillar.item;
 import dev.the_fireplace.caterpillar.Caterpillar;
 import dev.the_fireplace.caterpillar.block.DecorationBlock;
 import dev.the_fireplace.caterpillar.block.entity.DecorationBlockEntity;
-import dev.the_fireplace.caterpillar.client.screen.PatternBookEditScreen;
+import dev.the_fireplace.caterpillar.network.packet.server.OpenWritablePatternBookGuiS2CPacket;
 import dev.the_fireplace.caterpillar.registry.BlockRegistry;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.stats.Stats;
@@ -36,32 +35,34 @@ public class WritablePatternBookItem extends WritableBookItem {
     @Override
     public InteractionResult useOn(UseOnContext context) {
         Level level = context.getLevel();
-        Player player = context.getPlayer();
-        BlockPos blockpos = context.getClickedPos();
-        BlockState blockstate = level.getBlockState(blockpos);
-        if (!level.isClientSide) {
-            return InteractionResult.PASS;
-        }
 
-        if (blockstate.is(Blocks.LECTERN)) {
-            return LecternBlock.tryPlaceBook(context.getPlayer(), level, blockpos, blockstate, context.getItemInHand()) ? InteractionResult.sidedSuccess(level.isClientSide) : InteractionResult.PASS;
-        } else if (blockstate.is(BlockRegistry.DECORATION)) {
-            DecorationBlock clickedDecorationBlock = (DecorationBlock) blockstate.getBlock();
-
-            BlockPos baseDecorationBlockPos = clickedDecorationBlock.getBasePos(blockstate, blockpos);
-            DecorationBlockEntity baseDecorationBlockEntity = (DecorationBlockEntity) level.getBlockEntity(baseDecorationBlockPos);
-
-            InteractionHand hand = context.getHand();
-            ItemStack itemStack = player.getItemInHand(hand);
-
-            Minecraft.getInstance().setScreen(new PatternBookEditScreen(player, itemStack, hand, baseDecorationBlockEntity.getPlacementMap()));
-            player.awardStat(Stats.ITEM_USED.get(this));
-
-            return InteractionResult.sidedSuccess(level.isClientSide);
+        if (level.isClientSide()) {
+            return InteractionResult.sidedSuccess(level.isClientSide());
         } else {
-            player.displayClientMessage(Component.translatable("item." + Caterpillar.MOD_ID + ".writable_pattern_book.tooltip"), true);
+            Player player = context.getPlayer();
+            BlockPos blockpos = context.getClickedPos();
+            BlockState blockstate = level.getBlockState(blockpos);
 
-            return InteractionResult.PASS;
+            if (blockstate.is(Blocks.LECTERN)) {
+                return LecternBlock.tryPlaceBook(context.getPlayer(), level, blockpos, blockstate, context.getItemInHand()) ? InteractionResult.sidedSuccess(level.isClientSide) : InteractionResult.PASS;
+            } else if (blockstate.is(BlockRegistry.DECORATION)) {
+                DecorationBlock clickedDecorationBlock = (DecorationBlock) blockstate.getBlock();
+
+                BlockPos baseDecorationBlockPos = clickedDecorationBlock.getBasePos(blockstate, blockpos);
+                DecorationBlockEntity baseDecorationBlockEntity = (DecorationBlockEntity) level.getBlockEntity(baseDecorationBlockPos);
+
+                InteractionHand hand = context.getHand();
+                ItemStack itemStack = player.getItemInHand(hand);
+
+                OpenWritablePatternBookGuiS2CPacket.send(itemStack, baseDecorationBlockEntity.getPlacementMap());
+                player.awardStat(Stats.ITEM_USED.get(this));
+
+                return InteractionResult.sidedSuccess(level.isClientSide);
+            } else {
+                player.displayClientMessage(Component.translatable("item." + Caterpillar.MOD_ID + ".writable_pattern_book.tooltip"), true);
+
+                return InteractionResult.PASS;
+            }
         }
     }
 }

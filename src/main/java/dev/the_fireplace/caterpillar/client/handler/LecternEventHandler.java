@@ -1,12 +1,11 @@
 package dev.the_fireplace.caterpillar.client.handler;
 
 import dev.the_fireplace.caterpillar.registry.ItemRegistry;
-import dev.the_fireplace.caterpillar.network.packet.server.OpenBookGuiS2CPacket;
+import dev.the_fireplace.caterpillar.network.packet.server.OpenWrittenPatternBookGuiS2CPacket;
 import net.minecraft.core.BlockPos;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -34,7 +33,7 @@ public class LecternEventHandler {
                     if (!book.isEmpty()) {
                         if (!level.isClientSide) {
                             if (book.is(ItemRegistry.WRITTEN_PATTERN_BOOK)) {
-                                OpenBookGuiS2CPacket.send(book);
+                                OpenWrittenPatternBookGuiS2CPacket.send(book);
                                 player.awardStat(Stats.INTERACT_WITH_LECTERN);
                             } else {
                                 player.openMenu(lectern);

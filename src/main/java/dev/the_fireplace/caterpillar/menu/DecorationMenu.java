@@ -27,8 +27,6 @@ public class DecorationMenu extends AbstractScrollableMenu {
 
     public DecorationMenu(int id, Inventory playerInventory, DecorationBlockEntity blockEntity, ContainerData data) {
         super(MenuRegistry.DECORATION, id, playerInventory, blockEntity, data, DecorationBlockEntity.INVENTORY_SIZE);
-
-        this.scrollTo(0);
     }
 
     @Override

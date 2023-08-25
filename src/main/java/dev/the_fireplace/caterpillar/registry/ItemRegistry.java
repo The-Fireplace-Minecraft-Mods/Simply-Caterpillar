@@ -3,11 +3,9 @@ package dev.the_fireplace.caterpillar.registry;
 import dev.the_fireplace.caterpillar.Caterpillar;
 import dev.the_fireplace.caterpillar.item.WritablePatternBookItem;
 import dev.the_fireplace.caterpillar.item.WrittenPatternBookItem;
-import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 
 public class ItemRegistry {
