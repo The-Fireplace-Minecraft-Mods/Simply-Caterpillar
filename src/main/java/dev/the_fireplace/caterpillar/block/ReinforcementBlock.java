@@ -128,11 +128,11 @@ public class ReinforcementBlock extends DrillBaseBlock {
         FluidState fluidState = context.getLevel().getFluidState(context.getClickedPos());
 
         if (
-                blockPos.getY() < level.getMaxBuildHeight() - 1 &&
-                        level.getBlockState(blockPos.above().relative(direction.getClockWise())).canBeReplaced(context) &&
-                        level.getBlockState(blockPos.above().relative(direction.getCounterClockWise())).canBeReplaced(context) &&
-                        level.getBlockState(blockPos.above()).canBeReplaced(context) &&
-                        level.getBlockState(blockPos.above(2)).canBeReplaced(context)
+            blockPos.getY() < level.getMaxBuildHeight() - 1 &&
+            level.getBlockState(blockPos.above().relative(direction.getClockWise())).canBeReplaced(context) &&
+            level.getBlockState(blockPos.above().relative(direction.getCounterClockWise())).canBeReplaced(context) &&
+            level.getBlockState(blockPos.above()).canBeReplaced(context) &&
+            level.getBlockState(blockPos.above(2)).canBeReplaced(context)
         ) {
             BlockPos caterpillarHeadPos = CaterpillarBlockUtil.getCaterpillarHeadPos(level, blockPos.above().relative(direction), direction);
 
@@ -151,13 +151,22 @@ public class ReinforcementBlock extends DrillBaseBlock {
     @Override
     public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity livingEntity, @NotNull ItemStack stack) {
         Direction direction = state.getValue(FACING);
+        BlockState blockStateInFront = level.getBlockState(pos.relative(direction));
+        Block blockInFront = blockStateInFront.getBlock();
 
-        level.setBlockAndUpdate(pos.above().relative(direction.getCounterClockWise()), state.setValue(PART, ReinforcementPart.LEFT).setValue(ReinforcementBlock.WATERLOGGED, level.getFluidState(pos.above().relative(direction.getCounterClockWise())).getType() == Fluids.WATER));
-        level.setBlockAndUpdate(pos.above().relative(direction.getClockWise()), state.setValue(ReinforcementBlock.PART, ReinforcementPart.RIGHT).setValue(ReinforcementBlock.WATERLOGGED, level.getFluidState(pos.above().relative(direction.getClockWise())).getType() == Fluids.WATER));
-        level.setBlockAndUpdate(pos.above(), state.setValue(ReinforcementBlock.PART, ReinforcementPart.BASE).setValue(ReinforcementBlock.WATERLOGGED, level.getFluidState(pos.above()).getType() == Fluids.WATER));
-        level.setBlockAndUpdate(pos.above(2), state.setValue(ReinforcementBlock.PART, ReinforcementPart.TOP).setValue(ReinforcementBlock.WATERLOGGED, level.getFluidState(pos.above(2)).getType() == Fluids.WATER));
-
-        super.setPlacedBy(level, pos, state, livingEntity, stack);
+        if (!CaterpillarBlockUtil.isCaterpillarBlock(blockInFront)) {
+            level.setBlockAndUpdate(pos.above().relative(direction.getCounterClockWise()), state.setValue(PART, ReinforcementPart.LEFT).setValue(ReinforcementBlock.WATERLOGGED, level.getFluidState(pos.above().relative(direction.getCounterClockWise())).getType() == Fluids.WATER));
+            level.setBlockAndUpdate(pos.above().relative(direction.getClockWise()), state.setValue(ReinforcementBlock.PART, ReinforcementPart.RIGHT).setValue(ReinforcementBlock.WATERLOGGED, level.getFluidState(pos.above().relative(direction.getClockWise())).getType() == Fluids.WATER));
+            level.setBlockAndUpdate(pos.above(), state.setValue(ReinforcementBlock.PART, ReinforcementPart.BASE).setValue(ReinforcementBlock.WATERLOGGED, level.getFluidState(pos.above()).getType() == Fluids.WATER));
+            level.setBlockAndUpdate(pos.above(2), state.setValue(ReinforcementBlock.PART, ReinforcementPart.TOP).setValue(ReinforcementBlock.WATERLOGGED, level.getFluidState(pos.above(2)).getType() == Fluids.WATER));
+            level.setBlockAndUpdate(pos, state.setValue(ReinforcementBlock.PART, ReinforcementPart.BOTTOM).setValue(ReinforcementBlock.WATERLOGGED, level.getFluidState(pos).getType() == Fluids.WATER));
+        } else {
+            level.setBlockAndUpdate(pos.relative(direction.getCounterClockWise()), state.setValue(PART, ReinforcementPart.LEFT).setValue(ReinforcementBlock.WATERLOGGED, level.getFluidState(pos.above().relative(direction.getCounterClockWise())).getType() == Fluids.WATER));
+            level.setBlockAndUpdate(pos.relative(direction.getClockWise()), state.setValue(ReinforcementBlock.PART, ReinforcementPart.RIGHT).setValue(ReinforcementBlock.WATERLOGGED, level.getFluidState(pos.above().relative(direction.getClockWise())).getType() == Fluids.WATER));
+            level.setBlockAndUpdate(pos, state.setValue(ReinforcementBlock.PART, ReinforcementPart.BASE).setValue(ReinforcementBlock.WATERLOGGED, level.getFluidState(pos.above()).getType() == Fluids.WATER));
+            level.setBlockAndUpdate(pos.above(), state.setValue(ReinforcementBlock.PART, ReinforcementPart.TOP).setValue(ReinforcementBlock.WATERLOGGED, level.getFluidState(pos.above(2)).getType() == Fluids.WATER));
+            level.setBlockAndUpdate(pos.below(), state.setValue(ReinforcementBlock.PART, ReinforcementPart.BOTTOM).setValue(ReinforcementBlock.WATERLOGGED, level.getFluidState(pos).getType() == Fluids.WATER));
+        }
     }
 
     @Override

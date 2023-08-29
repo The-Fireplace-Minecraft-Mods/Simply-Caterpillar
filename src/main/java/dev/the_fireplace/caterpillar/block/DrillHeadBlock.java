@@ -184,15 +184,16 @@ public class DrillHeadBlock extends DrillBaseBlock {
         FluidState fluidState = context.getLevel().getFluidState(context.getClickedPos());
 
         if (
-                blockPos.getY() < level.getMaxBuildHeight() - 1 &&
-                        level.getBlockState(blockPos.relative(direction.getClockWise())).canBeReplaced(context) &&
-                        level.getBlockState(blockPos.relative(direction.getCounterClockWise())).canBeReplaced(context) &&
-                        level.getBlockState(blockPos.above().relative(direction.getClockWise())).canBeReplaced(context) &&
-                        level.getBlockState(blockPos.above().relative(direction.getCounterClockWise())).canBeReplaced(context) &&
-                        level.getBlockState(blockPos.above()).canBeReplaced(context) &&
-                        level.getBlockState(blockPos.above(2)).canBeReplaced(context) &&
-                        level.getBlockState(blockPos.above(2).relative(direction.getClockWise())).canBeReplaced(context) &&
-                        level.getBlockState(blockPos.above(2).relative(direction.getCounterClockWise())).canBeReplaced(context)
+            blockPos.getY() < level.getMaxBuildHeight() - 1 &&
+            level.getBlockState(blockPos.relative(direction.getClockWise())).canBeReplaced(context) &&
+            level.getBlockState(blockPos.relative(direction.getCounterClockWise())).canBeReplaced(context) &&
+            level.getBlockState(blockPos.above().relative(direction.getClockWise())).canBeReplaced(context) &&
+            level.getBlockState(blockPos.above().relative(direction.getCounterClockWise())).canBeReplaced(context) &&
+            level.getBlockState(blockPos.above()).canBeReplaced(context) &&
+            level.getBlockState(blockPos.above().relative(direction.getOpposite())).canBeReplaced(context) &&
+            level.getBlockState(blockPos.above(2)).canBeReplaced(context) &&
+            level.getBlockState(blockPos.above(2).relative(direction.getClockWise())).canBeReplaced(context) &&
+            level.getBlockState(blockPos.above(2).relative(direction.getCounterClockWise())).canBeReplaced(context)
         ) {
             BlockPos caterpillarHeadPos = CaterpillarBlockUtil.getCaterpillarHeadPos(level, blockPos.above().relative(direction), direction);
 
