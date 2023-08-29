@@ -134,7 +134,7 @@ public class ReinforcementBlock extends DrillBaseBlock {
             level.getBlockState(blockPos.above()).canBeReplaced(context) &&
             level.getBlockState(blockPos.above(2)).canBeReplaced(context)
         ) {
-            BlockPos caterpillarHeadPos = CaterpillarBlockUtil.getCaterpillarHeadPos(level, blockPos.above().relative(direction), direction);
+            BlockPos caterpillarHeadPos = CaterpillarBlockUtil.getCaterpillarHeadPos(level, blockPos.relative(direction), direction);
 
             if (CaterpillarBlockUtil.getConnectedCaterpillarBlockEntities(level, caterpillarHeadPos, new ArrayList<>()).stream().noneMatch(blockEntity -> blockEntity instanceof ReinforcementBlockEntity)) {
                 if (CaterpillarBlockUtil.isConnectedCaterpillarSameDirection(level, blockPos.above(), direction)) {

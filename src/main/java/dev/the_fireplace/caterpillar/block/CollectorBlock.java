@@ -100,7 +100,7 @@ public class CollectorBlock extends DrillBaseBlock {
             pos.getY() < level.getMaxBuildHeight() - 1 &&
             level.getBlockState(pos.above()).canBeReplaced(context)
         ) {
-            BlockPos caterpillarHeadPos = CaterpillarBlockUtil.getCaterpillarHeadPos(level, pos.above().relative(direction), direction);
+            BlockPos caterpillarHeadPos = CaterpillarBlockUtil.getCaterpillarHeadPos(level, pos.relative(direction), direction);
 
             if (CaterpillarBlockUtil.getConnectedCaterpillarBlockEntities(level, caterpillarHeadPos, new ArrayList<>()).stream().noneMatch(blockEntity -> blockEntity instanceof CollectorBlockEntity)) {
                 if (CaterpillarBlockUtil.isConnectedCaterpillarSameDirection(level, pos.above(), direction)) {
