@@ -25,9 +25,10 @@ public class OpenWritablePatternBookGuiS2CPacket {
 
     public static final ResourceLocation PACKET_ID = new ResourceLocation(Caterpillar.MOD_ID, "writable_pattern_book.open");
 
-    public static void send(ItemStack book, List<NonNullList<ItemStack>> pattern) {
+    public static void send(ItemStack book, InteractionHand hand, List<NonNullList<ItemStack>> pattern) {
         FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
         buf.writeItem(book);
+        buf.writeEnum(hand);
         buf.writeCollection(pattern, (buffer, inventory) -> buffer.writeNbt(ContainerHelper.saveAllItems(new CompoundTag(), inventory)));
 
         ClientPlayNetworking.send(PACKET_ID, buf);
@@ -35,13 +36,14 @@ public class OpenWritablePatternBookGuiS2CPacket {
 
     public static void receive(Minecraft client, ClientPacketListener handler, FriendlyByteBuf buf, PacketSender responseSender) {
         ItemStack book = buf.readItem();
-        Player player = client.player;
-        InteractionHand hand = player.getUsedItemHand();
+        InteractionHand hand = buf.readEnum(InteractionHand.class);
         List<NonNullList<ItemStack>> pattern = buf.readCollection(ArrayList::new, buffer -> {
             NonNullList<ItemStack> inventory = NonNullList.withSize(INVENTORY_MAX_SLOTS, ItemStack.EMPTY);
             ContainerHelper.loadAllItems(buffer.readNbt(), inventory);
             return inventory;
         });
+
+        Player player = client.player;
 
         client.execute(() -> {
             client.setScreen(new PatternBookEditScreen(player, book, hand, pattern));
