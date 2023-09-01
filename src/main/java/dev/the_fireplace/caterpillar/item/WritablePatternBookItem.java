@@ -54,7 +54,8 @@ public class WritablePatternBookItem extends WritableBookItem {
                 InteractionHand hand = context.getHand();
                 ItemStack itemStack = player.getItemInHand(hand);
 
-                OpenWritablePatternBookGuiS2CPacket.send(itemStack, hand, baseDecorationBlockEntity.getPlacementMap());
+                // OpenWritablePatternBookGuiS2CPacket.send(itemStack, hand, baseDecorationBlockEntity.getPlacementMap());
+                player.openItemGui(itemStack, hand);
                 player.awardStat(Stats.ITEM_USED.get(this));
 
                 return InteractionResult.sidedSuccess(level.isClientSide);

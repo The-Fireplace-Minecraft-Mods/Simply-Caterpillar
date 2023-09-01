@@ -1,11 +1,15 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "${modGroup}.mixin.client.events",
+  "package": "${modGroup}.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [],
   "client": [
-    "MixinKeyboard"
+    "client.events.MixinKeyboard",
+    "client.player.MixinLocalPlayer"
+  ],
+  "server": [
+    "server.level.MixinServerPlayer"
   ],
   "injectors": {
     "defaultRequire": 1
