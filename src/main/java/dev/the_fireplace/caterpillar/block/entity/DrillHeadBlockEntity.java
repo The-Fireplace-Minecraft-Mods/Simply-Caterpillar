@@ -13,6 +13,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -152,6 +153,10 @@ public class DrillHeadBlockEntity extends DrillBaseBlockEntity {
             blockEntity.litDuration = blockEntity.litTime;
             PacketHandler.sendToClients(new DrillHeadSyncLitS2CPacket(blockEntity.getLitTime(), blockEntity.getLitDuration(), blockEntity.getBlockPos()));
 
+            if (stack.is(Items.LAVA_BUCKET)) {
+                blockEntity.setStackInSlot(DrillHeadBlockEntity.FUEl_SLOT, new ItemStack(Items.BUCKET));
+            }
+
             stack.shrink(1);
 
             needsUpdate = true;
@@ -260,6 +265,10 @@ public class DrillHeadBlockEntity extends DrillBaseBlockEntity {
             if (!this.isLit()) {
                 this.litTime = this.getBurnDuration(stack);
                 this.litDuration = this.litTime;
+
+                if (stack.is(Items.LAVA_BUCKET)) {
+                    this.setStackInSlot(DrillHeadBlockEntity.FUEl_SLOT, new ItemStack(Items.BUCKET));
+                }
 
                 stack.shrink(1);
             }
