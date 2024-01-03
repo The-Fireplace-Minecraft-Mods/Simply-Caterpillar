@@ -91,9 +91,9 @@ public class StorageBlock extends DrillBaseBlock {
         FluidState fluidState = context.getLevel().getFluidState(context.getClickedPos());
 
         if (
-                pos.getY() < level.getMaxBuildHeight() - 1 &&
-                        level.getBlockState(pos.relative(direction.getClockWise())).canBeReplaced(context) &&
-                        level.getBlockState(pos.relative(direction.getCounterClockWise())).canBeReplaced(context)
+            pos.getY() < level.getMaxBuildHeight() - 1 &&
+            level.getBlockState(pos.relative(direction.getClockWise())).canBeReplaced(context) &&
+            level.getBlockState(pos.relative(direction.getCounterClockWise())).canBeReplaced(context)
         ) {
             BlockPos caterpillarHeadPos = CaterpillarBlockUtil.getCaterpillarHeadPos(level, pos.relative(direction), direction);
 

@@ -184,17 +184,18 @@ public class DrillHeadBlock extends DrillBaseBlock {
         FluidState fluidState = context.getLevel().getFluidState(context.getClickedPos());
 
         if (
-                blockPos.getY() < level.getMaxBuildHeight() - 1 &&
-                        level.getBlockState(blockPos.relative(direction.getClockWise())).canBeReplaced(context) &&
-                        level.getBlockState(blockPos.relative(direction.getCounterClockWise())).canBeReplaced(context) &&
-                        level.getBlockState(blockPos.above().relative(direction.getClockWise())).canBeReplaced(context) &&
-                        level.getBlockState(blockPos.above().relative(direction.getCounterClockWise())).canBeReplaced(context) &&
-                        level.getBlockState(blockPos.above()).canBeReplaced(context) &&
-                        level.getBlockState(blockPos.above(2)).canBeReplaced(context) &&
-                        level.getBlockState(blockPos.above(2).relative(direction.getClockWise())).canBeReplaced(context) &&
-                        level.getBlockState(blockPos.above(2).relative(direction.getCounterClockWise())).canBeReplaced(context)
+            blockPos.getY() < level.getMaxBuildHeight() - 1 &&
+            level.getBlockState(blockPos.relative(direction.getClockWise())).canBeReplaced(context) &&
+            level.getBlockState(blockPos.relative(direction.getCounterClockWise())).canBeReplaced(context) &&
+            level.getBlockState(blockPos.above().relative(direction.getClockWise())).canBeReplaced(context) &&
+            level.getBlockState(blockPos.above().relative(direction.getCounterClockWise())).canBeReplaced(context) &&
+            level.getBlockState(blockPos.above()).canBeReplaced(context) &&
+            level.getBlockState(blockPos.above().relative(direction.getOpposite())).canBeReplaced(context) &&
+            level.getBlockState(blockPos.above(2)).canBeReplaced(context) &&
+            level.getBlockState(blockPos.above(2).relative(direction.getClockWise())).canBeReplaced(context) &&
+            level.getBlockState(blockPos.above(2).relative(direction.getCounterClockWise())).canBeReplaced(context)
         ) {
-            BlockPos caterpillarHeadPos = CaterpillarBlockUtil.getCaterpillarHeadPos(level, blockPos.above().relative(direction), direction);
+            BlockPos caterpillarHeadPos = CaterpillarBlockUtil.getCaterpillarHeadPos(level, blockPos.relative(direction), direction);
 
             if (CaterpillarBlockUtil.getConnectedCaterpillarBlockEntities(level, caterpillarHeadPos, new ArrayList<>()).stream().noneMatch(blockEntity -> blockEntity instanceof DrillHeadBlockEntity)) {
                 if (CaterpillarBlockUtil.isConnectedCaterpillarSameDirection(level, blockPos.above(), direction)) {
@@ -218,8 +219,6 @@ public class DrillHeadBlock extends DrillBaseBlock {
     @Override
     public void setPlacedBy(@NotNull Level level, @NotNull BlockPos pos, @NotNull BlockState state, @Nullable LivingEntity livingEntity, @NotNull ItemStack stack) {
         buildStructure(level, pos, state);
-
-        super.setPlacedBy(level, pos, state, livingEntity, stack);
     }
 
     @Override
@@ -263,16 +262,32 @@ public class DrillHeadBlock extends DrillBaseBlock {
 
     public static void buildStructure(Level level, BlockPos pos, BlockState state) {
         Direction direction = state.getValue(FACING);
+        BlockState blockStateInFront = level.getBlockState(pos.relative(direction));
+        Block blockInFront = blockStateInFront.getBlock();
 
-        level.setBlockAndUpdate(pos.relative(direction.getCounterClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BIT_BOTTOM_LEFT).setValue(DrillHeadBlock.WATERLOGGED, level.getFluidState(pos.relative(direction.getCounterClockWise())).getType() == Fluids.WATER));
-        level.setBlockAndUpdate(pos.relative(direction.getClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BIT_BOTTOM_RIGHT).setValue(DrillHeadBlock.WATERLOGGED, level.getFluidState(pos.relative(direction.getClockWise())).getType() == Fluids.WATER));
-        level.setBlockAndUpdate(pos.above().relative(direction.getCounterClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BIT_LEFT).setValue(DrillHeadBlock.WATERLOGGED, level.getFluidState(pos.above().relative(direction.getCounterClockWise())).getType() == Fluids.WATER));
-        level.setBlockAndUpdate(pos.above().relative(direction.getClockWise()), state.setValue(PART, DrillHeadPart.BIT_RIGHT).setValue(DrillHeadBlock.WATERLOGGED, level.getFluidState(pos.above().relative(direction.getClockWise())).getType() == Fluids.WATER));
-        level.setBlockAndUpdate(pos.above(2), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BIT_TOP).setValue(DrillHeadBlock.WATERLOGGED, level.getFluidState(pos.above(2)).getType() == Fluids.WATER));
-        level.setBlockAndUpdate(pos.above(), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BIT_MIDDLE).setValue(DrillHeadBlock.WATERLOGGED, level.getFluidState(pos.above()).getType() == Fluids.WATER));
-        level.setBlockAndUpdate(pos.above(2).relative(direction.getCounterClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BIT_TOP_LEFT).setValue(DrillHeadBlock.WATERLOGGED, level.getFluidState(pos.above(2).relative(direction.getCounterClockWise())).getType() == Fluids.WATER));
-        level.setBlockAndUpdate(pos.above(2).relative(direction.getClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BIT_TOP_RIGHT).setValue(DrillHeadBlock.WATERLOGGED, level.getFluidState(pos.above(2).relative(direction.getClockWise())).getType() == Fluids.WATER));
-        level.setBlockAndUpdate(pos.above().relative(direction.getOpposite()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BASE).setValue(WATERLOGGED, level.getFluidState(pos.above()).getType() == Fluids.WATER));
+        if (!CaterpillarBlockUtil.isCaterpillarBlock(blockInFront)) {
+            level.setBlockAndUpdate(pos.relative(direction.getCounterClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BIT_BOTTOM_LEFT).setValue(DrillHeadBlock.WATERLOGGED, level.getFluidState(pos.relative(direction.getCounterClockWise())).getType() == Fluids.WATER));
+            level.setBlockAndUpdate(pos.relative(direction.getClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BIT_BOTTOM_RIGHT).setValue(DrillHeadBlock.WATERLOGGED, level.getFluidState(pos.relative(direction.getClockWise())).getType() == Fluids.WATER));
+            level.setBlockAndUpdate(pos, state.setValue(DrillHeadBlock.PART, DrillHeadPart.BIT_BOTTOM).setValue(DrillHeadBlock.WATERLOGGED, level.getFluidState(pos).getType() == Fluids.WATER));
+            level.setBlockAndUpdate(pos.above().relative(direction.getCounterClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BIT_LEFT).setValue(DrillHeadBlock.WATERLOGGED, level.getFluidState(pos.above().relative(direction.getCounterClockWise())).getType() == Fluids.WATER));
+            level.setBlockAndUpdate(pos.above().relative(direction.getClockWise()), state.setValue(PART, DrillHeadPart.BIT_RIGHT).setValue(DrillHeadBlock.WATERLOGGED, level.getFluidState(pos.above().relative(direction.getClockWise())).getType() == Fluids.WATER));
+            level.setBlockAndUpdate(pos.above(2), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BIT_TOP).setValue(DrillHeadBlock.WATERLOGGED, level.getFluidState(pos.above(2)).getType() == Fluids.WATER));
+            level.setBlockAndUpdate(pos.above(), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BIT_MIDDLE).setValue(DrillHeadBlock.WATERLOGGED, level.getFluidState(pos.above()).getType() == Fluids.WATER));
+            level.setBlockAndUpdate(pos.above(2).relative(direction.getCounterClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BIT_TOP_LEFT).setValue(DrillHeadBlock.WATERLOGGED, level.getFluidState(pos.above(2).relative(direction.getCounterClockWise())).getType() == Fluids.WATER));
+            level.setBlockAndUpdate(pos.above(2).relative(direction.getClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BIT_TOP_RIGHT).setValue(DrillHeadBlock.WATERLOGGED, level.getFluidState(pos.above(2).relative(direction.getClockWise())).getType() == Fluids.WATER));
+            level.setBlockAndUpdate(pos.above().relative(direction.getOpposite()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BASE).setValue(WATERLOGGED, level.getFluidState(pos.above()).getType() == Fluids.WATER));
+        } else {
+            level.setBlockAndUpdate(pos.below().relative(direction.getCounterClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BIT_BOTTOM_LEFT).setValue(DrillHeadBlock.WATERLOGGED, level.getFluidState(pos.relative(direction.getCounterClockWise())).getType() == Fluids.WATER));
+            level.setBlockAndUpdate(pos.below().relative(direction.getClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BIT_BOTTOM_RIGHT).setValue(DrillHeadBlock.WATERLOGGED, level.getFluidState(pos.relative(direction.getClockWise())).getType() == Fluids.WATER));
+            level.setBlockAndUpdate(pos.below(), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BIT_BOTTOM).setValue(DrillHeadBlock.WATERLOGGED, level.getFluidState(pos).getType() == Fluids.WATER));
+            level.setBlockAndUpdate(pos.relative(direction.getCounterClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BIT_LEFT).setValue(DrillHeadBlock.WATERLOGGED, level.getFluidState(pos.above().relative(direction.getCounterClockWise())).getType() == Fluids.WATER));
+            level.setBlockAndUpdate(pos.relative(direction.getClockWise()), state.setValue(PART, DrillHeadPart.BIT_RIGHT).setValue(DrillHeadBlock.WATERLOGGED, level.getFluidState(pos.above().relative(direction.getClockWise())).getType() == Fluids.WATER));
+            level.setBlockAndUpdate(pos.above(), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BIT_TOP).setValue(DrillHeadBlock.WATERLOGGED, level.getFluidState(pos.above(2)).getType() == Fluids.WATER));
+            level.setBlockAndUpdate(pos, state.setValue(DrillHeadBlock.PART, DrillHeadPart.BIT_MIDDLE).setValue(DrillHeadBlock.WATERLOGGED, level.getFluidState(pos.above()).getType() == Fluids.WATER));
+            level.setBlockAndUpdate(pos.above().relative(direction.getCounterClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BIT_TOP_LEFT).setValue(DrillHeadBlock.WATERLOGGED, level.getFluidState(pos.above(2).relative(direction.getCounterClockWise())).getType() == Fluids.WATER));
+            level.setBlockAndUpdate(pos.above().relative(direction.getClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BIT_TOP_RIGHT).setValue(DrillHeadBlock.WATERLOGGED, level.getFluidState(pos.above(2).relative(direction.getClockWise())).getType() == Fluids.WATER));
+            level.setBlockAndUpdate(pos.relative(direction.getOpposite()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BASE).setValue(WATERLOGGED, level.getFluidState(pos.above()).getType() == Fluids.WATER));
+        }
     }
 
     public static void moveStructure(Level level, BlockPos pos, BlockState state) {
