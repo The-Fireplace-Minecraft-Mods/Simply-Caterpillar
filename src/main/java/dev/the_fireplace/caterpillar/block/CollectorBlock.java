@@ -101,7 +101,7 @@ public class CollectorBlock extends DrillBaseBlock {
             pos.getY() < level.getMaxBuildHeight() - 1 &&
             level.getBlockState(pos.above()).canBeReplaced(context)
         ) {
-            BlockPos caterpillarHeadPos = CaterpillarBlockUtil.getCaterpillarHeadPos(level, pos.above().relative(direction), direction);
+            BlockPos caterpillarHeadPos = CaterpillarBlockUtil.getCaterpillarHeadPos(level, pos.relative(direction), direction);
 
             if (CaterpillarBlockUtil.getConnectedCaterpillarBlockEntities(level, caterpillarHeadPos, new ArrayList<>()).stream().noneMatch(blockEntity -> blockEntity instanceof CollectorBlockEntity)) {
                 if (CaterpillarBlockUtil.isConnectedCaterpillarSameDirection(level, pos.above(), direction)) {
@@ -125,9 +125,17 @@ public class CollectorBlock extends DrillBaseBlock {
 
     @Override
     public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity livingEntity, @NotNull ItemStack stack) {
-        level.setBlockAndUpdate(pos.above(), state.setValue(CollectorBlock.HALF, DoubleBlockHalf.UPPER).setValue(WATERLOGGED, level.getFluidState(pos.above()).getType() == Fluids.WATER));
+        Direction direction = state.getValue(FACING);
+        BlockState blockStateInFront = level.getBlockState(pos.relative(direction));
+        Block blockInFront = blockStateInFront.getBlock();
 
-        super.setPlacedBy(level, pos, state, livingEntity, stack);
+        if (!CaterpillarBlockUtil.isCaterpillarBlock(blockInFront)) {
+            level.setBlockAndUpdate(pos.above(), state.setValue(CollectorBlock.HALF, DoubleBlockHalf.UPPER).setValue(WATERLOGGED, level.getFluidState(pos.above()).getType() == Fluids.WATER));
+            level.setBlockAndUpdate(pos, state.setValue(CollectorBlock.HALF, DoubleBlockHalf.LOWER).setValue(WATERLOGGED, level.getFluidState(pos).getType() == Fluids.WATER));
+        } else {
+            level.setBlockAndUpdate(pos, state.setValue(CollectorBlock.HALF, DoubleBlockHalf.UPPER).setValue(WATERLOGGED, level.getFluidState(pos).getType() == Fluids.WATER));
+            level.setBlockAndUpdate(pos.below(), state.setValue(CollectorBlock.HALF, DoubleBlockHalf.LOWER).setValue(WATERLOGGED, level.getFluidState(pos.below()).getType() == Fluids.WATER));
+        }
     }
 
     @Nullable
