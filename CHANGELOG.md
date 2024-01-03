@@ -9,6 +9,10 @@ All notable changes to this project will be documented in this file.
 - Fixed item collector and reinforcement builder blocks placement.
 - Fixed empty bucket not returned after lava bucket consumed.
 
+### Updated
+
+- Rotated drill_bits 45deg, so they don't look like a cross.
+
 ## [1.20.1-8.0.1] - 2023-08-24
 
 ### Fixed
