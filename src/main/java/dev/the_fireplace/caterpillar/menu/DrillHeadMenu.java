@@ -98,9 +98,9 @@ public class DrillHeadMenu extends AbstractScrollableMenu {
         if (index < VANILLA_FIRST_SLOT_INDEX + VANILLA_SLOT_COUNT) {
             // This is a vanilla container slot so merge the stack into the BE inventory
             if (AbstractCaterpillarMenu.isFuel(sourceStack)) {
-                CaterpillarFuelSlot fuelSlot = (CaterpillarFuelSlot) this.getSlot(BE_INVENTORY_FIRST_SLOT_INDEX + DrillHeadBlockEntity.FUEl_SLOT);
+                CaterpillarFuelSlot fuelSlot = (CaterpillarFuelSlot) this.getSlot(BE_INVENTORY_FIRST_SLOT_INDEX + DrillHeadBlockEntity.FUEL_SLOT);
                 if (fuelSlotIsEmpty() || ItemStack.isSameItemSameTags(fuelSlot.getItem(), copyOfSourceStack) && fuelSlot.getItem().getCount() < fuelSlot.getMaxStackSize()) {
-                    if (!moveItemStackTo(sourceStack, BE_INVENTORY_FIRST_SLOT_INDEX + DrillHeadBlockEntity.FUEl_SLOT, BE_INVENTORY_FIRST_SLOT_INDEX + DrillHeadBlockEntity.FUEl_SLOT + 1, false)) {
+                    if (!moveItemStackTo(sourceStack, BE_INVENTORY_FIRST_SLOT_INDEX + DrillHeadBlockEntity.FUEL_SLOT, BE_INVENTORY_FIRST_SLOT_INDEX + DrillHeadBlockEntity.FUEL_SLOT + 1, false)) {
                         return ItemStack.EMPTY;
                     }
                 } else {
@@ -336,7 +336,7 @@ public class DrillHeadMenu extends AbstractScrollableMenu {
     }
 
     public boolean fuelSlotIsEmpty() {
-        return this.getSlot(BE_INVENTORY_FIRST_SLOT_INDEX + DrillHeadBlockEntity.FUEl_SLOT).getItem().isEmpty();
+        return this.getSlot(BE_INVENTORY_FIRST_SLOT_INDEX + DrillHeadBlockEntity.FUEL_SLOT).getItem().isEmpty();
     }
 
     public boolean storageIsConnected() {

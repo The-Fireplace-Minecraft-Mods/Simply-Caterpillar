@@ -13,6 +13,8 @@ import dev.the_fireplace.caterpillar.network.packet.server.CaterpillarSyncInvent
 import dev.the_fireplace.caterpillar.network.packet.server.DrillHeadSyncLitS2CPacket;
 import dev.the_fireplace.caterpillar.network.packet.server.DrillHeadSyncMovingS2CPacket;
 import dev.the_fireplace.caterpillar.network.packet.server.DrillHeadSyncPowerS2CPacket;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -52,7 +54,7 @@ public class DrillHeadBlockEntity extends DrillBaseBlockEntity {
 
     public static final int CONSUMPTION_SLOT_END = 9;
 
-    public static final int FUEl_SLOT = 0;
+    public static final int FUEL_SLOT = 0;
 
     public static final int GATHERED_SLOT_START = 10;
 
@@ -144,13 +146,17 @@ public class DrillHeadBlockEntity extends DrillBaseBlockEntity {
             needsUpdate = true;
         }
 
-        ItemStack stack = blockEntity.getItem(DrillHeadBlockEntity.FUEl_SLOT);
+        ItemStack stack = blockEntity.getItem(DrillHeadBlockEntity.FUEL_SLOT);
         boolean fuelSlotIsEmpty = stack.isEmpty();
 
         if (blockEntity.isPowered() && blockEntity.getLitTime() <= 0 && !fuelSlotIsEmpty) {
             blockEntity.litTime = blockEntity.getBurnDuration(stack);
             blockEntity.litDuration = blockEntity.litTime;
             DrillHeadSyncLitS2CPacket.send((ServerLevel) blockEntity.level, blockEntity.getLitTime(), blockEntity.getLitDuration(), blockEntity.getBlockPos());
+
+            if (stack.is(Items.LAVA_BUCKET)) {
+                blockEntity.setItem(DrillHeadBlockEntity.FUEL_SLOT, new ItemStack(Items.BUCKET));
+            }
 
             stack.shrink(1);
 
@@ -233,14 +239,15 @@ public class DrillHeadBlockEntity extends DrillBaseBlockEntity {
     }
 
     public boolean isFuelSlotEmpty() {
-        return this.getItem(FUEl_SLOT).isEmpty();
+        return this.getItem(FUEL_SLOT).isEmpty();
     }
 
     public int getBurnDuration(ItemStack stack) {
         if (stack.isEmpty()) {
             return 0;
         } else {
-            return AbstractFurnaceBlockEntity.getFuel().get(stack.getItem());
+            Item item = stack.getItem();
+            return AbstractFurnaceBlockEntity.getFuel().getOrDefault(item, 0);
         }
     }
 
@@ -253,13 +260,17 @@ public class DrillHeadBlockEntity extends DrillBaseBlockEntity {
     }
 
     public void setPowerOn() {
-        ItemStack stack = this.getItem(DrillHeadBlockEntity.FUEl_SLOT);
+        ItemStack stack = this.getItem(DrillHeadBlockEntity.FUEL_SLOT);
         boolean fuelSlotIsEmpty = stack.isEmpty();
 
         if (!fuelSlotIsEmpty || this.isLit()) {
             if (!this.isLit()) {
                 this.litTime = this.getBurnDuration(stack);
                 this.litDuration = this.litTime;
+
+                if (stack.is(Items.LAVA_BUCKET)) {
+                    this.setItem(DrillHeadBlockEntity.FUEL_SLOT, new ItemStack(Items.BUCKET));
+                }
 
                 stack.shrink(1);
             }
@@ -328,7 +339,7 @@ public class DrillHeadBlockEntity extends DrillBaseBlockEntity {
         super.load(tag);
 
         this.litTime = tag.getInt("BurnTime");
-        this.litDuration = this.getBurnDuration(this.getItem(FUEl_SLOT));
+        this.litDuration = this.getBurnDuration(this.getItem(FUEL_SLOT));
         this.powered = tag.getBoolean("Powered");
         this.moving = tag.getBoolean("Moving");
     }
