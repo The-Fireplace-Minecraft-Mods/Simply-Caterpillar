@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file.
 
 - Fixed item collector and reinforcement builder blocks placement.
 - Fixed empty bucket not returned after lava bucket consumed.
+- Fixed drill head particles position.
 
 ### Updated
 

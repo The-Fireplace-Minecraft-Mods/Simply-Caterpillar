@@ -338,16 +338,16 @@ public class DrillHeadBlock extends DrillBaseBlock {
 
     @Override
     public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
-        if (state.getValue(PART) == DrillHeadPart.BASE &&
-                state.getValue(DRILLING) &&
-                CaterpillarConfig.useParticles
+        if (state.getValue(PART) == DrillHeadPart.BIT_MIDDLE &&
+            state.getValue(DRILLING) &&
+            CaterpillarConfig.useParticles
         ) {
             Direction direction = level.getBlockEntity(pos).getBlockState().getValue(DrillHeadBlock.FACING);
             Direction.Axis direction$axis = direction.getAxis();
 
-            double x = direction$axis == Direction.Axis.X ? pos.getX() - 0.44D : pos.getX();
+            double x = direction$axis == Direction.Axis.X ? pos.getX() + 0.44D : pos.getX();
             double y = pos.getY();
-            double z = direction$axis == Direction.Axis.Z ? pos.getZ() - 0.44D : pos.getZ();
+            double z = direction$axis == Direction.Axis.Z ? pos.getZ() + 0.44D : pos.getZ();
 
             for (int i = 0; i < 10; i++) {
                 double randomDefault = level.getRandom().nextDouble() * (2.0D + 1.0D) - 1.0D;
