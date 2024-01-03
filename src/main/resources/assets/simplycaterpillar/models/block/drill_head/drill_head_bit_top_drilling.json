@@ -52,10 +52,10 @@
 			"name": "Bit9H",
 			"from": [3, 8, 3],
 			"to": [13, 8, 14],
-			"rotation": {"angle": 0, "axis": "y", "origin": [-8, -8, -3]},
+			"rotation": {"angle": 45, "axis": "z", "origin": [8, 8, 14]},
 			"faces": {
 				"west": {"uv": [3, 5, 13, 16], "rotation": 270, "texture": "#1"},
-				"up": {"uv": [3, 5, 13, 16], "texture": "#1"},
+				"up": {"uv": [13, 5, 3, 16], "texture": "#1"},
 				"down": {"uv": [3, 5, 13, 16], "rotation": 180, "texture": "#1"}
 			}
 		},
@@ -63,18 +63,17 @@
 			"name": "Bit9V",
 			"from": [8, 3, 3],
 			"to": [8, 13, 14],
-			"rotation": {"angle": 0, "axis": "y", "origin": [-8, -8, -3]},
+			"rotation": {"angle": 45, "axis": "z", "origin": [8, 8, 14]},
 			"faces": {
 				"north": {"uv": [0, 0, 5, 0.5], "rotation": 90, "texture": "#1"},
 				"east": {"uv": [3, 5, 13, 16], "rotation": 90, "texture": "#1"},
 				"south": {"uv": [1, 1, 6, 3.5], "rotation": 270, "texture": "#1"},
-				"west": {"uv": [3, 5, 13, 16], "rotation": 270, "texture": "#1"},
+				"west": {"uv": [13, 5, 3, 16], "rotation": 270, "texture": "#1"},
 				"up": {"uv": [0, 0, 5, 1], "texture": "#1"},
 				"down": {"uv": [0, 0, 5, 1], "rotation": 180, "texture": "#1"}
 			}
 		}
 	],
-	"display": {},
 	"groups": [
 		{
 			"name": "VoxelShapes",
