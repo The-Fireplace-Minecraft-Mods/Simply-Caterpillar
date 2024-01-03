@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Fixed
+
+- Fixed item collector and reinforcement builder blocks placement.
+- Fixed empty bucket not returned after lava bucket consumed.
+
 ## [1.20.1-8.0.1] - 2023-08-24
 
 ### Fixed
