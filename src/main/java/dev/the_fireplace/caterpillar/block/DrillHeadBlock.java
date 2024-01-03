@@ -342,7 +342,7 @@ public class DrillHeadBlock extends DrillBaseBlock {
             state.getValue(DRILLING) &&
             CaterpillarConfig.useParticles
         ) {
-            Direction direction = level.getBlockEntity(pos).getBlockState().getValue(DrillHeadBlock.FACING);
+            Direction direction = state.getValue(DrillHeadBlock.FACING);
             Direction.Axis direction$axis = direction.getAxis();
 
             double x = direction$axis == Direction.Axis.X ? pos.getX() + 0.44D : pos.getX();
