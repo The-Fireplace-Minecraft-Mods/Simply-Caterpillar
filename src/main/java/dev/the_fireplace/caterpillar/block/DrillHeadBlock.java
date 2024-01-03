@@ -351,7 +351,7 @@ public class DrillHeadBlock extends DrillBaseBlock {
             state.getValue(DRILLING) &&
             CaterpillarConfig.useParticles
         ) {
-            Direction direction = level.getBlockEntity(pos).getBlockState().getValue(DrillHeadBlock.FACING);
+            Direction direction = state.getValue(DrillHeadBlock.FACING);
             Direction.Axis direction$axis = direction.getAxis();
 
             double x = direction$axis == Direction.Axis.X ? pos.getX() + 0.44D : pos.getX();
@@ -374,6 +374,10 @@ public class DrillHeadBlock extends DrillBaseBlock {
     @Nullable
     @Override
     public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
-        return BlockEntityRegistry.DRILL_HEAD.get().create(pos, state);
+        if (state.getValue(PART) == DrillHeadPart.BASE) {
+            return BlockEntityRegistry.DRILL_HEAD.get().create(pos, state);
+        }
+
+        return null;
     }
 }
