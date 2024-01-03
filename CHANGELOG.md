@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.20.1-8.0.2] - 2024-01-03
+
 ### Fixed
 
 - Fixed item collector and reinforcement builder blocks placement.
