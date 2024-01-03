@@ -12,6 +12,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -53,7 +54,7 @@ public class DrillHeadBlockEntity extends DrillBaseBlockEntity {
 
     public static final int CONSUMPTION_SLOT_END = 9;
 
-    public static final int FUEl_SLOT = 0;
+    public static final int FUEL_SLOT = 0;
 
     public static final int GATHERED_SLOT_START = 10;
 
@@ -145,7 +146,7 @@ public class DrillHeadBlockEntity extends DrillBaseBlockEntity {
             needsUpdate = true;
         }
 
-        ItemStack stack = blockEntity.getStackInSlot(DrillHeadBlockEntity.FUEl_SLOT);
+        ItemStack stack = blockEntity.getStackInSlot(DrillHeadBlockEntity.FUEL_SLOT);
         boolean fuelSlotIsEmpty = stack.isEmpty();
 
         if (blockEntity.isPowered() && blockEntity.getLitTime() <= 0 && !fuelSlotIsEmpty) {
@@ -154,7 +155,7 @@ public class DrillHeadBlockEntity extends DrillBaseBlockEntity {
             PacketHandler.sendToClients(new DrillHeadSyncLitS2CPacket(blockEntity.getLitTime(), blockEntity.getLitDuration(), blockEntity.getBlockPos()));
 
             if (stack.is(Items.LAVA_BUCKET)) {
-                blockEntity.setStackInSlot(DrillHeadBlockEntity.FUEl_SLOT, new ItemStack(Items.BUCKET));
+                blockEntity.setStackInSlot(DrillHeadBlockEntity.FUEL_SLOT, new ItemStack(Items.BUCKET));
             }
 
             stack.shrink(1);
@@ -238,7 +239,7 @@ public class DrillHeadBlockEntity extends DrillBaseBlockEntity {
     }
 
     public boolean isFuelSlotEmpty() {
-        return this.getStackInSlot(FUEl_SLOT).isEmpty();
+        return this.getStackInSlot(FUEL_SLOT).isEmpty();
     }
 
     public int getBurnDuration(ItemStack stack) {
@@ -258,7 +259,7 @@ public class DrillHeadBlockEntity extends DrillBaseBlockEntity {
     }
 
     public void setPowerOn() {
-        ItemStack stack = this.getStackInSlot(DrillHeadBlockEntity.FUEl_SLOT);
+        ItemStack stack = this.getStackInSlot(DrillHeadBlockEntity.FUEL_SLOT);
         boolean fuelSlotIsEmpty = stack.isEmpty();
 
         if (!fuelSlotIsEmpty || this.isLit()) {
@@ -267,7 +268,7 @@ public class DrillHeadBlockEntity extends DrillBaseBlockEntity {
                 this.litDuration = this.litTime;
 
                 if (stack.is(Items.LAVA_BUCKET)) {
-                    this.setStackInSlot(DrillHeadBlockEntity.FUEl_SLOT, new ItemStack(Items.BUCKET));
+                    this.setStackInSlot(DrillHeadBlockEntity.FUEL_SLOT, new ItemStack(Items.BUCKET));
                 }
 
                 stack.shrink(1);
@@ -342,7 +343,7 @@ public class DrillHeadBlockEntity extends DrillBaseBlockEntity {
 
             @Override
             public boolean isItemValid(int slot, @NotNull ItemStack stack) {
-                if (slot == FUEl_SLOT) {
+                if (slot == FUEL_SLOT) {
                     return AbstractCaterpillarMenu.isFuel(stack);
                 }
 
@@ -364,7 +365,7 @@ public class DrillHeadBlockEntity extends DrillBaseBlockEntity {
         super.load(tag);
 
         this.litTime = tag.getInt("BurnTime");
-        this.litDuration = this.getBurnDuration(this.getStackInSlot(FUEl_SLOT));
+        this.litDuration = this.getBurnDuration(this.getStackInSlot(FUEL_SLOT));
         this.powered = tag.getBoolean("Powered");
         this.moving = tag.getBoolean("Moving");
     }
