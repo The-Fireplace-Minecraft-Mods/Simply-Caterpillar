@@ -27,7 +27,11 @@ public class Caterpillar implements ModInitializer {
         ItemGroupRegistry.registerCreativeModeTab();
         BlockRegistry.registerBlocks();
         BlockEntityRegistry.registerBlockEntities();
-        ItemRegistry.registerItems();
+        /**
+         * TODO: Re-enable when fixed
+         *
+         * ItemRegistry.registerItems();
+         */
         RecipeRegistry.registerRecipes();
 
         MenuRegistry.registerMenus();

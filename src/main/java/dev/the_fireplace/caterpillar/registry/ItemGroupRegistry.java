@@ -32,7 +32,11 @@ public class ItemGroupRegistry {
                     output.accept(BlockRegistry.STORAGE);
                     output.accept(BlockRegistry.DECORATION);
                     output.accept(BlockRegistry.TRANSPORTER);
-                    output.accept(ItemRegistry.WRITABLE_PATTERN_BOOK);
+                    /**
+                     * TODO: Re-enable when fixed
+                     *
+                     * output.accept(ItemRegistry.WRITABLE_PATTERN_BOOK);
+                     */
                 })
                 .build()
         );
