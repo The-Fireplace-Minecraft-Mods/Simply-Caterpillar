@@ -2,7 +2,7 @@ package dev.the_fireplace.caterpillar.block.entity;
 
 import dev.the_fireplace.caterpillar.block.entity.util.ImplementedInventory;
 import dev.the_fireplace.caterpillar.block.util.CaterpillarBlockUtil;
-import dev.the_fireplace.caterpillar.config.CaterpillarConfig;
+import dev.the_fireplace.caterpillar.config.ConfigManager;
 import dev.the_fireplace.caterpillar.registry.BlockEntityRegistry;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.minecraft.core.BlockPos;
@@ -74,7 +74,7 @@ public class DrillBaseBlockEntity extends BlockEntity implements ExtendedScreenH
         this.getLevel().setBlockAndUpdate(nextPos, this.getBlockState());
         this.getLevel().removeBlock(this.getBlockPos(), false);
 
-        if (CaterpillarConfig.enableSounds) {
+        if (ConfigManager.enableSounds()) {
             this.getLevel().playSound(null, this.getBlockPos(), SoundEvents.PISTON_EXTEND, SoundSource.BLOCKS, 1.0F, 1.0F);
         }
     }

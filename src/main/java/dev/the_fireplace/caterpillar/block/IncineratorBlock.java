@@ -2,7 +2,7 @@ package dev.the_fireplace.caterpillar.block;
 
 import dev.the_fireplace.caterpillar.block.entity.IncineratorBlockEntity;
 import dev.the_fireplace.caterpillar.block.util.CaterpillarBlockUtil;
-import dev.the_fireplace.caterpillar.config.CaterpillarConfig;
+import dev.the_fireplace.caterpillar.config.ConfigManager;
 import dev.the_fireplace.caterpillar.registry.BlockEntityRegistry;
 import dev.the_fireplace.caterpillar.registry.BlockRegistry;
 import org.jetbrains.annotations.NotNull;
@@ -93,17 +93,17 @@ public class IncineratorBlock extends DrillBaseBlock {
             double d6 = random.nextDouble() * 6.0D / 16.0D;
             double d7 = direction$axis == Direction.Axis.Z ? d4 : (double) direction.getStepZ() * d3;
 
-            if (CaterpillarConfig.enableSounds) {
+            if (ConfigManager.enableSounds()) {
                 level.playLocalSound(d0, d1, d2, SoundEvents.LAVA_POP, SoundSource.BLOCKS, 0.2F + random.nextFloat() * 0.2F, 0.9F + random.nextFloat() * 0.15F, false);
             }
 
-            if (CaterpillarConfig.useParticles) {
+            if (ConfigManager.useParticles()) {
                 level.addParticle(ParticleTypes.DRIPPING_LAVA, d0 + d5, d1 + d6, d2 - 0.5D + d7, 0.0D, 0.0D, 0.0D);
                 level.addParticle(ParticleTypes.DRIPPING_LAVA, d0 + d5, d1 + d6, d2 + 0.5D + d7, 0.0D, 0.0D, 0.0D);
             }
         }
 
-        if (CaterpillarConfig.enableSounds && random.nextInt(200) == 0) {
+        if (ConfigManager.enableSounds() && random.nextInt(200) == 0) {
             level.playLocalSound(pos.getX(), pos.getY(), pos.getZ(), SoundEvents.LAVA_AMBIENT, SoundSource.BLOCKS, 0.2F + random.nextFloat() * 0.2F, 0.9F + random.nextFloat() * 0.15F, false);
         }
     }

@@ -24,7 +24,7 @@
       "${modGroup}.CaterpillarClient"
     ],
     "modmenu": [
-      "${modGroup}.config.CaterpillarModMenuIntegration"
+      "${modGroup}.compat.modmenu.ModMenuIntegration"
     ]
   },
   "mixins": [

@@ -2,7 +2,7 @@ package dev.the_fireplace.caterpillar.block.entity;
 
 import dev.the_fireplace.caterpillar.block.CollectorBlock;
 import dev.the_fireplace.caterpillar.block.util.CaterpillarBlockUtil;
-import dev.the_fireplace.caterpillar.config.CaterpillarConfig;
+import dev.the_fireplace.caterpillar.config.ConfigManager;
 import dev.the_fireplace.caterpillar.registry.BlockEntityRegistry;
 import dev.the_fireplace.caterpillar.menu.util.DrillHeadMenuPart;
 import dev.the_fireplace.caterpillar.network.packet.server.CaterpillarSyncInventoryS2CPacket;
@@ -37,7 +37,7 @@ public class CollectorBlockEntity extends DrillBaseBlockEntity {
         this.getLevel().setBlockAndUpdate(nextPos, this.getBlockState());
         this.getLevel().setBlockAndUpdate(nextPos.below(), this.getBlockState().setValue(CollectorBlock.HALF, DoubleBlockHalf.LOWER));
 
-        if (CaterpillarConfig.enableSounds) {
+        if (ConfigManager.enableSounds()) {
             this.getLevel().playSound(null, basePos, SoundEvents.PISTON_EXTEND, SoundSource.BLOCKS, 1.0F, 1.0F);
         }
 

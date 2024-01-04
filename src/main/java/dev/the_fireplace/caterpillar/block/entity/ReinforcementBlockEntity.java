@@ -4,7 +4,7 @@ import dev.the_fireplace.caterpillar.Caterpillar;
 import dev.the_fireplace.caterpillar.block.ReinforcementBlock;
 import dev.the_fireplace.caterpillar.block.util.CaterpillarBlockUtil;
 import dev.the_fireplace.caterpillar.block.util.Replacement;
-import dev.the_fireplace.caterpillar.config.CaterpillarConfig;
+import dev.the_fireplace.caterpillar.config.ConfigManager;
 import dev.the_fireplace.caterpillar.registry.BlockEntityRegistry;
 import dev.the_fireplace.caterpillar.menu.ReinforcementMenu;
 import dev.the_fireplace.caterpillar.menu.util.DrillHeadMenuPart;
@@ -137,7 +137,7 @@ public class ReinforcementBlockEntity extends DrillBaseBlockEntity {
             level.removeBlock(basePos.above(), true);
             level.removeBlock(basePos.below(), true);
 
-            if (CaterpillarConfig.enableSounds) {
+            if (ConfigManager.enableSounds()) {
                 level.playSound(null, basePos, SoundEvents.PISTON_EXTEND, SoundSource.BLOCKS, 1.0F, 1.0F);
             }
 

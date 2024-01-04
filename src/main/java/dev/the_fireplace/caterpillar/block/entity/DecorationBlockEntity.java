@@ -4,7 +4,7 @@ import dev.the_fireplace.caterpillar.Caterpillar;
 import dev.the_fireplace.caterpillar.block.DecorationBlock;
 import dev.the_fireplace.caterpillar.block.util.CaterpillarBlockUtil;
 import dev.the_fireplace.caterpillar.block.util.DecorationPart;
-import dev.the_fireplace.caterpillar.config.CaterpillarConfig;
+import dev.the_fireplace.caterpillar.config.ConfigManager;
 import dev.the_fireplace.caterpillar.registry.BlockEntityRegistry;
 import dev.the_fireplace.caterpillar.menu.DecorationMenu;
 import dev.the_fireplace.caterpillar.menu.syncdata.DecorationContainerData;
@@ -123,7 +123,7 @@ public class DecorationBlockEntity extends DrillBaseBlockEntity {
             this.getLevel().removeBlock(basePos.relative(direction.getCounterClockWise()), false);
             this.getLevel().removeBlock(basePos.relative(direction.getClockWise()), false);
 
-            if (CaterpillarConfig.enableSounds) {
+            if (ConfigManager.enableSounds()) {
                 this.getLevel().playSound(null, basePos, SoundEvents.PISTON_EXTEND, SoundSource.BLOCKS, 1.0F, 1.0F);
             }
 

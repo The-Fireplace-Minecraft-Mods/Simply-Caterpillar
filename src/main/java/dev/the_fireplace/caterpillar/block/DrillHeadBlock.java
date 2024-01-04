@@ -3,7 +3,7 @@ package dev.the_fireplace.caterpillar.block;
 import dev.the_fireplace.caterpillar.block.entity.DrillHeadBlockEntity;
 import dev.the_fireplace.caterpillar.block.util.CaterpillarBlockUtil;
 import dev.the_fireplace.caterpillar.block.util.DrillHeadPart;
-import dev.the_fireplace.caterpillar.config.CaterpillarConfig;
+import dev.the_fireplace.caterpillar.config.ConfigManager;
 import dev.the_fireplace.caterpillar.registry.BlockEntityRegistry;
 import dev.the_fireplace.caterpillar.registry.BlockRegistry;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -340,7 +340,7 @@ public class DrillHeadBlock extends DrillBaseBlock {
     public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
         if (state.getValue(PART) == DrillHeadPart.BIT_MIDDLE &&
             state.getValue(DRILLING) &&
-            CaterpillarConfig.useParticles
+            ConfigManager.useParticles()
         ) {
             Direction direction = state.getValue(DrillHeadBlock.FACING);
             Direction.Axis direction$axis = direction.getAxis();
