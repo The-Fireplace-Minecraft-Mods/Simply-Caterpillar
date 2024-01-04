@@ -138,14 +138,14 @@ public final class PacketHandler {
                 .consumerMainThread(ReinforcementSyncReplacerS2CPacket::handle)
                 .add();
 
-        CHANNEL.messageBuilder(PatternBookEditC2SPacket.class, index++, NetworkDirection.PLAY_TO_SERVER)
-                .decoder(PatternBookEditC2SPacket::new)
-                .encoder(PatternBookEditC2SPacket::toBytes)
-                .consumerMainThread(PatternBookEditC2SPacket::handle)
-                .add();
-
         /**
          * TODO: Re-enable when fixed
+         *
+         *    CHANNEL.messageBuilder(PatternBookEditC2SPacket.class, index++, NetworkDirection.PLAY_TO_SERVER)
+         *                 .decoder(PatternBookEditC2SPacket::new)
+         *                 .encoder(PatternBookEditC2SPacket::toBytes)
+         *                 .consumerMainThread(PatternBookEditC2SPacket::handle)
+         *                 .add();
          *
          *   CHANNEL.messageBuilder(OpenBookGuiS2CPacket.class, index++, NetworkDirection.PLAY_TO_CLIENT)
          *      .decoder(OpenBookGuiS2CPacket::new)
