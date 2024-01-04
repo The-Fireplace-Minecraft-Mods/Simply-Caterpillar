@@ -21,7 +21,11 @@ public final class PacketHandler {
 
         ServerPlayNetworking.registerGlobalReceiver(ReinforcementSyncStateReplacerC2SPacket.PACKET_ID, ReinforcementSyncStateReplacerC2SPacket::receive);
 
-        ServerPlayNetworking.registerGlobalReceiver(PatternBookEditC2SPacket.PACKET_ID, PatternBookEditC2SPacket::receive);
+        /**
+         * TODO: Re-enable when fixed
+         *
+         *   ServerPlayNetworking.registerGlobalReceiver(PatternBookEditC2SPacket.PACKET_ID, PatternBookEditC2SPacket::receive);
+         */
     }
 
     public static void registerS2CPackets() {
@@ -39,6 +43,10 @@ public final class PacketHandler {
         ClientPlayNetworking.registerGlobalReceiver(ReinforcementSyncReplacerS2CPacket.PACKET_ID, ReinforcementSyncReplacerS2CPacket::receive);
         ClientPlayNetworking.registerGlobalReceiver(ReinforcementSyncStateReplacerS2CPacket.PACKET_ID, ReinforcementSyncStateReplacerS2CPacket::receive);
 
-        ClientPlayNetworking.registerGlobalReceiver(OpenBookGuiS2CPacket.PACKET_ID, OpenBookGuiS2CPacket::receive);
+        /**
+         * TODO: Re-enable when fixed
+         *
+         *   ClientPlayNetworking.registerGlobalReceiver(OpenBookGuiS2CPacket.PACKET_ID, OpenBookGuiS2CPacket::receive);
+         */
     }
 }

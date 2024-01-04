@@ -33,6 +33,11 @@ public class CaterpillarClient implements ClientModInitializer {
 
         EntityRendererRegistry.register(EntityRegistry.SEAT, SeatEntityRenderer::new);
 
-        UseBlockCallback.EVENT.register(LecternEventHandler::rightClick);
+
+        /**
+         * TODO: Re-enable when fixed
+         *
+         *   UseBlockCallback.EVENT.register(LecternEventHandler::rightClick);
+         */
     }
 }
