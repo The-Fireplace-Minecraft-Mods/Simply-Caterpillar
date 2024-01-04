@@ -31,7 +31,11 @@ public class Caterpillar {
         CreativeModeTabRegistry.register(bus);
         BlockRegistry.BLOCKS.register(bus);
         BlockEntityRegistry.BLOCK_ENTITY_TYPES.register(bus);
-        ItemRegistry.ITEMS.register(bus);
+        /**
+         * TODO: Re-enable when fixed
+         *
+         *  ItemRegistry.ITEMS.register(bus);
+         */
         MenuRegistry.MENU_TYPES.register(bus);
         EntityRegistry.ENTITY_TYPES.register(bus);
         RecipeRegistry.RECIPE_SERIALIZERS.register(bus);

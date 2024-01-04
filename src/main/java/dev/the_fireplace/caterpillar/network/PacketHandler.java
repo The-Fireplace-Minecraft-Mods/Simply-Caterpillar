@@ -144,11 +144,15 @@ public final class PacketHandler {
                 .consumerMainThread(PatternBookEditC2SPacket::handle)
                 .add();
 
-        CHANNEL.messageBuilder(OpenBookGuiS2CPacket.class, index++, NetworkDirection.PLAY_TO_CLIENT)
-                .decoder(OpenBookGuiS2CPacket::new)
-                .encoder(OpenBookGuiS2CPacket::toBytes)
-                .consumerMainThread(OpenBookGuiS2CPacket::handle)
-                .add();
+        /**
+         * TODO: Re-enable when fixed
+         *
+         *   CHANNEL.messageBuilder(OpenBookGuiS2CPacket.class, index++, NetworkDirection.PLAY_TO_CLIENT)
+         *      .decoder(OpenBookGuiS2CPacket::new)
+         *      .encoder(OpenBookGuiS2CPacket::toBytes)
+         *      .consumerMainThread(OpenBookGuiS2CPacket::handle)
+         *      .add();
+         */
 
         Caterpillar.LOGGER.info("Registered {} packets!", index);
     }

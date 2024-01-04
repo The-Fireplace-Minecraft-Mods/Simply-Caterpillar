@@ -7,6 +7,7 @@ import dev.the_fireplace.caterpillar.client.renderer.entity.SeatEntityRenderer;
 import dev.the_fireplace.caterpillar.client.screen.*;
 import dev.the_fireplace.caterpillar.config.ConfigHelper;
 import dev.the_fireplace.caterpillar.config.ConfigHolder;
+import dev.the_fireplace.caterpillar.network.packet.server.OpenBookGuiS2CPacket;
 import dev.the_fireplace.caterpillar.registry.EntityRegistry;
 import dev.the_fireplace.caterpillar.registry.MenuRegistry;
 import net.minecraft.client.gui.screens.MenuScreens;
@@ -63,12 +64,16 @@ public class ClientModEvents {
 
     @SubscribeEvent
     public static void onInitialize(FMLCommonSetupEvent event) {
-        MinecraftForge.EVENT_BUS.addListener((PlayerInteractEvent.RightClickBlock e) -> {
-            var result = LecternEventHandler.rightClick(e.getEntity(), e.getLevel(), e.getHand(), e.getHitVec());
-            if (result.consumesAction()) {
-                e.setCanceled(true);
-                e.setCancellationResult(result);
-            }
-        });
+        /**
+         * TODO: Re-enable when fixed
+         *
+         *  MinecraftForge.EVENT_BUS.addListener((PlayerInteractEvent.RightClickBlock e) -> {
+         *             var result = LecternEventHandler.rightClick(e.getEntity(), e.getLevel(), e.getHand(), e.getHitVec());
+         *             if (result.consumesAction()) {
+         *                 e.setCanceled(true);
+         *                 e.setCancellationResult(result);
+         *             }
+         *         });
+         */
     }
 }
