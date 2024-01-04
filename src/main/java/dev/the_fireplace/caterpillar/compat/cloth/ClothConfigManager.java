@@ -16,10 +16,9 @@ public class ClothConfigManager {
     public static void registerAutoConfig() {
         if(holder == null) {
             holder = AutoConfig.register(CaterpillarConfig.class, JanksonConfigSerializer::new);
-            if(holder.getConfig().nothing == null || holder.getConfig().nothing.isEmpty())
-            {
-                DEFAULT.accept(holder.getConfig());
-            }
+
+            DEFAULT.accept(holder.getConfig());
+
             Caterpillar.MODS_LOADED.add("cloth");
 
             holder.save();

@@ -8,8 +8,6 @@ import me.shedaniel.autoconfig.annotation.ConfigEntry;
 @Config(name = Caterpillar.MOD_ID)
 public class CaterpillarConfig implements ConfigData {
 
-    public String nothing = "Move along.";
-
     public boolean firstUse = true;
 
     public boolean useParticles = true;
