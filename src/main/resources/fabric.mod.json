@@ -34,12 +34,12 @@
   "depends": {
     "fabricloader": ">=${fabricLoaderVersion}",
     "fabric-api": "*",
-    "minecraft": "~1.20.1",
+    "minecraft": ">=1.20.2-",
     "java": ">=${minecraftJavaVersion}"
   },
 
   "suggests": {
     "modmenu": "*",
-    "cloth-config": ">=10"
+    "cloth-config": "*"
   }
 }

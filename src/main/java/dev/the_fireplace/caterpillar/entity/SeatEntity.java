@@ -80,10 +80,6 @@ public class SeatEntity extends Entity {
         return true;
     }
 
-    @Override
-    public double getPassengersRidingOffset() {
-        return 0.0D;
-    }
 
     @Override
     public Vec3 getDismountLocationForPassenger(LivingEntity entity) {
