@@ -22,7 +22,7 @@ jobs:
     - name: Build with Gradle
       run: ./gradlew build --no-daemon
     - name: Upload artifact JAR
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: Simply-Caterpillar_JAR
         path: build/libs/*.jar
