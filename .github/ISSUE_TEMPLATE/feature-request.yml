@@ -1,0 +1,33 @@
+name: Feature Request
+description: Suggest an idea or improvement
+title: "[feat]: "
+labels: [enhancement, triage]
+body:
+  - type: checkboxes
+    id: before-you-start
+    attributes:
+      label: Before you start
+      options:
+        - label: I have searched the issue tracker to see if my idea has already been suggested.
+          required: true
+  - type: textarea
+    attributes:
+      label: What is your idea?
+      description: Please give a thorough explanation of your idea. Attach/Link relevant images/files in relation to the idea!
+      placeholder: ex. This mod should add a new feature that...
+    validations:
+        required: true
+  - type: textarea
+    attributes:
+      label: Why should this idea be implemented?
+      description: Please explain why you think this idea should be implemented.
+      placeholder: ex. This would improve the mod by...
+    validations:
+        required: true
+  - type: textarea
+    attributes:
+      label: Additional Context
+      description: Please provide any additional context or screenshots about the feature request here.
+      placeholder: ex. Here are some ideas I have for the feature...
+    validations:
+        required: false

@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "c",
+    "d"
+  ],
+  "key": {
+    "d": {
+      "item": "simplycaterpillar:drill_base"
+    },
+    "c": {
+      "item": "minecraft:cauldron"
+    }
+  },
+  "result": {
+    "item": "simplycaterpillar:drill_seat"
+  }
+}

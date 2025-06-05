@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "c c",
+    "crc",
+    "cpc"
+  ],
+  "key": {
+    "c": {
+      "item": "minecraft:cobblestone"
+    },
+    "r": {
+      "item": "minecraft:redstone"
+    },
+    "p": {
+     "tag": "minecraft:planks"
+   }
+  },
+  "result": {
+    "item": "simplycaterpillar:drill_base"
+  }
+}

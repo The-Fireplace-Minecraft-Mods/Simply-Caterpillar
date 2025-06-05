@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "id": "simplycaterpillar",
+  "version": "${version}",
+  "name": "Simply Caterpillar",
+  "description": "Adds a caterpillar drill to Minecraft.",
+  "authors": [
+    "Daniel-Mendes"
+  ],
+  "contact": {
+    "homepage": "https://github.com/The-Fireplace-Minecraft-Mods/Simply-Caterpillar"
+  },
+  "license": "AGPL-3.0",
+  "icon": "assets/simplycaterpillar/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "dev.the_fireplace.caterpillar.fabric.CaterpillarFabric"
+    ],
+    "client": [
+      "dev.the_fireplace.caterpillar.fabric.client.CaterpillarFabricClient"
+    ]
+  },
+  "mixins": [
+    "simplycaterpillar.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.16.14",
+    "minecraft": "~1.21.5",
+    "java": ">=21",
+    "architectury": ">=16.1.4",
+    "fabric-api": "*"
+  },
+  "suggests": {
+    "another-mod": "*"
+  }
+}

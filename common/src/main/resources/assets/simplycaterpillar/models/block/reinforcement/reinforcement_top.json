@@ -1,0 +1,45 @@
+{
+	"render_type": "cutout",
+	"textures": {
+		"2": "simplycaterpillar:block/reinforcement/reinforcement_extend",
+		"extend": "simplycaterpillar:block/reinforcement/reinforcement_rod",
+		"particle": "simplycaterpillar:block/reinforcement/reinforcement_top",
+		"top": "simplycaterpillar:block/reinforcement/reinforcement_top"
+	},
+	"elements": [
+		{
+			"from": [0, 12, 0],
+			"to": [16, 16, 16],
+			"rotation": {"angle": 0, "axis": "y", "origin": [16, 0, 0]},
+			"faces": {
+				"north": {"uv": [0, 0, 16, 4], "texture": "#2", "tintindex": 0},
+				"east": {"uv": [0, 0, 16, 4], "texture": "#2"},
+				"south": {"uv": [0, 0, 16, 4], "texture": "#2"},
+				"west": {"uv": [0, 0, 16, 4], "texture": "#2"},
+				"up": {"uv": [0, 0, 16, 16], "rotation": 180, "texture": "#top"},
+				"down": {"uv": [0, 0, 16, 16], "rotation": 180, "texture": "#top"}
+			}
+		},
+		{
+			"from": [6, 0, 6],
+			"to": [10, 12, 10],
+			"rotation": {"angle": 0, "axis": "y", "origin": [16, 0, 0]},
+			"faces": {
+				"north": {"uv": [0, 0, 12, 4], "rotation": 270, "texture": "#extend", "tintindex": 0},
+				"east": {"uv": [0, 0, 12, 4], "rotation": 270, "texture": "#extend"},
+				"south": {"uv": [0, 0, 12, 4], "rotation": 270, "texture": "#extend"},
+				"west": {"uv": [0, 0, 12, 4], "rotation": 270, "texture": "#extend"},
+				"up": {"uv": [0, 12, 4, 16], "rotation": 180, "texture": "#extend"},
+				"down": {"uv": [0, 12, 4, 16], "rotation": 180, "texture": "#extend"}
+			}
+		}
+	],
+	"groups": [
+		{
+			"name": "VoxelShapes",
+			"origin": [0, 0, 0],
+			"color": 0,
+			"children": [0, 1]
+		}
+	]
+}

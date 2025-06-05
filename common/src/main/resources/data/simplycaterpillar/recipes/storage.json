@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "cdc"
+  ],
+  "key": {
+    "d": {
+      "item": "simplycaterpillar:drill_base"
+    },
+    "c": {
+      "item": "minecraft:chest"
+    }
+  },
+  "result": {
+    "item": "simplycaterpillar:storage"
+  }
+}
