@@ -18,7 +18,7 @@
       "dev.the_fireplace.caterpillar.fabric.CaterpillarFabric"
     ],
     "client": [
-      "dev.the_fireplace.caterpillar.fabric.client.CaterpillarFabricClient"
+      "dev.the_fireplace.caterpillar.client.fabric.CaterpillarFabricClient"
     ]
   },
   "mixins": [

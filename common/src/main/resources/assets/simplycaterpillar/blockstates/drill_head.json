@@ -1,9 +1,9 @@
 {
     "variants": {
-        "facing=north,part=base,drilling=false": { "model": "simplycaterpillar:block/drill_head/drill_head_base" },
-        "facing=south,part=base,drilling=false": { "model": "simplycaterpillar:block/drill_head/drill_head_base", "y": 180 },
-        "facing=west,part=base,drilling=false":  { "model": "simplycaterpillar:block/drill_head/drill_head_base", "y": 270 },
-        "facing=east,part=base,drilling=false":  { "model": "simplycaterpillar:block/drill_head/drill_head_base", "y": 90 },
+        "facing=north,part=base,drilling=false": { "model": "simplycaterpillar:block/drill_base/drill_base_block" },
+        "facing=south,part=base,drilling=false": { "model": "simplycaterpillar:block/drill_base/drill_base_block", "y": 180 },
+        "facing=west,part=base,drilling=false":  { "model": "simplycaterpillar:block/drill_base/drill_base_block", "y": 270 },
+        "facing=east,part=base,drilling=false":  { "model": "simplycaterpillar:block/drill_base/drill_base_block", "y": 90 },
 
         "facing=north,part=base,drilling=true": { "model": "simplycaterpillar:block/drill_head/drill_head_base_drilling" },
         "facing=south,part=base,drilling=true": { "model": "simplycaterpillar:block/drill_head/drill_head_base_drilling", "y": 180 },

@@ -1,5 +1,6 @@
 {
 	"parent": "minecraft:block/cube",
+	"render_type": "cutout",
 	"textures": {
 		"base": "simplycaterpillar:block/drill_base/drill_base",
 		"inner": "simplycaterpillar:block/drill_base/drill_base_inner",

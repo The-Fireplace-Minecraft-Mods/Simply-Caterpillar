@@ -1,12 +1,18 @@
 package dev.the_fireplace.caterpillar.block;
 
+import com.mojang.serialization.MapCodec;
+import dev.the_fireplace.caterpillar.block.entity.DrillBaseBlockEntity;
 import dev.the_fireplace.caterpillar.block.util.CaterpillarBlockUtil;
+import dev.the_fireplace.caterpillar.registry.BlockEntityTypesRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -14,17 +20,19 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.stream.Stream;
 
-public class DrillBaseBlock extends Block implements SimpleWaterloggedBlock {
+public class DrillBaseBlock extends BaseEntityBlock implements SimpleWaterloggedBlock {
 
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
@@ -36,10 +44,30 @@ public class DrillBaseBlock extends Block implements SimpleWaterloggedBlock {
             Block.box(6, 6, 16, 10, 10, 32)
     ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
 
+    protected final MapCodec<? extends DrillBaseBlock> CODEC = simpleCodec(DrillBaseBlock::new);
+
+    @Override
+    protected @NotNull MapCodec<? extends BaseEntityBlock> codec() {
+        return this.CODEC;
+    }
+
     public DrillBaseBlock(Properties properties) {
         super(properties);
         this.registerDefaultState(defaultBlockState().setValue(FACING, Direction.NORTH).setValue(WATERLOGGED, false));
         this.runCalculation(SHAPES, SHAPE);
+    }
+
+    @Override
+    protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
+        if (!level.isClientSide) {
+            this.openContainer(level, pos, player);
+        }
+
+        return InteractionResult.SUCCESS;
+    }
+
+    protected void openContainer(Level level, BlockPos pos, Player player) {
+
     }
 
     @Override
@@ -54,8 +82,7 @@ public class DrillBaseBlock extends Block implements SimpleWaterloggedBlock {
         Direction direction = context.getHorizontalDirection();
         FluidState fluidState = level.getFluidState(pos);
 
-        // TODO:  Use CaterpillarBlockUtil
-        if (true) {
+        if (CaterpillarBlockUtil.isConnectedCaterpillarSameDirection(level, pos, direction)) {
             return defaultBlockState().setValue(FACING, direction).setValue(WATERLOGGED, fluidState.getType() == Fluids.WATER);
         }
 
@@ -97,6 +124,10 @@ public class DrillBaseBlock extends Block implements SimpleWaterloggedBlock {
         return RenderShape.MODEL;
     }
 
+    public BlockPos getBasePos(BlockState state, BlockPos pos) {
+        return pos;
+    }
+
     protected void runCalculation(Map<Direction, VoxelShape> shapes, VoxelShape shape) {
         for (Direction direction : Direction.values())
             shapes.put(direction, calculateShapes(direction, shape));
@@ -114,5 +145,10 @@ public class DrillBaseBlock extends Block implements SimpleWaterloggedBlock {
         }
 
         return buffer[0];
+    }
+
+    @Override
+    public @Nullable BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+        return new DrillBaseBlockEntity(pos, state);
     }
 }

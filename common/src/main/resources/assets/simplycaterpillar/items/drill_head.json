@@ -1,0 +1,6 @@
+{
+	"model": {
+		"type": "minecraft:model",
+		"model": "simplycaterpillar:block/drill_head/drill_head_inventory"
+	}
+}

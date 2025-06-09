@@ -1,16 +1,11 @@
 package dev.the_fireplace.caterpillar.fabric;
 
-import dev.the_fireplace.caterpillar.Caterpillar;
+import dev.the_fireplace.caterpillar.CaterpillarCommon;
 import net.fabricmc.api.ModInitializer;
 
 public final class CaterpillarFabric implements ModInitializer {
     @Override
     public void onInitialize() {
-        // This code runs as soon as Minecraft is in a mod-load-ready state.
-        // However, some things (like resources) may still be uninitialized.
-        // Proceed with mild caution.
-
-        // Run our common setup.
-        Caterpillar.init();
+        CaterpillarCommon.init();
     }
 }
