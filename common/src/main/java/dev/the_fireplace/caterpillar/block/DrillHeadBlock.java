@@ -182,12 +182,12 @@ public class DrillHeadBlock extends DrillBaseBlock {
         ) {
             BlockPos caterpillarHeadPos = CaterpillarBlockUtil.getCaterpillarHeadPos(level, blockPos.relative(direction), direction);
 
-            if (CaterpillarBlockUtil.getConnectedCaterpillarBlockEntities(level, caterpillarHeadPos, new ArrayList<>()).stream().noneMatch(blockEntity -> blockEntity instanceof DrillHeadBlockEntity)) {
+            if (CaterpillarBlockUtil.getConnectedCaterpillarBlockEntities(level, caterpillarHeadPos).stream().noneMatch(blockEntity -> blockEntity instanceof DrillHeadBlockEntity)) {
                 if (CaterpillarBlockUtil.isConnectedCaterpillarSameDirection(level, blockPos.above(), direction)) {
                     return defaultBlockState().setValue(FACING, direction).setValue(DrillHeadBlock.PART, DrillHeadPart.BIT_BOTTOM).setValue(DrillHeadBlock.WATERLOGGED, fluidState.getType() == Fluids.WATER);
                 }
             } else {
-                context.getPlayer().displayClientMessage(Component.translatable("block.simplycaterpillar.blocks.already_connected", BlocksRegistry.DRILL_HEAD.getRegisteredName()), true);
+                context.getPlayer().displayClientMessage(Component.translatable("item.simplycaterpillar.blocks.already_connected", BlocksRegistry.DRILL_HEAD.getRegisteredName()), true);
             }
 
         }

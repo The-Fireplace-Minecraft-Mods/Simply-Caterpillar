@@ -104,12 +104,12 @@ public class ReinforcementBlock extends DrillBaseBlock {
         ) {
             BlockPos caterpillarHeadPos = CaterpillarBlockUtil.getCaterpillarHeadPos(level, blockPos.relative(direction), direction);
 
-            if (CaterpillarBlockUtil.getConnectedCaterpillarBlockEntities(level, caterpillarHeadPos, new ArrayList<>()).stream().noneMatch(blockEntity -> blockEntity instanceof ReinforcementBlockEntity)) {
+            if (CaterpillarBlockUtil.getConnectedCaterpillarBlockEntities(level, caterpillarHeadPos).stream().noneMatch(blockEntity -> blockEntity instanceof ReinforcementBlockEntity)) {
                 if (CaterpillarBlockUtil.isConnectedCaterpillarSameDirection(level, blockPos.above(), direction)) {
                     return defaultBlockState().setValue(FACING, direction).setValue(ReinforcementBlock.PART, ReinforcementPart.BOTTOM).setValue(DrillHeadBlock.WATERLOGGED, fluidState.getType() == Fluids.WATER);
                 }
             } else {
-                context.getPlayer().displayClientMessage(Component.translatable("block.simplycaterpillar.blocks.already_connected", BlocksRegistry.REINFORCEMENT.getRegisteredName()), true);
+                context.getPlayer().displayClientMessage(Component.translatable("item.simplycaterpillar.blocks.already_connected", BlocksRegistry.REINFORCEMENT.getRegisteredName()), true);
             }
         }
 

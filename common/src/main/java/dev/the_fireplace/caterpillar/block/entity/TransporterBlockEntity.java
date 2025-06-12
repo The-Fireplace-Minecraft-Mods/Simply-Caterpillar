@@ -7,11 +7,12 @@ import dev.the_fireplace.caterpillar.registry.BlockEntityTypesRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.ChestMenu;
 import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
+import org.jetbrains.annotations.Nullable;
 
 import static dev.the_fireplace.caterpillar.block.TransporterBlock.HALF;
 
@@ -46,7 +47,7 @@ public class TransporterBlockEntity extends DrillBaseBlockEntity {
     }
 
     @Override
-    protected AbstractContainerMenu createMenu(int containerId, Inventory playerInventory) {
+    public @Nullable AbstractContainerMenu createMenu(int containerId, Inventory playerInventory, Player player) {
         return new TransporterMenu(containerId, playerInventory, this, new SimpleContainerData(0));
     }
 }

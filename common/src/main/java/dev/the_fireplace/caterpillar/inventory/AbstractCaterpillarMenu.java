@@ -1,12 +1,20 @@
 package dev.the_fireplace.caterpillar.inventory;
 
+import dev.the_fireplace.caterpillar.block.DrillBaseBlock;
+import dev.the_fireplace.caterpillar.block.entity.DrillBaseBlockEntity;
+import dev.the_fireplace.caterpillar.block.util.CaterpillarBlockUtil;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.Container;
-import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
+
+import java.util.*;
 
 public abstract class AbstractCaterpillarMenu extends AbstractContainerMenu {
 
@@ -28,16 +36,17 @@ public abstract class AbstractCaterpillarMenu extends AbstractContainerMenu {
     private final ContainerData data;
     private final Level level;
 
-    protected AbstractCaterpillarMenu(MenuType<?> menuType, int containerId, Inventory playerInventory, int containerDataSize, int inventorySize) {
-        this(menuType, containerId, playerInventory, new SimpleContainer(inventorySize), new SimpleContainerData(containerDataSize), containerDataSize, inventorySize);
+    public final DrillBaseBlockEntity blockEntity;
+
+    protected AbstractCaterpillarMenu(MenuType<?> menuType, int containerId, Inventory playerInventory, FriendlyByteBuf extraData, int containerDataSize) {
+        this(menuType, containerId, playerInventory, getBlockEntity(playerInventory, extraData), new SimpleContainerData(containerDataSize));
     }
 
-    protected AbstractCaterpillarMenu(MenuType<?> menuType, int containerId, Inventory playerInventory, Container container, ContainerData data, int containerDataSize, int inventorySize) {
+    protected AbstractCaterpillarMenu(MenuType<?> menuType, int containerId, Inventory playerInventory, DrillBaseBlockEntity blockEntity, ContainerData data) {
         super(menuType, containerId);
-        checkContainerSize(container, inventorySize);
-        checkContainerDataCount(data, containerDataSize);
 
-        this.container = container;
+        this.blockEntity = blockEntity;
+        this.container = blockEntity;
         this.data = data;
         this.level = playerInventory.player.level();
 
@@ -45,6 +54,17 @@ public abstract class AbstractCaterpillarMenu extends AbstractContainerMenu {
         this.addSlots(container);
 
         this.addDataSlots(data);
+    }
+
+    private static DrillBaseBlockEntity getBlockEntity(Inventory playerInventory, FriendlyByteBuf extraData) {
+        BlockPos blockPos = extraData.readBlockPos();
+        BlockEntity blockEntity = playerInventory.player.level().getBlockEntity(blockPos);
+
+        if (blockEntity instanceof DrillBaseBlockEntity caterpillarBlockEntity) {
+            return caterpillarBlockEntity;
+        } else {
+            throw new IllegalArgumentException("Expected a DrillBaseBlockEntity at " + blockPos + ", but found " + blockEntity);
+        }
     }
 
     public boolean stillValid(Player player) {
@@ -61,4 +81,16 @@ public abstract class AbstractCaterpillarMenu extends AbstractContainerMenu {
     }
 
     protected abstract void addSlots(Container container);
+
+    public List<? extends DrillBaseBlock> getConnectedBlocks() {
+       return CaterpillarBlockUtil.getConnectedCaterpillarBlocks(this.level, this.blockEntity.getBlockPos());
+    }
+
+    public <T extends DrillBaseBlockEntity> T getConnectedBlockEntity(Block block) {
+        List<? extends DrillBaseBlockEntity> blockEntities = CaterpillarBlockUtil.getConnectedCaterpillarBlockEntities(this.level, this.blockEntity.getBlockPos());
+
+        return (T) blockEntities.stream()
+                .filter(be -> be.getBlockState().getBlock() == block)
+                .findFirst().orElse(null);
+    }
 }

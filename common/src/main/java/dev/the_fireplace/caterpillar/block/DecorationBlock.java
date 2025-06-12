@@ -84,12 +84,12 @@ public class DecorationBlock extends DrillBaseBlock {
         if (blockPos.getY() < level.getMaxY() - 1 && level.getBlockState(blockPos.relative(direction.getClockWise())).canBeReplaced(context) && level.getBlockState(blockPos.relative(direction.getCounterClockWise())).canBeReplaced(context)) {
             BlockPos caterpillarHeadPos = CaterpillarBlockUtil.getCaterpillarHeadPos(level, blockPos.relative(direction), direction);
 
-            if (CaterpillarBlockUtil.getConnectedCaterpillarBlockEntities(level, caterpillarHeadPos, new ArrayList<>()).stream().noneMatch(blockEntity -> blockEntity instanceof DecorationBlockEntity)) {
+            if (CaterpillarBlockUtil.getConnectedCaterpillarBlockEntities(level, caterpillarHeadPos).stream().noneMatch(blockEntity -> blockEntity instanceof DecorationBlockEntity)) {
                 if (CaterpillarBlockUtil.isConnectedCaterpillarSameDirection(level, blockPos, direction)) {
                     return super.defaultBlockState().setValue(FACING, direction).setValue(PART, DecorationPart.BASE).setValue(WATERLOGGED, fluidState.getType() == Fluids.WATER);
                 }
             } else {
-                context.getPlayer().displayClientMessage(Component.translatable("block.simplycaterpillar.blocks.already_connected", BlocksRegistry.DECORATION.getRegisteredName()), true);
+                context.getPlayer().displayClientMessage(Component.translatable("item.simplycaterpillar.blocks.already_connected", BlocksRegistry.DECORATION.getRegisteredName()), true);
             }
         }
 

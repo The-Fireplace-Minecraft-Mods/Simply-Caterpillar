@@ -1,29 +1,35 @@
 package dev.the_fireplace.caterpillar.client.screen;
 
 import com.google.common.collect.Lists;
+import dev.architectury.networking.NetworkManager;
+import dev.architectury.registry.menu.MenuRegistry;
+import dev.the_fireplace.caterpillar.block.entity.DrillBaseBlockEntity;
 import dev.the_fireplace.caterpillar.client.screen.util.ScreenTabs;
 import dev.the_fireplace.caterpillar.client.screen.widget.TabButton;
 import dev.the_fireplace.caterpillar.client.screen.widget.TutorialButton;
 import dev.the_fireplace.caterpillar.inventory.AbstractCaterpillarMenu;
+import io.netty.buffer.Unpooled;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public abstract class AbstractCaterpillarScreen<T extends AbstractCaterpillarMenu> extends AbstractContainerScreen<T> {
     public static final int SLOT_SIZE = 18;
 
     public static final int TAB_X_SELECTED = -28;
-    public static final int TAB_X_UNSELECTED = -31;
+    public static final int TAB_X_UNSELECTED = -30;
     public static final int TAB_Y = 3;
-    public static final int TAB_BG_X = 0;
-    public static final int TAB_BG_Y = 0;
     public static final int TAB_BG_X_OFFSET = -2;
     public static final int TAB_BG_Y_OFFSET = TabButton.TAB_HEIGHT;
+
+    private static final int TAB_ITEM_X = -21;
+    private static final int TAB_ITEM_X_SELECTED = -20;
+    private static final int TAB_ITEM_Y = 5;
 
     public final int TUTORIAL_WIDTH = 14;
     public final int TUTORIAL_HEIGHT = 18;
@@ -63,7 +69,11 @@ public abstract class AbstractCaterpillarScreen<T extends AbstractCaterpillarMen
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
         this.renderBackground(guiGraphics, mouseX, mouseY, partialTick);
 
+        this.renderTabItems(guiGraphics);
+
         super.render(guiGraphics, mouseX, mouseY, partialTick);
+
+        this.renderTooltipTabButtons(guiGraphics, mouseX, mouseY);
     }
 
     @Override
@@ -79,19 +89,28 @@ public abstract class AbstractCaterpillarScreen<T extends AbstractCaterpillarMen
     }
 
     private void addTabButtons() {
-        // only add tab buttons if connected blocks are present
-
         int incrementTab = 0;
 
         for (ScreenTabs tab : ScreenTabs.values()) {
-            if (true) { // TODO: if (shouldTabBeRendered(tab))
+            boolean isCurrentTab = this.currentTab == tab;
+
+            if (shouldTabBeRendered(tab)) {
                 TabButton tabButton = new TabButton(
-                    this.leftPos,
-                    this.topPos + incrementTab * TabButton.TAB_HEIGHT,
+                    this.leftPos + (isCurrentTab ? TAB_X_SELECTED : TAB_X_UNSELECTED),
+                    this.topPos + TAB_Y + incrementTab * TabButton.TAB_HEIGHT,
                     this.currentTab == tab,
                     button -> {
-                        // Close the screen and open new menu
-                    }
+                        this.minecraft.player.closeContainer();
+                        // Should be called on the server side
+                        // MenuRegistry.openExtendedMenu(this.minecraft.player, this.menu.getConnectedBlockEntity(tab.BLOCK));
+                        DrillBaseBlockEntity tabBlockEntity = this.menu.getConnectedBlockEntity(tab.BLOCK);
+
+                        FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
+                        buf.writeBlockPos(tabBlockEntity.getBlockPos());
+
+//                        NetworkManager.sendToServer(, buf);
+                    },
+                    tab.STACK
                 );
 
                 this.addTabButton(tabButton);
@@ -114,5 +133,38 @@ public abstract class AbstractCaterpillarScreen<T extends AbstractCaterpillarMen
     @Override
     protected void renderLabels(GuiGraphics guiGraphics, int mouseX, int mouseY) {
         super.renderLabels(guiGraphics, mouseX, mouseY);
+    }
+
+    private boolean shouldTabBeRendered(ScreenTabs tab) {
+        return this.menu.getConnectedBlocks().contains(tab.BLOCK);
+    }
+
+    private void renderTabItems(GuiGraphics graphics) {
+        int incrementTab = 0;
+
+        for (ScreenTabs tab : ScreenTabs.values()) {
+            boolean isCurrentTab = this.currentTab == tab;
+
+            if (shouldTabBeRendered(tab)) {
+                graphics.renderItem(tab.STACK,
+                    this.leftPos + (isCurrentTab ? TAB_ITEM_X_SELECTED : TAB_ITEM_X),
+                    this.topPos + TAB_ITEM_Y + incrementTab * TabButton.TAB_HEIGHT
+                );
+
+                incrementTab++;
+            }
+        }
+    }
+
+    private void renderTooltipTabButtons(GuiGraphics graphics, int mouseX, int mouseY) {
+        int incrementTab  = 0;
+
+        for (TabButton tabButton : this.tabButtons) {
+            if (tabButton.isHoveredOrFocused()) {
+                tabButton.renderTooltip(graphics, this.font, this.leftPos, this.topPos + TAB_Y + (incrementTab * TabButton.TAB_HEIGHT) + (TabButton.TAB_HEIGHT / 2) + 8);
+            }
+
+            incrementTab++;
+        }
     }
 }

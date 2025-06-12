@@ -50,12 +50,12 @@ public class DrillSeatBlock extends DrillBaseBlock {
 
         BlockPos caterpillarHeadPos = CaterpillarBlockUtil.getCaterpillarHeadPos(level, blockPos.relative(direction), direction);
 
-        if (CaterpillarBlockUtil.getConnectedCaterpillarBlockEntities(level, caterpillarHeadPos, new ArrayList<>()).stream().noneMatch(blockEntity -> blockEntity instanceof DrillSeatBlockEntity)) {
+        if (CaterpillarBlockUtil.getConnectedCaterpillarBlockEntities(level, caterpillarHeadPos).stream().noneMatch(blockEntity -> blockEntity instanceof DrillSeatBlockEntity)) {
             if (CaterpillarBlockUtil.isConnectedCaterpillarSameDirection(level, blockPos, direction)) {
                 return super.getStateForPlacement(context);
             }
         } else {
-            context.getPlayer().displayClientMessage(Component.translatable("block.simplycaterpillar.blocks.already_connected", BlocksRegistry.DRILL_SEAT.getRegisteredName()), true);
+            context.getPlayer().displayClientMessage(Component.translatable("item.simplycaterpillar.blocks.already_connected", BlocksRegistry.DRILL_SEAT.getRegisteredName()), true);
         }
 
         return null;

@@ -1,14 +1,21 @@
 package dev.the_fireplace.caterpillar.block;
 
+import dev.architectury.registry.menu.MenuRegistry;
 import dev.the_fireplace.caterpillar.block.entity.TransporterBlockEntity;
 import dev.the_fireplace.caterpillar.block.util.CaterpillarBlockUtil;
+import dev.the_fireplace.caterpillar.inventory.TransporterMenu;
 import dev.the_fireplace.caterpillar.registry.BlocksRegistry;
+import dev.the_fireplace.caterpillar.registry.MenuTypesRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -26,10 +33,11 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.stream.Stream;
+
+import static dev.the_fireplace.caterpillar.block.entity.TransporterBlockEntity.TITLE;
 
 public class TransporterBlock extends DrillBaseBlock {
 
@@ -72,7 +80,8 @@ public class TransporterBlock extends DrillBaseBlock {
     protected void openContainer(Level level, BlockPos pos, Player player) {
         BlockEntity blockEntity = level.getBlockEntity(pos);
         if (blockEntity instanceof TransporterBlockEntity transporterBlockEntity) {
-            player.openMenu(transporterBlockEntity);
+//            player.openMenu(transporterBlockEntity);
+            MenuRegistry.openExtendedMenu((ServerPlayer) player, transporterBlockEntity);
         }
     }
 
@@ -117,12 +126,12 @@ public class TransporterBlock extends DrillBaseBlock {
         if (pos.getY() < level.getMaxY() - 1) {
             BlockPos caterpillarHeadPos = CaterpillarBlockUtil.getCaterpillarHeadPos(level, pos.relative(direction), direction);
 
-            if (CaterpillarBlockUtil.getConnectedCaterpillarBlockEntities(level, caterpillarHeadPos, new ArrayList<>()).stream().noneMatch(blockEntity -> blockEntity instanceof TransporterBlockEntity)) {
+            if (CaterpillarBlockUtil.getConnectedCaterpillarBlockEntities(level, caterpillarHeadPos).stream().noneMatch(blockEntity -> blockEntity instanceof TransporterBlockEntity)) {
                 if (CaterpillarBlockUtil.isConnectedCaterpillarSameDirection(level, pos, direction)) {
                     return super.defaultBlockState().setValue(FACING, direction).setValue(HALF, DoubleBlockHalf.UPPER).setValue(WATERLOGGED, level.getFluidState(pos).getType() == Fluids.WATER);
                 }
             } else {
-                context.getPlayer().displayClientMessage(Component.translatable("block.simplycaterpillar.blocks.already_connected", BlocksRegistry.TRANSPORTER.get().getName()), true);
+                context.getPlayer().displayClientMessage(Component.translatable("item.simplycaterpillar.blocks.already_connected", BlocksRegistry.TRANSPORTER.get().getName()), true);
             }
         }
 

@@ -93,12 +93,12 @@ public class StorageBlock extends DrillBaseBlock {
         ) {
             BlockPos caterpillarHeadPos = CaterpillarBlockUtil.getCaterpillarHeadPos(level, pos.relative(direction), direction);
 
-            if (CaterpillarBlockUtil.getConnectedCaterpillarBlockEntities(level, caterpillarHeadPos, new ArrayList<>()).stream().noneMatch(blockEntity -> blockEntity instanceof StorageBlockEntity)) {
+            if (CaterpillarBlockUtil.getConnectedCaterpillarBlockEntities(level, caterpillarHeadPos).stream().noneMatch(blockEntity -> blockEntity instanceof StorageBlockEntity)) {
                 if (CaterpillarBlockUtil.isConnectedCaterpillarSameDirection(level, pos, direction)) {
                     return defaultBlockState().setValue(FACING, direction).setValue(StorageBlock.PART, StoragePart.BASE).setValue(DrillHeadBlock.WATERLOGGED, fluidState.getType() == Fluids.WATER);
                 }
             } else {
-                context.getPlayer().displayClientMessage(Component.translatable("block.simplycaterpillar.blocks.already_connected", BlocksRegistry.STORAGE.getRegisteredName()), true);
+                context.getPlayer().displayClientMessage(Component.translatable("item.simplycaterpillar.blocks.already_connected", BlocksRegistry.STORAGE.getRegisteredName()), true);
             }
         }
 

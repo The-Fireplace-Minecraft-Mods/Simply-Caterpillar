@@ -1,11 +1,13 @@
 package dev.the_fireplace.caterpillar.block;
 
+import dev.architectury.registry.menu.MenuRegistry;
 import dev.the_fireplace.caterpillar.block.entity.IncineratorBlockEntity;
 import dev.the_fireplace.caterpillar.block.util.CaterpillarBlockUtil;
 import dev.the_fireplace.caterpillar.registry.BlocksRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
@@ -35,7 +37,8 @@ public class IncineratorBlock extends DrillBaseBlock {
     protected void openContainer(Level level, BlockPos pos, Player player) {
         BlockEntity blockEntity = level.getBlockEntity(pos);
         if (blockEntity instanceof IncineratorBlockEntity incineratorBlockEntity) {
-            player.openMenu(incineratorBlockEntity);
+//            player.openMenu(incineratorBlockEntity);
+            MenuRegistry.openExtendedMenu((ServerPlayer) player, incineratorBlockEntity);
         }
     }
 
@@ -47,12 +50,12 @@ public class IncineratorBlock extends DrillBaseBlock {
 
         BlockPos caterpillarHeadPos = CaterpillarBlockUtil.getCaterpillarHeadPos(level, blockPos.relative(direction), direction);
 
-        if (CaterpillarBlockUtil.getConnectedCaterpillarBlockEntities(level, caterpillarHeadPos, new ArrayList<>()).stream().noneMatch(blockEntity -> blockEntity instanceof IncineratorBlockEntity)) {
+        if (CaterpillarBlockUtil.getConnectedCaterpillarBlockEntities(level, caterpillarHeadPos).stream().noneMatch(blockEntity -> blockEntity instanceof IncineratorBlockEntity)) {
             if (CaterpillarBlockUtil.isConnectedCaterpillarSameDirection(level, blockPos, direction)) {
                 return super.getStateForPlacement(context);
             }
         } else {
-            context.getPlayer().displayClientMessage(Component.translatable("block.simplycaterpillar.blocks.already_connected", BlocksRegistry.INCINERATOR.get().getName()), true);
+            context.getPlayer().displayClientMessage(Component.translatable("item.simplycaterpillar.blocks.already_connected", BlocksRegistry.INCINERATOR.get().getName()), true);
         }
 
         return null;
