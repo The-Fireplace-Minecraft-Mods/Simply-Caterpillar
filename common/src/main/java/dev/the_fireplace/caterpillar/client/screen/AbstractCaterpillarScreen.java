@@ -2,17 +2,14 @@ package dev.the_fireplace.caterpillar.client.screen;
 
 import com.google.common.collect.Lists;
 import dev.architectury.networking.NetworkManager;
-import dev.architectury.registry.menu.MenuRegistry;
-import dev.the_fireplace.caterpillar.block.entity.DrillBaseBlockEntity;
 import dev.the_fireplace.caterpillar.client.screen.util.ScreenTabs;
 import dev.the_fireplace.caterpillar.client.screen.widget.TabButton;
 import dev.the_fireplace.caterpillar.client.screen.widget.TutorialButton;
 import dev.the_fireplace.caterpillar.inventory.AbstractCaterpillarMenu;
-import io.netty.buffer.Unpooled;
+import dev.the_fireplace.caterpillar.network.packet.OpenTabMenuPacket;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 
@@ -100,15 +97,8 @@ public abstract class AbstractCaterpillarScreen<T extends AbstractCaterpillarMen
                     this.topPos + TAB_Y + incrementTab * TabButton.TAB_HEIGHT,
                     this.currentTab == tab,
                     button -> {
-                        this.minecraft.player.closeContainer();
-                        // Should be called on the server side
-                        // MenuRegistry.openExtendedMenu(this.minecraft.player, this.menu.getConnectedBlockEntity(tab.BLOCK));
-                        DrillBaseBlockEntity tabBlockEntity = this.menu.getConnectedBlockEntity(tab.BLOCK);
-
-                        FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
-                        buf.writeBlockPos(tabBlockEntity.getBlockPos());
-
-//                        NetworkManager.sendToServer(, buf);
+                        //this.minecraft.player.closeContainer();
+                        NetworkManager.sendToServer(new OpenTabMenuPacket(tab, this.menu.blockEntity.getBlockPos()));
                     },
                     tab.STACK
                 );

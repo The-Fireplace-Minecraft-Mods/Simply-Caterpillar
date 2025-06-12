@@ -55,6 +55,30 @@ public class CaterpillarBlockUtil {
                 !block.equals(Blocks.LAVA);
     }
 
+    public static DrillBaseBlock getConnectedCaterpillarBlock(Level level, BlockPos blockPos, Block blockToFind) {
+        List<DrillBaseBlock> connectedBlocks = getConnectedCaterpillarBlocks(level, blockPos);
+
+        for (DrillBaseBlock block : connectedBlocks) {
+            if (block.equals(blockToFind)) {
+                return block;
+            }
+        }
+
+        return null;
+    }
+
+    public static DrillBaseBlockEntity getConnectedCaterpillarBlockEntity(Level level, BlockPos pos, Block blockToFind) {
+        List<DrillBaseBlockEntity> connectedEntities = getConnectedCaterpillarBlockEntities(level, pos);
+
+        for (DrillBaseBlockEntity entity : connectedEntities) {
+            if (entity.getBlockState().getBlock().equals(blockToFind)) {
+                return entity;
+            }
+        }
+
+        return null;
+    }
+
     public static List<DrillBaseBlock> getConnectedCaterpillarBlocks(Level level, BlockPos pos) {
         List<DrillBaseBlock> result = new ArrayList<>();
 
