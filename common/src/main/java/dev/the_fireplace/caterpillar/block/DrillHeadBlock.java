@@ -1,5 +1,6 @@
 package dev.the_fireplace.caterpillar.block;
 
+import dev.architectury.registry.menu.MenuRegistry;
 import dev.the_fireplace.caterpillar.block.entity.DrillBaseBlockEntity;
 import dev.the_fireplace.caterpillar.block.entity.DrillHeadBlockEntity;
 import dev.the_fireplace.caterpillar.block.util.CaterpillarBlockUtil;
@@ -8,6 +9,7 @@ import dev.the_fireplace.caterpillar.registry.BlocksRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -143,6 +145,15 @@ public class DrillHeadBlock extends DrillBaseBlock {
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
         builder.add(DrillHeadBlock.PART, DrillHeadBlock.DRILLING);
+    }
+
+    @Override
+    protected void openContainer(Level level, BlockPos pos, BlockState state, Player player) {
+        BlockEntity blockEntity = level.getBlockEntity(pos);
+
+        if (blockEntity instanceof DrillHeadBlockEntity drillHeadBlockEntity) {
+            MenuRegistry.openExtendedMenu((ServerPlayer) player, drillHeadBlockEntity);
+        }
     }
 
     @Override

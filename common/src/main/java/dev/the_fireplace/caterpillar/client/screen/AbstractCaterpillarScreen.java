@@ -70,7 +70,7 @@ public abstract class AbstractCaterpillarScreen<T extends AbstractCaterpillarMen
 
         super.render(guiGraphics, mouseX, mouseY, partialTick);
 
-        this.renderTooltipTabButtons(guiGraphics, mouseX, mouseY);
+        this.renderTooltipTabButtons(guiGraphics);
     }
 
     @Override
@@ -97,7 +97,6 @@ public abstract class AbstractCaterpillarScreen<T extends AbstractCaterpillarMen
                     this.topPos + TAB_Y + incrementTab * TabButton.TAB_HEIGHT,
                     this.currentTab == tab,
                     button -> {
-                        //this.minecraft.player.closeContainer();
                         NetworkManager.sendToServer(new OpenTabMenuPacket(tab, this.menu.blockEntity.getBlockPos()));
                     },
                     tab.STACK
@@ -146,7 +145,7 @@ public abstract class AbstractCaterpillarScreen<T extends AbstractCaterpillarMen
         }
     }
 
-    private void renderTooltipTabButtons(GuiGraphics graphics, int mouseX, int mouseY) {
+    private void renderTooltipTabButtons(GuiGraphics graphics) {
         int incrementTab  = 0;
 
         for (TabButton tabButton : this.tabButtons) {

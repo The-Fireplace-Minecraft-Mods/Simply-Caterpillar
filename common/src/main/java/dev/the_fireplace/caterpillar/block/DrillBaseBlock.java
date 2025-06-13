@@ -1,11 +1,14 @@
 package dev.the_fireplace.caterpillar.block;
 
 import com.mojang.serialization.MapCodec;
+import dev.architectury.registry.menu.MenuRegistry;
 import dev.the_fireplace.caterpillar.block.entity.DrillBaseBlockEntity;
+import dev.the_fireplace.caterpillar.block.entity.DrillHeadBlockEntity;
 import dev.the_fireplace.caterpillar.block.util.CaterpillarBlockUtil;
-import dev.the_fireplace.caterpillar.registry.BlockEntityTypesRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -60,14 +63,23 @@ public class DrillBaseBlock extends BaseEntityBlock implements SimpleWaterlogged
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
         if (!level.isClientSide) {
-            this.openContainer(level, pos, player);
+            this.openContainer(level, pos, state, player);
         }
 
         return InteractionResult.SUCCESS;
     }
 
-    protected void openContainer(Level level, BlockPos pos, Player player) {
+    protected void openContainer(Level level, BlockPos pos, BlockState state, Player player) {
+        Direction direction = state.getValue(FACING);
+        BlockPos basePos = this.getBasePos(state, pos);
+        BlockPos caterpillarHeadPos = CaterpillarBlockUtil.getCaterpillarHeadPos(level, basePos, direction);
 
+        BlockEntity blockEntity = level.getBlockEntity(caterpillarHeadPos);
+        if (blockEntity instanceof DrillHeadBlockEntity drillHeadBlockEntity) {
+            MenuRegistry.openExtendedMenu((ServerPlayer)  player, drillHeadBlockEntity);
+        } else {
+            player.displayClientMessage(Component.translatable("item.simplycaterpillar.drill_head.not_found"), true);
+        }
     }
 
     @Override

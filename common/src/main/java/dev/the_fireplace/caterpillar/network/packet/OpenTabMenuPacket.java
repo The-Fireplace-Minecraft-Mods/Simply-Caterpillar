@@ -8,6 +8,7 @@ import dev.the_fireplace.caterpillar.block.util.CaterpillarBlockUtil;
 import dev.the_fireplace.caterpillar.client.screen.util.ScreenTabs;
 import dev.the_fireplace.caterpillar.network.NetworkRegistry;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
@@ -15,8 +16,9 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+
+import static dev.the_fireplace.caterpillar.block.DrillBaseBlock.FACING;
 
 public class OpenTabMenuPacket implements CustomPacketPayload {
     public static final ResourceLocation PACKET_ID = Constants.getId("caterpillar.open_menu_c2s");
@@ -51,8 +53,11 @@ public class OpenTabMenuPacket implements CustomPacketPayload {
 
         if (player instanceof ServerPlayer serverPlayer) {
             Level level = serverPlayer.level();
+            BlockState blockState = level.getBlockState(packet.blockPos);
+            Direction direction = blockState.getValue(FACING);
 
-            DrillBaseBlockEntity blockEntity = CaterpillarBlockUtil.getConnectedCaterpillarBlockEntity(level, packet.blockPos, packet.tab.BLOCK);
+            BlockPos caterpillarHeadPos = CaterpillarBlockUtil.getCaterpillarHeadPos(level, packet.blockPos, direction);
+            DrillBaseBlockEntity blockEntity = CaterpillarBlockUtil.getConnectedCaterpillarBlockEntity(level, caterpillarHeadPos, packet.tab.BLOCK);
 
             MenuRegistry.openExtendedMenu(serverPlayer, blockEntity);
         }

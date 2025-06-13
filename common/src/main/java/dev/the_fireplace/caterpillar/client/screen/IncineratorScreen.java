@@ -9,4 +9,10 @@ public class IncineratorScreen extends AbstractCaterpillarScreen<IncineratorMenu
     public IncineratorScreen(IncineratorMenu menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title, ScreenTabs.INCINERATOR);
     }
+
+    @Override
+    protected void init() {
+        super.init();
+        this.titleLabelX = (this.imageWidth - this.font.width(this.title)) / 2;
+    }
 }

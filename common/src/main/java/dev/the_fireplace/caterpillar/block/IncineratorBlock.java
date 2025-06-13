@@ -34,10 +34,9 @@ public class IncineratorBlock extends DrillBaseBlock {
     }
 
     @Override
-    protected void openContainer(Level level, BlockPos pos, Player player) {
+    protected void openContainer(Level level, BlockPos pos, BlockState state, Player player) {
         BlockEntity blockEntity = level.getBlockEntity(pos);
         if (blockEntity instanceof IncineratorBlockEntity incineratorBlockEntity) {
-//            player.openMenu(incineratorBlockEntity);
             MenuRegistry.openExtendedMenu((ServerPlayer) player, incineratorBlockEntity);
         }
     }

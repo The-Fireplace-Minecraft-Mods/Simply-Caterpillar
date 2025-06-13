@@ -77,10 +77,9 @@ public class TransporterBlock extends DrillBaseBlock {
     }
 
     @Override
-    protected void openContainer(Level level, BlockPos pos, Player player) {
+    protected void openContainer(Level level, BlockPos pos, BlockState state, Player player) {
         BlockEntity blockEntity = level.getBlockEntity(pos);
         if (blockEntity instanceof TransporterBlockEntity transporterBlockEntity) {
-//            player.openMenu(transporterBlockEntity);
             MenuRegistry.openExtendedMenu((ServerPlayer) player, transporterBlockEntity);
         }
     }

@@ -4,6 +4,7 @@ import dev.the_fireplace.caterpillar.block.DrillBaseBlock;
 import dev.the_fireplace.caterpillar.block.entity.DrillBaseBlockEntity;
 import dev.the_fireplace.caterpillar.block.util.CaterpillarBlockUtil;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
@@ -15,6 +16,8 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
 import java.util.*;
+
+import static dev.the_fireplace.caterpillar.block.DrillBaseBlock.FACING;
 
 public abstract class AbstractCaterpillarMenu extends AbstractContainerMenu {
 
@@ -33,10 +36,11 @@ public abstract class AbstractCaterpillarMenu extends AbstractContainerMenu {
     private static final int INVENTORY_SLOT_Y_START = 84;
 
     private final Container container;
-    private final ContainerData data;
-    private final Level level;
+    final ContainerData data;
+    protected final Level level;
 
     public final DrillBaseBlockEntity blockEntity;
+    private List<? extends DrillBaseBlock> connectedBlocks;
 
     protected AbstractCaterpillarMenu(MenuType<?> menuType, int containerId, Inventory playerInventory, FriendlyByteBuf extraData, int containerDataSize) {
         this(menuType, containerId, playerInventory, getBlockEntity(playerInventory, extraData), new SimpleContainerData(containerDataSize));
@@ -49,6 +53,8 @@ public abstract class AbstractCaterpillarMenu extends AbstractContainerMenu {
         this.container = blockEntity;
         this.data = data;
         this.level = playerInventory.player.level();
+
+        this.setConnectedBlocks();
 
         this.addStandardInventorySlots(playerInventory, INVENTORY_SLOT_X_START, INVENTORY_SLOT_Y_START);
         this.addSlots(container);
@@ -76,21 +82,19 @@ public abstract class AbstractCaterpillarMenu extends AbstractContainerMenu {
         return null;
     }
 
-    protected boolean isFuel(ItemStack stack) {
-        return this.level.fuelValues().isFuel(stack);
-    }
-
     protected abstract void addSlots(Container container);
 
     public List<? extends DrillBaseBlock> getConnectedBlocks() {
-       return CaterpillarBlockUtil.getConnectedCaterpillarBlocks(this.level, this.blockEntity.getBlockPos());
+      return this.connectedBlocks;
     }
 
-    public <T extends DrillBaseBlockEntity> T getConnectedBlockEntity(Block block) {
-        List<? extends DrillBaseBlockEntity> blockEntities = CaterpillarBlockUtil.getConnectedCaterpillarBlockEntities(this.level, this.blockEntity.getBlockPos());
+    private void setConnectedBlocks() {
+        if (this.connectedBlocks == null) {
+            BlockPos blockPos = this.blockEntity.getBlockPos();
+            Direction direction = this.blockEntity.getBlockState().getValue(FACING);
 
-        return (T) blockEntities.stream()
-                .filter(be -> be.getBlockState().getBlock() == block)
-                .findFirst().orElse(null);
+            BlockPos caterpillarHeadPos = CaterpillarBlockUtil.getCaterpillarHeadPos(this.level, blockPos, direction);
+            this.connectedBlocks = CaterpillarBlockUtil.getConnectedCaterpillarBlocks(this.level, caterpillarHeadPos);
+        }
     }
 }
