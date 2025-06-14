@@ -113,4 +113,15 @@ public class DrillHeadBlockEntity extends DrillBaseBlockEntity {
     public @Nullable AbstractContainerMenu createMenu(int containerId, Inventory playerInventory, Player player) {
         return new DrillHeadMenu(containerId, playerInventory, this, this.dataAccess);
     }
+
+    public void togglePower() {
+        if (this.powered) {
+            this.powered = false;
+        } else {
+            // TODO: Check if the drill head is lit before powering it on
+            this.powered = true;
+        }
+
+        this.setChanged();
+    }
 }

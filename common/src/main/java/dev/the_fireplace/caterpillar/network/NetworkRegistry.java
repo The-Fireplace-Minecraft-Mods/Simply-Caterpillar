@@ -6,6 +6,7 @@ import dev.architectury.platform.Platform;
 import dev.architectury.utils.Env;
 import dev.the_fireplace.caterpillar.Constants;
 import dev.the_fireplace.caterpillar.network.packet.OpenTabMenuPacket;
+import dev.the_fireplace.caterpillar.network.packet.TogglePowerPacket;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
@@ -15,9 +16,11 @@ import java.util.List;
 
 public class NetworkRegistry {
     public static final CustomPacketPayload.Type<OpenTabMenuPacket> OPEN_MENU_ID = new CustomPacketPayload.Type<>(Constants.getId("open_menu"));
+    public static final CustomPacketPayload.Type<TogglePowerPacket> TOGGLE_POWER_ID = new CustomPacketPayload.Type<>(Constants.getId("toggle_power"));
 
     public static void init() {
         registerC2S(OPEN_MENU_ID, OpenTabMenuPacket.STREAM_CODEC, OpenTabMenuPacket::handle);
+        registerC2S(TOGGLE_POWER_ID, TogglePowerPacket.STREAM_CODEC, TogglePowerPacket::handle);
     }
 
     private static <T extends CustomPacketPayload> void registerS2C(CustomPacketPayload.Type<T> packetType, StreamCodec<? super RegistryFriendlyByteBuf, T> codec, NetworkManager.NetworkReceiver<T> receiver) {

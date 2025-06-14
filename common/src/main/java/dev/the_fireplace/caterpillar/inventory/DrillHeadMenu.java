@@ -74,8 +74,4 @@ public class DrillHeadMenu extends AbstractCaterpillarMenu {
     public boolean isPowered() {
         return this.data.get(2) > 0;
     }
-
-    public void togglePower() {
-        this.data.set(2, this.isPowered() ? 0 : 1);
-    }
 }

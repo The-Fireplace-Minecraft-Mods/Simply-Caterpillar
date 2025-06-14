@@ -18,8 +18,7 @@ import java.util.List;
 public abstract class AbstractCaterpillarScreen<T extends AbstractCaterpillarMenu> extends AbstractContainerScreen<T> {
     public static final int SLOT_SIZE = 18;
 
-    public static final int TAB_X_SELECTED = -28;
-    public static final int TAB_X_UNSELECTED = -30;
+    public static final int TAB_X = -30;
     public static final int TAB_Y = 3;
     public static final int TAB_BG_X_OFFSET = -2;
     public static final int TAB_BG_Y_OFFSET = TabButton.TAB_HEIGHT;
@@ -39,20 +38,20 @@ public abstract class AbstractCaterpillarScreen<T extends AbstractCaterpillarMen
     private final List<TabButton> tabButtons = Lists.newArrayList();
     private TutorialButton tutorialButton;
 
-    private ScreenTabs currentTab;
+    private ScreenTabs screenTab;
+    private TabButton selectedTab;
 
-    public AbstractCaterpillarScreen(T menu, Inventory playerInventory, Component title, ScreenTabs currentTab) {
+    public AbstractCaterpillarScreen(T menu, Inventory playerInventory, Component title, ScreenTabs screenTab) {
         super(menu, playerInventory, title);
-        this.currentTab = currentTab;
+        this.screenTab = screenTab;
     }
 
     @Override
     protected void init() {
         super.init();
 
-        // this.tabButtons.clear();
-
         this.addTabButtons();
+
         this.addTutorialButton();
     }
 
@@ -66,21 +65,17 @@ public abstract class AbstractCaterpillarScreen<T extends AbstractCaterpillarMen
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
         this.renderBackground(guiGraphics, mouseX, mouseY, partialTick);
 
-        this.renderTabItems(guiGraphics);
-
         super.render(guiGraphics, mouseX, mouseY, partialTick);
-
-        this.renderTooltipTabButtons(guiGraphics);
     }
 
     @Override
     protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
         graphics.blit(
             RenderType::guiTextured,
-            this.currentTab.TEXTURE,
+            this.screenTab.TEXTURE,
             this.leftPos, this.topPos,
             0.0F, 0.0F,
-            this.currentTab.IMAGE_WIDTH, this.currentTab.IMAGE_HEIGHT,
+            this.screenTab.IMAGE_WIDTH, this.screenTab.IMAGE_HEIGHT,
             BACKGROUND_TEXTURE_WIDTH, BACKGROUND_TEXTURE_HEIGHT
         );
     }
@@ -89,16 +84,11 @@ public abstract class AbstractCaterpillarScreen<T extends AbstractCaterpillarMen
         int incrementTab = 0;
 
         for (ScreenTabs tab : ScreenTabs.values()) {
-            boolean isCurrentTab = this.currentTab == tab;
-
             if (shouldTabBeRendered(tab)) {
                 TabButton tabButton = new TabButton(
-                    this.leftPos + (isCurrentTab ? TAB_X_SELECTED : TAB_X_UNSELECTED),
+                    this.leftPos + TAB_X,
                     this.topPos + TAB_Y + incrementTab * TabButton.TAB_HEIGHT,
-                    this.currentTab == tab,
-                    button -> {
-                        NetworkManager.sendToServer(new OpenTabMenuPacket(tab, this.menu.blockEntity.getBlockPos()));
-                    },
+                    this.screenTab == tab,
                     tab.STACK
                 );
 
@@ -128,32 +118,22 @@ public abstract class AbstractCaterpillarScreen<T extends AbstractCaterpillarMen
         return this.menu.getConnectedBlocks().contains(tab.BLOCK);
     }
 
-    private void renderTabItems(GuiGraphics graphics) {
-        int incrementTab = 0;
+    @Override
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        if (!this.minecraft.player.isSpectator()) {
+            for (TabButton tabButton: this.tabButtons) {
+                if (tabButton.mouseClicked(mouseX, mouseY, button)) {
+                    if (this.selectedTab != tabButton) {
+                        NetworkManager.sendToServer(new OpenTabMenuPacket(ScreenTabs.getTabByStack(tabButton.icon), this.menu.blockEntity.getBlockPos()));
+                    }
 
-        for (ScreenTabs tab : ScreenTabs.values()) {
-            boolean isCurrentTab = this.currentTab == tab;
-
-            if (shouldTabBeRendered(tab)) {
-                graphics.renderItem(tab.STACK,
-                    this.leftPos + (isCurrentTab ? TAB_ITEM_X_SELECTED : TAB_ITEM_X),
-                    this.topPos + TAB_ITEM_Y + incrementTab * TabButton.TAB_HEIGHT
-                );
-
-                incrementTab++;
-            }
-        }
-    }
-
-    private void renderTooltipTabButtons(GuiGraphics graphics) {
-        int incrementTab  = 0;
-
-        for (TabButton tabButton : this.tabButtons) {
-            if (tabButton.isHoveredOrFocused()) {
-                tabButton.renderTooltip(graphics, this.font, this.leftPos, this.topPos + TAB_Y + (incrementTab * TabButton.TAB_HEIGHT) + (TabButton.TAB_HEIGHT / 2) + 8);
+                    return true;
+                }
             }
 
-            incrementTab++;
+            return false;
+        } else {
+            return false;
         }
     }
 }

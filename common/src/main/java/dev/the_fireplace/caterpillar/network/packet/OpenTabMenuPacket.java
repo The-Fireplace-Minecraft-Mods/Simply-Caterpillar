@@ -12,7 +12,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -21,8 +20,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import static dev.the_fireplace.caterpillar.block.DrillBaseBlock.FACING;
 
 public class OpenTabMenuPacket implements CustomPacketPayload {
-    public static final ResourceLocation PACKET_ID = Constants.getId("caterpillar.open_menu_c2s");
-
     private final ScreenTabs tab;
     private final BlockPos blockPos;
 

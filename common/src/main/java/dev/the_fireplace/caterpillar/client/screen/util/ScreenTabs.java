@@ -33,4 +33,13 @@ public enum ScreenTabs {
         this.BLOCK = block;
         this.STACK = new ItemStack(item);
     }
+
+    public static ScreenTabs getTabByStack(ItemStack stack) {
+        for (ScreenTabs tab : values()) {
+            if (tab.STACK.getItem() == stack.getItem()) {
+                return tab;
+            }
+        }
+        return null;
+    }
 }
