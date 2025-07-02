@@ -1,9 +1,14 @@
 package dev.the_fireplace.caterpillar.block.entity;
 
+import dev.the_fireplace.caterpillar.block.CollectorBlock;
 import dev.the_fireplace.caterpillar.registry.BlockEntityTypesRegistry;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.phys.AABB;
 
 import java.util.List;
@@ -16,12 +21,20 @@ public class CollectorBlockEntity extends DrillBaseBlockEntity {
         super(BlockEntityTypesRegistry.COLLECTOR.get(), pos, state, INVENTORY_SIZE);
     }
 
-    public void move() {
+    @Override
+    public void move(Level level, BlockState state, BlockPos basePos, BlockPos nextBasePos, Direction direction) {
+        super.move(level, state, basePos, nextBasePos, direction);
+        level.setBlockAndUpdate(nextBasePos.below(), state.setValue(CollectorBlock.HALF, DoubleBlockHalf.LOWER));
+        level.removeBlock(basePos.below(), false);
 
+        BlockEntity newBlockEntity = level.getBlockEntity(nextBasePos);
+        if (newBlockEntity instanceof CollectorBlockEntity collector) {
+            collector.collect();
+        }
     }
 
     private void collect() {
-
+        // TODO: implement item drops collect logic
     }
 
     public List<ItemEntity> getItemsAround() {

@@ -5,10 +5,12 @@ import dev.the_fireplace.caterpillar.block.entity.DrillBaseBlockEntity;
 import dev.the_fireplace.caterpillar.block.entity.DrillHeadBlockEntity;
 import dev.the_fireplace.caterpillar.block.util.CaterpillarBlockUtil;
 import dev.the_fireplace.caterpillar.block.util.DrillHeadPart;
+import dev.the_fireplace.caterpillar.registry.BlockEntityTypesRegistry;
 import dev.the_fireplace.caterpillar.registry.BlocksRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -18,6 +20,8 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
@@ -211,6 +215,15 @@ public class DrillHeadBlock extends DrillBaseBlock {
         buildStructure(level, pos, state);
     }
 
+    @Override
+    public @Nullable <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> blockEntityType) {
+        if (level.isClientSide()) {
+            return null;
+        }
+
+        return createTickerHelper(blockEntityType, BlockEntityTypesRegistry.DRILL_HEAD.get(), DrillHeadBlockEntity::serverTick);
+    }
+
     private void dropContents(Level level, BlockPos pos) {
         BlockEntity blockEntity = level.getBlockEntity(pos);
         if (blockEntity instanceof DrillBaseBlockEntity caterpillarBlockEntity) {
@@ -245,10 +258,8 @@ public class DrillHeadBlock extends DrillBaseBlock {
         level.destroyBlock(pos.relative(direction).below().relative(direction.getClockWise()), false);
     }
 
-    public static void removeStructure(Level level, BlockPos pos, BlockState state) {
-        Direction direction = state.getValue(FACING);
-
-        level.removeBlock(pos, false);
+    public static void removeStructure(Level level, BlockPos pos, BlockState state, Direction direction) {
+        // level.removeBlock(pos, false);
         level.removeBlock(pos.relative(direction).relative(direction.getCounterClockWise()), false);
         level.removeBlock(pos.relative(direction).relative(direction.getClockWise()), false);
         level.removeBlock(pos.relative(direction).above(), false);
@@ -258,7 +269,6 @@ public class DrillHeadBlock extends DrillBaseBlock {
         level.removeBlock(pos.relative(direction).below().relative(direction.getCounterClockWise()), false);
         level.removeBlock(pos.relative(direction).below().relative(direction.getClockWise()), false);
     }
-
 
     public static void buildStructure(Level level, BlockPos pos, BlockState state) {
         Direction direction = state.getValue(FACING);
@@ -290,9 +300,7 @@ public class DrillHeadBlock extends DrillBaseBlock {
         }
     }
 
-    public static void moveStructure(Level level, BlockPos pos, BlockState state) {
-        Direction direction = state.getValue(FACING);
-
+    public static void moveStructure(Level level, BlockPos pos, BlockState state, Direction direction) {
         level.setBlockAndUpdate(pos.relative(direction).below(), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BIT_BOTTOM));
         level.setBlockAndUpdate(pos.relative(direction).below().relative(direction.getCounterClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BIT_BOTTOM_LEFT));
         level.setBlockAndUpdate(pos.relative(direction).below().relative(direction.getClockWise()), state.setValue(DrillHeadBlock.PART, DrillHeadPart.BIT_BOTTOM_RIGHT));

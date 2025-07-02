@@ -5,11 +5,14 @@ import dev.the_fireplace.caterpillar.block.TransporterBlock;
 import dev.the_fireplace.caterpillar.inventory.TransporterMenu;
 import dev.the_fireplace.caterpillar.registry.BlockEntityTypesRegistry;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.SimpleContainerData;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import org.jetbrains.annotations.Nullable;
@@ -27,9 +30,28 @@ public class TransporterBlockEntity extends DrillBaseBlockEntity {
     }
 
     @Override
-    public void move() {}
+    public void move(Level level, BlockState state, BlockPos basePos, BlockPos nextBasePos, Direction direction) {
+        super.move(level, state, basePos, nextBasePos, direction);
+        if (hasMinecartChest()) {
+            this.moveMultiblock(level, state, basePos, nextBasePos);
+        }
 
-    private void transport() {}
+        BlockEntity newBlockEntity = level.getBlockEntity(nextBasePos);
+        if (newBlockEntity instanceof TransporterBlockEntity transporter) {
+            transporter.transport();
+        }
+    }
+
+    private void moveMultiblock(Level level, BlockState state, BlockPos basePos, BlockPos nextBasePos) {
+        level.setBlockAndUpdate(nextBasePos.below(), state.setValue(TransporterBlock.HALF, DoubleBlockHalf.LOWER));
+        level.removeBlock(basePos.below(), false);
+
+        // TODO: put back the previous block (like rail)
+    }
+
+    private void transport() {
+        // TODO: implement items transport logic
+    }
 
     public boolean hasMinecartChest() {
         BlockState belowState = level.getBlockState(this.getBlockPos().below());

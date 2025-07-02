@@ -1,26 +1,13 @@
 package dev.the_fireplace.caterpillar.block.entity;
 
 import dev.the_fireplace.caterpillar.Constants;
-import dev.the_fireplace.caterpillar.block.ReinforcementBlock;
-import dev.the_fireplace.caterpillar.block.util.CaterpillarBlockUtil;
 import dev.the_fireplace.caterpillar.block.util.Replacement;
 import dev.the_fireplace.caterpillar.registry.BlockEntityTypesRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.nbt.ByteArrayTag;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.SimpleContainerData;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -30,9 +17,7 @@ import java.util.List;
 
 public class ReinforcementBlockEntity extends DrillBaseBlockEntity {
 
-    public static final Component TITLE = Component.translatable(
-            "container." + Constants.MOD_ID + ".reinforcement"
-    );
+    public static final Component TITLE = Component.translatable("container." + Constants.MOD_ID + ".reinforcement");
 
     public static final int REINFORCEMENT_SLOT_CEILING_START = 0;
 
@@ -80,6 +65,8 @@ public class ReinforcementBlockEntity extends DrillBaseBlockEntity {
             this.replacers.add(new byte[Replacement.values().length]);
         }
 
+        // TODO: refactor this to use data tags fields instead of hardcoded indices
+
         this.replacers.get(REPLACER_CEILING)[Replacement.WATER.INDEX] = 1;
         this.replacers.get(REPLACER_CEILING)[Replacement.LAVA.INDEX] = 1;
         this.replacers.get(REPLACER_CEILING)[Replacement.FALLING_BLOCKS.INDEX] = 1;
@@ -103,6 +90,33 @@ public class ReinforcementBlockEntity extends DrillBaseBlockEntity {
         this.replacers.get(REPLACER_FLOOR)[Replacement.FALLING_BLOCKS.INDEX] = 0;
         this.replacers.get(REPLACER_FLOOR)[Replacement.AIR.INDEX] = 1;
         this.replacers.get(REPLACER_FLOOR)[Replacement.ALL.INDEX] = 0;
+    }
+
+    @Override
+    public void move(Level level, BlockState state, BlockPos basePos, BlockPos nextBasePos, Direction direction) {
+        super.move(level, state, basePos, nextBasePos, direction);
+        this.moveStructure(level, state, basePos, nextBasePos, direction);
+
+        BlockEntity newBlockEntity = level.getBlockEntity(nextBasePos);
+        if (newBlockEntity instanceof ReinforcementBlockEntity reinforcement) {
+            reinforcement.reinforce();
+        }
+    }
+
+    private void moveStructure(Level level, BlockState state, BlockPos basePos, BlockPos nextBasePos, Direction direction) {
+        level.setBlockAndUpdate(nextBasePos.relative(direction.getCounterClockWise()), level.getBlockState(basePos.relative(direction.getCounterClockWise())));
+        level.setBlockAndUpdate(nextBasePos.relative(direction.getClockWise()), level.getBlockState(basePos.relative(direction.getClockWise())));
+        level.setBlockAndUpdate(nextBasePos.above(), level.getBlockState(basePos.above()));
+        level.setBlockAndUpdate(nextBasePos.below(), level.getBlockState(basePos.below()));
+
+        level.removeBlock(basePos.relative(direction.getCounterClockWise()), false);
+        level.removeBlock(basePos.relative(direction.getClockWise()), false);
+        level.removeBlock(basePos.above(), false);
+        level.removeBlock(basePos.below(), false);
+    }
+
+    private void reinforce() {
+        // TODO: implement reinforcement logic
     }
 
     @Override

@@ -130,10 +130,8 @@ public abstract class AbstractCaterpillarScreen<T extends AbstractCaterpillarMen
                     return true;
                 }
             }
-
-            return false;
-        } else {
-            return false;
         }
+
+        return super.mouseClicked(mouseX, mouseY, button);
     }
 }

@@ -4,12 +4,15 @@ import dev.the_fireplace.caterpillar.Constants;
 import dev.the_fireplace.caterpillar.inventory.IncineratorMenu;
 import dev.the_fireplace.caterpillar.registry.BlockEntityTypesRegistry;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
 public class IncineratorBlockEntity extends DrillBaseBlockEntity {
@@ -32,6 +35,22 @@ public class IncineratorBlockEntity extends DrillBaseBlockEntity {
         this.setItem(2, new ItemStack(Blocks.RED_SAND));
         this.setItem(3, new ItemStack(Blocks.COBBLESTONE));
         this.setItem(4, new ItemStack(Blocks.DIRT));
+    }
+
+    @Override
+    public void move(Level level, BlockState state, BlockPos basePos, BlockPos nextBasePos, Direction direction) {
+        super.move(level, state, basePos, nextBasePos, direction);
+
+        BlockEntity newBlockEntity = level.getBlockEntity(nextBasePos);
+        if (newBlockEntity instanceof IncineratorBlockEntity incinerator) {
+            incinerator.incinerate();
+        }
+    }
+
+    private void incinerate() {
+        // TODO: implement items incineration logic
+
+        // TODO: randomly (5% chance) play custom sound of incineration
     }
 
     @Override

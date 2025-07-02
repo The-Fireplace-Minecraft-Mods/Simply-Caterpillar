@@ -1,12 +1,9 @@
 package dev.the_fireplace.caterpillar.block.entity;
 
-import dev.the_fireplace.caterpillar.block.DrillHeadBlock;
 import dev.the_fireplace.caterpillar.entity.SeatEntity;
 import dev.the_fireplace.caterpillar.registry.BlockEntityTypesRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
@@ -22,14 +19,8 @@ public class DrillSeatBlockEntity extends DrillBaseBlockEntity {
     }
 
     @Override
-    public void move() {
-        Level level = this.getLevel();
-        BlockPos basePos = this.getBlockPos();
-        BlockState state = this.getBlockState();
-        Direction direction = state.getValue(DrillHeadBlock.FACING);
-        BlockPos nextBasePos = basePos.relative(direction);
-
-        level.setBlockAndUpdate(nextBasePos, state);
+    public void move(Level level, BlockState state, BlockPos basePos, BlockPos nextBasePos, Direction direction) {
+        super.move(level, state, basePos, nextBasePos, direction);
 
         // Move seat entity to the new position
         List<SeatEntity> seats = level.getEntitiesOfClass(SeatEntity.class, new AABB(basePos.getX(), basePos.getY(), basePos.getZ(), basePos.getX()+ 1.0, basePos.getY() + 1.0, basePos.getZ() + 1.0));
@@ -37,9 +28,5 @@ public class DrillSeatBlockEntity extends DrillBaseBlockEntity {
             SeatEntity seat = seats.getFirst();
             seat.setPos(nextBasePos.getX() + 0.5, nextBasePos.getY() + 0.4, nextBasePos.getZ() + 0.5);
         }
-
-        level.removeBlock(basePos, false);
-
-        level.playSound(null, basePos, SoundEvents.PISTON_EXTEND, SoundSource.BLOCKS, 1.0F, 1.0F);
     }
 }

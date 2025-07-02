@@ -6,14 +6,19 @@ import dev.the_fireplace.caterpillar.block.util.CaterpillarBlockUtil;
 import dev.the_fireplace.caterpillar.registry.BlockEntityTypesRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
@@ -44,7 +49,35 @@ public class DrillBaseBlockEntity extends InventoryBlockEntity implements Extend
         return null;
     }
 
-    public void move() { }
+    void move() {
+        Level level = this.getLevel();
+        BlockState state = this.getBlockState();
+        Direction direction = state.getValue(FACING);
+        BlockPos basePos = this.getBlockPos();
+        BlockPos nextBasePos = basePos.relative(direction);
+
+        this.move(level, state, basePos, nextBasePos, direction);
+
+        level.playSound(null, basePos, SoundEvents.PISTON_EXTEND, SoundSource.BLOCKS, 1.0F, 1.0F);
+    }
+
+    public void move(Level level, BlockState state, BlockPos basePos, BlockPos nextBasePos, Direction direction) {
+        CompoundTag tag = new CompoundTag();
+        this.saveAdditional(tag, level.registryAccess());
+
+        level.removeBlockEntity(basePos);
+        this.setRemoved();
+
+        level.setBlockAndUpdate(nextBasePos, state);
+
+        BlockEntity newBlockEntity = level.getBlockEntity(nextBasePos);
+        if (newBlockEntity instanceof DrillBaseBlockEntity newDrillBaseBlockEntity) {
+            newDrillBaseBlockEntity.loadAdditional(tag, level.registryAccess());
+            newDrillBaseBlockEntity.setChanged();
+        }
+
+        level.removeBlock(basePos, false);
+    }
 
     protected boolean takeItemFromCaterpillarConsumption(Item item) {
         if (item.equals(Items.AIR)) {

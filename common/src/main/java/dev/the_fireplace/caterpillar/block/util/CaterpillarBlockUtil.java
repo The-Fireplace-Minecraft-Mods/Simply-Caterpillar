@@ -55,6 +55,11 @@ public class CaterpillarBlockUtil {
                 !block.equals(Blocks.LAVA);
     }
 
+    public static boolean isBlockBreakable(Level level, BlockPos pos, BlockState state) {
+        return state.getDestroySpeed(level, pos) >= 0;
+    }
+
+
     public static DrillBaseBlock getConnectedCaterpillarBlock(Level level, BlockPos blockPos, Block blockToFind) {
         List<DrillBaseBlock> connectedBlocks = getConnectedCaterpillarBlocks(level, blockPos);
 
