@@ -9,6 +9,7 @@ public final class CaterpillarFabricClient implements ClientModInitializer {
     public void onInitializeClient() {
         CaterpillarClient.init();
 
+        // Only for Fabric, we need to initialize block render layers here
         BlockRenderLayers.init();
     }
 }
