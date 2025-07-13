@@ -12,7 +12,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
 import java.util.*;
@@ -27,10 +26,11 @@ public abstract class AbstractCaterpillarMenu extends AbstractContainerMenu {
     public static final int PLAYER_INVENTORY_COLUMN_COUNT = 9;
     public static final int PLAYER_INVENTORY_SLOT_COUNT = PLAYER_INVENTORY_COLUMN_COUNT * PLAYER_INVENTORY_ROW_COUNT;
     public static final int VANILLA_SLOT_COUNT = HOTBAR_SLOT_COUNT + PLAYER_INVENTORY_SLOT_COUNT;
-    public static final int VANILLA_FIRST_SLOT_INDEX = 0;
-    public static final int BE_INVENTORY_FIRST_SLOT_INDEX = VANILLA_FIRST_SLOT_INDEX + VANILLA_SLOT_COUNT;
-
-    // private final int BE_INVENTORY_SLOT_COUNT;
+    public static final int VANILLA_SLOT_START_INDEX = 0;
+    public static final int VANILLA_SLOT_END_INDEX = VANILLA_SLOT_START_INDEX + VANILLA_SLOT_COUNT;
+    public static final int BE_INVENTORY_SLOT_START_INDEX = VANILLA_SLOT_START_INDEX + VANILLA_SLOT_COUNT;
+    private final int BE_INVENTORY_SLOT_COUNT;
+    private final int BE_INVENTORY_SLOT_END_INDEX;
 
     private static final int INVENTORY_SLOT_X_START = 8;
     private static final int INVENTORY_SLOT_Y_START = 84;
@@ -53,6 +53,9 @@ public abstract class AbstractCaterpillarMenu extends AbstractContainerMenu {
         this.container = blockEntity;
         this.data = data;
         this.level = playerInventory.player.level();
+
+        this.BE_INVENTORY_SLOT_COUNT = this.container.getContainerSize();
+        this.BE_INVENTORY_SLOT_END_INDEX = BE_INVENTORY_SLOT_START_INDEX + this.BE_INVENTORY_SLOT_COUNT;
 
         this.setConnectedBlocks();
 
@@ -79,7 +82,33 @@ public abstract class AbstractCaterpillarMenu extends AbstractContainerMenu {
 
     @Override
     public ItemStack quickMoveStack(Player player, int index) {
-        return null;
+        ItemStack itemStack = ItemStack.EMPTY;
+        Slot slot = this.slots.get(index);
+
+        if (slot.hasItem()) {
+            ItemStack stackInSlot = slot.getItem();
+            itemStack = stackInSlot.copy();
+
+            // Check if the slot clicked is one of the vanilla container slots
+            if (index < VANILLA_SLOT_END_INDEX) {
+                // This is a vanilla slot so merge the stack into the BE inventory
+                if (!this.moveItemStackTo(stackInSlot, BE_INVENTORY_SLOT_START_INDEX, BE_INVENTORY_SLOT_END_INDEX, false)) return ItemStack.EMPTY;
+            } else if (index < BE_INVENTORY_SLOT_END_INDEX) {
+                // This is a BE slot so merge the stack into the player inventory
+                if (!this.moveItemStackTo(stackInSlot, VANILLA_SLOT_START_INDEX, VANILLA_SLOT_END_INDEX, false)) return ItemStack.EMPTY;
+            }
+
+            // If the entire stack is being moved, clear the slot
+            if (stackInSlot.isEmpty()) {
+                slot.setByPlayer(ItemStack.EMPTY);
+            } else {
+                slot.setChanged();
+            }
+
+            slot.onTake(player, stackInSlot);
+        }
+
+        return itemStack;
     }
 
     protected abstract void addSlots(Container container);
