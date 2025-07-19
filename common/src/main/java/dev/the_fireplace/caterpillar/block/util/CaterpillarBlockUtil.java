@@ -8,6 +8,8 @@ import dev.the_fireplace.caterpillar.block.entity.StorageBlockEntity;
 import dev.the_fireplace.caterpillar.registry.BlocksRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.Container;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -185,7 +187,7 @@ public class CaterpillarBlockUtil {
         return true;
     }
 
-    public static List<? extends DrillBaseBlockEntity> getConnectedDrillHeadAndStorageBlockEntities(Level level, BlockPos pos, Direction direction) {
+    public static List<DrillBaseBlockEntity> getStorages(Level level, BlockPos pos, Direction direction) {
         BlockPos headPos = getCaterpillarHeadPos(level, pos, direction);
 
         AtomicReference<DrillHeadBlockEntity> drillHead = new AtomicReference<>();
@@ -218,6 +220,47 @@ public class CaterpillarBlockUtil {
         }
 
         return null;
+    }
+
+    public static ItemStack tryMergeInItem(ItemStack stack, Container container, int startIndex, int endIndex) {
+        for (int i = startIndex; i <= endIndex; i++) {
+            ItemStack containerStack = container.getItem(i);
+
+            if (!containerStack.isEmpty() && ItemStack.isSameItemSameComponents(stack, containerStack)) {
+                int maxStackSize = Math.min(containerStack.getMaxStackSize(), stack.getMaxStackSize());
+                int combinedCount = containerStack.getCount() + stack.getCount();
+
+                if (combinedCount <= maxStackSize) {
+                    containerStack.grow(stack.getCount());
+                    stack.setCount(0);
+
+                    break; // Stack has been fully merged
+                } else if (containerStack.getCount() < maxStackSize) {
+                    int remaining = maxStackSize - containerStack.getCount();
+                    containerStack.grow(remaining);
+                    stack.shrink(remaining);
+                }
+            }
+
+            if (stack.isEmpty()) {
+                break; // No more items to merge
+            }
+        }
+
+        return stack;
+    }
+
+    public static ItemStack tryInsertInEmpty(ItemStack stack, Container container, int startIndex, int endIndex) {
+        for (int i = startIndex; i <= endIndex; i++) {
+            ItemStack containerStack = container.getItem(i);
+
+            if (containerStack.isEmpty()) {
+                container.setItem(i, stack.split(stack.getCount()));
+                return stack;
+            }
+        }
+
+        return stack;
     }
 
     public static DrillHeadBlockEntity getDrillHeadBlockEntity(List<? extends DrillBaseBlockEntity> caterpillarBlockEntities) {

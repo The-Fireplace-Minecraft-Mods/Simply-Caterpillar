@@ -1,10 +1,12 @@
 package dev.the_fireplace.caterpillar.block.entity;
 
 import dev.the_fireplace.caterpillar.block.CollectorBlock;
+import dev.the_fireplace.caterpillar.block.util.CaterpillarBlockUtil;
 import dev.the_fireplace.caterpillar.registry.BlockEntityTypesRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -26,15 +28,33 @@ public class CollectorBlockEntity extends DrillBaseBlockEntity {
         super.move(level, state, basePos, nextBasePos, direction);
         level.setBlockAndUpdate(nextBasePos.below(), state.setValue(CollectorBlock.HALF, DoubleBlockHalf.LOWER));
         level.removeBlock(basePos.below(), false);
+    }
 
-        BlockEntity newBlockEntity = level.getBlockEntity(nextBasePos);
-        if (newBlockEntity instanceof CollectorBlockEntity collector) {
-            collector.collect();
-        }
+    @Override
+    public void act() {
+        this.collect();
     }
 
     private void collect() {
-        // TODO: implement item drops collect logic
+        Level level = this.getLevel();
+        BlockPos pos = this.getBlockPos();
+        BlockState state = this.getBlockState();
+        Direction direction = state.getValue(CollectorBlock.FACING);
+
+        BlockPos caterpillarHeadBlockPos = CaterpillarBlockUtil.getCaterpillarHeadPos(level, pos.relative(direction), direction);
+        BlockEntity headBlockEntity = level.getBlockEntity(caterpillarHeadBlockPos);
+
+        if (headBlockEntity instanceof DrillHeadBlockEntity drillHeadBlockEntity) {
+            for (ItemEntity itemEntity : this.getItemsAround()) {
+                ItemStack remainingStack = drillHeadBlockEntity.tryInsertItemToGathered(itemEntity.getItem());
+
+                if (remainingStack.isEmpty()) {
+                    itemEntity.discard();
+                } else {
+                    itemEntity.setItem(remainingStack);
+                }
+            }
+        }
     }
 
     public List<ItemEntity> getItemsAround() {

@@ -1,6 +1,7 @@
 package dev.the_fireplace.caterpillar.block.entity;
 
 import dev.architectury.registry.menu.ExtendedMenuProvider;
+import dev.the_fireplace.caterpillar.block.DrillBaseBlock;
 import dev.the_fireplace.caterpillar.block.entity.util.InventoryBlockEntity;
 import dev.the_fireplace.caterpillar.block.util.CaterpillarBlockUtil;
 import dev.the_fireplace.caterpillar.registry.BlockEntityTypesRegistry;
@@ -24,8 +25,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
-
-import static dev.the_fireplace.caterpillar.block.DrillBaseBlock.FACING;
 
 public class DrillBaseBlockEntity extends InventoryBlockEntity implements ExtendedMenuProvider {
 
@@ -52,7 +51,7 @@ public class DrillBaseBlockEntity extends InventoryBlockEntity implements Extend
     void move() {
         Level level = this.getLevel();
         BlockState state = this.getBlockState();
-        Direction direction = state.getValue(FACING);
+        Direction direction = state.getValue(DrillBaseBlock.FACING);
         BlockPos basePos = this.getBlockPos();
         BlockPos nextBasePos = basePos.relative(direction);
 
@@ -79,13 +78,15 @@ public class DrillBaseBlockEntity extends InventoryBlockEntity implements Extend
         level.removeBlock(basePos, false);
     }
 
+    public void act() {}
+
     protected boolean takeItemFromCaterpillarConsumption(Item item) {
         if (item.equals(Items.AIR)) {
             return true;
         }
 
-        Direction direction = this.getBlockState().getValue(FACING);
-        List<? extends DrillBaseBlockEntity> drillHeadAndStorageBlockEntities = CaterpillarBlockUtil.getConnectedDrillHeadAndStorageBlockEntities(level, this.getBlockPos(), direction);
+        Direction direction = this.getBlockState().getValue(DrillBaseBlock.FACING);
+        List<? extends DrillBaseBlockEntity> drillHeadAndStorageBlockEntities = CaterpillarBlockUtil.getStorages(level, this.getBlockPos(), direction);
 
         if (drillHeadAndStorageBlockEntities == null || drillHeadAndStorageBlockEntities.size() == 0) {
             return false;
@@ -117,8 +118,8 @@ public class DrillBaseBlockEntity extends InventoryBlockEntity implements Extend
     }
 
     protected ItemStack insertItemStackToCaterpillarGathered(ItemStack stack) {
-        Direction direction = this.getBlockState().getValue(FACING);
-        List<? extends DrillBaseBlockEntity> drillHeadAndStorageBlockEntities = CaterpillarBlockUtil.getConnectedDrillHeadAndStorageBlockEntities(level, this.getBlockPos(), direction);
+        Direction direction = this.getBlockState().getValue(DrillBaseBlock.FACING);
+        List<? extends DrillBaseBlockEntity> drillHeadAndStorageBlockEntities = CaterpillarBlockUtil.getStorages(level, this.getBlockPos(), direction);
 
         if (drillHeadAndStorageBlockEntities == null || drillHeadAndStorageBlockEntities.size() == 0) {
             return stack;
@@ -194,8 +195,8 @@ public class DrillBaseBlockEntity extends InventoryBlockEntity implements Extend
             return;
         }
 
-        Direction direction = this.getBlockState().getValue(FACING);
-        List<? extends DrillBaseBlockEntity> drillHeadAndStorageBlockEntities = CaterpillarBlockUtil.getConnectedDrillHeadAndStorageBlockEntities(level, this.getBlockPos(), direction);
+        Direction direction = this.getBlockState().getValue(DrillBaseBlock.FACING);
+        List<? extends DrillBaseBlockEntity> drillHeadAndStorageBlockEntities = CaterpillarBlockUtil.getStorages(level, this.getBlockPos(), direction);
 
         if (drillHeadAndStorageBlockEntities == null || drillHeadAndStorageBlockEntities.size() == 0) {
             return;

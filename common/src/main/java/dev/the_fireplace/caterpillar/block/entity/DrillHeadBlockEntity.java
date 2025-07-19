@@ -102,6 +102,7 @@ public class DrillHeadBlockEntity extends DrillBaseBlockEntity {
 
             if (splitedBlockEntity instanceof DrillBaseBlockEntity chainedBlockEntity) {
                 chainedBlockEntity.move();
+                chainedBlockEntity.act();
             } else {
                 blockEntity.setMoving(false);
                 blockEntity.timer = 0;
@@ -117,8 +118,7 @@ public class DrillHeadBlockEntity extends DrillBaseBlockEntity {
             }
 
             if (blockEntity.timer != 0 && blockEntity.timer % DRILL_HEAD_MOVEMENT_TICK == 0) {
-                // TODO: fix drill
-                blockEntity.drill();
+                blockEntity.act();
 
                 if (state.getValue(DrillHeadBlock.DRILLING)) {
                     state = state.setValue(DrillHeadBlock.DRILLING, false);
@@ -174,6 +174,11 @@ public class DrillHeadBlockEntity extends DrillBaseBlockEntity {
         DrillHeadBlock.moveStructure(level, nextBasePos, state, direction);
     }
 
+    @Override
+    public void act() {
+        this.drill();
+    }
+
     public void drill() {
         Level level = this.getLevel();
         BlockPos pos = this.getBlockPos();
@@ -196,6 +201,41 @@ public class DrillHeadBlockEntity extends DrillBaseBlockEntity {
                 }
             }
         }
+    }
+
+    public ItemStack tryInsertItemToGathered(ItemStack stack) {
+        Level level = this.getLevel();
+        BlockPos pos = this.getBlockPos();
+        BlockState state  = this.getBlockState();
+        Direction direction = state.getValue(DrillHeadBlock.FACING);
+
+        List<DrillBaseBlockEntity> storagesBlockEntities = CaterpillarBlockUtil.getStorages(level, pos, direction);
+
+        if ( storagesBlockEntities == null || storagesBlockEntities.isEmpty()) return stack;
+
+        // Try to merge the stack into existing slots
+        stack = CaterpillarBlockUtil.tryMergeInItem(stack, storagesBlockEntities.getFirst(), DrillHeadBlockEntity.GATHERED_SLOT_START, DrillHeadBlockEntity.GATHERED_SLOT_END);
+
+        if (storagesBlockEntities.size() == 2 && !stack.isEmpty()) {
+            stack = CaterpillarBlockUtil.tryMergeInItem(stack, storagesBlockEntities.getLast(), StorageBlockEntity.GATHERED_SLOT_START, StorageBlockEntity.GATHERED_SLOT_END);
+        }
+
+        // If the stack is still not empty, try to insert it into empty slots
+        if (!stack.isEmpty()) {
+            stack = CaterpillarBlockUtil.tryInsertInEmpty(stack, storagesBlockEntities.getFirst(), DrillHeadBlockEntity.GATHERED_SLOT_START, DrillHeadBlockEntity.GATHERED_SLOT_END);
+        }
+
+        if (storagesBlockEntities.size() == 2 && !stack.isEmpty()) {
+            stack = CaterpillarBlockUtil.tryInsertInEmpty(stack, storagesBlockEntities.getLast(), StorageBlockEntity.GATHERED_SLOT_START, StorageBlockEntity.GATHERED_SLOT_END);
+        }
+
+        for (DrillBaseBlockEntity storage : storagesBlockEntities) {
+            if (storage instanceof StorageBlockEntity storageEntity) {
+                storageEntity.setChanged();
+            }
+        }
+
+        return stack;
     }
 
     @Override
