@@ -1,11 +1,15 @@
 package dev.the_fireplace.caterpillar.block.entity;
 
 import dev.the_fireplace.caterpillar.Constants;
+import dev.the_fireplace.caterpillar.block.CollectorBlock;
+import dev.the_fireplace.caterpillar.block.util.CaterpillarBlockUtil;
 import dev.the_fireplace.caterpillar.inventory.IncineratorMenu;
 import dev.the_fireplace.caterpillar.registry.BlockEntityTypesRegistry;
+import dev.the_fireplace.caterpillar.registry.SoundsRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.SimpleContainerData;
@@ -29,28 +33,44 @@ public class IncineratorBlockEntity extends DrillBaseBlockEntity {
         this.setDefaultIncinerationBlocks();
     }
 
+    // TODO: refactor to use tag system for default incineration blocks
     private void setDefaultIncinerationBlocks() {
         this.setItem(0, new ItemStack(Blocks.GRAVEL));
         this.setItem(1, new ItemStack(Blocks.SAND));
         this.setItem(2, new ItemStack(Blocks.RED_SAND));
         this.setItem(3, new ItemStack(Blocks.COBBLESTONE));
         this.setItem(4, new ItemStack(Blocks.DIRT));
+
+        this.setChanged();
     }
 
     @Override
-    public void move(Level level, BlockState state, BlockPos basePos, BlockPos nextBasePos, Direction direction) {
-        super.move(level, state, basePos, nextBasePos, direction);
-
-        BlockEntity newBlockEntity = level.getBlockEntity(nextBasePos);
-        if (newBlockEntity instanceof IncineratorBlockEntity incinerator) {
-            incinerator.incinerate();
-        }
+    public void act() {
+        this.incinerate();
     }
 
     private void incinerate() {
-        // TODO: implement items incineration logic
+        Level level = this.getLevel();
+        BlockPos pos = this.getBlockPos();
+        BlockState state = this.getBlockState();
+        Direction direction = state.getValue(CollectorBlock.FACING);
 
-        // TODO: randomly (5% chance) play custom sound of incineration
+        for (int i = 0; i < this.getContainerSize(); i++) {
+            ItemStack stack = this.getItem(i);
+
+            if (!stack.isEmpty()) {
+                BlockPos caterpillarHeadBlockPos = CaterpillarBlockUtil.getCaterpillarHeadPos(level, pos.relative(direction), direction);
+                BlockEntity headBlockEntity = level.getBlockEntity(caterpillarHeadBlockPos);
+
+                if (headBlockEntity instanceof DrillHeadBlockEntity drillHeadBlockEntity) {
+                    drillHeadBlockEntity.tryRemoveItemFromGathered(stack);
+                }
+            }
+        }
+
+        if (!level.isClientSide && level.getRandom().nextFloat() < 0.05f) {
+            level.playSound(null, pos, SoundsRegistry.INCINERATOR_BURN.get(), SoundSource.BLOCKS, 1.0f, 1.0f);
+        }
     }
 
     @Override

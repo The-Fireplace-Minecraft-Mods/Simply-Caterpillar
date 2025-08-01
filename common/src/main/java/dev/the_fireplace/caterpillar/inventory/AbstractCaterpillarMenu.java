@@ -30,7 +30,7 @@ public abstract class AbstractCaterpillarMenu extends AbstractContainerMenu {
     public static final int VANILLA_SLOT_END_INDEX = VANILLA_SLOT_START_INDEX + VANILLA_SLOT_COUNT;
     public static final int BE_INVENTORY_SLOT_START_INDEX = VANILLA_SLOT_START_INDEX + VANILLA_SLOT_COUNT;
     private final int BE_INVENTORY_SLOT_COUNT;
-    private final int BE_INVENTORY_SLOT_END_INDEX;
+    public final int BE_INVENTORY_SLOT_END_INDEX;
 
     private static final int INVENTORY_SLOT_X_START = 8;
     private static final int INVENTORY_SLOT_Y_START = 84;

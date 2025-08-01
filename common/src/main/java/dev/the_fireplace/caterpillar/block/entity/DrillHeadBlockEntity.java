@@ -211,7 +211,7 @@ public class DrillHeadBlockEntity extends DrillBaseBlockEntity {
 
         List<DrillBaseBlockEntity> storagesBlockEntities = CaterpillarBlockUtil.getStorages(level, pos, direction);
 
-        if ( storagesBlockEntities == null || storagesBlockEntities.isEmpty()) return stack;
+        if (storagesBlockEntities == null || storagesBlockEntities.isEmpty()) return stack;
 
         // Try to merge the stack into existing slots
         stack = CaterpillarBlockUtil.tryMergeInItem(stack, storagesBlockEntities.getFirst(), DrillHeadBlockEntity.GATHERED_SLOT_START, DrillHeadBlockEntity.GATHERED_SLOT_END);
@@ -236,6 +236,30 @@ public class DrillHeadBlockEntity extends DrillBaseBlockEntity {
         }
 
         return stack;
+    }
+
+    public void tryRemoveItemFromGathered(ItemStack stack) {
+        if (stack.isEmpty()) return;
+
+        Level level = this.getLevel();
+        BlockPos pos = this.getBlockPos();
+        BlockState state  = this.getBlockState();
+        Direction direction = state.getValue(DrillHeadBlock.FACING);
+
+        List<DrillBaseBlockEntity> storagesBlockEntities = CaterpillarBlockUtil.getStorages(level, pos, direction);
+
+        if (storagesBlockEntities == null || storagesBlockEntities.isEmpty()) return;
+
+        CaterpillarBlockUtil.tryRemoveItem(stack, storagesBlockEntities.getFirst(), DrillHeadBlockEntity.GATHERED_SLOT_START, DrillHeadBlockEntity.GATHERED_SLOT_END);
+
+        if (storagesBlockEntities.size() == 2) {
+            CaterpillarBlockUtil.tryRemoveItem(stack, storagesBlockEntities.getLast(), StorageBlockEntity.GATHERED_SLOT_START, StorageBlockEntity.GATHERED_SLOT_END);
+        }
+    }
+
+    // TODO: implement logic
+    public boolean tryTakeItemFromConsumption(ItemStack takeStack) {
+        return true;
     }
 
     @Override

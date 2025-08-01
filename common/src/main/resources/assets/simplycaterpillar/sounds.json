@@ -1,0 +1,8 @@
+{
+  "incinerator_burn": {
+    "subtitle": "sounds.simplycaterpillar:block.incinerator.burn",
+    "sounds": [
+      "simplycaterpillar:block_incinerator_burn"
+    ]
+  }
+}

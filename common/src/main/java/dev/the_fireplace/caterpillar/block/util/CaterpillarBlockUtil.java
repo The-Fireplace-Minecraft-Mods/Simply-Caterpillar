@@ -263,6 +263,18 @@ public class CaterpillarBlockUtil {
         return stack;
     }
 
+    public static void tryRemoveItem(ItemStack removeStack, Container container, int startIndex, int endIndex) {
+        for (int i = startIndex; i <= endIndex; i++) {
+            ItemStack containerStack = container.getItem(i);
+
+            if (!containerStack.isEmpty() && ItemStack.isSameItemSameComponents(removeStack, containerStack)) {
+               container.removeItemNoUpdate(i);
+            }
+        }
+
+        container.setChanged();
+    }
+
     public static DrillHeadBlockEntity getDrillHeadBlockEntity(List<? extends DrillBaseBlockEntity> caterpillarBlockEntities) {
         return (DrillHeadBlockEntity)caterpillarBlockEntities.stream().filter(blockEntity -> blockEntity instanceof DrillHeadBlockEntity).findFirst().orElse(null);
     }
